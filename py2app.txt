@@ -1,0 +1,9 @@
+
+
+1. setup erstellen: py2applet --make-setup
+2. icon: 1024x1024 png logo in icns konvertieren, darf nicht im hauptordner liegen!
+3. icon benutzen: in OPTIONS: "iconfile":"pfad"
+4. im Alias mode testen: python3 setup.py py2app -A
+5. Test dann mit dist/main.app/contents/macOS/main
+6.fertigstellung mit python3 setup.py py2app
+
