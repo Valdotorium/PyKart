@@ -1,1 +1,2 @@
 01: could not get screen sizes
+02: could not load textures

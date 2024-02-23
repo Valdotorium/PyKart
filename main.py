@@ -22,10 +22,10 @@ class Game():
         self.screen = screen
         self.fps = fps
         #loading the font files
-        self.font = "textures/FONTS/PixelOperator.ttf"
-        self.boldfont = "textures/FONTS/PixelOperator-Bold.ttf"
-        self.largefont = "textures/FONTS/PixelOperator.ttf"
-        self.largeboldfont = "textures/FONTS/PixelOperator-Bold.ttf"
+        self.font = os.path.dirname(__file__)+"/textures/FONTS/PixelOperator.ttf"
+        self.boldfont = os.path.dirname(__file__)+"/textures/FONTS/PixelOperator-Bold.ttf"
+        self.largefont = os.path.dirname(__file__)+"/textures/FONTS/PixelOperator.ttf"
+        self.largeboldfont = os.path.dirname(__file__)+"/textures/FONTS/PixelOperator-Bold.ttf"
         #initializing the font
         self.font = pygame.font.Font(self.font, 16)
         self.boldfont = pygame.font.Font(self.boldfont, 16)
@@ -36,7 +36,13 @@ class Game():
         self.CFG_visuals = True
         self.CFG_debug_mode = True
         self.CFG_limit_refresh_access = False
-        
+
+        #options
+        self.S_Fitscreen = True
+        self.S_Fullscreen = False
+
+
+    
 
     def run(self):
             pass
@@ -49,6 +55,6 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         Exo.run()
-        pygame.display.update()
+        pygame.display.flip()
         time.sleep(1/fps)
 

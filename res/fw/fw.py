@@ -10,4 +10,6 @@ def displayText(obj, text):
     txt = obj.largefont.render(text, True, (20, 20, 20))
     obj.screen.blit(txt, (600, 300))
     if not obj.CFG_limit_refresh_access:
-        pygame.display.update()
+        obj.screen.fill((100,100,100))
+        obj.screen.blit(txt, (600, 300))
+        pygame.display.flip()
