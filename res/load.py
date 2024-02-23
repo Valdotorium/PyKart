@@ -4,7 +4,6 @@ import os
 from .fw import fw as utils
 def respond(obj):
     print("ive loaded from the source package!")
-    utils.displayText(obj,"loading game data")
     time.sleep(1)
     obj.dimensions = utils.getScreenSize()
     print("LOG: screen dimensions are:", obj.dimensions)
@@ -16,6 +15,10 @@ def respond(obj):
             obj.screen = pygame.display.set_mode(obj.dimensions[0])
         obj.screen.fill((100, 100, 100))
         pygame.display.set_caption("Project Exoplanet") 
+    else:
+        obj.screen = pygame.display.set_mode((1200, 800))
+        obj.screen.fill((100, 100, 100))
+        pygame.display.set_caption("Project Exoplanet")
     obj.dimensions = obj.dimensions[0]
     utils.displayText(obj,"finding files")
 
@@ -24,12 +27,12 @@ def respond(obj):
 
     print("LOG: found gamefiles in:", gamefiles)
     utils.displayText(obj,"checking for necessary files")
-    if "textures" in gamefiles:
-        utils.displayText(obj,"found textures folder")
-        if "images" in os.listdir(CurrentPath+"/textures"):
-            imagefiles = os.listdir(CurrentPath+"/textures/images")
+    if "assets" in gamefiles:
+        utils.displayText(obj,"found assets folder")
+        if "images" in os.listdir(CurrentPath+"/assets"):
+            imagefiles = os.listdir(CurrentPath+"/assets/images")
             for image in imagefiles:
-                pygame.image.load(CurrentPath+"/textures/images/"+image)
+                pygame.image.load(CurrentPath+"/assets/images/"+image)
                 utils.displayText(obj,f"loaded image {image}")
                 time.sleep(1)
         else:

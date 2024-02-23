@@ -7,9 +7,8 @@ def getScreenSize():
         raise ValueError("ERRNO_01:Could not get screen size")
 
 def displayText(obj, text):
+    
     txt = obj.largefont.render(text, True, (20, 20, 20))
-    obj.screen.blit(txt, (600, 300))
-    if not obj.CFG_limit_refresh_access:
-        obj.screen.fill((100,100,100))
-        obj.screen.blit(txt, (600, 300))
-        pygame.display.flip()
+    obj.screen.fill((100,100,100))
+    obj.screen.blit(txt, (0, 300))
+    pygame.display.update()
