@@ -39,6 +39,10 @@ class Game():
         #options
         self.S_Fitscreen = False
         self.S_Fullscreen = False
+        #flat, smooth, chipped, mountainous, extreme, default
+        self.S_Terrain_Preset = "mountainous"
+        #small, medium, default, large
+        self.S_Terrain_Size = "medium"
         
 
 
