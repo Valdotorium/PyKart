@@ -9,6 +9,10 @@ def getScreenSize():
 def displayText(obj, text):
     
     txt = obj.largefont.render(text, True, (20, 20, 20))
-    obj.screen.fill((100,100,100))
     obj.screen.blit(txt, (0, 300))
+    pygame.display.update()
+def displayTextAt(obj, text, pos):
+    
+    txt = obj.largefont.render(text, True, (20, 20, 20))
+    obj.screen.blit(txt, pos)
     pygame.display.update()

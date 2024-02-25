@@ -42,7 +42,11 @@ class Game():
         #flat, smooth, chipped, mountainous, extreme, default
         self.S_Terrain_Preset = "mountainous"
         #small, medium, default, large
-        self.S_Terrain_Size = "medium"
+        self.S_Terrain_Size = "large"
+        #spots (old) or lines (new)
+        self.S_Terrain_Generator = "lines"
+        #scale factor
+        self.S_Terrain_Scale_Factor = 1
         
 
 
