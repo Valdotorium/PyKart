@@ -11,62 +11,6 @@ def _reset_sys_path():
 _reset_sys_path()
 
 
-def _site_packages():
-    import os
-    import site
-    import sys
-
-    paths = []
-    prefixes = [sys.prefix]
-    if sys.exec_prefix != sys.prefix:
-        prefixes.append(sys.exec_prefix)
-    for prefix in prefixes:
-        paths.append(
-            os.path.join(
-                prefix, "lib", "python%d.%d" % (sys.version_info[:2]), "site-packages"
-            )
-        )
-
-    if os.path.join(".framework", "") in os.path.join(sys.prefix, ""):
-        home = os.environ.get("HOME")
-        if home:
-            # Sierra and later
-            paths.append(
-                os.path.join(
-                    home,
-                    "Library",
-                    "Python",
-                    "%d.%d" % (sys.version_info[:2]),
-                    "lib",
-                    "python",
-                    "site-packages",
-                )
-            )
-
-            # Before Sierra
-            paths.append(
-                os.path.join(
-                    home,
-                    "Library",
-                    "Python",
-                    "%d.%d" % (sys.version_info[:2]),
-                    "site-packages",
-                )
-            )
-
-    # Work around for a misfeature in setuptools: easy_install.pth places
-    # site-packages way to early on sys.path and that breaks py2app bundles.
-    # NOTE: this is hacks into an undocumented feature of setuptools and
-    # might stop to work without warning.
-    sys.__egginsert = len(sys.path)
-
-    for path in paths:
-        site.addsitedir(path)
-
-
-_site_packages()
-
-
 def _chdir_resource():
     import os
 
@@ -76,25 +20,17 @@ def _chdir_resource():
 _chdir_resource()
 
 
-def _setup_ctypes():
-    import os
-    from ctypes.macholib import dyld
+def _disable_linecache():
+    import linecache
 
-    frameworks = os.path.join(os.environ["RESOURCEPATH"], "..", "Frameworks")
-    dyld.DEFAULT_FRAMEWORK_FALLBACK.insert(0, frameworks)
-    dyld.DEFAULT_LIBRARY_FALLBACK.insert(0, frameworks)
+    def fake_getline(*args, **kwargs):
+        return ""
 
-
-_setup_ctypes()
+    linecache.orig_getline = linecache.getline
+    linecache.getline = fake_getline
 
 
-def _path_inject(paths):
-    import sys
-
-    sys.path[:0] = paths
-
-
-_path_inject(['/Users/valentinliedtke/vscode/Project Exoplanet'])
+_disable_linecache()
 
 
 import re
@@ -124,32 +60,111 @@ def _run():
     import site  # noqa: F401
 
     sys.frozen = "macosx_app"
+    base = os.environ["RESOURCEPATH"]
 
     argv0 = os.path.basename(os.environ["ARGVZERO"])
     script = SCRIPT_MAP.get(argv0, DEFAULT_SCRIPT)  # noqa: F821
 
-    sys.argv[0] = __file__ = script
+    path = os.path.join(base, script)
+    sys.argv[0] = __file__ = path
     if sys.version_info[0] == 2:
-        with open(script, "rU") as fp:
+        with open(path, "rU") as fp:
             source = fp.read() + "\n"
     else:
-        with open(script, "rb") as fp:
+        with open(path, "rb") as fp:
             encoding = guess_encoding(fp)
 
-        with open(script, "r", encoding=encoding) as fp:
+        with open(path, "r", encoding=encoding) as fp:
             source = fp.read() + "\n"
 
         BOM = b"\xef\xbb\xbf".decode("utf-8")
-
         if source.startswith(BOM):
             source = source[1:]
 
-    exec(compile(source, script, "exec"), globals(), globals())
+    exec(compile(source, path, "exec"), globals(), globals())
 
 
-DEFAULT_SCRIPT='/Users/valentinliedtke/vscode/Project Exoplanet/main.py'
+def _setup_ctypes():
+    import os
+    from ctypes.macholib import dyld
+
+    frameworks = os.path.join(os.environ["RESOURCEPATH"], "..", "Frameworks")
+    dyld.DEFAULT_FRAMEWORK_FALLBACK.insert(0, frameworks)
+    dyld.DEFAULT_LIBRARY_FALLBACK.insert(0, frameworks)
+
+
+_setup_ctypes()
+
+
+def _boot_multiprocessing():
+    import sys
+    import multiprocessing.spawn
+
+    orig_get_command_line = multiprocessing.spawn.get_command_line
+    def wrapped_get_command_line(**kwargs):
+        orig_frozen = sys.frozen
+        del sys.frozen
+        try:
+            return orig_get_command_line(**kwargs)
+        finally:
+            sys.frozen = orig_frozen
+    multiprocessing.spawn.get_command_line = wrapped_get_command_line
+
+_boot_multiprocessing()
+
+
+import pkg_resources, zipimport, os
+
+def find_eggs_in_zip(importer, path_item, only=False):
+    if importer.archive.endswith('.whl'):
+        # wheels are not supported with this finder
+        # they don't have PKG-INFO metadata, and won't ever contain eggs
+        return
+
+    metadata = pkg_resources.EggMetadata(importer)
+    if metadata.has_metadata('PKG-INFO'):
+        yield Distribution.from_filename(path_item, metadata=metadata)
+    for subitem in metadata.resource_listdir(''):
+        if not only and pkg_resources._is_egg_path(subitem):
+            subpath = os.path.join(path_item, subitem)
+            dists = find_eggs_in_zip(zipimport.zipimporter(subpath), subpath)
+            for dist in dists:
+                yield dist
+        elif subitem.lower().endswith(('.dist-info', '.egg-info')):
+            subpath = os.path.join(path_item, subitem)
+            submeta = pkg_resources.EggMetadata(zipimport.zipimporter(subpath))
+            submeta.egg_info = subpath
+            yield pkg_resources.Distribution.from_location(path_item, subitem, submeta)  # noqa: B950
+
+def _fixup_pkg_resources():
+    pkg_resources.register_finder(zipimport.zipimporter, find_eggs_in_zip)
+    pkg_resources.working_set.entries = []
+    list(map(pkg_resources.working_set.add_entry, sys.path))
+
+_fixup_pkg_resources()
+
+
+
+def _setup_openssl():
+    import os
+    resourcepath = os.environ["RESOURCEPATH"]
+    os.environ["SSL_CERT_FILE"] = os.path.join(
+        resourcepath, "openssl.ca", "no-such-file")
+    os.environ["SSL_CERT_DIR"] = os.path.join(
+        resourcepath, "openssl.ca", "no-such-file")
+
+_setup_openssl()
+
+
+def _boot_tkinter():
+    import os
+
+    resourcepath = os.environ["RESOURCEPATH"]
+    os.putenv("TCL_LIBRARY", os.path.join(resourcepath, "lib/tcl8"))
+    os.putenv("TK_LIBRARY", os.path.join(resourcepath, "lib/tk8.6"))
+_boot_tkinter()
+
+
+DEFAULT_SCRIPT='main.py'
 SCRIPT_MAP={}
-try:
-    _run()
-except KeyboardInterrupt:
-    pass
+_run()

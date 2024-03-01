@@ -7,3 +7,6 @@
 5. Test dann mit dist/main.app/contents/macOS/main
 6.fertigstellung mit python3 setup.py py2app
 
+TODO nach fertigstellung:
+"assets und res in Resources einfügen, assets ernout in Resources/lib/Python 3.12 einfügen
+

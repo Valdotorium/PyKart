@@ -41,7 +41,7 @@
 	<key>PyOptions</key>
 	<dict>
 		<key>alias</key>
-		<true/>
+		<false/>
 		<key>argv_emulation</key>
 		<false/>
 		<key>emulate_shell_environment</key>
@@ -63,25 +63,24 @@
 	<array/>
 	<key>PyRuntimeLocations</key>
 	<array>
-		<string>@executable_path/../Frameworks/Python.framework/Versions/3.10/Python</string>
-		<string>/Library/Frameworks/Python.framework/Versions/3.10/Python</string>
+		<string>@executable_path/../Frameworks/Python.framework/Versions/3.12/Python</string>
 	</array>
 	<key>PythonInfoDict</key>
 	<dict>
 		<key>PythonExecutable</key>
-		<string>/Library/Frameworks/Python.framework/Versions/3.10/bin/python3</string>
+		<string>/Library/Frameworks/Python.framework/Versions/3.12/bin/python3</string>
 		<key>PythonLongVersion</key>
-		<string>3.10.11 (v3.10.11:7d4cc5aa85, Apr  4 2023, 19:05:19) [Clang 13.0.0 (clang-1300.0.29.30)]</string>
+		<string>3.12.2 (v3.12.2:6abddd9f6a, Feb  6 2024, 17:02:06) [Clang 13.0.0 (clang-1300.0.29.30)]</string>
 		<key>PythonShortVersion</key>
 		<string>3.1</string>
 		<key>py2app</key>
 		<dict>
 			<key>alias</key>
-			<true/>
+			<false/>
 			<key>template</key>
 			<string>app</string>
 			<key>version</key>
-			<string>0.28.6</string>
+			<string>0.28.7</string>
 		</dict>
 	</dict>
 </dict>

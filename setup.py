@@ -9,7 +9,7 @@ from setuptools import setup
 
 APP = ["main.py"]
 DATA_FILES = []
-OPTIONS = {"iconfile": "textures/berry_bush.icns"}
+OPTIONS = {"iconfile": "assets/berry_bush.icns"}
 
 setup(
     app=APP,

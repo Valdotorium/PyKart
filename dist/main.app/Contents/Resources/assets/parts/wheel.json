@@ -1,0 +1,18 @@
+{
+    "Name": "Wheel",
+    "Index": 1,
+    "Type": "Wheel",
+    "Cost": 1500,
+    "Properties": {
+        "Rot": 0,
+        "FuelUse": 0.2,
+        "MaxImpulse": 1080,
+        "MaxForce": 1000,
+        "MinForce": 50,
+        "Friction": 0.85
+    },
+    "Damping": {
+        "BreakPoint": 1000000,
+        "Hardness": 0.8
+    }
+}
