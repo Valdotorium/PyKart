@@ -1,0 +1,15 @@
+{
+    "Name": "Metal Frame",
+    "Index": 2,
+    "Type": "Cube",
+    "Cost": 500,
+    "Tex": "part_metal_frame.png",
+    "Properties": {
+        "Rot": 0,
+        "Friction": 0.95
+    },
+    "Damping": {
+        "BreakPoint": 600000,
+        "Hardness": 0.98
+    }
+}

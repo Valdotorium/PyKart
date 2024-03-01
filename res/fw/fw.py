@@ -20,4 +20,5 @@ def clear(screen):
     screen.fill((100,100,100))
 
 def DecodePart(part, obj):
-    pass
+    obj.partdict[part["Name"]] = part
+    obj.shopdict[part["Name"]] = {"type" : part["Type"], "cost":part["Cost"], "texture":part["Tex"]}

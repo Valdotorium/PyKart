@@ -50,6 +50,8 @@ def respond(obj):
                 utils.clear(obj.screen)
                 utils.displayText(obj,f"loaded part {part}")
                 time.sleep(1)
+            print("all parts loaded to game: ", obj.partdict)
+            print("all parts loaded to shop: ", obj.shopdict)
         else:
             exit
     else:

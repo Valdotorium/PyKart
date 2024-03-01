@@ -20,6 +20,8 @@ class Game():
         self.running = True
         self.clock = pygame.time.Clock()
         self.fps = fps
+        self.partdict = {} # all part data in the game
+        self.shopdict = {} #includes only part properties necessary while building
         #loading the font files
         self.font = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
         self.boldfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator-Bold.ttf"

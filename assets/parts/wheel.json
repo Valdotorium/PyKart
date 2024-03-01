@@ -3,6 +3,7 @@
     "Index": 1,
     "Type": "Wheel",
     "Cost": 1500,
+    "Tex": "part_wheel.png",
     "Properties": {
         "Rot": 0,
         "FuelUse": 0.2,
