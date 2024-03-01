@@ -9,7 +9,6 @@ def respond(obj):
     obj.dimensions = utils.getScreenSize()
     print("LOG: screen dimensions are:", obj.dimensions)
     if obj.S_Fitscreen:
-        utils.displayText(obj,"fitting screen sizes")
         if obj.S_Fullscreen:
             obj.screen = pygame.display.set_mode(obj.dimensions[0], pygame.FULLSCREEN)
         else:
@@ -19,6 +18,7 @@ def respond(obj):
     else:
         obj.screen = pygame.display.set_mode((1200, 800))
         obj.screen.fill((100, 100, 100))
+        obj.dimensions[0] = (1200, 800)
         pygame.display.set_caption("Project Exoplanet")
     obj.dimensions = obj.dimensions[0]
     utils.displayText(obj,"finding files")
@@ -42,6 +42,7 @@ def respond(obj):
                 time.sleep(1)
                 textures[image] = loadedimage
             print("LOG: loaded all images into:", textures)
+
             
             partfiles = os.listdir(CurrentPath+"/assets/parts")
             for part in partfiles:

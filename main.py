@@ -3,6 +3,7 @@ import time
 import res.load
 import res.terrain
 import res.physics
+import res.build
 #load files in othe directories like this: os.path.dirname(__file__) + "/folder/folder/file.png"
 #put scripts into top-level directory, put images or other "universal files" into _internal in dist/main
 #create a window in fullscreen size with a rectangle in it
@@ -37,10 +38,13 @@ class Game():
         self.CFG_visuals = True
         self.CFG_debug_mode = True
         self.CFG_limit_refresh_access = False
+        self.CFG_Build_Enforce_Rules = True
+        self.CFG_Build_Grid_Dimensions = (7,5)
 
         #options
         self.S_Fitscreen = False
         self.S_Fullscreen = False
+        self.gm = "build"
         #flat, smooth, chipped, mountainous, extreme, default
         self.S_Terrain_Preset = "mountainous"
         #small, medium, default, large
@@ -55,14 +59,25 @@ class Game():
 
 
     def run(self):
-        Exo.screen.fill((100,100,100))
-        res.physics.simulate(Exo, fps)
+        if self.gm == "game":
+            Exo.screen.fill((100,100,100))
+            res.physics.simulate(Exo, fps)
+        if self.gm =="build":
+            Exo.screen.fill((100,100,100))
+            res.build.run(Exo)
 
 frame = 0
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        #q quits the game
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_q:
+                running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
     if frame == 0:
         Exo = Game()
 

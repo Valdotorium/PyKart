@@ -11,5 +11,9 @@
     "Damping": {
         "BreakPoint": 600000,
         "Hardness": 0.98
+    },
+    "Build":{
+        "NeedsJoint": 0,
+        "HasRotation": 1
     }
 }
