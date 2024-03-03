@@ -16,6 +16,11 @@ def displayTextAt(obj, text, pos):
     txt = obj.largefont.render(text, True, (20, 20, 20))
     obj.screen.blit(txt, pos)
     pygame.display.update()
+def displayTextCenter(obj, text):
+    txt = obj.largefont.render(text, True, (20, 20, 20))
+    pos = (obj.dimensions[0] / 2 - txt.get_width() / 2, obj.dimensions[1] / 2)
+    obj.screen.blit(txt, pos)
+    pygame.display.update()
 def clear(screen):
     screen.fill((100,100,100))
 

@@ -3,7 +3,7 @@
     "Index": 2,
     "Type": "Cube",
     "Cost": 500,
-    "Tex": "part_metal_frame.png",
+    "Tex": "grass.png",
     "Properties": {
         "Rot": 0,
         "Friction": 0.95

@@ -21,13 +21,13 @@ def respond(obj):
         obj.dimensions[0] = (1200, 800)
         pygame.display.set_caption("Project Exoplanet")
     obj.dimensions = obj.dimensions[0]
-    utils.displayText(obj,"finding files")
+    utils.displayTextCenter(obj,"finding files")
 
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
     gamefiles = os.listdir(CurrentPath)
 
     print("LOG: found gamefiles in:", gamefiles)
-    utils.displayText(obj,"checking for necessary files")
+    utils.displayTextCenter(obj,"checking for necessary files")
     if "assets" in gamefiles:
         print("file loader path is: ", CurrentPath)
         utils.displayText(obj,"found assets folder")
@@ -38,10 +38,13 @@ def respond(obj):
                 loadedimage = pygame.image.load(CurrentPath+"/assets/images/"+image)
 
                 utils.clear(obj.screen)
-                utils.displayText(obj,f"loaded image {image}")
-                time.sleep(1)
+                #center the text
+
+                utils.displayTextCenter(obj,f"loaded image {image}")
+                time.sleep(0.1)
                 textures[image] = loadedimage
             print("LOG: loaded all images into:", textures)
+            obj.textures = textures
 
             
             partfiles = os.listdir(CurrentPath+"/assets/parts")
@@ -49,15 +52,16 @@ def respond(obj):
                 loadedpart = json.load(open(CurrentPath+"/assets/parts/"+part))
                 utils.DecodePart(loadedpart, obj)
                 utils.clear(obj.screen)
-                utils.displayText(obj,f"loaded part {part}")
-                time.sleep(1)
+                utils.displayTextCenter(obj,f"loaded part {part}")
+                time.sleep(0.1)
             print("all parts loaded to game: ", obj.partdict)
             print("all parts loaded to shop: ", obj.shopdict)
+
         else:
             exit
     else:
-        utils.displayText(obj,"ERROR: no textures folder found")
+        utils.displayTextCenter(obj,"ERROR: no textures folder found")
         print("ERRNO_02: No textures or assets folder found in " + CurrentPath)
         exit
 
-    utils.displayText(obj, "All Done!")
+    utils.displayTextCenter(obj, "All Done!")

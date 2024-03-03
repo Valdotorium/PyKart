@@ -39,7 +39,7 @@ class Game():
         self.CFG_debug_mode = True
         self.CFG_limit_refresh_access = False
         self.CFG_Build_Enforce_Rules = True
-        self.CFG_Build_Grid_Dimensions = (7,5)
+        self.CFG_Build_Grid_Dimensions = (9,5)
 
         #options
         self.S_Fitscreen = False
@@ -89,6 +89,7 @@ while running:
         #res.terrain.generate(Exo)
         res.terrain.place(Exo)
         res.physics.setup(Exo)
+        res.build.setupGrid(Exo)
         frame += 1
     Exo.run()
     pygame.display.flip()
