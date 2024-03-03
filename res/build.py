@@ -64,6 +64,7 @@ def UI(obj):
         x += 1
 
      #THE ACTUAL UI
+    obj.UI_TilebarPositions = []
     x = 0
     while x < len(obj.partdict):
         try:
@@ -72,8 +73,12 @@ def UI(obj):
             part_img = obj.textures[part_img]
             #scale the image to tile size
             part_img = pygame.transform.scale(part_img, (tile_size, tile_size))
+
+            #stores position of tiles in the building menu
+            obj.UI_TilebarPositions.append((x * (tile_size + tile_gap) + obj.dimensions[0] / 8, obj.dimensions[1] - obj.dimensions[1] / 6))
+
             #draw the part img
-            obj.screen.blit(part_img, (x * (tile_size + tile_gap), obj.dimensions[1] - obj.dimensions[1] / 10))
+            obj.screen.blit(part_img, (x * (tile_size + tile_gap)  + obj.dimensions[0] / 8, obj.dimensions[1] - obj.dimensions[1] / 6))
         except:
             raise FileNotFoundError(f"ERRNO_03: Could not find texture for part {obj.partdict[x]["Name"]}")
         x += 1

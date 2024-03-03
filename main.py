@@ -4,6 +4,7 @@ import res.load
 import res.terrain
 import res.physics
 import res.build
+import res.interactions
 #load files in othe directories like this: os.path.dirname(__file__) + "/folder/folder/file.png"
 #put scripts into top-level directory, put images or other "universal files" into _internal in dist/main
 #create a window in fullscreen size with a rectangle in it
@@ -59,6 +60,7 @@ class Game():
 
 
     def run(self):
+        res.interactions.interactions(Exo)
         if self.gm == "game":
             Exo.screen.fill((100,100,100))
             res.physics.simulate(Exo, fps)
