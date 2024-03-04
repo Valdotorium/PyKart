@@ -1,7 +1,7 @@
 import pygame
 
 def ButtonArea(obj, image, pos, size):
-    print("Creating a button at position " + str(pos) + " and size" + str(size))
+   # print("Creating a button at position " + str(pos) + " and size" + str(size))
     try:
         obj.screen.blit(image, pos)
     except:
@@ -13,4 +13,8 @@ def ButtonArea(obj, image, pos, size):
         # is the button clicked?  (is the mouse within a box at pos with size when the click occurs?)
         if mx >= pos[0] and mx <= pos[0] + size[0]:
             if my >= pos[1] and my <= pos[1] + size[1]:
-                print("ive been clicked on!")
+                return True
+            else:
+                return False
+        else:
+            return False
