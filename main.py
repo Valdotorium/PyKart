@@ -60,11 +60,13 @@ class Game():
 
 
     def run(self):
-        res.interactions.interactions(Exo)
+        #res.interactions.interactions.ButtonArea(Exo)
         if self.gm == "game":
             Exo.screen.fill((100,100,100))
+            #running the physics
             res.physics.simulate(Exo, fps)
         if self.gm =="build":
+            #buiding mode
             Exo.screen.fill((100,100,100))
             res.build.run(Exo)
 

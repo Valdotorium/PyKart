@@ -1,8 +1,9 @@
 import pygame
 import random
+from .interactions import interactions as interactions
 def setupGrid(obj):
     obj.screen.fill((100,100,100))
-    dim = obj.dimensions
+    dim = obj.dimensions #the window dimesions as (x, y) tuple
     griddim = obj.CFG_Build_Grid_Dimensions
     #print("LOG:building UI with dimensions ", dim)
 
@@ -69,6 +70,7 @@ def UI(obj):
     while x < len(obj.partdict):
         try:
             key = list(obj.partdict)[x]
+            #image of selected part
             part_img = obj.partdict[key]["Tex"]
             part_img = obj.textures[part_img]
             #scale the image to tile size
@@ -77,8 +79,12 @@ def UI(obj):
             #stores position of tiles in the building menu
             obj.UI_TilebarPositions.append((x * (tile_size + tile_gap) + obj.dimensions[0] / 8, obj.dimensions[1] - obj.dimensions[1] / 6))
 
-            #draw the part img
-            obj.screen.blit(part_img, (x * (tile_size + tile_gap)  + obj.dimensions[0] / 8, obj.dimensions[1] - obj.dimensions[1] / 6))
+            #create a button with the part img
+            IsClicked = interactions.ButtonArea(obj, part_img,(x * (tile_size + tile_gap) + obj.dimensions[0] / 8, obj.dimensions[1] - obj.dimensions[1] / 6), (tile_size, tile_size) )
+            #IsClicked is True once the button gets clicked
+            if IsClicked:
+                #Teil wird ausgewählt (Jo, dein Einsatz!)
+                obj.selected_part = 0 #muss noch ergänzt werden
         except:
             raise FileNotFoundError(f"ERRNO_03: Could not find texture for part {obj.partdict[x]["Name"]}")
         x += 1

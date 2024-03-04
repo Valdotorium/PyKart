@@ -6,22 +6,27 @@ import json
 def respond(obj):
     print("ive loaded from the source package!")
     time.sleep(1)
+    #getting the window size
     obj.dimensions = utils.getScreenSize()
     print("LOG: screen dimensions are:", obj.dimensions)
     if obj.S_Fitscreen:
         if obj.S_Fullscreen:
+            #makes it fullscreen
             obj.screen = pygame.display.set_mode(obj.dimensions[0], pygame.FULLSCREEN)
         else:
+            #makes it windowed, but with the size of the full screen
             obj.screen = pygame.display.set_mode(obj.dimensions[0])
         obj.screen.fill((100, 100, 100))
         pygame.display.set_caption("Project Exoplanet") 
     else:
+        #smol version
         obj.screen = pygame.display.set_mode((1200, 800))
         obj.screen.fill((100, 100, 100))
         obj.dimensions[0] = (1200, 800)
         pygame.display.set_caption("Project Exoplanet")
     obj.dimensions = obj.dimensions[0]
     utils.displayTextCenter(obj,"finding files")
+    #locating the game assets
 
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
     gamefiles = os.listdir(CurrentPath)
@@ -31,9 +36,11 @@ def respond(obj):
     if "assets" in gamefiles:
         print("file loader path is: ", CurrentPath)
         utils.displayText(obj,"found assets folder")
+        #loading images from the images folder
         if "images" in os.listdir(CurrentPath+"/assets"):
             imagefiles = os.listdir(CurrentPath+"/assets/images")
             textures = {}
+            #loading all the images into the game
             for image in imagefiles:
                 loadedimage = pygame.image.load(CurrentPath+"/assets/images/"+image)
 
@@ -46,7 +53,7 @@ def respond(obj):
             print("LOG: loaded all images into:", textures)
             obj.textures = textures
 
-            
+            #loading all the parts into the game
             partfiles = os.listdir(CurrentPath+"/assets/parts")
             for part in partfiles:
                 loadedpart = json.load(open(CurrentPath+"/assets/parts/"+part))
