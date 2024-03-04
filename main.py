@@ -19,6 +19,7 @@ inputvalues = []
 class Game():
     def __init__(self):
         #game stuff
+        self.selected_part = ""
         self.running = True
         self.clock = pygame.time.Clock()
         self.fps = fps

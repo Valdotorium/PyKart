@@ -37,20 +37,25 @@ def setupGrid(obj):
     #position matrix
     x = 0
     obj.Build_TileGridPositions = []
+    obj.Vehicle = []
     while x < griddim[0]:
         y = 0
         column = []
+        column2 = []
         while y < griddim[1]:
             tilepos= (start_pos[0] + (tile_size + tile_gap) * x, start_pos[1] + (tile_size + tile_gap) * y)
             #draw the tile img
             column.append(tilepos)
+            column2.append("")
         
             y += 1
         obj.Build_TileGridPositions.append(column)
+        obj.Vehicle.append(column2)
         x += 1
     #print(obj.Build_TileGridPositions)
 def UI(obj):
     #drawing the tile grid
+    #obj.Vehicle stores the vehicle
     tile_size = obj.Build_TileSize
     tile_gap = obj.Build_TileGap
     tile_img = obj.Build_TileImg
@@ -59,8 +64,37 @@ def UI(obj):
         y = 0
         while y < len(obj.Build_TileGridPositions[0]):
             tilepos = obj.Build_TileGridPositions[x][y]
-            obj.screen.blit(tile_img, tilepos)
+            #obj.screen.blit(tile_img, tilepos)
+
+            #placing parts
+            IsClicked = interactions.ButtonArea(obj, tile_img,obj.Build_TileGridPositions[x][y], (tile_size, tile_size) )
+            if IsClicked:
+                #part will be placed
+                obj.Vehicle[x][y] = obj.selected_part
             y += 1
+
+
+
+        x += 1
+    #drawing the Vehicle
+    x = 0
+    while x < len(obj.Vehicle):
+        y = 0
+        while y < len(obj.Vehicle[0]):
+            if obj.Vehicle[x][y] != "":
+                #drawing existing parts
+                tilepos = obj.Build_TileGridPositions[x][y]
+                
+                tile_part_img = obj.textures[obj.partdict[obj.Vehicle[x][y]]["Tex"]]
+                #print("drawing part with texture " + tile_part_img)
+
+                IsClicked = interactions.ButtonArea(obj, tile_part_img,tilepos, (tile_size, tile_size))
+                if IsClicked:
+                    #part will be placed
+                    obj.Vehicle[x][y] = obj.selected_part
+            y += 1
+
+
 
         x += 1
 
@@ -84,7 +118,7 @@ def UI(obj):
             #IsClicked is True once the button gets clicked
             if IsClicked:
                 #Teil wird ausgewählt (Jo, dein Einsatz!)
-                obj.selected_part = obj.partdict[key]["Name"] #muss noch ergänzt werden
+                obj.selected_part = obj.partdict[key]["Name"] 
                 print("Selected part: " + obj.selected_part)
             
         except:

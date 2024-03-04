@@ -3,6 +3,8 @@ import pygame
 def ButtonArea(obj, image, pos, size):
    # print("Creating a button at position " + str(pos) + " and size" + str(size))
     try:
+        #resize the image to size of the button
+        image = pygame.transform.scale(image, size)
         obj.screen.blit(image, pos)
     except:
         raise SyntaxError("ERRNO_04: could not find screen to blit on")
