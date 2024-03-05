@@ -2,6 +2,9 @@ import pygame
 import random
 from .interactions import interactions as interactions
 def setupGrid(obj):
+    """This script sets up the sizes of tiles in  the building mode, fit to most conventional screen sizes
+    the positions of all the tiles in building mode get stored in a list and passed to UI(), to avoid all those
+    calculations every single frame."""
     obj.screen.fill((100,100,100))
     dim = obj.dimensions #the window dimesions as (x, y) tuple
     griddim = obj.CFG_Build_Grid_Dimensions
@@ -54,6 +57,9 @@ def setupGrid(obj):
         x += 1
     #print(obj.Build_TileGridPositions)
 def UI(obj):
+    """This script creates the UI elements in building mode and implements their core functions (for example part placement)
+    More on part placement: parts will be placed within the obj.Vehicle matrix at index[x][y]. obj.vehicle only stores properties
+    important for building mode while in building mode, these will be translated into physics stuff afterwards."""
     #drawing the tile grid
     #obj.Vehicle stores the vehicle
     tile_size = obj.Build_TileSize
@@ -129,7 +135,7 @@ def UI(obj):
     size = (obj.Build_TileSize, obj.Build_TileSize)
     IsClicked = interactions.ButtonArea(obj, obj.textures["UI_StartButton.png"], pos, size)
     if IsClicked:
-        obj.gm = "game"
+        obj.gm = "transfer"
         
 def run(obj):
     UI(obj)

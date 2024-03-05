@@ -5,6 +5,7 @@ import res.terrain
 import res.physics
 import res.build
 import res.interactions
+import res.transfer
 #load files in othe directories like this: os.path.dirname(__file__) + "/folder/folder/file.png"
 #put scripts into top-level directory, put images or other "universal files" into _internal in dist/main
 #create a window in fullscreen size with a rectangle in it
@@ -70,6 +71,8 @@ class Game():
             #buiding mode
             Exo.screen.fill((100,100,100))
             res.build.run(Exo)
+        if self.gm == "transfer":
+            res.transfer.run(Exo)
 
 frame = 0
 while running:
@@ -96,6 +99,7 @@ while running:
         res.physics.setup(Exo)
         res.build.setupGrid(Exo)
         frame += 1
+    running = Exo.running
     Exo.run()
     pygame.display.flip()
     time.sleep(1/fps)
