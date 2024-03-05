@@ -5,7 +5,10 @@ def ButtonArea(obj, image, pos, size):
     try:
         #resize the image to size of the button
         image = pygame.transform.scale(image, size)
-        obj.screen.blit(image, pos)
+        try:
+            obj.screen.blit(image, pos)
+        except:
+            raise SyntaxError("ERRNO_04B: Invalid size parameters!")
     except:
         raise SyntaxError("ERRNO_04: could not find screen to blit on")
     if pygame.mouse.get_pressed()[0]:#

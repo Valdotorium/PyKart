@@ -124,6 +124,12 @@ def UI(obj):
         except:
             raise FileNotFoundError(f"ERRNO_03: Could not find texture for part {obj.partdict[x]["Name"]}")
         x += 1
+    #the start button
+    pos = (obj.dimensions[0] - obj.dimensions[0] / 20, obj.dimensions[1] / 20)
+    size = (obj.Build_TileSize, obj.Build_TileSize)
+    IsClicked = interactions.ButtonArea(obj, obj.textures["UI_StartButton.png"], pos, size)
+    if IsClicked:
+        obj.gm = "game"
         
 def run(obj):
     UI(obj)
