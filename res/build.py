@@ -124,8 +124,10 @@ def UI(obj):
             #IsClicked is True once the button gets clicked
             if IsClicked:
                 #Teil wird ausgewählt (Jo, dein Einsatz!)
-                obj.selected_part = obj.partdict[key]["Name"]
+                obj.selected_part = obj.partdict[key]["Name"] 
                 print("Selected part: " + obj.selected_part)
+                textur = obj.partdict[obj.selected_part]["Stex"]
+                textur = obj.textures[textur]
             
         except:
             raise FileNotFoundError(f"ERRNO_03: Could not find texture for part {obj.partdict[x]["Name"]}")

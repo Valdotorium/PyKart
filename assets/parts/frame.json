@@ -4,9 +4,12 @@
     "Type": "Cube",
     "Cost": 500,
     "Tex": "frame.png",
+    "Stex": "metal_frame_selectet.png",
     "Properties": {
         "Rot": 0,
-        "Friction": 0.95
+        "Friction": 0.95,
+        "Weight": 20
+
     },
     "Damping": {
         "BreakPoint": 600000,
