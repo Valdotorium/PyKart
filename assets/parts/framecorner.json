@@ -4,6 +4,7 @@
     "Type": "corner",
     "Cost": 300,
     "Tex": "metal_frame_corner.png",
+    "Stex": "metal_frame_corner.png",
     "Properties": {
         "Rot": 0,
         "Friction": 0.94

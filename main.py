@@ -89,6 +89,8 @@ class Game():
 
 frame = 0
 while running:
+    if frame > 0:
+        running = Exo.running
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -114,7 +116,7 @@ while running:
         res.procedural.setup(Exo)
         res.procedural.generate_chunk(Exo)
         frame += 1
-    running = Exo.running
+
     Exo.run()
     pygame.display.flip()
     time.sleep(1/fps)

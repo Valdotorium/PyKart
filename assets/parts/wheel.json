@@ -4,6 +4,7 @@
     "Type": "Wheel",
     "Cost": 1500,
     "Tex": "wheel.png",
+    "Stex": "wheel.png",
     "Properties": {
         "Rot": 0,
         "FuelUse": 0.2,
