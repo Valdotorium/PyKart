@@ -105,6 +105,7 @@ while running:
         res.physics.setup(Exo)
         res.build.setupGrid(Exo)
         res.procedural.setup(Exo)
+        res.procedural.generate_chunk(Exo)
         frame += 1
     running = Exo.running
     Exo.run()
