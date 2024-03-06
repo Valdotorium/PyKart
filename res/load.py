@@ -4,7 +4,7 @@ import os
 from .fw import fw as utils
 import json
 def respond(obj):
-    """Thos script is responsible for loading the games assets, such as images and parts. it will load everything in the folder it finds.
+    """This script is responsible for loading the games assets, such as images and parts. it will load everything in the folder it finds.
     WARNING: In py2app, the assets folder must be included TWICE in several locations of the app, see py2app.txt"""
     print("ive loaded from the source package!")
     time.sleep(1)
