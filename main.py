@@ -6,6 +6,7 @@ import res.physics
 import res.build
 import res.interactions
 import res.transfer
+import res.procedural
 #load files in othe directories like this: os.path.dirname(__file__) + "/folder/folder/file.png"
 #put scripts into top-level directory, put images or other "universal files" into _internal in dist/main
 #create a window in fullscreen size with a rectangle in it
@@ -49,13 +50,19 @@ class Game():
         self.S_Fullscreen = False
         self.gm = "build"
         #flat, smooth, chipped, mountainous, extreme, default
-        self.S_Terrain_Preset = "mountainous"
+        #self.S_Terrain_Preset = "mountainous"
         #small, medium, default, large
-        self.S_Terrain_Size = "large"
+        #self.S_Terrain_Size = "large"
         #spots (old) or lines (new)
-        self.S_Terrain_Generator = "lines"
+        #self.S_Terrain_Generator = "lines"
         #scale factor
-        self.S_Terrain_Scale_Factor = 1
+        #self.S_Terrain_Scale_Factor = 1
+        #new terrain settings:
+        self.CFG_Terrain_Scale = 1
+        self.CFG_Chunk_Size = 100
+        self.CFG_Chunk_Detail = 10
+        self.CFG_Render_Distance_Chunks = 2
+        self.CFG_Enable_Biomes = False
         
 
 
@@ -98,6 +105,7 @@ while running:
         res.terrain.place(Exo)
         res.physics.setup(Exo)
         res.build.setupGrid(Exo)
+        res.procedural.setup(Exo)
         frame += 1
     running = Exo.running
     Exo.run()
