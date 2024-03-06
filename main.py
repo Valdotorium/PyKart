@@ -58,10 +58,9 @@ class Game():
         #scale factor
         #self.S_Terrain_Scale_Factor = 1
         #new terrain settings:
-        self.CFG_Terrain_Scale = 1
-        self.CFG_Chunk_Size = 100
-        self.CFG_Chunk_Detail = 10
-        self.CFG_Render_Distance_Chunks = 2
+        self.CFG_Terrain_Scale = 0.05
+        self.CFG_Render_Distance = 100
+        self.CFG_Terrain_Detail = 5
         self.CFG_Enable_Biomes = False
         
 
@@ -100,9 +99,9 @@ while running:
         Exo.screen.fill((100,100,100))
         pygame.display.flip()
         time.sleep(1)
-        res.terrain.terrain_quality_presets(Exo)
+        #res.terrain.terrain_quality_presets(Exo)
         #res.terrain.generate(Exo)
-        res.terrain.place(Exo)
+        #res.terrain.place(Exo)
         res.physics.setup(Exo)
         res.build.setupGrid(Exo)
         res.procedural.setup(Exo)
