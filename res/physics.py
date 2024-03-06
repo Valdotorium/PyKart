@@ -3,6 +3,7 @@ import pymunk
 
 def simulate(obj, fps):
     obj.space.step(1/fps)
+    #draeing the poligon with the list of points obj.GroundPolygon
     pygame.draw.polygon(obj.screen, (0,0,0),obj.GroundPolygon)
     #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
 def setup(obj):

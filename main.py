@@ -122,5 +122,6 @@ while running:
     Exo.run()
     pygame.display.flip()
     clock.tick(fps)
+    #FPS counter
     print("FPS: "+ str(int(clock.get_fps())))
 
