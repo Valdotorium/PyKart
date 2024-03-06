@@ -8,5 +8,5 @@ def run(obj):
     print("Cya!")
     BuildVehicle = obj.Vehicle
     PhysicsVehicle = []
-    obj.running = False
+    obj.gm = "game"
     obj.Vehicle = PhysicsVehicle

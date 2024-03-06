@@ -16,7 +16,7 @@ pygame.font.init()
 
 #main loop
 running = True
-fps = 30
+fps = 60
 inputvalues = []
 class Game():
     def __init__(self):
@@ -58,13 +58,13 @@ class Game():
         #scale factor
         #self.S_Terrain_Scale_Factor = 1
         #new terrain settings:
-        self.CFG_Terrain_Scale = 0.05
+        self.CFG_Terrain_Scale = 0.5
         self.CFG_Render_Distance = 100
         self.CFG_Terrain_Detail = 5
         self.CFG_Terrain_Upscale_Factor = 100
 
         #size of each "point" in the ground polygon. 10 is 1/10 of the screen x size
-        self.CFG_Terrain_Node_Scale_Factor = 20
+        self.CFG_Terrain_X_Scale = 100
 
         self.CFG_Enable_Biomes = False
         
@@ -88,6 +88,7 @@ class Game():
             res.transfer.run(Exo)
 
 frame = 0
+clock = pygame.time.Clock()
 while running:
     if frame > 0:
         running = Exo.running
@@ -101,6 +102,7 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 running = False
+
     if frame == 0:
         Exo = Game()
 
@@ -119,5 +121,6 @@ while running:
 
     Exo.run()
     pygame.display.flip()
-    time.sleep(1/fps)
+    clock.tick(fps)
+    print("FPS: "+ str(int(clock.get_fps())))
 

@@ -22,8 +22,9 @@ def generate_chunk(obj):
     x = 0
     while x < len(TerrainDots):
         TerrainDots[x] *= 1000
+        TerrainDots[x] += 500
         #rounding the numbers for readability
-        TerrainDots[x] = round(obj.Terrain[x])
+        TerrainDots[x] = round(TerrainDots[x])
 
         x += 1
     obj.Terrain = TerrainDots
@@ -33,7 +34,11 @@ def WritePolygonPositions(obj):
     obj.GroundPolygon = []
     x = 0
     PolygonPoints = []
-    
+    PolygonPoints.append((0, 10000))
     while x < len(obj.Terrain):
         Point = obj.Terrain[x]
+        PolygonPoints.append((x * obj.CFG_Terrain_X_Scale, Point))
         x += 1
+    PolygonPoints.append(((x - 1) * obj.CFG_Terrain_X_Scale, 10000))
+    obj.GroundPolygon = PolygonPoints
+    #print("THE GROUND POLYGON IS AT:", PolygonPoints)
