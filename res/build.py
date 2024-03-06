@@ -123,9 +123,11 @@ def UI(obj):
             IsClicked = interactions.ButtonArea(obj, part_img,(x * (tile_size + tile_gap) + obj.dimensions[0] / 8, obj.dimensions[1] - obj.dimensions[1] / 6), (tile_size, tile_size) )
             #IsClicked is True once the button gets clicked
             if IsClicked:
-                #Teil wird ausgewählt (Jo, dein Einsatz!)
+                
                 obj.selected_part = obj.partdict[key]["Name"] 
                 print("Selected part: " + obj.selected_part)
+                textur = obj.partdict[obj.selected_part]["Stex"]
+                textur = obj.textures[textur]
             
         except:
             raise FileNotFoundError(f"ERRNO_03: Could not find texture for part {obj.partdict[x]["Name"]}")
