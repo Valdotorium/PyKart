@@ -61,6 +61,11 @@ class Game():
         self.CFG_Terrain_Scale = 0.05
         self.CFG_Render_Distance = 100
         self.CFG_Terrain_Detail = 5
+        self.CFG_Terrain_Upscale_Factor = 100
+
+        #size of each "point" in the ground polygon. 10 is 1/10 of the screen x size
+        self.CFG_Terrain_Node_Scale_Factor = 20
+
         self.CFG_Enable_Biomes = False
         
 
@@ -72,7 +77,9 @@ class Game():
         if self.gm == "game":
             Exo.screen.fill((100,100,100))
             #running the physics
+            res.procedural.WritePolygonPositions(Exo)
             res.physics.simulate(Exo, fps)
+            
         if self.gm =="build":
             #buiding mode
             Exo.screen.fill((100,100,100))

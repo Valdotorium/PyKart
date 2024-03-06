@@ -124,7 +124,7 @@ def UI(obj):
             #IsClicked is True once the button gets clicked
             if IsClicked:
                 #Teil wird ausgewählt (Jo, dein Einsatz!)
-                obj.selected_part = obj.partdict[key]["Name"] 
+                obj.selected_part = obj.partdict[key]["Name"]
                 print("Selected part: " + obj.selected_part)
             
         except:

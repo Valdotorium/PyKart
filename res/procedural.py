@@ -17,7 +17,7 @@ def generate_chunk(obj):
             obj.Terrain_Height_Change = obj.CFG_Terrain_Scale * 10
         if obj.Terrain_Height_Change < -obj.CFG_Terrain_Scale * 10:
             obj.Terrain_Height_Change = -obj.CFG_Terrain_Scale * 10
-        TerrainDots.append += obj.Terrain_Height_Change
+        TerrainDots.append(obj.Terrain_Height_Change)
         x += 1
     x = 0
     while x < len(TerrainDots):
@@ -29,3 +29,11 @@ def generate_chunk(obj):
     obj.Terrain = TerrainDots
 
     print(obj.Terrain) 
+def WritePolygonPositions(obj):
+    obj.GroundPolygon = []
+    x = 0
+    PolygonPoints = []
+    
+    while x < len(obj.Terrain):
+        Point = obj.Terrain[x]
+        x += 1

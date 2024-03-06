@@ -12,12 +12,4 @@ def setup(obj):
     #static floor of the simulation
     obj.body_floor = pymunk.Body(1, 100, body_type=pymunk.Body.STATIC)
     obj.body_floor.position = (0,0)
-    obj.body_floor_size = [(0,800), (1000,800), (1000, 750), (0,700)]
-    obj.body_floor_shape = pymunk.Poly(obj.body_floor, obj.body_floor_size)
-    obj.space.add(obj.body_floor, obj.body_floor_shape)
-    #ball 1
-    obj.body_ball1 = pymunk.Body(1, 100, body_type=pymunk.Body.DYNAMIC)
-    obj.body_ball1.position = (100,500)
-    obj.body_ball1_size = 50
-    obj.body_ball1_shape = pymunk.Circle(obj.body_ball1, obj.body_ball1_size)
-    obj.space.add(obj.body_ball1, obj.body_ball1_shape)
+    

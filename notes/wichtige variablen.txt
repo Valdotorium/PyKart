@@ -1,0 +1,9 @@
+
+
+obj.partdict: speichert die Daten aller Teile, können nach Namen gesucht werden 
+Beispiele:
+obj-partdict["Metal Frame"]["Tex"] ist der NAME det TExtur von Metal Frame
+
+obj.textures: speichert alle Texturen als Bilder, können nach namen aus obj.partdict gesucht werden
+
+obj.Vehicle: speichert das Fahrzeug und seine Daten in einer Matrix
