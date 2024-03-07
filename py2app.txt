@@ -10,3 +10,4 @@
 TODO nach fertigstellung:
 "assets und res in Resources einfügen, assets ernout in Resources/lib/Python 3.12 einfügen
 
+latest app generation: 7.3.2024

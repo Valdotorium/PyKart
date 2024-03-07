@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>VCR</string>
+	<string>main</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -29,7 +29,7 @@
 	<key>NSAppleScriptEnabled</key>
 	<false/>
 	<key>NSHumanReadableCopyright</key>
-	<string>MIT License</string>
+	<string>Copyright not specified</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
