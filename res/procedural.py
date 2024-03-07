@@ -5,19 +5,22 @@ def Noise(obj, scale, variability):
         print("----------------------------------------------------------------")
         x = 0
         Height_Change = random.uniform(-obj.CFG_Terrain_Scale * scale, obj.CFG_Terrain_Scale * scale)
-        Terrain_Direction = "Up"
+        Terrain_Direction = 0
 
         while x < len(obj.Terrain):
             r = random.uniform(0,100)
             if r < variability:
-                if Terrain_Direction == "Up":
-                    Terrain_Direction = "Down"
-                elif Terrain_Direction == "Down":
-                    Terrain_Direction = "Up"
-            if Terrain_Direction == "Up":
-                Height_Change += random.uniform(0, (obj.CFG_Terrain_Scale * scale) / 50)
-            elif Terrain_Direction == "Down":
-                Height_Change += random.uniform(-(obj.CFG_Terrain_Scale * scale )/ 50, 0)
+                Terrain_Direction += random.randint(-1,1)
+            #keeping Terrain_Direction within valid area (-3 to 3)
+            if Terrain_Direction > 3:
+                Terrain_Direction = 3
+            elif Terrain_Direction < -3:
+                Terrain_Direction = -3
+           
+            if Terrain_Direction > 0:
+                Height_Change += random.uniform(0, ((obj.CFG_Terrain_Scale * scale) / 50) * Terrain_Direction)
+            elif Terrain_Direction < 0:
+                Height_Change += random.uniform(-((obj.CFG_Terrain_Scale * scale )/ 50) * -Terrain_Direction, 0)
             Height_Change * scale
             obj.Terrain[x] += Height_Change
             obj.Terrain[x] = round(obj.Terrain[x])
@@ -30,9 +33,9 @@ def setup(obj):
         x += 1
 
 def generate_chunk(obj):
-    Noise(obj, 24, 8)
-    Noise(obj, 6, 14)
-    Noise(obj, 2, 26)
+    Noise(obj, 24, 13)
+    Noise(obj, 6, 20)
+    Noise(obj, 2, 31)
 
     print("generated terrain: " + str(obj.Terrain)) 
 def WritePolygonPositions(obj):

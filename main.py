@@ -58,8 +58,8 @@ class Game():
         #scale factor
         #self.S_Terrain_Scale_Factor = 1
         #new terrain settings:
-        self.CFG_Terrain_Scale = 25
-        self.CFG_Render_Distance = 1000
+        self.CFG_Terrain_Scale = 10
+        self.CFG_Render_Distance = 100
         self.CFG_Terrain_Detail = 5
         self.CFG_Terrain_Upscale_Factor = 100
 
@@ -83,13 +83,13 @@ class Game():
         #res.interactions.interactions.ButtonArea(Exo)
         if self.gm == "game":
             if pygame.key.get_pressed()[pygame.K_w]:
-                Exo.Y_Position += 10
+                Exo.Y_Position += 20
             if pygame.key.get_pressed()[pygame.K_s]:
-                Exo.Y_Position -= 10
+                Exo.Y_Position -= 20
             if pygame.key.get_pressed()[pygame.K_a]:
-                Exo.X_Position -= 10
+                Exo.X_Position -= 20
             if pygame.key.get_pressed()[pygame.K_d]:
-                Exo.X_Position += 10
+                Exo.X_Position += 20
             Exo.screen.fill((100,100,100))
             #running the physics
             res.procedural.WritePolygonPositions(Exo)
