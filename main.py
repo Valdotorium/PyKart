@@ -58,13 +58,13 @@ class Game():
         #scale factor
         #self.S_Terrain_Scale_Factor = 1
         #new terrain settings:
-        self.CFG_Terrain_Scale = 10
+        self.CFG_Terrain_Scale = 29 #must be below CFG_Terrain_X_Scale
         self.CFG_Render_Distance = 100
         self.CFG_Terrain_Detail = 5
         self.CFG_Terrain_Upscale_Factor = 100
 
         #size of each "point" in the ground polygon. 10 is 1/10 of the screen x size
-        self.CFG_Terrain_X_Scale = 100
+        self.CFG_Terrain_X_Scale = 30
         self.CFG_Terrain_Noise_Downscale = 5
         self.CFG_Enable_Biomes = False
 
@@ -138,6 +138,5 @@ while running:
     Exo.run()
     pygame.display.flip()
     clock.tick(fps)
-    #FPS counter
-    print("FPS: "+ str(Exo.X_Position))
+    
 

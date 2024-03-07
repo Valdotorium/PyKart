@@ -50,7 +50,6 @@ def respond(obj):
                 #center the text
 
                 utils.displayTextCenter(obj,f"loaded image {image}")
-                time.sleep(0.1)
                 textures[image] = loadedimage
             print("LOG: loaded all images into:", textures)
             obj.textures = textures
@@ -62,7 +61,6 @@ def respond(obj):
                 utils.DecodePart(loadedpart, obj)
                 utils.clear(obj.screen)
                 utils.displayTextCenter(obj,f"loaded part {part}")
-                time.sleep(0.1)
             print("all parts loaded to game: ", obj.partdict)
             print("all parts loaded to shop: ", obj.shopdict)
 

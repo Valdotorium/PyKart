@@ -41,11 +41,13 @@ def generate_chunk(obj):
 def WritePolygonPositions(obj):
     #making tuples (x,y) out of the y positions of the future polygon vertices stored in obj.Terrain
     obj.GroundPolygon = []
-    x = 0
+    x = round(obj.X_Position / round(obj.dimensions[0] / obj.CFG_Terrain_X_Scale))
+    endx = round((obj.X_Position + obj.dimensions[0]) / round(obj.dimensions[0] / obj.CFG_Terrain_X_Scale))
     PolygonPoints = []
+    startx = x
     #Edge point
     PolygonPoints.append((0, 10000))
-    while x < len(obj.Terrain):
+    while x < round(endx):
         Point = obj.Terrain[x] + obj.Y_Position
         PolygonPoints.append((x * round(obj.dimensions[0] / obj.CFG_Terrain_X_Scale) - obj.X_Position, Point))
         x += 1
@@ -53,3 +55,4 @@ def WritePolygonPositions(obj):
     PolygonPoints.append(((x - 1) * round(obj.dimensions[0] / obj.CFG_Terrain_X_Scale), 10000))
     obj.GroundPolygon = PolygonPoints
     #print("THE GROUND POLYGON IS AT:", PolygonPoints)
+    print(f"drawing poly from terrain item {startx} to terrain item {x}")
