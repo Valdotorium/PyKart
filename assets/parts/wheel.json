@@ -11,7 +11,8 @@
         "MaxImpulse": 1080,
         "MaxForce": 1000,
         "MinForce": 50,
-        "Friction": 0.85
+        "Friction": 0.85,
+        "Weight": 30
     },
     "Damping": {
         "BreakPoint": 1000000,

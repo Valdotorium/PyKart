@@ -7,7 +7,8 @@
     "Stex": "metal_frame_corner.png",
     "Properties": {
         "Rot": 0,
-        "Friction": 0.94
+        "Friction": 0.94,
+        "Weight": 12
     },
     "Damping": {
         "BreakPoint": 500000,
