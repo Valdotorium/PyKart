@@ -58,23 +58,38 @@ class Game():
         #scale factor
         #self.S_Terrain_Scale_Factor = 1
         #new terrain settings:
-        self.CFG_Terrain_Scale = 0.5
-        self.CFG_Render_Distance = 100
+        self.CFG_Terrain_Scale = 25
+        self.CFG_Render_Distance = 1000
         self.CFG_Terrain_Detail = 5
         self.CFG_Terrain_Upscale_Factor = 100
 
         #size of each "point" in the ground polygon. 10 is 1/10 of the screen x size
         self.CFG_Terrain_X_Scale = 100
-
+        self.CFG_Terrain_Noise_Downscale = 5
         self.CFG_Enable_Biomes = False
+
+        """
+        THE GAME COORDINATE SYSTEM: 
+        The game runs in a seperate coordinate system with a screen size of 1200x800 pixels. This then gets scaled to the screen of the user"""
+        self.X_Position = 0
+        self.Y_Position = 0
         
 
 
 
 
     def run(self):
+    
         #res.interactions.interactions.ButtonArea(Exo)
         if self.gm == "game":
+            if pygame.key.get_pressed()[pygame.K_w]:
+                Exo.Y_Position += 10
+            if pygame.key.get_pressed()[pygame.K_s]:
+                Exo.Y_Position -= 10
+            if pygame.key.get_pressed()[pygame.K_a]:
+                Exo.X_Position -= 10
+            if pygame.key.get_pressed()[pygame.K_d]:
+                Exo.X_Position += 10
             Exo.screen.fill((100,100,100))
             #running the physics
             res.procedural.WritePolygonPositions(Exo)
@@ -103,6 +118,7 @@ while running:
             if event.key == pygame.K_ESCAPE:
                 running = False
 
+
     if frame == 0:
         Exo = Game()
 
@@ -123,5 +139,5 @@ while running:
     pygame.display.flip()
     clock.tick(fps)
     #FPS counter
-    print("FPS: "+ str(int(clock.get_fps())))
+    print("FPS: "+ str(Exo.X_Position))
 
