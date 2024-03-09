@@ -93,11 +93,10 @@ class Game():
             Exo.screen.fill((100,100,100))
             #running the physics
             res.procedural.WritePolygonPositions(Exo)
-            res.physics.simulate(Exo, fps)
             
         if self.gm =="build":
             #buiding mode
-            Exo.screen.fill((100,100,100))
+            Exo.screen.fill((180, 190, 230))
             res.build.run(Exo)
         if self.gm == "transfer":
             res.transfer.run(Exo)
@@ -129,12 +128,12 @@ while running:
         #res.terrain.terrain_quality_presets(Exo)
         #res.terrain.generate(Exo)
         #res.terrain.place(Exo)
-        res.physics.setup(Exo)
-        res.build.setupGrid(Exo)
+        res.build.setup(Exo)
         res.procedural.setup(Exo)
         res.procedural.generate_chunk(Exo)
+        res.procedural.WritePolygonPositions(Exo)
+        res.physics.setup(Exo)
         frame += 1
-
     Exo.run()
     pygame.display.flip()
     clock.tick(fps)
