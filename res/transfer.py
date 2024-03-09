@@ -8,5 +8,5 @@ def run(obj):
     print("Cya!")
     BuildVehicle = obj.Vehicle
     PhysicsVehicle = []
+    print("User started with Vehicle: ", obj.Vehicle)
     obj.gm = "game"
-    obj.Vehicle = PhysicsVehicle
