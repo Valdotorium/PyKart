@@ -12,7 +12,6 @@ def ButtonArea(obj, image, pos, size):
     except:
         raise SyntaxError("ERRNO_04: could not find screen to blit on")
     if pygame.mouse.get_pressed()[0]:#
-        print("Mouse pressed")
         mx, my = pygame.mouse.get_pos()
 
         # is the button clicked?  (is the mouse within a box at pos with size when the click occurs?)
