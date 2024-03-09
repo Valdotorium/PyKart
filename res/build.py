@@ -26,7 +26,7 @@ def run(obj):
                 if (mx,my) == obj.Vehicle[c]["pos"]:
                     PartIsValid = False
                     print("part placement failed due to invalid positioning")
-                    c += 1
+                c += 1
             #saving the part that has been placed and its data to obj.Vehicle
             if PartIsValid:
                 PlacedPart = {
@@ -83,4 +83,11 @@ def run(obj):
     if PlayButton:
         print("User just cligged on the play button")
         obj.gm = "transfer"
-
+    #------------------------------Drawing the Vehicle--------------------------------
+        
+    c = 0
+    while c < len(obj.Vehicle):
+        Texture = obj.textures[obj.Vehicle[c]["Tex"]] # Surface object of Tex of item c in obj.Vehicle
+        Texture = pygame.transform.scale(Texture, (int(64 * scaleX), int(64 * scaleX)))
+        obj.screen.blit(Texture, obj.Vehicle[c]["pos"])
+        c += 1
