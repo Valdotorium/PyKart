@@ -18,19 +18,19 @@
     "Joints":[
         {
             "Type": "Provide",
-            "Pos": [0,0]
+            "Pos": [32,0]
         },
         {
             "Type": "Provide",
-            "Pos": [64,0]
+            "Pos": [64,32]
         },
         {
             "Type": "Provide",
-            "Pos": [0,64]
+            "Pos": [32, 64]
         },
         {
             "Type": "Provide",
-            "Pos": [64,64]
+            "Pos": [0, 32]
         }
     ]
 }

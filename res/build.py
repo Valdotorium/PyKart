@@ -14,38 +14,8 @@ def setup(obj):
 def run(obj):
     scaleX = obj.scalefactor
     mx, my = pygame.mouse.get_pos()
-    #------------------------------Upon placement, check if the position of the parts center is within a valid rectangle (BuildBackgroundImg)--------------------------------
-    if obj.selectedPart != "" and pygame.mouse.get_pressed()[0]:
-        #if the mouse is touching BuildBackgroundImg, the part gets placed
-        if obj.dimensions[0] * 0.125 < mx < 0.875 * obj.dimensions[0] and obj.dimensions[1] * 0.125 < my < 0.875 * obj.dimensions[1]:
-            #checking if the position of the part is otherwise invalid
-            PartIsValid = True
-            #is the part exactly placed on another part?
-            c = 0
-            while c < len(obj.Vehicle):
-                if (mx,my) == obj.Vehicle[c]["Pos"]:
-                    PartIsValid = False
-                    print("part placement failed due to invalid positioning")
-                c += 1
-            #saving the part that has been placed and its data to obj.Vehicle
-            if PartIsValid:
-                PlacedPart = {
-                    #ready to store as json
-                    "name": obj.selectedPart,
-                    "Index": len(obj.Vehicle),
-                    "Tex": obj.partdict[obj.selectedPart]["Tex"],
-                    "Pos": (mx,my),
-                    "refundValue": obj.partdict[obj.selectedPart]["Cost"],
-                    "CanStandAlone": True,
-                    "Joints":obj.partdict[obj.selectedPart]["Joints"]
-                }
-                obj.Vehicle.append(PlacedPart)
-                print(f"part {obj.selectedPart} placed at {(mx,my)}")
-                #part gets unselected
-                obj.selectedPart = ""
-        else:
-            #the part gets unselected
-            obj.selectedPart = ""
+    UserHasSelectedPart = False
+
     #--------------------------Drawing the part inventory---------------------------------------------------
     inventoryTileImage = obj.textures["UI_tile.png"]
     obj.inventoryTile = pygame.transform.scale(inventoryTileImage, (int(64 * scaleX), int(64 * scaleX)))
@@ -67,6 +37,7 @@ def run(obj):
         c += 1
         
         if IsClicked:
+            UserHasSelectedPart = True
             print(f"User just cligged on part {obj.partdict[list(obj.partdict)[c - 1]]["Name"]}")
             obj.selectedPart = obj.partdict[list(obj.partdict)[c - 1]]["Name"]
     #------------------------------The play button----------------------------------------------------------------
@@ -114,18 +85,21 @@ def run(obj):
             FJointPosition[0] = JointPosition[0] + mx
             FJointPosition[1] = JointPosition[1] + my
             JointPositionsOfSelectedPart.append(FJointPosition)
-            print(FJointPosition)
-            pygame.draw.circle(obj.screen, (180,50,0), FJointPosition, 5 * scaleX)
 
             c += 1
         print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}")  
     #------------------------------Sanpping to joints when close to them-------------------------------------------------------------------------
-    c = 0
+    
     if obj.selectedPart != "":
+        c = 0
         while c < len(obj.JointPositions):
-            if obj.JointPositions[c][0] - 10 * scaleX < mx < obj.JointPositions[c][0] + 10 * scaleX:
-                if obj.JointPositions[c][1] - 10 * scaleX < my < obj.JointPositions[c][1] + 10 * scaleX:
-                    mx,my = obj.JointPositions[c]
+            cc = 0
+            while cc < len(JointPositionsOfSelectedPart):
+                #check if a joint of the part curently selected is closer than 15 * scaleX pixels to a placed joint
+                if obj.JointPositions[c][0] - 15 * scaleX < JointPositionsOfSelectedPart[cc][0] < obj.JointPositions[c][0] + 15 * scaleX:
+                    if obj.JointPositions[c][1] - 15 * scaleX < JointPositionsOfSelectedPart[cc][1] < obj.JointPositions[c][1] + 15 * scaleX:
+                        mx,my = (obj.JointPositions[c][0] - SelectedPartJoints[cc]["Pos"][0], obj.JointPositions[c][1] - SelectedPartJoints[cc]["Pos"][1])
+                cc += 1
             c += 1
     #------------------------------Drawing the selected part at mouse pos-------------------------------------
     if obj.selectedPart != "":
@@ -134,3 +108,56 @@ def run(obj):
         textur = obj.textures[textur]
         textur = pygame.transform.scale(textur, (int(64 * scaleX), int(64 * scaleX)))
         obj.screen.blit(textur, (mx, my))
+    #----------------------------- Getting Temporary Joint Positions of the SelectedPart (if it snapped, at a new position) --------------------------------------------------------
+    JointPositionsOfSelectedPart = []
+    if obj.selectedPart != "":
+        SelectedPartJoints = obj.partdict[obj.selectedPart]["Joints"]
+        
+        c = 0
+        while c < len(SelectedPartJoints):
+            JointPosition = SelectedPartJoints[c]["Pos"]
+            FJointPosition = [0,0]
+            FJointPosition[0] = JointPosition[0] + mx
+            FJointPosition[1] = JointPosition[1] + my
+            JointPositionsOfSelectedPart.append(FJointPosition)
+
+            c += 1
+        print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}") 
+    #------------------------------Upon placement, check if the position of the parts center is within a valid rectangle (BuildBackgroundImg)--------------------------------
+    if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not UserHasSelectedPart:
+        #if the mouse is touching BuildBackgroundImg, the part gets placed
+        if obj.dimensions[0] * 0.125 < mx < 0.875 * obj.dimensions[0] and obj.dimensions[1] * 0.125 < my < 0.875 * obj.dimensions[1]:
+            #checking if the position of the part is otherwise invalid
+            PartIsValid = True
+            #is the part exactly placed on another part?
+            c = 0
+            while c < len(obj.Vehicle):
+                if (mx,my) == obj.Vehicle[c]["Pos"]:
+                    PartIsValid = False
+                    print("part placement failed due to invalid positioning")
+                c += 1
+            #saving the part that has been placed and its data to obj.Vehicle
+            if PartIsValid:
+                PlacedPart = {
+                    #ready to store as json
+                    "name": obj.selectedPart,
+                    "Index": len(obj.Vehicle),
+                    "Tex": obj.partdict[obj.selectedPart]["Tex"],
+                    "Pos": (mx,my),
+                    "refundValue": obj.partdict[obj.selectedPart]["Cost"],
+                    "CanStandAlone": True,
+                    "Joints":obj.partdict[obj.selectedPart]["Joints"]
+                }
+                obj.Vehicle.append(PlacedPart)
+                print(f"part {obj.selectedPart} placed at {(mx,my)}")
+                #part gets unselected
+                obj.selectedPart = ""
+        else:
+            #the part gets unselected
+            obj.selectedPart = ""
+    #------------------------------Drawing dots at the currently selected parts joints --------------------------------
+    if obj.selectedPart != "":
+        c = 0
+        while c < len(JointPositionsOfSelectedPart):
+            pygame.draw.circle(obj.screen, (200,0,0), JointPositionsOfSelectedPart[c], 5 * scaleX)
+            c += 1
