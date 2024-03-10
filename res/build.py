@@ -68,11 +68,12 @@ def run(obj):
             FinalJointPosition=[0,0]
             FinalJointPosition[0] = PartPosition[0] + JointPosition[0]
             FinalJointPosition[1] = PartPosition[1] + JointPosition[1]
-            obj.JointPositions.append(FinalJointPosition)
-            #print(f"creating joint at pos {FinalJointPosition}")
+            obj.JointPositions.append([c,FinalJointPosition]) #c is also the index of the joints parent part
+            #print(f"creating joint at pos {FinalJointPosition} with parent {c}")
             pygame.draw.circle(obj.screen, (200,0,0), FinalJointPosition, 5 * scaleX)
             cc += 1
         c += 1
+    print("all joints:", obj.JointPositions)
     #----------------------------- Getting Temporary Joint Positions of the SelectedPart --------------------------------------------------------
     JointPositionsOfSelectedPart = []
     if obj.selectedPart != "":
@@ -87,7 +88,7 @@ def run(obj):
             JointPositionsOfSelectedPart.append(FJointPosition)
 
             c += 1
-        print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}")  
+        #print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}")  
     #------------------------------Sanpping to joints when close to them-------------------------------------------------------------------------
     
     if obj.selectedPart != "":
@@ -96,9 +97,9 @@ def run(obj):
             cc = 0
             while cc < len(JointPositionsOfSelectedPart):
                 #check if a joint of the part curently selected is closer than 15 * scaleX pixels to a placed joint
-                if obj.JointPositions[c][0] - 15 * scaleX < JointPositionsOfSelectedPart[cc][0] < obj.JointPositions[c][0] + 15 * scaleX:
-                    if obj.JointPositions[c][1] - 15 * scaleX < JointPositionsOfSelectedPart[cc][1] < obj.JointPositions[c][1] + 15 * scaleX:
-                        mx,my = (obj.JointPositions[c][0] - SelectedPartJoints[cc]["Pos"][0], obj.JointPositions[c][1] - SelectedPartJoints[cc]["Pos"][1])
+                if obj.JointPositions[c][1][0] - 15 * scaleX < JointPositionsOfSelectedPart[cc][0] < obj.JointPositions[c][1][0] + 15 * scaleX:
+                    if obj.JointPositions[c][1][1] - 15 * scaleX < JointPositionsOfSelectedPart[cc][1] < obj.JointPositions[c][1][1] + 15 * scaleX:
+                        mx,my = (obj.JointPositions[c][1][0] - SelectedPartJoints[cc]["Pos"][0], obj.JointPositions[c][1][1] - SelectedPartJoints[cc]["Pos"][1])
                 cc += 1
             c += 1
     #------------------------------Drawing the selected part at mouse pos-------------------------------------
@@ -122,7 +123,7 @@ def run(obj):
             JointPositionsOfSelectedPart.append(FJointPosition)
 
             c += 1
-        print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}") 
+        #print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}") 
     #------------------------------Upon placement, check if the position of the parts center is within a valid rectangle (BuildBackgroundImg)--------------------------------
     if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not UserHasSelectedPart:
         #if the mouse is touching BuildBackgroundImg, the part gets placed
@@ -137,6 +138,14 @@ def run(obj):
                     print("part placement failed due to invalid positioning")
                 c += 1
             #saving the part that has been placed and its data to obj.Vehicle
+                
+            #TODO #2 here!
+            #check if joint pairing is valid
+            #create joint data Todo: 
+            #get parent of joint
+            #get joint types
+            #append physical data to joint
+                
             if PartIsValid:
                 PlacedPart = {
                     #ready to store as json
@@ -146,7 +155,8 @@ def run(obj):
                     "Pos": (mx,my),
                     "refundValue": obj.partdict[obj.selectedPart]["Cost"],
                     "CanStandAlone": True,
-                    "Joints":obj.partdict[obj.selectedPart]["Joints"]
+                    "Joints":obj.partdict[obj.selectedPart]["Joints"],
+                    "Parent": 1
                 }
                 obj.Vehicle.append(PlacedPart)
                 print(f"part {obj.selectedPart} placed at {(mx,my)}")
@@ -161,3 +171,7 @@ def run(obj):
         while c < len(JointPositionsOfSelectedPart):
             pygame.draw.circle(obj.screen, (200,0,0), JointPositionsOfSelectedPart[c], 5 * scaleX)
             c += 1
+    
+    #TODO #3: part removing here!
+    #checkj for collisions with parts 
+    #refactor all lists when part gets clicked and remove parts dependent from the one removed
