@@ -23,7 +23,7 @@ def run(obj):
             #is the part exactly placed on another part?
             c = 0
             while c < len(obj.Vehicle):
-                if (mx,my) == obj.Vehicle[c]["pos"]:
+                if (mx,my) == obj.Vehicle[c]["Pos"]:
                     PartIsValid = False
                     print("part placement failed due to invalid positioning")
                 c += 1
@@ -34,10 +34,10 @@ def run(obj):
                     "name": obj.selectedPart,
                     "Index": len(obj.Vehicle),
                     "Tex": obj.partdict[obj.selectedPart]["Tex"],
-                    "pos": (mx,my),
+                    "Pos": (mx,my),
                     "refundValue": obj.partdict[obj.selectedPart]["Cost"],
                     "CanStandAlone": True,
-                    "Joints":{}
+                    "Joints":obj.partdict[obj.selectedPart]["Joints"]
                 }
                 obj.Vehicle.append(PlacedPart)
                 print(f"part {obj.selectedPart} placed at {(mx,my)}")
@@ -89,5 +89,21 @@ def run(obj):
     while c < len(obj.Vehicle):
         Texture = obj.textures[obj.Vehicle[c]["Tex"]] # Surface object of Tex of item c in obj.Vehicle
         Texture = pygame.transform.scale(Texture, (int(64 * scaleX), int(64 * scaleX)))
-        obj.screen.blit(Texture, obj.Vehicle[c]["pos"])
+        obj.screen.blit(Texture, obj.Vehicle[c]["Pos"])
+        c += 1
+    #------------------------------Drawing the Joints--------------------------------
+    c = 0
+    while c < len(obj.Vehicle):
+        PartJoints = obj.Vehicle[c]["Joints"]
+        PartPosition = obj.Vehicle[c]["Pos"]
+        #draw every joint of the part
+        cc = 0
+        while cc < len(PartJoints):
+            JointPosition = PartJoints[cc]["Pos"]
+            FinalJointPosition=[0,0]
+            FinalJointPosition[0] = PartPosition[0] + JointPosition[0]
+            FinalJointPosition[1] = PartPosition[1] + JointPosition[1]
+            #print(f"creating joint at pos {FinalJointPosition}")
+            pygame.draw.circle(obj.screen, (200,0,0), FinalJointPosition, 5 * scaleX)
+            cc += 1
         c += 1

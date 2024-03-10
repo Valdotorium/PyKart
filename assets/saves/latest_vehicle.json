@@ -1,1 +1,1 @@
-[]
+[{"name": "Wheel", "Index": 0, "Tex": "wheel.png", "Pos": [523, 436], "refundValue": 1500, "CanStandAlone": true, "Joints": [{"Type": "Provide", "Pos": [0, 0]}, {"Type": "Provide", "Pos": [64, 0]}, {"Type": "Provide", "Pos": [0, 64]}, {"Type": "Provide", "Pos": [64, 64]}]}, {"name": "Metal Frame", "Index": 1, "Tex": "frame.png", "Pos": [526, 332], "refundValue": 500, "CanStandAlone": true, "Joints": [{"Type": "Provide", "Pos": [0, 0]}, {"Type": "Provide", "Pos": [64, 0]}, {"Type": "Provide", "Pos": [0, 64]}, {"Type": "Provide", "Pos": [64, 64]}]}]

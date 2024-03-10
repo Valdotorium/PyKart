@@ -6,8 +6,7 @@ Then this list is used to setup the pymink physics simulation for the vehicle"""
 import os
 import json
 def run(obj):
-    print("Ha im not doin' anythin' aight? I'm just yo' placeholder!")
-    print("Cya!")
+    #---------------------------------------------------------------- some basics
     BuildVehicle = obj.Vehicle
     PhysicsVehicle = []
     print("User started with Vehicle: ", obj.Vehicle)
@@ -17,5 +16,7 @@ def run(obj):
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
     with open(CurrentPath + "/assets/saves/latest_vehicle.json", "w") as outfile: 
         json.dump(obj.Vehicle, outfile)
+    #---------------------------------------------------------------- transforming obj.Vehicle
+    #TBA
 
 
