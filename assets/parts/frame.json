@@ -1,7 +1,7 @@
 {
     "Name": "Metal Frame",
     "Index": 2,
-    "Type": "Cube",
+    "Type": "Stability",
     "Cost": 500,
     "Tex": "frame.png",
     "Stex": "metal_frame_selectet.png",

@@ -1,10 +1,10 @@
 {
     "Name": "Metal Frame corner",
     "Index": 3,
-    "Type": "corner",
+    "Type": "Stability",
     "Cost": 300,
-    "Tex": "metal_frame_corner.png",
-    "Stex": "metal_frame_corner.png",
+    "Tex": "frame_corner.png",
+    "Stex": "frame_corner.png",
     "Properties": {
         "Rot": 0,
         "Friction": 0.94,
@@ -23,10 +23,6 @@
         "HasRotation": 1
     },
     "Joints":[
-        {
-            "Type": "Provide",
-            "Pos": [64,32]
-        },
         {
             "Type": "Provide",
             "Pos": [32, 64]
