@@ -69,21 +69,14 @@ def run(obj):
         if IsClicked:
             print(f"User just cligged on part {obj.partdict[list(obj.partdict)[c - 1]]["Name"]}")
             obj.selectedPart = obj.partdict[list(obj.partdict)[c - 1]]["Name"]
-    #------------------------------Drawing the selected part at mouse pos-------------------------------------
-    if obj.selectedPart != "":
-        #jos code
-        textur = obj.partdict[obj.selectedPart]["Stex"]
-        textur = obj.textures[textur]
-        textur = pygame.transform.scale(textur, (int(64 * scaleX), int(64 * scaleX)))
-        obj.screen.blit(textur, (mx - int(64 * scaleX) / 2, my - int(64 * scaleX) / 2))
-    #------------------------------The play button--------------------------------
+    #------------------------------The play button----------------------------------------------------------------
     PlayButtonImg = obj.textures["UI_StartButton.png"]
     PlayButtonImg = pygame.transform.scale(PlayButtonImg, (int(64 * scaleX), int(64 * scaleX)))
     PlayButton = interactions.ButtonArea(obj, PlayButtonImg, (obj.dimensions[0] - 128 * scaleX, 64 * scaleX), (int(64 * scaleX), int(64 * scaleX)))
     if PlayButton:
         print("User just cligged on the play button")
         obj.gm = "transfer"
-    #------------------------------Drawing the Vehicle--------------------------------
+    #------------------------------Drawing the Vehicle--------------------------------------------------------
         
     c = 0
     while c < len(obj.Vehicle):
@@ -91,8 +84,9 @@ def run(obj):
         Texture = pygame.transform.scale(Texture, (int(64 * scaleX), int(64 * scaleX)))
         obj.screen.blit(Texture, obj.Vehicle[c]["Pos"])
         c += 1
-    #------------------------------Drawing the Joints--------------------------------
+    #------------------------------Drawing the Joints-----------------------------------------------------------
     c = 0
+    obj.JointPositions = []
     while c < len(obj.Vehicle):
         PartJoints = obj.Vehicle[c]["Joints"]
         PartPosition = obj.Vehicle[c]["Pos"]
@@ -103,7 +97,40 @@ def run(obj):
             FinalJointPosition=[0,0]
             FinalJointPosition[0] = PartPosition[0] + JointPosition[0]
             FinalJointPosition[1] = PartPosition[1] + JointPosition[1]
+            obj.JointPositions.append(FinalJointPosition)
             #print(f"creating joint at pos {FinalJointPosition}")
             pygame.draw.circle(obj.screen, (200,0,0), FinalJointPosition, 5 * scaleX)
             cc += 1
         c += 1
+    #----------------------------- Getting Temporary Joint Positions of the SelectedPart --------------------------------------------------------
+    JointPositionsOfSelectedPart = []
+    if obj.selectedPart != "":
+        SelectedPartJoints = obj.partdict[obj.selectedPart]["Joints"]
+        
+        c = 0
+        while c < len(SelectedPartJoints):
+            JointPosition = SelectedPartJoints[c]["Pos"]
+            FJointPosition = [0,0]
+            FJointPosition[0] = JointPosition[0] + mx
+            FJointPosition[1] = JointPosition[1] + my
+            JointPositionsOfSelectedPart.append(FJointPosition)
+            print(FJointPosition)
+            pygame.draw.circle(obj.screen, (180,50,0), FJointPosition, 5 * scaleX)
+
+            c += 1
+        print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}")  
+    #------------------------------Sanpping to joints when close to them-------------------------------------------------------------------------
+    c = 0
+    if obj.selectedPart != "":
+        while c < len(obj.JointPositions):
+            if obj.JointPositions[c][0] - 10 * scaleX < mx < obj.JointPositions[c][0] + 10 * scaleX:
+                if obj.JointPositions[c][1] - 10 * scaleX < my < obj.JointPositions[c][1] + 10 * scaleX:
+                    mx,my = obj.JointPositions[c]
+            c += 1
+    #------------------------------Drawing the selected part at mouse pos-------------------------------------
+    if obj.selectedPart != "":
+        #jos code
+        textur = obj.partdict[obj.selectedPart]["Stex"]
+        textur = obj.textures[textur]
+        textur = pygame.transform.scale(textur, (int(64 * scaleX), int(64 * scaleX)))
+        obj.screen.blit(textur, (mx, my))

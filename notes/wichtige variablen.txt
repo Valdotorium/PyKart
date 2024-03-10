@@ -14,3 +14,5 @@ mx, my: mouseX, mouseY: positionen der Maus
 
 obj.scalefactor: speicher Skalierungsfaktor von 1200 x 800 auf aktuelle Fenstergröße
 
+obj.JointPositions speichert die Positionen aller Joints im Baumodus als Liste
+
