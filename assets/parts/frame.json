@@ -36,5 +36,8 @@
             "Type": "Provide",
             "Pos": [0, 32]
         }
+    ],
+    "Hitboxes":[
+        
     ]
 }

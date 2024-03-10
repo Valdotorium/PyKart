@@ -16,3 +16,5 @@ obj.scalefactor: speicher Skalierungsfaktor von 1200 x 800 auf aktuelle Fensterg
 
 obj.JointPositions speichert die Positionen aller Joints im Baumodus als Liste
 
+obj.VehicleJoints speichert die Daten (beteiligte Teile, physisches) aller Joints im Fahrzeug
+

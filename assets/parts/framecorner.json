@@ -11,11 +11,11 @@
         "Weight": 12
     },
     "JointData": {
-        "BreakPoint": 600000,
+        "BreakPoint": 300000,
         "Hardness": 0.98,
         "Type": "Groove",
         "Data":{
-            "MaximumDistance": 1
+            "MaximumDistance": 2
         }
     },
     "Build":{
@@ -35,5 +35,8 @@
             "Type": "Provide",
             "Pos": [0, 32]
         }
+    ],
+    "Hitboxes":[
+        
     ]
 }

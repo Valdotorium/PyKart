@@ -106,21 +106,22 @@ def run(obj):
                     if obj.JointPositions[c][1][1] - 15 * scaleX < JointPositionsOfSelectedPart[cc][1] < obj.JointPositions[c][1][1] + 15 * scaleX:
                         mx,my = (obj.JointPositions[c][1][0] - SelectedPartJoints[cc]["Pos"][0], obj.JointPositions[c][1][1] - SelectedPartJoints[cc]["Pos"][1])
                         #check if pairing of joints is invalid (if both joints have type "Accept")
-                        if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
-                            PartIsValid = False
-                            print("joint pairing is invalid")
-                        #if both involved joints are providers, the joint data of the child part will get applied
-                        if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
-                            obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
-                            #The Joints Data that will be saved to obj.VehicleJoints
-                        #if the new part is a acceptor and its parent is a provider, the joint data of the child part will get applied
-                        if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
-                            obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
-                            #The Joints Data that will be saved to obj.VehicleJoints
-                        #vice versa
-                        if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
-                            obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
-                            #The Joints Data that will be saved to obj.VehicleJoints
+                        if cc < len(obj.Vehicle[obj.JointPositions[c][0]]["Joints"]) and cc < len(obj.partdict[obj.selectedPart]["Joints"]):
+                            if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
+                                PartIsValid = False
+                                print("joint pairing is invalid")
+                            #if both involved joints are providers, the joint data of the child part will get applied
+                            if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
+                                obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
+                                #The Joints Data that will be saved to obj.VehicleJoints
+                            #if the new part is a acceptor and its parent is a provider, the joint data of the child part will get applied
+                            if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
+                                obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
+                                #The Joints Data that will be saved to obj.VehicleJoints
+                            #vice versa
+                            if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
+                                obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
+                                #The Joints Data that will be saved to obj.VehicleJoints
                 cc += 1
             c += 1
     #------------------------------Drawing the selected part at mouse pos-------------------------------------
@@ -158,17 +159,7 @@ def run(obj):
                     PartIsValid = False
                     print("part placement failed due to invalid positioning")
                 c += 1
-            #saving the part that has been placed and its data to obj.Vehicle
-                
-            #TODO #2 here!
-            #check if joint pairing is valid
-            c = 0
-
-            #create joint data Todo: 
-            #get parent of joint
-            #get joint types
-            #append physical data to joint
-                
+            #saving the part that has been placed and its data to obj.Vehicle                
             if PartIsValid:
                 PlacedPart = {
                     #ready to store as json
@@ -180,6 +171,7 @@ def run(obj):
                     "CanStandAlone": True,
                     "Joints": obj.partdict[obj.selectedPart]["Joints"],
                 }
+                #if a joint need to be formed, its data will be created here
                 if obj.SnappedJointData != None:
                     PlacedPart["JoinedWith"] = obj.SnappedJointData["JoinedParts"]
                     obj.VehicleJoints.append(obj.SnappedJointData)
@@ -202,4 +194,5 @@ def run(obj):
     
     #TODO #3: part removing here!
     #checkj for collisions with parts 
-    #refactor all lists when part gets clicked and remove parts dependent from the one removed
+    #refactor all lists when part gets clicked and remove parts dependent from the one removed 
+    #(or figure out a way to remove joints and set removed parts in obj.Vehicle to None)
