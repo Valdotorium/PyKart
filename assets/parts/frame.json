@@ -11,9 +11,13 @@
         "Weight": 20
 
     },
-    "Damping": {
+    "JointData": {
         "BreakPoint": 600000,
-        "Hardness": 0.98
+        "Hardness": 0.98,
+        "Type": "Groove",
+        "Data":{
+            "MaximumDistance": 1
+        }
     },
     "Joints":[
         {

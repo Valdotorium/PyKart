@@ -14,9 +14,13 @@
         "Friction": 0.85,
         "Weight": 30
     },
-    "Damping": {
-        "BreakPoint": 1000000,
-        "Hardness": 0.8
+    "JointData": {
+        "BreakPoint": 600000,
+        "Hardness": 0.85,
+        "Type": "Spring",
+        "Data":{
+            "MaximumDistance": 1
+        }
     },
     "Build":{
         "NeedsJoint": 1,
@@ -24,20 +28,8 @@
     },
     "Joints":[
         {
-            "Type": "Provide",
+            "Type": "Accept",
             "Pos": [32,0]
-        },
-        {
-            "Type": "Provide",
-            "Pos": [64,32]
-        },
-        {
-            "Type": "Provide",
-            "Pos": [32, 64]
-        },
-        {
-            "Type": "Provide",
-            "Pos": [0, 32]
         }
     ]
 }

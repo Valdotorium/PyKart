@@ -10,13 +10,13 @@ def run(obj):
     BuildVehicle = obj.Vehicle
     PhysicsVehicle = []
     print("User started with Vehicle: ", obj.Vehicle)
-    obj.gm = "game"
-
+    print("The Vehicles Joints are: ", obj.VehicleJoints)
     #storing the vehicle as json for readability
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
     with open(CurrentPath + "/assets/saves/latest_vehicle.json", "w") as outfile: 
         json.dump(obj.Vehicle, outfile)
     #---------------------------------------------------------------- transforming obj.Vehicle
     #TBA
+        obj.running = False
 
 

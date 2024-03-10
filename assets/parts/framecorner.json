@@ -10,19 +10,19 @@
         "Friction": 0.94,
         "Weight": 12
     },
-    "Damping": {
-        "BreakPoint": 500000,
-        "Hardness": 0.96
+    "JointData": {
+        "BreakPoint": 600000,
+        "Hardness": 0.98,
+        "Type": "Groove",
+        "Data":{
+            "MaximumDistance": 1
+        }
     },
     "Build":{
         "NeedsJoint": 0,
         "HasRotation": 1
     },
     "Joints":[
-        {
-            "Type": "Provide",
-            "Pos": [32,0]
-        },
         {
             "Type": "Provide",
             "Pos": [64,32]

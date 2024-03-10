@@ -9,9 +9,14 @@ def setup(obj):
     print(1200 * scaleX , 800 * scaleX)
     obj.selectedPart = ""
     obj.Vehicle = []
+    obj.VehicleJoints = []
+    obj.VehicleHitboxes = []
+    #if joints have snapped together, it stores their data
+    obj.SnappedJointData = None
 
  
 def run(obj):
+    PartIsValid = True
     scaleX = obj.scalefactor
     mx, my = pygame.mouse.get_pos()
     UserHasSelectedPart = False
@@ -90,7 +95,7 @@ def run(obj):
             c += 1
         #print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}")  
     #------------------------------Sanpping to joints when close to them-------------------------------------------------------------------------
-    
+    obj.SnappedJointData = None
     if obj.selectedPart != "":
         c = 0
         while c < len(obj.JointPositions):
@@ -100,6 +105,22 @@ def run(obj):
                 if obj.JointPositions[c][1][0] - 15 * scaleX < JointPositionsOfSelectedPart[cc][0] < obj.JointPositions[c][1][0] + 15 * scaleX:
                     if obj.JointPositions[c][1][1] - 15 * scaleX < JointPositionsOfSelectedPart[cc][1] < obj.JointPositions[c][1][1] + 15 * scaleX:
                         mx,my = (obj.JointPositions[c][1][0] - SelectedPartJoints[cc]["Pos"][0], obj.JointPositions[c][1][1] - SelectedPartJoints[cc]["Pos"][1])
+                        #check if pairing of joints is invalid (if both joints have type "Accept")
+                        if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
+                            PartIsValid = False
+                            print("joint pairing is invalid")
+                        #if both involved joints are providers, the joint data of the child part will get applied
+                        if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
+                            obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
+                            #The Joints Data that will be saved to obj.VehicleJoints
+                        #if the new part is a acceptor and its parent is a provider, the joint data of the child part will get applied
+                        if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
+                            obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
+                            #The Joints Data that will be saved to obj.VehicleJoints
+                        #vice versa
+                        if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
+                            obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
+                            #The Joints Data that will be saved to obj.VehicleJoints
                 cc += 1
             c += 1
     #------------------------------Drawing the selected part at mouse pos-------------------------------------
@@ -129,7 +150,7 @@ def run(obj):
         #if the mouse is touching BuildBackgroundImg, the part gets placed
         if obj.dimensions[0] * 0.125 < mx < 0.875 * obj.dimensions[0] and obj.dimensions[1] * 0.125 < my < 0.875 * obj.dimensions[1]:
             #checking if the position of the part is otherwise invalid
-            PartIsValid = True
+
             #is the part exactly placed on another part?
             c = 0
             while c < len(obj.Vehicle):
@@ -141,6 +162,8 @@ def run(obj):
                 
             #TODO #2 here!
             #check if joint pairing is valid
+            c = 0
+
             #create joint data Todo: 
             #get parent of joint
             #get joint types
@@ -155,12 +178,17 @@ def run(obj):
                     "Pos": (mx,my),
                     "refundValue": obj.partdict[obj.selectedPart]["Cost"],
                     "CanStandAlone": True,
-                    "Joints":obj.partdict[obj.selectedPart]["Joints"],
-                    "Parent": 1
+                    "Joints": obj.partdict[obj.selectedPart]["Joints"],
                 }
+                if obj.SnappedJointData != None:
+                    PlacedPart["JoinedWith"] = obj.SnappedJointData["JoinedParts"]
+                    obj.VehicleJoints.append(obj.SnappedJointData)
+                else:
+                    PlacedPart["JoinedWith"] = []
                 obj.Vehicle.append(PlacedPart)
                 print(f"part {obj.selectedPart} placed at {(mx,my)}")
                 #part gets unselected
+                obj.SnappedJointData = None
                 obj.selectedPart = ""
         else:
             #the part gets unselected
