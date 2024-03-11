@@ -21,7 +21,6 @@ def run(obj):
     scaleX = obj.scalefactor
     mx, my = pygame.mouse.get_pos()
     UserHasSelectedPart = False
-    obj.SelectedBuiltPart = None
 
     #--------------------------Drawing the part inventory---------------------------------------------------
     inventoryTileImage = obj.textures["UI_tile.png"]
@@ -44,6 +43,7 @@ def run(obj):
         c += 1
         
         if IsClicked:
+            obj.SelectedBuiltPart = None
             UserHasSelectedPart = True
             print(f"User just cligged on part {obj.partdict[list(obj.partdict)[c - 1]]["Name"]}")
             obj.selectedPart = obj.partdict[list(obj.partdict)[c - 1]]["Name"]
@@ -60,6 +60,7 @@ def run(obj):
     while c < len(obj.Vehicle):
         Texture = obj.textures[obj.Vehicle[c]["Tex"]] # Surface object of Tex of item c in obj.Vehicle
         IsClicked = interactions.ButtonArea(obj, Texture, obj.Vehicle[c]["Pos"], (int(64 * scaleX), int(64 * scaleX)))
+        #selectingparts
         if IsClicked:
             obj.SelectedBuiltPart = c
             print("user just selected part ", c, " of Vehicle")
@@ -196,8 +197,17 @@ def run(obj):
         while c < len(JointPositionsOfSelectedPart):
             pygame.draw.circle(obj.screen, (200,0,0), JointPositionsOfSelectedPart[c], 5 * scaleX)
             c += 1
-    
+    #------------------------------The Unselect Part Button-------------------------------------
+    if obj.SelectedBuiltPart != None:
+        UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], (50 * scaleX, 50*scaleX), (int(64 * scaleX), int(64 * scaleX)))
+        if UnselectButton:
+            obj.SelectedBuiltPart = None
+    #------------------------------Marking the selected part-------------------------------------
+    if obj.SelectedBuiltPart != None:
+        RectPos = obj.Vehicle[obj.SelectedBuiltPart]["Pos"]
+        pygame.draw.rect(obj.screen, (50,50,50), (RectPos[0], RectPos[1],int(64 * scaleX), int(64 * scaleX) ), 2,2)
+
     #TODO #3: part removing here!
-    #checkj for collisions with parts 
+    #checkj for collisions with parts DONE
     #refactor all lists when part gets clicked and remove parts dependent from the one removed 
     #(or figure out a way to remove joints and set removed parts in obj.Vehicle to None)
