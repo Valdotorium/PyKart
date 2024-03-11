@@ -13,6 +13,7 @@ def setup(obj):
     obj.VehicleHitboxes = []
     #if joints have snapped together, it stores their data
     obj.SnappedJointData = None
+    obj.SelectedBuiltPart = None
 
  
 def run(obj):
@@ -20,6 +21,7 @@ def run(obj):
     scaleX = obj.scalefactor
     mx, my = pygame.mouse.get_pos()
     UserHasSelectedPart = False
+    obj.SelectedBuiltPart = None
 
     #--------------------------Drawing the part inventory---------------------------------------------------
     inventoryTileImage = obj.textures["UI_tile.png"]
@@ -57,8 +59,11 @@ def run(obj):
     c = 0
     while c < len(obj.Vehicle):
         Texture = obj.textures[obj.Vehicle[c]["Tex"]] # Surface object of Tex of item c in obj.Vehicle
-        Texture = pygame.transform.scale(Texture, (int(64 * scaleX), int(64 * scaleX)))
-        obj.screen.blit(Texture, obj.Vehicle[c]["Pos"])
+        IsClicked = interactions.ButtonArea(obj, Texture, obj.Vehicle[c]["Pos"], (int(64 * scaleX), int(64 * scaleX)))
+        if IsClicked:
+            obj.SelectedBuiltPart = c
+            print("user just selected part ", c, " of Vehicle")
+            pygame.draw.rect(obj.screen, (50,50,50), (obj.Vehicle[c]["Pos"][0], obj.Vehicle[c]["Pos"][1],int(64 * scaleX), int(64 * scaleX) ), 2,2)
         c += 1
     #------------------------------Drawing the Joints-----------------------------------------------------------
     c = 0
