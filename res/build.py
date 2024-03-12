@@ -50,7 +50,7 @@ def run(obj):
     #------------------------------The play button----------------------------------------------------------------
     PlayButtonImg = obj.textures["UI_StartButton.png"]
     PlayButtonImg = pygame.transform.scale(PlayButtonImg, (int(64 * scaleX), int(64 * scaleX)))
-    PlayButton = interactions.ButtonArea(obj, PlayButtonImg, (obj.dimensions[0] - 128 * scaleX, 64 * scaleX), (int(64 * scaleX), int(64 * scaleX)))
+    PlayButton = interactions.ButtonArea(obj, PlayButtonImg, (50 * scaleX, 50 * scaleX), (int(64 * scaleX), int(64 * scaleX)))
     if PlayButton:
         print("User just cligged on the play button")
         obj.gm = "transfer"
@@ -58,31 +58,33 @@ def run(obj):
         
     c = 0
     while c < len(obj.Vehicle):
-        Texture = obj.textures[obj.Vehicle[c]["Tex"]] # Surface object of Tex of item c in obj.Vehicle
-        IsClicked = interactions.ButtonArea(obj, Texture, obj.Vehicle[c]["Pos"], (int(64 * scaleX), int(64 * scaleX)))
-        #selectingparts
-        if IsClicked:
-            obj.SelectedBuiltPart = c
-            print("user just selected part ", c, " of Vehicle")
-            pygame.draw.rect(obj.screen, (50,50,50), (obj.Vehicle[c]["Pos"][0], obj.Vehicle[c]["Pos"][1],int(64 * scaleX), int(64 * scaleX) ), 2,2)
+        if obj.Vehicle[c] != None:
+            Texture = obj.textures[obj.Vehicle[c]["Tex"]] # Surface object of Tex of item c in obj.Vehicle
+            IsClicked = interactions.ButtonArea(obj, Texture, obj.Vehicle[c]["Pos"], (int(64 * scaleX), int(64 * scaleX)))
+            #selectingparts
+            if IsClicked:
+                obj.SelectedBuiltPart = c
+                print("user just selected part ", c, " of Vehicle")
+                pygame.draw.rect(obj.screen, (50,50,50), (obj.Vehicle[c]["Pos"][0], obj.Vehicle[c]["Pos"][1],int(64 * scaleX), int(64 * scaleX) ), 2,2)
         c += 1
     #------------------------------Drawing the Joints-----------------------------------------------------------
     c = 0
     obj.JointPositions = []
     while c < len(obj.Vehicle):
-        PartJoints = obj.Vehicle[c]["Joints"]
-        PartPosition = obj.Vehicle[c]["Pos"]
-        #draw every joint of the part
-        cc = 0
-        while cc < len(PartJoints):
-            JointPosition = PartJoints[cc]["Pos"]
-            FinalJointPosition=[0,0]
-            FinalJointPosition[0] = PartPosition[0] + JointPosition[0]
-            FinalJointPosition[1] = PartPosition[1] + JointPosition[1]
-            obj.JointPositions.append([c,FinalJointPosition]) #c is also the index of the joints parent part
-            #print(f"creating joint at pos {FinalJointPosition} with parent {c}")
-            pygame.draw.circle(obj.screen, (200,0,0), FinalJointPosition, 5 * scaleX)
-            cc += 1
+        if obj.Vehicle[c] != None:
+            PartJoints = obj.Vehicle[c]["Joints"]
+            PartPosition = obj.Vehicle[c]["Pos"]
+            #draw every joint of the part
+            cc = 0
+            while cc < len(PartJoints):
+                JointPosition = PartJoints[cc]["Pos"]
+                FinalJointPosition=[0,0]
+                FinalJointPosition[0] = PartPosition[0] + JointPosition[0]
+                FinalJointPosition[1] = PartPosition[1] + JointPosition[1]
+                obj.JointPositions.append([c,FinalJointPosition]) #c is also the index of the joints parent part
+                #print(f"creating joint at pos {FinalJointPosition} with parent {c}")
+                pygame.draw.circle(obj.screen, (200,0,0), FinalJointPosition, 5 * scaleX)
+                cc += 1
         c += 1
     print("all joints:", obj.JointPositions)
     #----------------------------- Getting Temporary Joint Positions of the SelectedPart --------------------------------------------------------
@@ -106,29 +108,30 @@ def run(obj):
         c = 0
         while c < len(obj.JointPositions):
             cc = 0
-            while cc < len(JointPositionsOfSelectedPart):
-                #check if a joint of the part curently selected is closer than 15 * scaleX pixels to a placed joint
-                if obj.JointPositions[c][1][0] - 15 * scaleX < JointPositionsOfSelectedPart[cc][0] < obj.JointPositions[c][1][0] + 15 * scaleX:
-                    if obj.JointPositions[c][1][1] - 15 * scaleX < JointPositionsOfSelectedPart[cc][1] < obj.JointPositions[c][1][1] + 15 * scaleX:
-                        mx,my = (obj.JointPositions[c][1][0] - SelectedPartJoints[cc]["Pos"][0], obj.JointPositions[c][1][1] - SelectedPartJoints[cc]["Pos"][1])
-                        #check if pairing of joints is invalid (if both joints have type "Accept")
-                        if cc < len(obj.Vehicle[obj.JointPositions[c][0]]["Joints"]) and cc < len(obj.partdict[obj.selectedPart]["Joints"]):
-                            if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
-                                PartIsValid = False
-                                print("joint pairing is invalid")
-                            #if both involved joints are providers, the joint data of the child part will get applied
-                            if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
-                                obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
-                                #The Joints Data that will be saved to obj.VehicleJoints
-                            #if the new part is a acceptor and its parent is a provider, the joint data of the child part will get applied
-                            if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
-                                obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
-                                #The Joints Data that will be saved to obj.VehicleJoints
-                            #vice versa
-                            if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
-                                obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
-                                #The Joints Data that will be saved to obj.VehicleJoints
-                cc += 1
+            if obj.JointPositions[c] != None:
+                while cc < len(JointPositionsOfSelectedPart):
+                    #check if a joint of the part curently selected is closer than 15 * scaleX pixels to a placed joint
+                    if obj.JointPositions[c][1][0] - 15 * scaleX < JointPositionsOfSelectedPart[cc][0] < obj.JointPositions[c][1][0] + 15 * scaleX:
+                        if obj.JointPositions[c][1][1] - 15 * scaleX < JointPositionsOfSelectedPart[cc][1] < obj.JointPositions[c][1][1] + 15 * scaleX:
+                            mx,my = (obj.JointPositions[c][1][0] - SelectedPartJoints[cc]["Pos"][0], obj.JointPositions[c][1][1] - SelectedPartJoints[cc]["Pos"][1])
+                            #check if pairing of joints is invalid (if both joints have type "Accept")
+                            if cc < len(obj.Vehicle[obj.JointPositions[c][0]]["Joints"]) and cc < len(obj.partdict[obj.selectedPart]["Joints"]):
+                                if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
+                                    PartIsValid = False
+                                    print("joint pairing is invalid")
+                                #if both involved joints are providers, the joint data of the child part will get applied
+                                if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
+                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
+                                    #The Joints Data that will be saved to obj.VehicleJoints
+                                #if the new part is a acceptor and its parent is a provider, the joint data of the child part will get applied
+                                if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
+                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
+                                    #The Joints Data that will be saved to obj.VehicleJoints
+                                #vice versa
+                                if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
+                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
+                                    #The Joints Data that will be saved to obj.VehicleJoints
+                    cc += 1
             c += 1
     #------------------------------Drawing the selected part at mouse pos-------------------------------------
     if obj.selectedPart != "":
@@ -161,9 +164,10 @@ def run(obj):
             #is the part exactly placed on another part?
             c = 0
             while c < len(obj.Vehicle):
-                if (mx,my) == obj.Vehicle[c]["Pos"]:
-                    PartIsValid = False
-                    print("part placement failed due to invalid positioning")
+                if obj.Vehicle[c] != None:
+                    if (mx,my) == obj.Vehicle[c]["Pos"]:
+                        PartIsValid = False
+                        print("part placement failed due to invalid positioning")
                 c += 1
             #saving the part that has been placed and its data to obj.Vehicle                
             if PartIsValid:
@@ -199,15 +203,29 @@ def run(obj):
             c += 1
     #------------------------------The Unselect Part Button-------------------------------------
     if obj.SelectedBuiltPart != None:
-        UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], (50 * scaleX, 50*scaleX), (int(64 * scaleX), int(64 * scaleX)))
+        UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], (250 * scaleX, 50*scaleX), (int(64 * scaleX), int(64 * scaleX)))
         if UnselectButton:
             obj.SelectedBuiltPart = None
+        #---------------------The Delete Part Button--------------------------------
+        DeleteButton = interactions.ButtonArea(obj, obj.textures["DeleteButton.png"], (150 * scaleX, 50*scaleX), (int(64 * scaleX), int(64 * scaleX)))
+        if DeleteButton:
+            #removed parts are still list items, but they will be ignored
+            obj.Vehicle[obj.SelectedBuiltPart] = None
+            print(f"part {obj.SelectedBuiltPart} deleted")
+            #removing all joints that are ocnneced to the built part
+            c = 0
+            while c < len(obj.JointPositions):
+                if obj.SelectedBuiltPart == obj.JointPositions[c][0]:
+                    #removed joints are still list items, but they will be ignored 
+                    obj.JointPositions[c] = None
+                c += 1
+            obj.SelectedBuiltPart = None
+
+        
     #------------------------------Marking the selected part-------------------------------------
     if obj.SelectedBuiltPart != None:
         RectPos = obj.Vehicle[obj.SelectedBuiltPart]["Pos"]
         pygame.draw.rect(obj.screen, (50,50,50), (RectPos[0], RectPos[1],int(64 * scaleX), int(64 * scaleX) ), 2,2)
 
     #TODO #3: part removing here!
-    #checkj for collisions with parts DONE
-    #refactor all lists when part gets clicked and remove parts dependent from the one removed 
-    #(or figure out a way to remove joints and set removed parts in obj.Vehicle to None)
+    #remove parts dependent from the one removed 

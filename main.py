@@ -43,9 +43,8 @@ class Game():
         self.CFG_debug_mode = True
         self.CFG_limit_refresh_access = False
         self.CFG_Build_Enforce_Rules = True
-        self.CFG_Build_Grid_Dimensions = (9,5)
 
-        #options
+        #options,olease set fit and fullscreen to false
         self.S_Fitscreen = False
         self.S_Fullscreen = False
         self.gm = "build"
@@ -67,10 +66,6 @@ class Game():
         self.CFG_Terrain_X_Scale = 30
         self.CFG_Terrain_Noise_Downscale = 5
         self.CFG_Enable_Biomes = False
-
-        """
-        THE GAME COORDINATE SYSTEM: 
-        The game runs in a seperate coordinate system with a screen size of 1200x800 pixels. This then gets scaled to the screen of the user"""
         self.X_Position = 0
         self.Y_Position = 0
         
