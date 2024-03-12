@@ -1,0 +1,11 @@
+{
+    "Gravity": 9.81,
+    "Name": "Earth",
+    "Terrain":{},
+    "PhysMods":{
+        "MaterialStiffness": 1,
+        "OxygenPresent": true,
+        "Slidiness": 1,
+        "MovementDecayFactor": 1.0000001
+    }
+}

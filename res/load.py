@@ -67,7 +67,12 @@ def respond(obj):
                 time.sleep(0.05)
             print("all parts loaded to game: ", obj.partdict)
             print("all parts loaded to shop: ", obj.shopdict)
-
+            try:
+                EnvironmentFile = open(CurrentPath+"/assets/environment.json")
+                obj.Environment = json.load(EnvironmentFile)
+                print(f"loaded environment: ", obj.Environment)
+            except:
+                raise ImportError("Environment File not found")
         else:
             exit
     else:
