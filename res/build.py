@@ -14,10 +14,16 @@ obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"]
 this searches for the key obj.JointPositions[c][0], which is the parent of the joint obj.JointPositions[c]. From this 
 parent part, it searches the Type of the cc-th Joint.
 
+IsClicked = interactions.ButtonArea(obj,obj.textures[TexturesOfPart[cc]["Image"]],PositionOfTexture, (TexturesOfPart[cc]["Size"][0] * scaleX, TexturesOfPart[cc]["Size"][1] * scaleX))
+
+this creates a clickable area for the object obj, which has the image of the cc-th texture of the part. It is located at the position
+PositionOfTexture, which is the top left corner of the texture. The size of the texture is (TexturesOfPart[cc]["Size"][0] * scaleX, TexturesOfPart[cc]["Size"][1] * scaleX), which is a tuple
+containing the sizes of the cc-th texture of the part multiplied by the UI scaling factor scaleX.
 I hope this helps. -Valdotorium-
 """
 def setup(obj):
     scaleX = obj.dimensions[0] / 1200
+    print(f"scale factor: {scaleX}")
     scaleY = obj.dimensions[1] / 800
     obj.scalefactor = scaleX 
     #the calculations of the game are performed in a 1200x800 screen, which will later get rescaled onto the actual window size. everything dealing with positions and sizes needs to get multiplied by scaleX
@@ -65,7 +71,7 @@ def run(obj):
             PositionOfTexture_Y = PositionOfTexture_Y + TexturesOfPart[cc]["Pos"][1]
             #the position of the texture
             PositionOfTexture = [PositionOfTexture_X, PositionOfTexture_Y]
-            IsClicked = interactions.ButtonArea(obj,obj.textures[TexturesOfPart[cc]["Image"]],PositionOfTexture, TexturesOfPart[cc]["Size"])
+            IsClicked = interactions.ButtonArea(obj,obj.textures[TexturesOfPart[cc]["Image"]],PositionOfTexture, (TexturesOfPart[cc]["Size"][0] * scaleX, TexturesOfPart[cc]["Size"][1] * scaleX))
             if IsClicked:
                 obj.SelectedBuiltPart = None
                 UserHasSelectedPart = True
@@ -93,7 +99,7 @@ def run(obj):
                 PositionOfTexture_X = obj.Vehicle[c]["Pos"][0]+ TexturesOfPart[cc]["Pos"][0]
                 PositionOfTexture_Y = obj.Vehicle[c]["Pos"][1]+ TexturesOfPart[cc]["Pos"][1]
                 PositionOfTexture = (PositionOfTexture_X,PositionOfTexture_Y)
-                IsClicked = interactions.ButtonArea(obj,obj.textures[TexturesOfPart[cc]["Image"]],PositionOfTexture, TexturesOfPart[cc]["Size"])
+                IsClicked = interactions.ButtonArea(obj,obj.textures[TexturesOfPart[cc]["Image"]],PositionOfTexture,  (TexturesOfPart[cc]["Size"][0] * scaleX, TexturesOfPart[cc]["Size"][1] * scaleX))
                 if IsClicked:
                     obj.SelectedBuiltPart = c
                     print("user just selected part ", c, " of Vehicle")
@@ -120,7 +126,8 @@ def run(obj):
                 pygame.draw.circle(obj.screen, (200,0,0), FinalJointPosition, 5 * scaleX)
                 cc += 1
         c += 1
-    print("all joints:", obj.JointPositions)
+    
+    #print("all joints:", obj.JointPositions)
     #----------------------------- Getting Temporary Joint Positions of the SelectedPart --------------------------------------------------------
     JointPositionsOfSelectedPart = []
     if obj.selectedPart != "":

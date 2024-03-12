@@ -43,6 +43,7 @@ class Game():
         self.CFG_debug_mode = True
         self.CFG_limit_refresh_access = False
         self.CFG_Build_Enforce_Rules = True
+        self.CFG_Default_Screen_Size = (1200, 800)
 
         #options,olease set fit and fullscreen to false
         self.S_Fitscreen = False

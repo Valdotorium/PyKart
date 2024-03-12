@@ -22,9 +22,10 @@ def respond(obj):
         pygame.display.set_caption("Project Exoplanet") 
     else:
         #smol version
-        obj.screen = pygame.display.set_mode((1200, 800))
+        screensize = obj.CFG_Default_Screen_Size
+        obj.screen = pygame.display.set_mode(screensize)
         obj.screen.fill((100, 100, 100))
-        obj.dimensions[0] = (1200, 800)
+        obj.dimensions[0] = screensize
         pygame.display.set_caption("Project Exoplanet")
     obj.dimensions = obj.dimensions[0]
     utils.displayTextCenter(obj,"finding files")

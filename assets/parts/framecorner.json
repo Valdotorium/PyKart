@@ -37,8 +37,9 @@
         "Size":[64,64]
     },
     "Textures": [{
-        "Image": "metal_frame_corner.png",
+        "Image": "frame_corner.png",
         "Pos": [0,0],
         "Size": [64,64]
     }]
+
 }
