@@ -1,3 +1,34 @@
+
+The game is an object that gets passed around between scripts, referred to as obj.
+
+JOINTS:
+Parts have joints that store physical and other data such as the parts the do connect, the type of joint and its 
+physical characteristics. Jounts get stored in obj.VehicleJoints. The parts the connect refer to indexes of parts in obj.Vehicle.
+The initial joint data is writen upon part placement in building mode
+
+HITBOXES:
+Hitboxes define hitboxes of parts and their appearance. A parts "Tex" represents the texture of the part in building mode.
+However, in driving mode, only hitboxes of pats have textures and so "Tex" cannot be used here because a part
+can have multiple hitboxes. 
+General:
+The "Tex" of a hitbox is the image that gets placed at the hitboxes position. its size is "TexSize".
+The "Type" of a hitbox defines what object pymunk should create for the hitbox ("rect" for rectangle, "poly", "circle"...)
+The "Pos" of a hitbox is the position of the hitboxes top left corner
+The "Size" of a hitbox describes various things dependent on the Type of a hitbox:
+    if the type is "rect", the size is the size on x and y of the rect. This gets saved as list
+    if the type is "poly", the size is  a list of vertices for the poly body. This gets saved as list
+    if the type is "circle", the size is the radius of the circle. This gets saved as int
+
+Each part needs one hitbox with "MainPartHitbox" set to true. This is the hitbox that joints from external parts will connect to.
+Other Hitboxes can be connected to the main part hitbox using "JointToMain" set to a dictionary containing the following data:
+JointToMain:{
+    JointType: str #the joints type, "pivot", "groove", "spring"
+    Data: list #for storing the joints data, for pivot joints its [maxforce, rotationlimit], for spring [maxforce, stiffness], for groove [maxforce, stiffness, maxdist]
+}
+
+
+
+Variablen:
 obj.partdict: speichert die Daten aller Teile, können nach Namen gesucht werden 
 Beispiele:
 obj.partdict["Metal Frame"]["Tex"] ist der NAME der Textur von Metal Frame
