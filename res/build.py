@@ -1,6 +1,21 @@
 import pygame
 import random
 from .interactions import interactions as interactions
+"""WARNING: BARELY READABLE CODE
+This program does not perform very complex operations, but reading it with all the dictionary indexing can be quite challenging
+here are some examples:
+obj.partdict[list(obj.partdict)[c]]["Textures"]
+
+this searches for the key list(obj.partdict)[c], which is the c-th key of obj.partdict.
+Then it searches for "Textures" within this key-value pair.
+
+obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"]
+
+this searches for the key obj.JointPositions[c][0], which is the parent of the joint obj.JointPositions[c]. From this 
+parent part, it searches the Type of the cc-th Joint.
+
+I hope this helps. -Valdotorium-
+"""
 def setup(obj):
     scaleX = obj.dimensions[0] / 1200
     scaleY = obj.dimensions[1] / 800
@@ -34,19 +49,31 @@ def run(obj):
     obj.screen.blit(BuildBackgroundImg, (obj.dimensions[0] / 8, obj.dimensions[1] / 8))
     while c < len(obj.partdict):
         gap = 10 * scaleX
-        #getting the name of the texture
-        part_img = obj.partdict[list(obj.partdict)[c]]["Tex"]
-        #geting the preloaded surface using the name as key
-        part_img = obj.textures[part_img]
-        obj.screen.blit(TileBackgroundImg, (c *(64 * scaleX) + c * gap,obj.dimensions[1] - 100))
-        IsClicked = interactions.ButtonArea(obj, part_img, (c *(64 * scaleX) + c * gap,obj.dimensions[1] - 100), ((64 * scaleX), int(64 * scaleX)))
+        cc = 0
+        TexturesOfPart = obj.partdict[list(obj.partdict)[c]]["Textures"]
+        #THE "BASE" POSITION (like "Pos" of part in obj.vehicle)
+        #data of the texture stored in "Textures" of each part, here retrieved from partdict
+        PositionOfTexture_X = int(64 * c * scaleX) + int(64 * scaleX) + int(gap*c)
+        #1/10 screen y's from the bottom:
+        PositionOfTexture_Y = obj.dimensions[1] - round(obj.dimensions[1] / 10)
+        #the position of the top left corner of the part
+        #BasePositionOfTexture = [PositionOfTexture_X, PositionOfTexture_Y]
+        while cc < len(obj.partdict[list(obj.partdict)[c]]["Textures"]):
+            #THE "BASE" POSITION (like "Pos" of part in obj.vehicle)
+            #adding relative position of texture
+            PositionOfTexture_X = PositionOfTexture_X + TexturesOfPart[cc]["Pos"][0]
+            PositionOfTexture_Y = PositionOfTexture_Y + TexturesOfPart[cc]["Pos"][1]
+            #the position of the texture
+            PositionOfTexture = [PositionOfTexture_X, PositionOfTexture_Y]
+            IsClicked = interactions.ButtonArea(obj,obj.textures[TexturesOfPart[cc]["Image"]],PositionOfTexture, TexturesOfPart[cc]["Size"])
+            if IsClicked:
+                obj.SelectedBuiltPart = None
+                UserHasSelectedPart = True
+                print(f"User just cligged on part {obj.partdict[list(obj.partdict)[c]]["Name"]}")
+                obj.selectedPart = obj.partdict[list(obj.partdict)[c]]["Name"]
+            cc += 1
         c += 1
         
-        if IsClicked:
-            obj.SelectedBuiltPart = None
-            UserHasSelectedPart = True
-            print(f"User just cligged on part {obj.partdict[list(obj.partdict)[c - 1]]["Name"]}")
-            obj.selectedPart = obj.partdict[list(obj.partdict)[c - 1]]["Name"]
     #------------------------------The play button----------------------------------------------------------------
     PlayButtonImg = obj.textures["UI_StartButton.png"]
     PlayButtonImg = pygame.transform.scale(PlayButtonImg, (int(64 * scaleX), int(64 * scaleX)))
@@ -59,13 +86,20 @@ def run(obj):
     c = 0
     while c < len(obj.Vehicle):
         if obj.Vehicle[c] != None:
-            Texture = obj.textures[obj.Vehicle[c]["Tex"]] # Surface object of Tex of item c in obj.Vehicle
-            IsClicked = interactions.ButtonArea(obj, Texture, obj.Vehicle[c]["Pos"], (int(64 * scaleX), int(64 * scaleX)))
-            #selectingparts
-            if IsClicked:
-                obj.SelectedBuiltPart = c
-                print("user just selected part ", c, " of Vehicle")
-                pygame.draw.rect(obj.screen, (50,50,50), (obj.Vehicle[c]["Pos"][0], obj.Vehicle[c]["Pos"][1],int(64 * scaleX), int(64 * scaleX) ), 2,2)
+            cc = 0
+            TexturesOfPart = obj.Vehicle[c]["Textures"]
+            while cc < len(obj.Vehicle[c]["Textures"]):
+                #data of the texture stored in "Textures"
+                PositionOfTexture_X = obj.Vehicle[c]["Pos"][0]+ TexturesOfPart[cc]["Pos"][0]
+                PositionOfTexture_Y = obj.Vehicle[c]["Pos"][1]+ TexturesOfPart[cc]["Pos"][1]
+                PositionOfTexture = (PositionOfTexture_X,PositionOfTexture_Y)
+                IsClicked = interactions.ButtonArea(obj,obj.textures[TexturesOfPart[cc]["Image"]],PositionOfTexture, TexturesOfPart[cc]["Size"])
+                if IsClicked:
+                    obj.SelectedBuiltPart = c
+                    print("user just selected part ", c, " of Vehicle")
+                    #draeing a rect at the position of the texture with the size of the texture
+                    pygame.draw.rect(obj.screen, (50,50,50), (obj.Vehicle[c]["Pos"][0], obj.Vehicle[c]["Pos"][1],round(TexturesOfPart[cc]["Size"][0] * scaleX), round(TexturesOfPart[cc]["Size"][1] * scaleX)), 2,2)
+                cc += 1
         c += 1
     #------------------------------Drawing the Joints-----------------------------------------------------------
     c = 0
@@ -175,7 +209,7 @@ def run(obj):
                     #ready to store as json
                     "name": obj.selectedPart,
                     "Index": len(obj.Vehicle),
-                    "Tex": obj.partdict[obj.selectedPart]["Tex"],
+                    "Textures": obj.partdict[obj.selectedPart]["Textures"],
                     "Pos": (mx,my),
                     "refundValue": obj.partdict[obj.selectedPart]["Cost"],
                     "CanStandAlone": True,

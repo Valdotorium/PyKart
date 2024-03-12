@@ -69,10 +69,6 @@ class Game():
         self.X_Position = 0
         self.Y_Position = 0
         
-
-
-
-
     def run(self):
     
         #res.interactions.interactions.ButtonArea(Exo)

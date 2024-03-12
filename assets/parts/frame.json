@@ -3,7 +3,6 @@
     "Index": 2,
     "Type": "Stability",
     "Cost": 500,
-    "Tex": "frame.png",
     "Stex": "metal_frame_selectet.png",
     "Properties": {
         "Rot": 0,
@@ -37,16 +36,15 @@
             "Pos": [0, 32]
         }
     ],
-    "Hitboxes":[
-        {
+    "Hitbox":{
             "Pos": [0,0],
             "Type": "Rect",
-            "Size":[64,64],
-            "Tex":"frame.png",
-            "TexPos": [0,0],
-            "TexSize": [64,64],
-            "MainPartHitbox": true,
-            "JointToMain": false
-        }
-    ]
+            "Size":[64,64]
+        },
+    "Textures": [{
+        "Image": "frame.png",
+        "Pos": [0,0],
+        "Size": [64,64]
+    }]
+    
 }

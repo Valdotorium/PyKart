@@ -3,7 +3,6 @@
     "Index": 1,
     "Type": "Wheel",
     "Cost": 1500,
-    "Tex": "wheel.png",
     "Stex": "wheel.png",
     "Properties": {
         "Rot": 0,
@@ -32,7 +31,14 @@
             "Pos": [32,0]
         }
     ],
-    "Hitboxes":[
-
-    ]
+    "Hitbox":{
+        "Pos": [0,0],
+        "Type": "Circle",
+        "Size": 64
+    },
+    "Textures": [{
+        "Image": "wheel.png",
+        "Pos": [0,0],
+        "Size": [64,64]
+    }]
 }

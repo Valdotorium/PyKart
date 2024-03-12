@@ -29,4 +29,4 @@ def clear(screen):
 def DecodePart(part, obj):
     #loading parts into the game
     obj.partdict[part["Name"]] = part
-    obj.shopdict[part["Name"]] = {"type" : part["Type"], "cost":part["Cost"], "texture":part["Tex"]}
+    obj.shopdict[part["Name"]] = {"Type" : part["Type"], "Cost":part["Cost"], "Textures":part["Textures"]}
