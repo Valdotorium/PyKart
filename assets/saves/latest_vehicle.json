@@ -1,1 +1,1 @@
-[null]
+[{"name": "Metal Frame", "Index": 0, "Textures": [{"Image": "frame.png", "Pos": [0, 0], "Size": [64, 64]}], "Pos": [372, 444], "refundValue": 500, "CanStandAlone": true, "Joints": [{"Type": "Provide", "Pos": [32, 0]}, {"Type": "Provide", "Pos": [64, 32]}, {"Type": "Provide", "Pos": [32, 64]}, {"Type": "Provide", "Pos": [0, 32]}], "Hitbox": {"Pos": [0, 0], "Type": "Rect", "Size": [64, 64]}, "JoinedWith": []}]

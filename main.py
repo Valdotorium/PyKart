@@ -85,6 +85,7 @@ class Game():
             Exo.screen.fill((100,100,100))
             #running the physics
             res.procedural.WritePolygonPositions(Exo)
+            res.physics.simulate(Exo, fps)
             
         if self.gm =="build":
             #buiding mode
@@ -92,6 +93,8 @@ class Game():
             res.build.run(Exo)
         if self.gm == "transfer":
             res.transfer.run(Exo)
+            res.physics.TransferStage(Exo)
+
 
 frame = 0
 clock = pygame.time.Clock()

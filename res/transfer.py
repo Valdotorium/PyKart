@@ -17,6 +17,3 @@ def run(obj):
         json.dump(obj.Vehicle, outfile)
     #---------------------------------------------------------------- transforming obj.Vehicle
     #TBA
-    obj.running = False
-
-
