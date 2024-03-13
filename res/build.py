@@ -1,6 +1,7 @@
 import pygame
 import random
 from .interactions import interactions as interactions
+from .fw import fw as utils
 """WARNING: BARELY READABLE CODE
 This program does not perform very complex operations, but reading it with all the dictionary indexing can be quite challenging
 here are some examples:
@@ -45,21 +46,21 @@ def run(obj):
 
     #--------------------------Drawing the part inventory---------------------------------------------------
     inventoryTileImage = obj.textures["UI_tile.png"]
-    obj.inventoryTile = pygame.transform.scale(inventoryTileImage, (int(64 * scaleX), int(64 * scaleX)))
+    obj.inventoryTile = pygame.transform.scale(inventoryTileImage, utils.Scale(obj, (64,64)))
     c = 0
     #background for inventory tiles
     TileBackgroundImg = obj.textures["UI_tile.png"]
-    TileBackgroundImg = pygame.transform.scale(TileBackgroundImg, (int(64 * scaleX), int(64 * scaleX)))
+    TileBackgroundImg = pygame.transform.scale(TileBackgroundImg, utils.Scale(obj,(64,64)))
     #background for the building area
     BuildBackgroundImg = pygame.transform.scale(TileBackgroundImg,( round(obj.dimensions[0] * 0.75), round(obj.dimensions[1] * 0.75)))
     obj.screen.blit(BuildBackgroundImg, (obj.dimensions[0] / 8, obj.dimensions[1] / 8))
     while c < len(obj.partdict):
-        gap = 10 * scaleX
+        gap = 10
         cc = 0
         TexturesOfPart = obj.partdict[list(obj.partdict)[c]]["Textures"]
         #THE "BASE" POSITION (like "Pos" of part in obj.vehicle)
         #data of the texture stored in "Textures" of each part, here retrieved from partdict
-        PositionOfTexture_X = int(64 * c * scaleX) + int(64 * scaleX) + int(gap*c)
+        PositionOfTexture_X = 64 * c + 64 + gap*c
         #1/10 screen y's from the bottom:
         PositionOfTexture_Y = obj.dimensions[1] - round(obj.dimensions[1] / 10)
         #the position of the top left corner of the part
@@ -67,10 +68,9 @@ def run(obj):
         while cc < len(obj.partdict[list(obj.partdict)[c]]["Textures"]):
             #THE "BASE" POSITION (like "Pos" of part in obj.vehicle)
             #adding relative position of texture
-            PositionOfTexture_X = PositionOfTexture_X + TexturesOfPart[cc]["Pos"][0]
-            PositionOfTexture_Y = PositionOfTexture_Y + TexturesOfPart[cc]["Pos"][1]
-            #the position of the texture
             PositionOfTexture = [PositionOfTexture_X, PositionOfTexture_Y]
+            #the position of the texture
+            PositionOfTexture = utils.Scale(obj,utils.AddTuples(PositionOfTexture, TexturesOfPart[cc]["Pos"]))
             IsClicked = interactions.ButtonArea(obj,obj.textures[TexturesOfPart[cc]["Image"]],PositionOfTexture, (TexturesOfPart[cc]["Size"][0] * scaleX, TexturesOfPart[cc]["Size"][1] * scaleX))
             if IsClicked:
                 obj.SelectedBuiltPart = None
@@ -82,8 +82,8 @@ def run(obj):
         
     #------------------------------The play button----------------------------------------------------------------
     PlayButtonImg = obj.textures["UI_StartButton.png"]
-    PlayButtonImg = pygame.transform.scale(PlayButtonImg, (int(64 * scaleX), int(64 * scaleX)))
-    PlayButton = interactions.ButtonArea(obj, PlayButtonImg, (50 * scaleX, 50 * scaleX), (int(64 * scaleX), int(64 * scaleX)))
+    PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[64,64]))
+    PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,50]), utils.Scale(obj,[64,64]))
     if PlayButton:
         print("User just cligged on the play button")
         obj.gm = "transfer"
@@ -96,10 +96,8 @@ def run(obj):
             TexturesOfPart = obj.Vehicle[c]["Textures"]
             while cc < len(obj.Vehicle[c]["Textures"]):
                 #data of the texture stored in "Textures"
-                PositionOfTexture_X = obj.Vehicle[c]["Pos"][0]+ TexturesOfPart[cc]["Pos"][0]
-                PositionOfTexture_Y = obj.Vehicle[c]["Pos"][1]+ TexturesOfPart[cc]["Pos"][1]
-                PositionOfTexture = (PositionOfTexture_X,PositionOfTexture_Y)
-                IsClicked = interactions.ButtonArea(obj,obj.textures[TexturesOfPart[cc]["Image"]],PositionOfTexture,  (TexturesOfPart[cc]["Size"][0] * scaleX, TexturesOfPart[cc]["Size"][1] * scaleX))
+                PositionOfTexture = utils.AddTuples(obj.Vehicle[c]["Pos"],TexturesOfPart[cc]["Pos"])
+                IsClicked = interactions.ButtonArea(obj,obj.textures[TexturesOfPart[cc]["Image"]],PositionOfTexture,  utils.MultiplyTuple(TexturesOfPart[cc]["Size"], scaleX))
                 if IsClicked:
                     obj.SelectedBuiltPart = c
                     print("user just selected part ", c, " of Vehicle")
@@ -118,9 +116,7 @@ def run(obj):
             cc = 0
             while cc < len(PartJoints):
                 JointPosition = PartJoints[cc]["Pos"]
-                FinalJointPosition=[0,0]
-                FinalJointPosition[0] = PartPosition[0] + JointPosition[0]
-                FinalJointPosition[1] = PartPosition[1] + JointPosition[1]
+                FinalJointPosition=utils.AddTuples(PartPosition,JointPosition)
                 obj.JointPositions.append([c,FinalJointPosition]) #c is also the index of the joints parent part
                 #print(f"creating joint at pos {FinalJointPosition} with parent {c}")
                 pygame.draw.circle(obj.screen, (200,0,0), FinalJointPosition, 5 * scaleX)
@@ -136,9 +132,7 @@ def run(obj):
         c = 0
         while c < len(SelectedPartJoints):
             JointPosition = SelectedPartJoints[c]["Pos"]
-            FJointPosition = [0,0]
-            FJointPosition[0] = JointPosition[0] + mx
-            FJointPosition[1] = JointPosition[1] + my
+            FJointPosition = utils.AddTuples(JointPosition, (mx,my))
             JointPositionsOfSelectedPart.append(FJointPosition)
 
             c += 1
@@ -179,7 +173,7 @@ def run(obj):
         #jos code
         textur = obj.partdict[obj.selectedPart]["Stex"]
         textur = obj.textures[textur]
-        textur = pygame.transform.scale(textur, (int(64 * scaleX), int(64 * scaleX)))
+        textur = pygame.transform.scale(textur, utils.Scale(obj,[64,64]))
         obj.screen.blit(textur, (mx, my))
     #----------------------------- Getting Temporary Joint Positions of the SelectedPart (if it snapped, at a new position) --------------------------------------------------------
     JointPositionsOfSelectedPart = []
@@ -189,9 +183,7 @@ def run(obj):
         c = 0
         while c < len(SelectedPartJoints):
             JointPosition = SelectedPartJoints[c]["Pos"]
-            FJointPosition = [0,0]
-            FJointPosition[0] = JointPosition[0] + mx
-            FJointPosition[1] = JointPosition[1] + my
+            FJointPosition = utils.AddTuples(JointPosition, (mx,my))
             JointPositionsOfSelectedPart.append(FJointPosition)
 
             c += 1
@@ -244,11 +236,11 @@ def run(obj):
             c += 1
     #------------------------------The Unselect Part Button-------------------------------------
     if obj.SelectedBuiltPart != None:
-        UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], (250 * scaleX, 50*scaleX), (int(64 * scaleX), int(64 * scaleX)))
+        UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(250,50)), utils.Scale(obj,[64,64]))
         if UnselectButton:
             obj.SelectedBuiltPart = None
         #---------------------The Delete Part Button--------------------------------
-        DeleteButton = interactions.ButtonArea(obj, obj.textures["DeleteButton.png"], (150 * scaleX, 50*scaleX), (int(64 * scaleX), int(64 * scaleX)))
+        DeleteButton = interactions.ButtonArea(obj, obj.textures["DeleteButton.png"], utils.Scale(obj,(150,50)), utils.Scale(obj,[64,64]))
         if DeleteButton:
             #removed parts are still list items, but they will be ignored
             obj.Vehicle[obj.SelectedBuiltPart] = None

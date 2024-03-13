@@ -30,3 +30,22 @@ def DecodePart(part, obj):
     #loading parts into the game
     obj.partdict[part["Name"]] = part
     obj.shopdict[part["Name"]] = {"Type" : part["Type"], "Cost":part["Cost"], "Textures":part["Textures"]}
+def Scale(obj,element):
+    #scaling things, fitting screen sizes, necessary for "dynamic" UI
+    if type(element) == tuple:
+        return (element[0] * obj.scalefactor, element[1] * obj.scalefactor)
+    if type(element) == int:
+        return element * obj.scalefactor
+    if type(element) == float:
+        return element * obj.scalefactor
+    #scaling lists of vertices:
+    if type(element) == list:
+        return [Scale(obj,x) for x in element]
+    if type(element) == dict:
+        return {k:Scale(obj,v) for k,v in element.items()}
+    
+def AddTuples(tuple1, tuple2):
+    return tuple1[0] + tuple2[0], tuple1[1] + tuple2[1]
+def MultiplyTuple(tuple1, factor):
+    return tuple1[0] * factor, tuple1[1] * factor
+    
