@@ -15,12 +15,15 @@ def PhysDraw(obj):
             #defining shapes of hitboxes
             if HitboxOfPart["Type"] == "Rect":
                 HitboxVertices = []
+                #take current position of THE PYMUNK BODY and create vertices with them
+
 
 
             elif HitboxOfPart["Type"] == "Circle":
                 HitboxPosition = utils.AddTuples(PartPosition, HitboxOfPart["Pos"])
-
+                
             elif HitboxOfPart["Type"] == "Poly":
+                #the same as in rect
                 pass
                 
         c += 1
@@ -90,7 +93,7 @@ def TransferStage(obj):
                 #bottom left corner
                 HitboxVertices.append(utils.AddTuples(HitboxPosition , (0,HitboxOfPart["Size"][1])))
                 print("Hitbox (rect)vertices for part: ",c," : ", HitboxVertices)
-
+                obj.PhysicsOutputData[c]["Size"] = HitboxVertices
                 hitbox_shape = pymunk.Poly(hitbox_body, HitboxVertices)
                 obj.space.add(hitbox_body)
                 obj.PymunkBodies.append(hitbox_body)
@@ -99,6 +102,7 @@ def TransferStage(obj):
                 HitboxPosition = utils.AddTuples(PartPosition, HitboxOfPart["Pos"])
                 hitbox_shape = pymunk.Circle(hitbox_body, HitboxOfPart["Size"])
                 print("radius of hitbox for part ",c," : ", HitboxOfPart["Size"])
+                obj.PhysicsOutputData[c]["Size"] = [HitboxPosition,HitboxOfPart["Size"]]
                 obj.space.add(hitbox_body)
                 obj.PymunkBodies.append(hitbox_body)
             elif HitboxOfPart["Type"] == "Poly":
@@ -109,7 +113,9 @@ def TransferStage(obj):
                     HitboxVertices.append(utils.AddTuples(HitboxPosition, HitboxOfPart["Size"][cc]))
                     cc += 1
                 hitbox_shape = pymunk.Poly(hitbox_body, HitboxVertices)
+                obj.PhysicsOutputData[c]["Size"] = HitboxVertices
                 print("Hitbox (poly)vertices for part: ",c," : ", HitboxVertices)
+                print("Physics output data :", obj.PhysicsOutputData)
                 obj.space.add(hitbox_body)
                 obj.PymunkBodies.append(hitbox_body)
                 
