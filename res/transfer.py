@@ -15,5 +15,12 @@ def run(obj):
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
     with open(CurrentPath + "/assets/saves/latest_vehicle.json", "w") as outfile: 
         json.dump(obj.Vehicle, outfile)
+    #store the vehicles joints
+    with open(CurrentPath + "/assets/saves/latest_vehicle_joints.json", "w") as outfile: 
+        json.dump(obj.VehicleJoints, outfile)
+    #store the latest vehicles hitboxes
+    with open(CurrentPath + "/assets/saves/latest_vehicle_hitboxes.json", "w") as outfile: 
+        json.dump(obj.VehicleHitboxes, outfile)
+    
     #---------------------------------------------------------------- transforming obj.Vehicle
     #TBA

@@ -80,5 +80,19 @@ def respond(obj):
         utils.displayTextCenter(obj,"ERROR: no textures folder found")
         print("ERRNO_02: No textures or assets folder found in " + CurrentPath)
         exit
+    if obj.CFG_Reload_Latest_Vehicle:
+        print("loading latest vehicle")
+        try:
+            VehicleFile = open(CurrentPath+"/assets/saves/latest_vehicle.json")
+            obj.Vehicle = json.load(VehicleFile)
+            print(f"loaded vehicle: ", obj.Vehicle)
+            VehicleJointFile = open(CurrentPath+"/assets/saves/latest_vehicle_joints.json")
+            obj.VehicleJoints = json.load(VehicleJointFile)
+            print(f"loaded vehicle joints: ", obj.VehicleJoints)
+            VehicleHitboxFile = open(CurrentPath+"/assets/saves/latest_vehicle_hitboxes.json")
+            obj.VehicleHitboxes = json.load(VehicleHitboxFile)
+            print(f"loaded vehicle hitboxes: ", obj.VehicleHitboxes)
+        except:
+            raise ImportError("Vehicle File not found")
 
     utils.displayTextCenter(obj, "All Done!")

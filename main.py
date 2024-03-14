@@ -69,6 +69,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.X_Position = 0
         self.Y_Position = 0
+        self.CFG_Reload_Latest_Vehicle = True
         
     def run(self):
     
