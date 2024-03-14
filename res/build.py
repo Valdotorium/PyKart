@@ -38,7 +38,6 @@ def setup(obj):
     obj.SnappedJointData = None
     obj.SelectedBuiltPart = None
 
- 
 def run(obj):
     PartIsValid = True
     scaleX = obj.scalefactor
@@ -255,12 +254,8 @@ def run(obj):
                     obj.JointPositions[c] = None
                 c += 1
             obj.SelectedBuiltPart = None
-
-        
     #------------------------------Marking the selected part-------------------------------------
     if obj.SelectedBuiltPart != None:
         RectPos = obj.Vehicle[obj.SelectedBuiltPart]["Pos"]
         pygame.draw.rect(obj.screen, (50,50,50), (RectPos[0], RectPos[1],int(64 * scaleX), int(64 * scaleX) ), 2,2)
 
-    #TODO #3: part removing here!
-    #remove parts dependent from the one removed 

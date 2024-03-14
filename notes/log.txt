@@ -8,6 +8,8 @@ LOG START 1.3.2024
 9.3.2024 ------ completely recoded the building system
 10.3.2024 ----- implemented joints and refactored parts
 12.3.2024 ----- first successful distribution test
+14.3.2024 ----- basic physics simulation done (but still needs some updates)
+14.3.2024 ----- vehicle saving and loading
 
 (Straffererer plan:)
 17.3.2024 ---- pymunk joints

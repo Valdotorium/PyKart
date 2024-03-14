@@ -19,8 +19,6 @@ def PhysDraw(obj):
                 #take current position of THE PYMUNK BODY and create vertices with them
                 pygame.draw.rect(obj.screen, (200,150,150), (PartPosition[0], PartPosition[1], HitboxOfPart["Size"][0], HitboxOfPart["Size"][1]))
 
-
-
             elif HitboxOfPart["Type"] == "Circle":
                 HitboxPosition = PartPosition
                 pygame.draw.circle(obj.screen, (200,150,150), HitboxPosition, HitboxOfPart["Size"])
@@ -34,8 +32,7 @@ def PhysDraw(obj):
                     cc += 1
 
                 pygame.draw.polygon(obj.screen, (200,150,150), Vertices)
-                
-                
+                   
         c += 1
 def simulate(obj, fps):
     obj.space.step(1/fps)
@@ -128,6 +125,5 @@ def TransferStage(obj):
                 print("Physics output data :", obj.PhysicsOutputData)
                 obj.space.add(hitbox_body, hitbox_shape)
                 obj.PymunkBodies.append(hitbox_body)
-
         c += 1
     

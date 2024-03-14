@@ -133,5 +133,3 @@ while running:
     Exo.run()
     pygame.display.flip()
     clock.tick(fps)
-    
-

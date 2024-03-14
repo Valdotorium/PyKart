@@ -22,5 +22,3 @@ def run(obj):
     with open(CurrentPath + "/assets/saves/latest_vehicle_hitboxes.json", "w") as outfile: 
         json.dump(obj.VehicleHitboxes, outfile)
     
-    #---------------------------------------------------------------- transforming obj.Vehicle
-    #TBA
