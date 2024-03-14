@@ -8,23 +8,33 @@ def PhysDraw(obj):
     while c < len(obj.Vehicle):
         if obj.Vehicle[c]!= None:
             PartJoints = obj.Vehicle[c]["Joints"]
-            PartPosition = obj.Vehicle[c]["Pos"]
+            PartBody = obj.PymunkBodies[c]
+            PartPosition = PartBody.position
+
             #draw a box with the parts size at part position       
             HitboxOfPart = obj.Vehicle[c]["Hitbox"]
 
             #defining shapes of hitboxes
             if HitboxOfPart["Type"] == "Rect":
-                HitboxVertices = []
                 #take current position of THE PYMUNK BODY and create vertices with them
+                pygame.draw.rect(obj.screen, (200,150,150), (PartPosition[0], PartPosition[1], HitboxOfPart["Size"][0], HitboxOfPart["Size"][1]))
 
 
 
             elif HitboxOfPart["Type"] == "Circle":
-                HitboxPosition = utils.AddTuples(PartPosition, HitboxOfPart["Pos"])
+                HitboxPosition = PartPosition
+                pygame.draw.circle(obj.screen, (200,150,150), HitboxPosition, HitboxOfPart["Size"])
                 
             elif HitboxOfPart["Type"] == "Poly":
                 #the same as in rect
-                pass
+                cc = 0
+                Vertices = []
+                while cc < len(HitboxOfPart["Size"]):
+                    Vertices.append((PartPosition[0] + HitboxOfPart["Size"][cc][0], PartPosition[1] + HitboxOfPart["Size"][cc][1]))
+                    cc += 1
+
+                pygame.draw.polygon(obj.screen, (200,150,150), Vertices)
+                
                 
         c += 1
 def simulate(obj, fps):
