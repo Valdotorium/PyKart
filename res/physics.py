@@ -66,7 +66,7 @@ def setup(obj):
     obj.body_floor = pymunk.Body(1, 100, body_type=pymunk.Body.STATIC)
     obj.body_floor.position = (0,0)
     obj.body_floor.shape = pymunk.Poly(obj.body_floor, obj.GroundPolygon)
-    obj.space.add(obj.body_floor)
+    obj.space.add(obj.body_floor, obj.body_floor.shape)
 def TransferStage(obj):
     obj.gm = "game"
     obj.PhysicsOutputData = []
@@ -90,7 +90,7 @@ def TransferStage(obj):
             obj.PhysicsOutputData.append({"Type":HitboxOfPart["Type"],
                                       "Pos":HitboxOfPart["Pos"]
                                       })
-            HitboxPosition = utils.AddTuples(PartPosition, HitboxOfPart["Pos"])
+            HitboxPosition = HitboxOfPart["Pos"]
             #defining shapes of hitboxes
             if HitboxOfPart["Type"] == "Rect":
                 HitboxVertices = []
@@ -105,7 +105,7 @@ def TransferStage(obj):
                 print("Hitbox (rect)vertices for part: ",c," : ", HitboxVertices)
                 obj.PhysicsOutputData[c]["Size"] = HitboxVertices
                 hitbox_shape = pymunk.Poly(hitbox_body, HitboxVertices)
-                obj.space.add(hitbox_body)
+                obj.space.add(hitbox_body,hitbox_shape)
                 obj.PymunkBodies.append(hitbox_body)
 
             elif HitboxOfPart["Type"] == "Circle":
@@ -113,7 +113,7 @@ def TransferStage(obj):
                 hitbox_shape = pymunk.Circle(hitbox_body, HitboxOfPart["Size"])
                 print("radius of hitbox for part ",c," : ", HitboxOfPart["Size"])
                 obj.PhysicsOutputData[c]["Size"] = [HitboxPosition,HitboxOfPart["Size"]]
-                obj.space.add(hitbox_body)
+                obj.space.add(hitbox_body,hitbox_shape)
                 obj.PymunkBodies.append(hitbox_body)
             elif HitboxOfPart["Type"] == "Poly":
                 cc = 0
@@ -122,11 +122,12 @@ def TransferStage(obj):
                 while cc < len(HitboxOfPart["Size"]):
                     HitboxVertices.append(utils.AddTuples(HitboxPosition, HitboxOfPart["Size"][cc]))
                     cc += 1
-                hitbox_shape = pymunk.Poly(hitbox_body, HitboxVertices)
+                hitbox_shape = pymunk.Poly(hitbox_body, HitboxOfPart["Size"])
                 obj.PhysicsOutputData[c]["Size"] = HitboxVertices
                 print("Hitbox (poly)vertices for part: ",c," : ", HitboxVertices)
                 print("Physics output data :", obj.PhysicsOutputData)
-                obj.space.add(hitbox_body)
+                obj.space.add(hitbox_body, hitbox_shape)
                 obj.PymunkBodies.append(hitbox_body)
-                
+
         c += 1
+    
