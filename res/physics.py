@@ -164,4 +164,11 @@ def TransferStage(obj):
             #rc is a counter value for all parts that are != Nine to prevent IOOR errors
             rc += 1
         c += 1
+    c = 0
+    rc = 0
+    #print("VehicleJoints: " + str(obj.VehicleJoints))
+    #oV[c] = some item c in obj.Vehicle
+    #format of VehicleJoints [{"JoinedParts": [oV[c], oV[c]], "JointData": dict, see the parts json files}]
+    while c < len(obj.VehicleJoints):
+        c += 1
     
