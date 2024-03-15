@@ -69,8 +69,8 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.X_Position = 0
         self.Y_Position = 0
-        self.CFG_Reload_Latest_Vehicle = True
-        self.pi = 3.14159265359
+        self.CFG_Reload_Latest_Vehicle = False
+        self.pi =3.1415926535897932384626433832795
         
     def run(self):
     
@@ -84,7 +84,7 @@ class Game():
                 Exo.X_Position -= 20
             if pygame.key.get_pressed()[pygame.K_d]:
                 Exo.X_Position += 20
-            Exo.screen.fill((100,100,100))
+            Exo.screen.fill((160,180,210))
             #running the physics
             res.procedural.WritePolygonPositions(Exo)
             res.physics.simulate(Exo, fps)

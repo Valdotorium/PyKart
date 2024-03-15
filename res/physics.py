@@ -7,7 +7,7 @@ def Draw(obj):
         #negative because it is somehow inverted
         BodyRotation = -utils.RadiansToDegrees(obj.PymunkBodies[c].angle)
         BodyPosition = obj.PymunkBodies[c].position
-        print(BodyPosition)
+        print(BodyPosition,  BodyRotation)
         PartTextures = obj.PhysicsOutputData[c]["PartTextures"]
         cc = 0
         while cc < len(PartTextures):
@@ -83,7 +83,7 @@ def setup(obj):
     obj.body_floor.position = (0,0)
     obj.body_floor.shape = pymunk.Poly(obj.body_floor, obj.GroundPolygon)
     obj.body_floor.shape.friction = 0.8
-    obj.body_floor.shape.elasticity = 0.1
+    obj.body_floor.shape.elasticity = 0.9
     obj.space.add(obj.body_floor, obj.body_floor.shape)
 def TransferStage(obj):
     obj.gm = "game"
