@@ -213,7 +213,8 @@ def run(obj):
                     "refundValue": obj.partdict[obj.selectedPart]["Cost"],
                     "CanStandAlone": True,
                     "Joints": obj.partdict[obj.selectedPart]["Joints"],
-                    "Hitbox": obj.partdict[obj.selectedPart]["Hitbox"]
+                    "Hitbox": obj.partdict[obj.selectedPart]["Hitbox"],
+                    "Properties": obj.partdict[obj.selectedPart]["Properties"],
                 }
                 #if a joint need to be formed, its data will be created here
                 if obj.SnappedJointData != None:

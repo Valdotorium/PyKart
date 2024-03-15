@@ -63,6 +63,8 @@ def setup(obj):
     obj.body_floor = pymunk.Body(1, 100, body_type=pymunk.Body.STATIC)
     obj.body_floor.position = (0,0)
     obj.body_floor.shape = pymunk.Poly(obj.body_floor, obj.GroundPolygon)
+    obj.body_floor.shape.friction = 0.8
+    obj.body_floor.shape.elasticity = 0.1
     obj.space.add(obj.body_floor, obj.body_floor.shape)
 def TransferStage(obj):
     obj.gm = "game"
@@ -102,7 +104,6 @@ def TransferStage(obj):
                 print("Hitbox (rect)vertices for part: ",c," : ", HitboxVertices)
                 obj.PhysicsOutputData[c]["Size"] = HitboxVertices
                 hitbox_shape = pymunk.Poly(hitbox_body, HitboxVertices)
-                obj.space.add(hitbox_body,hitbox_shape)
                 obj.PymunkBodies.append(hitbox_body)
 
             elif HitboxOfPart["Type"] == "Circle":
@@ -110,7 +111,6 @@ def TransferStage(obj):
                 hitbox_shape = pymunk.Circle(hitbox_body, HitboxOfPart["Size"])
                 print("radius of hitbox for part ",c," : ", HitboxOfPart["Size"])
                 obj.PhysicsOutputData[c]["Size"] = [HitboxPosition,HitboxOfPart["Size"]]
-                obj.space.add(hitbox_body,hitbox_shape)
                 obj.PymunkBodies.append(hitbox_body)
             elif HitboxOfPart["Type"] == "Poly":
                 cc = 0
@@ -123,7 +123,11 @@ def TransferStage(obj):
                 obj.PhysicsOutputData[c]["Size"] = HitboxVertices
                 print("Hitbox (poly)vertices for part: ",c," : ", HitboxVertices)
                 print("Physics output data :", obj.PhysicsOutputData)
-                obj.space.add(hitbox_body, hitbox_shape)
                 obj.PymunkBodies.append(hitbox_body)
+
+            hitbox_shape.mass = obj.Vehicle[c]["Properties"]["Weight"]
+            hitbox_shape.elasticity = obj.Vehicle[c]["Properties"]["Bounciness"]
+            hitbox_shape.friction = obj.Vehicle[c]["Properties"]["Friction"]
+            obj.space.add(hitbox_body, hitbox_shape)
         c += 1
     
