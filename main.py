@@ -70,6 +70,7 @@ class Game():
         self.X_Position = 0
         self.Y_Position = 0
         self.CFG_Reload_Latest_Vehicle = True
+        self.pi = 3.14159265359
         
     def run(self):
     

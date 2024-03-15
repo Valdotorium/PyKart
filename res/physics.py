@@ -1,8 +1,26 @@
 import pygame
 import pymunk
 from .fw import fw as utils
-def draw(obj):
-    pass
+def Draw(obj):
+    c = 0
+    while c < len(obj.PymunkBodies):
+        #negative because it is somehow inverted
+        BodyRotation = -utils.RadiansToDegrees(obj.PymunkBodies[c].angle)
+        BodyPosition = obj.PymunkBodies[c].position
+        print(BodyPosition)
+        PartTextures = obj.PhysicsOutputData[c]["PartTextures"]
+        cc = 0
+        while cc < len(PartTextures):
+            Image = PartTextures[cc]["Image"]
+            #getting the actual image object:
+            Image = obj.textures[Image]
+            Position = utils.AddTuples(BodyPosition, PartTextures[cc]["Pos"])
+            Rotation = BodyRotation
+            Image = pygame.transform.scale(Image, PartTextures[cc]["Size"])
+            Image = pygame.transform.rotate(Image, Rotation)
+            obj.screen.blit(Image, Position)
+            cc += 1
+        c+=1
 def PhysDraw(obj):
     c = 0
     while c < len(obj.Vehicle):
@@ -40,7 +58,8 @@ def simulate(obj, fps):
     pygame.draw.polygon(obj.screen, (0,0,0),obj.GroundPolygon)
     #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
     #draw(obj.Vehicle) <--will be used for textures later
-    PhysDraw(obj)
+    #PhysDraw(obj)
+    Draw(obj)
 def Oldsetup(obj):
     #physics simulation tuns in a 1000 x 600 px space and will be scaled
     obj.space = pymunk.Space()#creating the space
@@ -84,10 +103,14 @@ def TransferStage(obj):
             hitbox_body.position = utils.AddTuples(PartPosition, HitboxOfPart["Pos"])
             #the following variables can be used for drawing the hitboxes
             hitbox_body.properties = {"Type":HitboxOfPart["Type"],
-                                      "Pos":HitboxOfPart["Pos"]
+                                      "Pos":HitboxOfPart["Pos"],
+                                      "PartName": obj.Vehicle[c]["name"],
+                                      "PartTextures": obj.Vehicle[c]["Textures"]
                                       }
             obj.PhysicsOutputData.append({"Type":HitboxOfPart["Type"],
-                                      "Pos":HitboxOfPart["Pos"]
+                                      "Pos":HitboxOfPart["Pos"],
+                                      "PartName": obj.Vehicle[c]["name"],
+                                      "PartTextures": obj.Vehicle[c]["Textures"]
                                       })
             HitboxPosition = HitboxOfPart["Pos"]
             #defining shapes of hitboxes
