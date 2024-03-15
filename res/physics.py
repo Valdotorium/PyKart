@@ -4,7 +4,7 @@ import pymunk.pygame_util
 from .fw import fw as utils
 def Draw(obj):
     c = 0
-    if obj.CFG_Debug_Mode:
+    if obj.CFG_debug_mode:
         obj.space.debug_draw(obj.draw_options)
     while c < len(obj.PymunkBodies):
         #negative because it is somehow inverted
@@ -25,7 +25,7 @@ def Draw(obj):
             obj.screen.blit(Image, Position)
             cc += 1
         c+=1
-def PhysDraw(obj):
+def PhysDrawManual(obj):
     c = 0
     while c < len(obj.Vehicle):
         if obj.Vehicle[c]!= None:
@@ -56,14 +56,18 @@ def PhysDraw(obj):
                 pygame.draw.polygon(obj.screen, (200,150,150), Vertices)
                    
         c += 1
+def PhysDraw(obj):
+    obj.space.debug_draw(obj.draw_options)
 def simulate(obj, fps):
     obj.space.step(1/fps)
     #draeing the poligon with the list of points obj.GroundPolygon
     pygame.draw.polygon(obj.screen, (0,0,0),obj.GroundPolygon)
     #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
     #draw(obj.Vehicle) <--will be used for textures later
-    #PhysDraw(obj)
-    Draw(obj)
+    #PhysDrawManual(obj)
+    #Draw(obj)
+    PhysDraw(obj)
+    
 def Oldsetup(obj):
     #physics simulation tuns in a 1000 x 600 px space and will be scaled
     obj.space = pymunk.Space()#creating the space
@@ -95,6 +99,7 @@ def TransferStage(obj):
     obj.PymunkBodies = []
     #creating hitboxes
     c = 0
+    rc = 0
     while c < len(obj.Vehicle):
         if obj.Vehicle[c]!= None:
             PartJoints = obj.Vehicle[c]["Joints"]
@@ -129,7 +134,7 @@ def TransferStage(obj):
                 #bottom left corner
                 HitboxVertices.append(utils.AddTuples(HitboxPosition , (0,HitboxOfPart["Size"][1])))
                 print("Hitbox (rect)vertices for part: ",c," : ", HitboxVertices)
-                obj.PhysicsOutputData[c]["Size"] = HitboxVertices
+                obj.PhysicsOutputData[rc]["Size"] = HitboxVertices
                 hitbox_shape = pymunk.Poly(hitbox_body, HitboxVertices)
                 obj.PymunkBodies.append(hitbox_body)
 
@@ -137,7 +142,7 @@ def TransferStage(obj):
                 HitboxPosition = utils.AddTuples(PartPosition, HitboxOfPart["Pos"])
                 hitbox_shape = pymunk.Circle(hitbox_body, HitboxOfPart["Size"])
                 print("radius of hitbox for part ",c," : ", HitboxOfPart["Size"])
-                obj.PhysicsOutputData[c]["Size"] = [HitboxPosition,HitboxOfPart["Size"]]
+                obj.PhysicsOutputData[rc]["Size"] = [HitboxPosition,HitboxOfPart["Size"]]
                 obj.PymunkBodies.append(hitbox_body)
             elif HitboxOfPart["Type"] == "Poly":
                 cc = 0
@@ -147,7 +152,7 @@ def TransferStage(obj):
                     HitboxVertices.append(utils.AddTuples(HitboxPosition, HitboxOfPart["Size"][cc]))
                     cc += 1
                 hitbox_shape = pymunk.Poly(hitbox_body, HitboxOfPart["Size"])
-                obj.PhysicsOutputData[c]["Size"] = HitboxVertices
+                obj.PhysicsOutputData[rc]["Size"] = HitboxVertices
                 print("Hitbox (poly)vertices for part: ",c," : ", HitboxVertices)
                 print("Physics output data :", obj.PhysicsOutputData)
                 obj.PymunkBodies.append(hitbox_body)
@@ -156,5 +161,7 @@ def TransferStage(obj):
             hitbox_shape.elasticity = obj.Vehicle[c]["Properties"]["Bounciness"]
             hitbox_shape.friction = obj.Vehicle[c]["Properties"]["Friction"]
             obj.space.add(hitbox_body, hitbox_shape)
+            #rc is a counter value for all parts that are != Nine to prevent IOOR errors
+            rc += 1
         c += 1
     

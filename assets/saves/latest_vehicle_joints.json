@@ -1,1 +1,1 @@
-[]
+[{"JoinedParts": [0, 1], "JointData": {"BreakPoint": 600000, "Hardness": 0.98, "Type": "Groove", "Data": {"MaximumDistance": 1}}}, {"JoinedParts": [1, 2], "JointData": {"BreakPoint": 600000, "Hardness": 0.98, "Type": "Groove", "Data": {"MaximumDistance": 1}}}, {"JoinedParts": [2, 3], "JointData": {"BreakPoint": 600000, "Hardness": 0.98, "Type": "Groove", "Data": {"MaximumDistance": 1}}}, {"JoinedParts": [3, 12], "JointData": {"BreakPoint": 600000, "Hardness": 0.98, "Type": "Groove", "Data": {"MaximumDistance": 1}}}]

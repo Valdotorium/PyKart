@@ -45,6 +45,8 @@ class Game():
         self.CFG_debug_mode = True
         self.CFG_limit_refresh_access = False
         self.CFG_Build_Enforce_Rules = True
+        self.CFG_Reload_Latest_Vehicle = True
+        self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200, 800)
 
         #options,olease set fit and fullscreen to false
@@ -68,10 +70,8 @@ class Game():
         #size of each "point" in the ground polygon. 10 is 1/10 of the screen x size
         self.CFG_Terrain_X_Scale = 30
         self.CFG_Terrain_Noise_Downscale = 5
-        self.CFG_Enable_Biomes = False
         self.X_Position = 0
         self.Y_Position = 0
-        self.CFG_Reload_Latest_Vehicle = True
         self.pi =3.1415926535897932384626433832795
         
     def run(self):

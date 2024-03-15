@@ -189,7 +189,7 @@ def run(obj):
             c += 1
         #print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}") 
     #------------------------------Upon placement, check if the position of the parts center is within a valid rectangle (BuildBackgroundImg)--------------------------------
-    if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not UserHasSelectedPart:
+    if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not UserHasSelectedPart and obj.CFG_Build_Enforce_Rules:
         #if the mouse is touching BuildBackgroundImg, the part gets placed
         if obj.dimensions[0] * 0.125 < mx < 0.875 * obj.dimensions[0] and obj.dimensions[1] * 0.125 < my < 0.875 * obj.dimensions[1]:
             #checking if the position of the part is otherwise invalid
