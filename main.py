@@ -1,5 +1,6 @@
 import pygame, os, sys
 import time
+import pymunk,pymunk.pygame_util
 import res.load
 import res.terrain
 import res.physics
@@ -23,6 +24,7 @@ class Game():
         #game stuff
         self.selected_part = ""
         self.running = True
+
         self.clock = pygame.time.Clock()
         self.fps = fps
         self.partdict = {} # all part data in the game
@@ -69,7 +71,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.X_Position = 0
         self.Y_Position = 0
-        self.CFG_Reload_Latest_Vehicle = False
+        self.CFG_Reload_Latest_Vehicle = True
         self.pi =3.1415926535897932384626433832795
         
     def run(self):
@@ -130,6 +132,7 @@ while running:
         res.procedural.generate_chunk(Exo)
         res.procedural.WritePolygonPositions(Exo)
         res.physics.setup(Exo)
+        Exo.draw_options = pymunk.pygame_util.DrawOptions(Exo.screen)
         frame += 1
     Exo.run()
     pygame.display.flip()

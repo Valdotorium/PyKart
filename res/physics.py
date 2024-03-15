@@ -1,8 +1,11 @@
 import pygame
 import pymunk
+import pymunk.pygame_util
 from .fw import fw as utils
 def Draw(obj):
     c = 0
+    if obj.CFG_Debug_Mode:
+        obj.space.debug_draw(obj.draw_options)
     while c < len(obj.PymunkBodies):
         #negative because it is somehow inverted
         BodyRotation = -utils.RadiansToDegrees(obj.PymunkBodies[c].angle)
