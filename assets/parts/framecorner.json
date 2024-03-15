@@ -13,9 +13,8 @@
     "JointData": {
         "BreakPoint": 300000,
         "Hardness": 0.98,
-        "Type": "Groove",
+        "Type": "Solid",
         "Data":{
-            "MaximumDistance": 2
         }
     },
     "Build":{
@@ -35,7 +34,8 @@
     "Hitbox":{
         "Pos": [0,0],
         "Type": "Poly",
-        "Size":[[0,0], [0,64], [64,64]]
+        "Size":[[0,0], [0,64], [64,64]],
+        "Anchor": [16,32]
     },
     "Textures": [{
         "Image": "frame_corner.png",

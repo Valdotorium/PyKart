@@ -2,6 +2,7 @@ import pygame
 import pymunk
 import pymunk.pygame_util
 from .fw import fw as utils
+import pymunk.constraints
 def Draw(obj):
     c = 0
     if obj.CFG_debug_mode:
@@ -97,6 +98,7 @@ def TransferStage(obj):
     obj.gm = "game"
     obj.PhysicsOutputData = []
     obj.PymunkBodies = []
+    obj.VehicleOriginalIndexes = []
     #creating hitboxes
     c = 0
     rc = 0
@@ -163,12 +165,42 @@ def TransferStage(obj):
             obj.space.add(hitbox_body, hitbox_shape)
             #rc is a counter value for all parts that are != Nine to prevent IOOR errors
             rc += 1
+            obj.VehicleOriginalIndexes.append(c)
         c += 1
     c = 0
     rc = 0
+    obj.PymunkJoints = []
     #print("VehicleJoints: " + str(obj.VehicleJoints))
     #oV[c] = some item c in obj.Vehicle
     #format of VehicleJoints [{"JoinedParts": [oV[c], oV[c]], "JointData": dict, see the parts json files}]
     while c < len(obj.VehicleJoints):
+        PartnerA = obj.VehicleJoints[c]["JoinedParts"][0]
+        PartnerB = obj.VehicleJoints[c]["JoinedParts"][1]
+        #the size of the hitbox of PartnerA / 2
+        AnchorA = obj.Vehicle[PartnerA]["Hitbox"]["Anchor"]
+        #the size of the hitbox of PartnerB / 2
+        AnchorB = obj.Vehicle[PartnerB]["Hitbox"]["Anchor"]
+        PartnerA = obj.VehicleOriginalIndexes.index(PartnerA)
+        PartnerB = obj.VehicleOriginalIndexes.index(PartnerB)
+        PartnerA = obj.PymunkBodies[PartnerA]
+        PartnerB = obj.PymunkBodies[PartnerB]
+        JointData = obj.VehicleJoints[c]["JointData"]
+        JointType = JointData["Type"]
+        if JointType == "Spring":
+            Joint = pymunk.constraints.DampedSpring(PartnerA,PartnerB,AnchorA,AnchorB, 64, JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
+            obj.PymunkJoints.append(Joint)
+            obj.space.add(Joint)
+        if JointType == "Solid":
+            Joint = pymunk.constraints.RotaryLimitJoint(PartnerA, PartnerB, 0,0)
+            Joint.collide_bodies = True
+            obj.PymunkJoints.append(Joint)
+            obj.space.add(Joint)
+            Joint = pymunk.constraints.SlideJoint(PartnerA,PartnerB,AnchorA,AnchorB,64,64)
+            Joint.collide_bodies = True
+            obj.PymunkJoints.append(Joint)
+            obj.space.add(Joint)
+        print(Joint)
         c += 1
+
+
     

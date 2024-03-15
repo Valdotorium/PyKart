@@ -16,10 +16,11 @@
     },
     "JointData": {
         "BreakPoint": 600000,
-        "Hardness": 0.85,
         "Type": "Spring",
         "Data":{
-            "MaximumDistance": 1
+            "MaximumDistance": 1,
+            "Damping": 5,
+            "Stiffness": 3
         }
     },
     "Build":{
@@ -35,7 +36,8 @@
     "Hitbox":{
         "Pos": [32,32],
         "Type": "Circle",
-        "Size": 32
+        "Size": 32,
+        "Anchor": [0,0]
     },
     "Textures": [{
         "Image": "wheel.png",
