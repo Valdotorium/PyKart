@@ -16,6 +16,7 @@ def Draw(obj):
             Image = obj.textures[Image]
             Position = utils.AddTuples(BodyPosition, PartTextures[cc]["Pos"])
             Rotation = BodyRotation
+            #many fixes need to be done here
             Image = pygame.transform.scale(Image, PartTextures[cc]["Size"])
             Image = pygame.transform.rotate(Image, Rotation)
             obj.screen.blit(Image, Position)
