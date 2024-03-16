@@ -11,13 +11,19 @@ LOG START 1.3.2024
 14.3.2024 ----- basic physics simulation done (but still needs some updates)
 14.3.2024 ----- vehicle saving and loading
 
-TODO:
--solid joints
--working springs
--working graphics
--motors
+TODO (alternativer plan):
+-17.3.2024-working springs
+-19.3.2024-implementing motors
+-21.3.2024-implementing a second wheel part
+-23.3.2024-adding throttle
+-26.3.2024-getting graphics to work for vehicle
+-29.3.2024-implementing part rotation
+-31.3.2024-adding the procedural terrain
+-2.4.2024--adding infinite terrain generation
+-4.4.2024--implementing a gyroscope
+-7.4.2024--visuals and audio
 
-(Straffererer plan:)
+(alter plan:)
 17.3.2024 ---- pymunk joints
 21.3.2024 ---- building UI
 24.3.2024 ==== having a drivable car and a full working mainscreen
@@ -33,3 +39,5 @@ Further ideas:
 -fuel system
 -different planets
 -money
+-launcher
+-with launcher: texture packs and modding options

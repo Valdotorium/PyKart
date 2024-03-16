@@ -161,7 +161,10 @@ def TransferStage(obj):
         JointData = obj.VehicleJoints[c]["JointData"]
         JointType = JointData["Type"]
         if JointType == "Spring":
-            Joint = pymunk.constraints.DampedSpring(PartnerA,PartnerB,AnchorA,AnchorB, 64, JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
+            Joint = pymunk.constraints.DampedSpring(PartnerA,PartnerB,AnchorA,AnchorB, JointData["Data"]["Distance"], JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
+            obj.PymunkJoints.append(Joint)
+            obj.space.add(Joint)
+            Joint = pymunk.constraints.DampedRotarySpring(PartnerA, PartnerB,0, JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
             obj.PymunkJoints.append(Joint)
             obj.space.add(Joint)
         if JointType == "Solid":
