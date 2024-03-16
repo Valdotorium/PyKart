@@ -1,5 +1,5 @@
 import pygame
-import random
+import random,json,os
 from .interactions import interactions as interactions
 from .fw import fw as utils
 """WARNING: BARELY READABLE CODE
@@ -81,7 +81,7 @@ def run(obj):
         c += 1
         
     #------------------------------The play button----------------------------------------------------------------
-    PlayButtonImg = obj.textures["UI_StartButton.png"]
+    PlayButtonImg = obj.textures["PlayButton.png"]
     PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[64,64]))
     PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,50]), utils.Scale(obj,[64,64]))
     if PlayButton:
@@ -156,15 +156,19 @@ def run(obj):
                                     print("joint pairing is invalid")
                                 #if both involved joints are providers, the joint data of the child part will get applied
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
-                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
+                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],obj.partdict[obj.selectedPart]["Joints"][cc]["Pos"]] }
                                     #The Joints Data that will be saved to obj.VehicleJoints
                                 #if the new part is a acceptor and its parent is a provider, the joint data of the child part will get applied
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
-                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
-                                    #The Joints Data that will be saved to obj.VehicleJoints
+                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],obj.partdict[obj.selectedPart]["Joints"][cc]["Pos"]] }
+                                    #The Joints Data that will be saved to obj.VehicleJoints, format {JoinedParts: [Int,Int], JointData:{},PositionData: [Vec2d,Vec2d]}
+                                    #JoinedParts stores the indexes of the two parts in obj.Vehicle
+                                    #JointData stores the joint data of the (in this case) child joint
+                                    #PositionData stores the position of the joint in world coordinates and the position of the joint relative to the new part
+                                    #obj.Jointpositions[c][1] is a tuple containing the world coordinates of the joint.
                                 #vice versa
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
-                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"] }
+                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],obj.partdict[obj.selectedPart]["Joints"][cc]["Pos"]] }
                                     #The Joints Data that will be saved to obj.VehicleJoints
                     cc += 1
             c += 1
@@ -238,11 +242,11 @@ def run(obj):
             c += 1
     #------------------------------The Unselect Part Button-------------------------------------
     if obj.SelectedBuiltPart != None:
-        UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(250,50)), utils.Scale(obj,[64,64]))
+        UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(350,50)), utils.Scale(obj,[64,64]))
         if UnselectButton:
             obj.SelectedBuiltPart = None
         #---------------------The Delete Part Button--------------------------------
-        DeleteButton = interactions.ButtonArea(obj, obj.textures["DeleteButton.png"], utils.Scale(obj,(150,50)), utils.Scale(obj,[64,64]))
+        DeleteButton = interactions.ButtonArea(obj, obj.textures["DeleteButton.png"], utils.Scale(obj,(250,50)), utils.Scale(obj,[64,64]))
         if DeleteButton:
             #removed parts are still list items, but they will be ignored
             obj.Vehicle[obj.SelectedBuiltPart] = None
@@ -259,4 +263,20 @@ def run(obj):
     if obj.SelectedBuiltPart != None:
         RectPos = obj.Vehicle[obj.SelectedBuiltPart]["Pos"]
         pygame.draw.rect(obj.screen, (50,50,50), (RectPos[0], RectPos[1],int(64 * scaleX), int(64 * scaleX) ), 2,2)
-
+    #------------------------------The Reload Vehicle Button---------------------------------------
+    CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
+    ReloadButton = interactions.ButtonArea(obj, obj.textures["ReloadButton.png"], utils.Scale(obj,(150,50)), utils.Scale(obj,[64,64]))
+    if ReloadButton:
+        print("loading latest vehicle")
+        try:
+            VehicleFile = open(CurrentPath+"/assets/saves/latest_vehicle.json")
+            obj.Vehicle = json.load(VehicleFile)
+            print(f"loaded vehicle: ", obj.Vehicle)
+            VehicleJointFile = open(CurrentPath+"/assets/saves/latest_vehicle_joints.json")
+            obj.VehicleJoints = json.load(VehicleJointFile)
+            print(f"loaded vehicle joints: ", obj.VehicleJoints)
+            VehicleHitboxFile = open(CurrentPath+"/assets/saves/latest_vehicle_hitboxes.json")
+            obj.VehicleHitboxes = json.load(VehicleHitboxFile)
+            print(f"loaded vehicle hitboxes: ", obj.VehicleHitboxes)
+        except:
+            raise ImportError("Vehicle File not found")

@@ -45,7 +45,7 @@ class Game():
         self.CFG_debug_mode = True
         self.CFG_limit_refresh_access = False
         self.CFG_Build_Enforce_Rules = True
-        self.CFG_Reload_Latest_Vehicle = True
+        self.CFG_Reload_Latest_Vehicle = False
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200, 800)
 

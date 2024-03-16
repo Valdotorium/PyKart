@@ -46,7 +46,31 @@ def Scale(obj,element):
     
 def AddTuples(tuple1, tuple2):
     return tuple1[0] + tuple2[0], tuple1[1] + tuple2[1]
+def SubtractTuples(tuple1, tuple2):
+    return tuple1[0] - tuple2[0], tuple1[1] - tuple2[1]
 def MultiplyTuple(tuple1, factor):
     return tuple1[0] * factor, tuple1[1] * factor
 def RadiansToDegrees(radians):
     return radians * 180 / 3.14159265359
+def Negative(*args):
+    c = 0
+    ReturnArgs = []
+    while c < len(args):
+        if type(args[c]) == tuple or type(args[c]) == list:
+            cc = 0
+            ReturnTuple = []
+            while cc < len(args[c]):
+                ReturnTuple.append(-args[c][cc])
+                cc += 1
+            ReturnArgs.append(ReturnTuple)
+        elif type(args[c]) == int:
+            ReturnArgs.append(-args[c])
+        else:
+            ReturnArgs.append(None)
+        c += 1
+    if len(ReturnArgs) > 1:
+        return ReturnArgs
+    else:
+        return ReturnArgs[0]
+
+            

@@ -145,7 +145,7 @@ def TransferStage(obj):
     obj.PymunkJoints = []
     #print("VehicleJoints: " + str(obj.VehicleJoints))
     #oV[c] = some item c in obj.Vehicle
-    #format of VehicleJoints [{"JoinedParts": [oV[c], oV[c]], "JointData": dict, see the parts json files}]
+    #format of VehicleJoints [{JoinedParts: [oV[c],oV[c]], JointData:{},PositionData: [Vec2d,Vec2d]}]
     while c < len(obj.VehicleJoints):
         PartnerA = obj.VehicleJoints[c]["JoinedParts"][0]
         PartnerB = obj.VehicleJoints[c]["JoinedParts"][1]
@@ -165,13 +165,13 @@ def TransferStage(obj):
             obj.PymunkJoints.append(Joint)
             obj.space.add(Joint)
         if JointType == "Solid":
-            Joint = pymunk.constraints.SlideJoint(PartnerA,PartnerB,AnchorA,AnchorB,64,64)
+            #relative position of the pivot joint t the position of PartnerA
+            PivotPoint = obj.VehicleJoints[c]["PositionData"][0]
+            Joint = pymunk.constraints.PivotJoint(PartnerA,PartnerB,PivotPoint)
             Joint.collide_bodies = True
+            print("Creating PivotJoint at position:",PivotPoint)
             obj.PymunkJoints.append(Joint)
             obj.space.add(Joint)
-            #TODO: #4 
-            #Figure out a way to make a absolutely solid connection between two parts
         #TODO #5
         #somehow make wheels ignore collisions ONLY with other vehicle parts
-        print(Joint)
         c += 1

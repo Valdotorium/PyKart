@@ -1,1 +1,1 @@
-[{"JoinedParts": [0, 1], "JointData": {"BreakPoint": 600000, "Hardness": 0.98, "Type": "Solid", "Data": {}}}, {"JoinedParts": [0, 2], "JointData": {"BreakPoint": 600000, "Hardness": 0.98, "Type": "Solid", "Data": {}}}]
+[{"JoinedParts": [0, 1], "JointData": {"BreakPoint": 600000, "Hardness": 0.98, "Type": "Solid", "Data": {}}, "PositionData": [[618, 352], [32, 64]]}, {"JoinedParts": [1, 2], "JointData": {"BreakPoint": 600000, "Hardness": 0.98, "Type": "Solid", "Data": {}}, "PositionData": [[586, 320], [64, 32]]}]
