@@ -66,6 +66,7 @@ def setup(obj):
     obj.body_floor.shape = pymunk.Poly(obj.body_floor, obj.GroundPolygon)
     obj.body_floor.shape.friction = 0.8
     obj.body_floor.shape.elasticity = 0.9
+    obj.body_floor.shape.filter = pymunk.ShapeFilter(categories= 4, mask= 7)
     obj.space.add(obj.body_floor, obj.body_floor.shape)
 
 def TransferStage(obj):
@@ -135,6 +136,19 @@ def TransferStage(obj):
             hitbox_shape.mass = obj.Vehicle[c]["Properties"]["Weight"]
             hitbox_shape.elasticity = obj.Vehicle[c]["Properties"]["Bounciness"]
             hitbox_shape.friction = obj.Vehicle[c]["Properties"]["Friction"]
+            #defferent Collision Categories
+
+            #default (all)
+            CategoryNum = 4
+            CategoryMask = 7
+            #"All" collides with everything
+            if HitboxOfPart["CollisionType"] == "Full":
+                CategoryNum = 1
+                CategoryMask = 5
+            if HitboxOfPart["CollisionType"] == "Semi":
+                CategoryNum = 2
+                CategoryMask = 6
+            hitbox_shape.filter = pymunk.ShapeFilter(categories = CategoryNum, mask = CategoryMask)
             obj.space.add(hitbox_body, hitbox_shape)
             #rc is a counter value for all parts that are != Nine to prevent IOOR errors
             rc += 1

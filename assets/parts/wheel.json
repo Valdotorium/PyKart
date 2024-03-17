@@ -37,7 +37,8 @@
         "Pos": [32,32],
         "Type": "Circle",
         "Size": 32,
-        "Anchor": [0,0]
+        "Anchor": [0,0],
+        "CollisionType": "Semi"
     },
     "Textures": [{
         "Image": "wheel.png",

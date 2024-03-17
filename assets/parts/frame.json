@@ -40,7 +40,8 @@
             "Pos": [0,0],
             "Type": "Rect",
             "Size":[64,64],
-            "Anchor":[32,32]
+            "Anchor":[32,32],
+            "CollisionType": "Full"
         },
     "Textures": [{
         "Image": "frame.png",
