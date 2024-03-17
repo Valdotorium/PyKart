@@ -35,6 +35,8 @@ def CheckJoints(obj):
     #if the impulse exceeds a set limit, the joint breaks
     c = 0
     while c < len(obj.PymunkJoints) and c < len(obj.VehicleJoints):
+        #TODO: #6 
+        #Fix a bug where the list index is OOR, because items maybe get removed asynchronously. check.
         if obj.PymunkJoints[c]!= None:
             JointImpulse = obj.PymunkJoints[c].impulse
             ImpulseLimit = obj.VehicleJoints[c]["JointData"]["BreakPoint"]
