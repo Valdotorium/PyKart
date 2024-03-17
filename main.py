@@ -135,5 +135,8 @@ while running:
         Exo.draw_options = pymunk.pygame_util.DrawOptions(Exo.screen)
         frame += 1
     Exo.run()
+    #handling error messages
+    if Exo.Errormessage != None:
+        Exo.Errormessage.update(Exo)
     pygame.display.flip()
     clock.tick(fps)

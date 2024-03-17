@@ -40,7 +40,7 @@ def respond(obj):
     time.sleep(0.2)
     if "assets" in gamefiles:
         print("file loader path is: ", CurrentPath)
-        utils.displayText(obj,"found assets folder")
+        utils.displayTextCenter(obj,"found assets folder")
         #loading images from the images folder
         if "images" in os.listdir(CurrentPath+"/assets"):
             imagefiles = os.listdir(CurrentPath+"/assets/images")

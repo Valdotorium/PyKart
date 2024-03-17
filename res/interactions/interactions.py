@@ -1,4 +1,4 @@
-import pygame
+import pygame,os
 
 def ButtonArea(obj, image, pos, size):
    # print("Creating a button at position " + str(pos) + " and size" + str(size))
@@ -22,3 +22,17 @@ def ButtonArea(obj, image, pos, size):
                 return False
         else:
             return False
+class Errormessage():
+    def __init__(self, message, duration, obj):
+        self.message = message
+        self.duration = duration
+        self.font = obj.largeboldfont
+        self.ticks = 0
+    def update(self, obj):
+        self.ticks += 1
+        text = self.font.render(self.message,True, (180, 100, 20))
+        pos = (obj.dimensions[0] / 2 - text.get_width() / 2, obj.dimensions[1] / 2)
+        obj.screen.blit(text, pos)
+        if self.ticks >= self.duration:
+            obj.Errormessage = None
+            del(self)

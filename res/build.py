@@ -37,6 +37,7 @@ def setup(obj):
     #if joints have snapped together, it stores their data
     obj.SnappedJointData = None
     obj.SelectedBuiltPart = None
+    obj.Errormessage = None
 
 def run(obj):
     PartIsValid = True
@@ -210,6 +211,7 @@ def run(obj):
                     if obj.Vehicle[c] != None:
                         if (mx,my) == obj.Vehicle[c]["Pos"]:
                             PartIsValid = False
+                            obj.Errormessage = interactions.Errormessage("Part Placement Invalid", 100, obj)
                             print("part placement failed due to invalid positioning")
                     c += 1
                 #saving the part that has been placed and its data to obj.Vehicle                
@@ -241,6 +243,7 @@ def run(obj):
             #the part gets unselected
             obj.selectedPart = ""
             obj.SnappedJointData = None
+            obj.Errormessage = interactions.Errormessage("Part Placement Invalid", 100, obj)
     #------------------------------Drawing dots at the currently selected parts joints --------------------------------
     if obj.selectedPart != "":
         c = 0
