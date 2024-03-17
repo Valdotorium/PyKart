@@ -39,33 +39,20 @@ def simulate(obj, fps):
     #draw(obj.Vehicle) <--will be used for textures later
     #Draw(obj)
     PhysDraw(obj)
-    
-def Oldsetup(obj):
-    #physics simulation tuns in a 1000 x 600 px space and will be scaled
-    obj.space = pymunk.Space()#creating the space
-    obj.space.gravity = (0, 98)
-    #static floor of the simulation
-    obj.body_floor = pymunk.Body(1, 100, body_type=pymunk.Body.STATIC)
-    obj.body_floor.position = (0,0)
-    obj.space.add(obj.body_floor)
-    obj.ball = pymunk.Body(1, 100, body_type=pymunk.Body.DYNAMIC)
-    obj.ball.position = (100, 0)
-    obj.ball.shape=pymunk.Circle(obj.ball, 10)
-    obj.space.add(obj.ball)
-
 def OldRefreshPolygon(obj):
     print(f"initializing ground poly with vertices: ", obj.GroundPolygon)
     obj.body_floor.shape = pymunk.Poly(obj.body_floor, obj.GroundPolygon)
 
 def setup(obj):
+    Env = obj.Environment
     obj.space = pymunk.Space()#creating the space
-    obj.space.gravity = (0, 98)
+    obj.space.gravity = Env["Gravity"]
     #static floor of the simulation
     obj.body_floor = pymunk.Body(1, 100, body_type=pymunk.Body.STATIC)
     obj.body_floor.position = (0,0)
     obj.body_floor.shape = pymunk.Poly(obj.body_floor, obj.GroundPolygon)
-    obj.body_floor.shape.friction = 0.8
-    obj.body_floor.shape.elasticity = 0.9
+    obj.body_floor.shape.friction = Env["Physics"]["Friction"]
+    obj.body_floor.shape.elasticity = Env["Physics"]["Bounce"]
     obj.body_floor.shape.filter = pymunk.ShapeFilter(categories= 4, mask= 7)
     obj.space.add(obj.body_floor, obj.body_floor.shape)
 
@@ -136,8 +123,7 @@ def TransferStage(obj):
             hitbox_shape.mass = obj.Vehicle[c]["Properties"]["Weight"]
             hitbox_shape.elasticity = obj.Vehicle[c]["Properties"]["Bounciness"]
             hitbox_shape.friction = obj.Vehicle[c]["Properties"]["Friction"]
-            #defferent Collision Categories
-
+            #different Collision Categories
             #default (all)
             CategoryNum = 4
             CategoryMask = 7
@@ -145,9 +131,11 @@ def TransferStage(obj):
             if HitboxOfPart["CollisionType"] == "Full":
                 CategoryNum = 1
                 CategoryMask = 5
+                #collides with everything except "Semi"
             if HitboxOfPart["CollisionType"] == "Semi":
                 CategoryNum = 2
                 CategoryMask = 6
+                #collides with everything except "Full", used in wheels
             hitbox_shape.filter = pymunk.ShapeFilter(categories = CategoryNum, mask = CategoryMask)
             obj.space.add(hitbox_body, hitbox_shape)
             #rc is a counter value for all parts that are != Nine to prevent IOOR errors
@@ -175,12 +163,15 @@ def TransferStage(obj):
         JointData = obj.VehicleJoints[c]["JointData"]
         JointType = JointData["Type"]
         if JointType == "Spring":
+
+            #creating the joint, assuming joint is facing down, need to fix later
             Joint = pymunk.constraints.DampedSpring(PartnerA,PartnerB,AnchorA,AnchorB, JointData["Data"]["Distance"], JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
             obj.PymunkJoints.append(Joint)
             obj.space.add(Joint)
-            Joint = pymunk.constraints.DampedRotarySpring(PartnerA, PartnerB,0, JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
+            Joint = pymunk.constraints.GrooveJoint(PartnerA, PartnerB, AnchorA, (AnchorA[0], AnchorA[1] + JointData["Data"]["Distance"]), AnchorB)
             obj.PymunkJoints.append(Joint)
             obj.space.add(Joint)
+
         if JointType == "Solid":
             #relative position of the pivot joint t the position of PartnerA
             PivotPoint = obj.VehicleJoints[c]["PositionData"][0]
@@ -189,6 +180,4 @@ def TransferStage(obj):
             print("Creating PivotJoint at position:",PivotPoint)
             obj.PymunkJoints.append(Joint)
             obj.space.add(Joint)
-        #TODO #5
-        #somehow make wheels ignore collisions ONLY with other vehicle parts
         c += 1

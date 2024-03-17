@@ -12,15 +12,16 @@
         "MinForce": 50,
         "Friction": 0.85,
         "Weight": 25,
-        "Bounciness": 0.1
+        "Bounciness": 0.1,
+        "JoiningBehavior": "Accept"
     },
     "JointData": {
         "BreakPoint": 600000,
         "Type": "Spring",
         "Data":{
             "Distance": 72,
-            "Damping": 30,
-            "Stiffness": 600
+            "Damping": 100,
+            "Stiffness": 6000
         }
     },
     "Build":{
@@ -38,7 +39,8 @@
         "Type": "Circle",
         "Size": 32,
         "Anchor": [0,0],
-        "CollisionType": "Semi"
+        "CollisionType": "Semi",
+        "HasTwoAnchors": false
     },
     "Textures": [{
         "Image": "wheel.png",

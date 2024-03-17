@@ -8,7 +8,8 @@
         "Rot": 0,
         "Friction": 0.95,
         "Weight": 32,
-        "Bounciness": 0.015
+        "Bounciness": 0.015,
+        "JoiningBehavior": "Provide"
 
     },
     "JointData": {

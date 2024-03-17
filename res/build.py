@@ -139,6 +139,7 @@ def run(obj):
         #print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}")  
     #------------------------------Sanpping to joints when close to them-------------------------------------------------------------------------
     obj.SnappedJointData = None
+    obj.IndexOfSnappedJoint = None
     if obj.selectedPart != "":
         c = 0
         while c < len(obj.JointPositions):
@@ -157,10 +158,12 @@ def run(obj):
                                 #if both involved joints are providers, the joint data of the child part will get applied
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
                                     obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],obj.partdict[obj.selectedPart]["Joints"][cc]["Pos"]] }
+                                    obj.IndexOfSnappedJoint = cc
                                     #The Joints Data that will be saved to obj.VehicleJoints
                                 #if the new part is a acceptor and its parent is a provider, the joint data of the child part will get applied
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
                                     obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],obj.partdict[obj.selectedPart]["Joints"][cc]["Pos"]] }
+                                    obj.IndexOfSnappedJoint = cc
                                     #The Joints Data that will be saved to obj.VehicleJoints, format {JoinedParts: [Int,Int], JointData:{},PositionData: [Vec2d,Vec2d]}
                                     #JoinedParts stores the indexes of the two parts in obj.Vehicle
                                     #JointData stores the joint data of the (in this case) child joint
@@ -169,6 +172,7 @@ def run(obj):
                                 #vice versa
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
                                     obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],obj.partdict[obj.selectedPart]["Joints"][cc]["Pos"]] }
+                                    obj.IndexOfSnappedJoint = cc
                                     #The Joints Data that will be saved to obj.VehicleJoints
                     cc += 1
             c += 1
@@ -194,46 +198,49 @@ def run(obj):
         #print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}") 
     #------------------------------Upon placement, check if the position of the parts center is within a valid rectangle (BuildBackgroundImg)--------------------------------
     if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not UserHasSelectedPart and obj.CFG_Build_Enforce_Rules:
-        #if the mouse is touching BuildBackgroundImg, the part gets placed
-        if obj.dimensions[0] * 0.125 < mx < 0.875 * obj.dimensions[0] and obj.dimensions[1] * 0.125 < my < 0.875 * obj.dimensions[1]:
-            #checking if the position of the part is otherwise invalid
+        #is the user trying to place an "unjoined" accepting joint?
+        if obj.SnappedJointData == None and obj.partdict[obj.selectedPart]["Properties"]["JoiningBehavior"] != "Accept" or obj.SnappedJointData != None:
+            #if the mouse is touching BuildBackgroundImg, the part gets placed
+            if obj.dimensions[0] * 0.125 < mx < 0.875 * obj.dimensions[0] and obj.dimensions[1] * 0.125 < my < 0.875 * obj.dimensions[1]:
+                #checking if the position of the part is otherwise invalid
 
-            #is the part exactly placed on another part?
-            c = 0
-            while c < len(obj.Vehicle):
-                if obj.Vehicle[c] != None:
-                    if (mx,my) == obj.Vehicle[c]["Pos"]:
-                        PartIsValid = False
-                        print("part placement failed due to invalid positioning")
-                c += 1
-            #saving the part that has been placed and its data to obj.Vehicle                
-            if PartIsValid:
-                PlacedPart = {
-                    #ready to store as json
-                    "name": obj.selectedPart,
-                    "Index": len(obj.Vehicle),
-                    "Textures": obj.partdict[obj.selectedPart]["Textures"],
-                    "Pos": (mx,my),
-                    "refundValue": obj.partdict[obj.selectedPart]["Cost"],
-                    "CanStandAlone": True,
-                    "Joints": obj.partdict[obj.selectedPart]["Joints"],
-                    "Hitbox": obj.partdict[obj.selectedPart]["Hitbox"],
-                    "Properties": obj.partdict[obj.selectedPart]["Properties"],
-                }
-                #if a joint need to be formed, its data will be created here
-                if obj.SnappedJointData != None:
-                    PlacedPart["JoinedWith"] = obj.SnappedJointData["JoinedParts"]
-                    obj.VehicleJoints.append(obj.SnappedJointData)
-                else:
-                    PlacedPart["JoinedWith"] = []
-                obj.Vehicle.append(PlacedPart)
-                print(f"part {obj.selectedPart} placed at {(mx,my)}")
-                #part gets unselected
-                obj.SnappedJointData = None
-                obj.selectedPart = ""
+                #is the part exactly placed on another part?
+                c = 0
+                while c < len(obj.Vehicle):
+                    if obj.Vehicle[c] != None:
+                        if (mx,my) == obj.Vehicle[c]["Pos"]:
+                            PartIsValid = False
+                            print("part placement failed due to invalid positioning")
+                    c += 1
+                #saving the part that has been placed and its data to obj.Vehicle                
+                if PartIsValid:
+                    PlacedPart = {
+                        #ready to store as json
+                        "name": obj.selectedPart,
+                        "Index": len(obj.Vehicle),
+                        "Textures": obj.partdict[obj.selectedPart]["Textures"],
+                        "Pos": (mx,my),
+                        "refundValue": obj.partdict[obj.selectedPart]["Cost"],
+                        "CanStandAlone": True,
+                        "Joints": obj.partdict[obj.selectedPart]["Joints"],
+                        "Hitbox": obj.partdict[obj.selectedPart]["Hitbox"],
+                        "Properties": obj.partdict[obj.selectedPart]["Properties"],
+                    }
+                    #if a joint need to be formed, its data will be created here
+                    if obj.SnappedJointData != None:
+                        PlacedPart["JoinedWith"] = obj.SnappedJointData["JoinedParts"]
+                        obj.VehicleJoints.append(obj.SnappedJointData)
+                    else:
+                        PlacedPart["JoinedWith"] = []
+                    obj.Vehicle.append(PlacedPart)
+                    print(f"part {obj.selectedPart} placed at {(mx,my)}")
+                    #part gets unselected
+                    obj.SnappedJointData = None
+                    obj.selectedPart = ""
         else:
             #the part gets unselected
             obj.selectedPart = ""
+            obj.SnappedJointData = None
     #------------------------------Drawing dots at the currently selected parts joints --------------------------------
     if obj.selectedPart != "":
         c = 0
