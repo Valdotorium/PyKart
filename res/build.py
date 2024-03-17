@@ -261,12 +261,13 @@ def run(obj):
             #removed parts are still list items, but they will be ignored
             obj.Vehicle[obj.SelectedBuiltPart] = None
             print(f"part {obj.SelectedBuiltPart} deleted")
-            #removing all joints that are ocnneced to the built part
+            #removing all joints that are connected to the built part
             c = 0
-            while c < len(obj.JointPositions):
-                if obj.SelectedBuiltPart == obj.JointPositions[c][0]:
-                    #removed joints are still list items, but they will be ignored 
-                    obj.JointPositions[c] = None
+            while c < len(obj.VehicleJoints):
+                if obj.VehicleJoints[c] != None:
+                    if obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][0] or obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][1]:
+                        #removed joints are still list items, but they will be ignored 
+                        obj.VehicleJoints[c] = None
                 c += 1
             obj.SelectedBuiltPart = None
     #------------------------------Marking the selected part-------------------------------------

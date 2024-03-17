@@ -30,7 +30,21 @@ def Draw(obj):
 
 def PhysDraw(obj):
     obj.space.debug_draw(obj.draw_options)
-
+def CheckJoints(obj):
+    #checking the latest impulse divided by fps
+    #if the impulse exceeds a set limit, the joint breaks
+    c = 0
+    while c < len(obj.PymunkJoints) and c < len(obj.VehicleJoints):
+        if obj.PymunkJoints[c]!= None:
+            JointImpulse = obj.PymunkJoints[c].impulse
+            ImpulseLimit = obj.VehicleJoints[c]["JointData"]["BreakPoint"]
+            print(len(obj.PymunkJoints), len(obj.VehicleJoints))
+            print("Impulse of joint ", c, ":", JointImpulse)
+            if JointImpulse > ImpulseLimit:
+                obj.space.remove(obj.PymunkJoints[c])
+                obj.VehicleJoints[c] = None
+                obj.PymunkJoints[c] = None
+        c += 1
 def simulate(obj, fps):
     obj.space.step(1/fps)
     #draeing the poligon with the list of points obj.GroundPolygon
@@ -39,6 +53,7 @@ def simulate(obj, fps):
     #draw(obj.Vehicle) <--will be used for textures later
     #Draw(obj)
     PhysDraw(obj)
+    CheckJoints(obj)
 def OldRefreshPolygon(obj):
     print(f"initializing ground poly with vertices: ", obj.GroundPolygon)
     obj.body_floor.shape = pymunk.Poly(obj.body_floor, obj.GroundPolygon)
@@ -149,35 +164,36 @@ def TransferStage(obj):
     #oV[c] = some item c in obj.Vehicle
     #format of VehicleJoints [{JoinedParts: [oV[c],oV[c]], JointData:{},PositionData: [Vec2d,Vec2d]}]
     while c < len(obj.VehicleJoints):
-        PartnerA = obj.VehicleJoints[c]["JoinedParts"][0]
-        PartnerB = obj.VehicleJoints[c]["JoinedParts"][1]
-        #the size of the hitbox of PartnerA / 2
-        AnchorA = obj.Vehicle[PartnerA]["Hitbox"]["Anchor"]
-        #the size of the hitbox of PartnerB / 2
-        AnchorB = obj.Vehicle[PartnerB]["Hitbox"]["Anchor"]
-        #finding the indexes of joined parts in PymunkBodies
-        PartnerA = obj.VehicleOriginalIndexes.index(PartnerA)
-        PartnerB = obj.VehicleOriginalIndexes.index(PartnerB)
-        PartnerA = obj.PymunkBodies[PartnerA]
-        PartnerB = obj.PymunkBodies[PartnerB]
-        JointData = obj.VehicleJoints[c]["JointData"]
-        JointType = JointData["Type"]
-        if JointType == "Spring":
+        if obj.VehicleJoints[c] != None:
+            PartnerA = obj.VehicleJoints[c]["JoinedParts"][0]
+            PartnerB = obj.VehicleJoints[c]["JoinedParts"][1]
+            #the size of the hitbox of PartnerA / 2
+            AnchorA = obj.Vehicle[PartnerA]["Hitbox"]["Anchor"]
+            #the size of the hitbox of PartnerB / 2
+            AnchorB = obj.Vehicle[PartnerB]["Hitbox"]["Anchor"]
+            #finding the indexes of joined parts in PymunkBodies
+            PartnerA = obj.VehicleOriginalIndexes.index(PartnerA)
+            PartnerB = obj.VehicleOriginalIndexes.index(PartnerB)
+            PartnerA = obj.PymunkBodies[PartnerA]
+            PartnerB = obj.PymunkBodies[PartnerB]
+            JointData = obj.VehicleJoints[c]["JointData"]
+            JointType = JointData["Type"]
+            if JointType == "Spring":
 
-            #creating the joint, assuming joint is facing down, need to fix later
-            Joint = pymunk.constraints.DampedSpring(PartnerA,PartnerB,AnchorA,AnchorB, JointData["Data"]["Distance"], JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
-            obj.PymunkJoints.append(Joint)
-            obj.space.add(Joint)
-            Joint = pymunk.constraints.GrooveJoint(PartnerA, PartnerB, AnchorA, (AnchorA[0], AnchorA[1] + JointData["Data"]["Distance"]), AnchorB)
-            obj.PymunkJoints.append(Joint)
-            obj.space.add(Joint)
+                #creating the joint, assuming joint is facing down, need to fix later
+                Joint = pymunk.constraints.DampedSpring(PartnerA,PartnerB,AnchorA,AnchorB, JointData["Data"]["Distance"], JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
+                obj.PymunkJoints.append(Joint)
+                obj.space.add(Joint)
+                Joint = pymunk.constraints.GrooveJoint(PartnerA, PartnerB, AnchorA, (AnchorA[0], AnchorA[1] + JointData["Data"]["Distance"]), AnchorB)
+                obj.PymunkJoints.append(Joint)
+                obj.space.add(Joint)
 
-        if JointType == "Solid":
-            #relative position of the pivot joint t the position of PartnerA
-            PivotPoint = obj.VehicleJoints[c]["PositionData"][0]
-            Joint = pymunk.constraints.PivotJoint(PartnerA,PartnerB,PivotPoint)
-            Joint.collide_bodies = True
-            print("Creating PivotJoint at position:",PivotPoint)
-            obj.PymunkJoints.append(Joint)
-            obj.space.add(Joint)
+            if JointType == "Solid":
+                #relative position of the pivot joint t the position of PartnerA
+                PivotPoint = obj.VehicleJoints[c]["PositionData"][0]
+                Joint = pymunk.constraints.PivotJoint(PartnerA,PartnerB,PivotPoint)
+                Joint.collide_bodies = True
+                print("Creating PivotJoint at position:",PivotPoint)
+                obj.PymunkJoints.append(Joint)
+                obj.space.add(Joint)
         c += 1
