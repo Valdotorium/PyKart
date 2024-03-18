@@ -1,4 +1,4 @@
-import pygame
+import pygame, math
 #some small helpers to make code shorter and maybe more radable
 def getScreenSize():
     try:
@@ -72,5 +72,16 @@ def Negative(*args):
         return ReturnArgs
     else:
         return ReturnArgs[0]
+def RotateVector(vector, angle):
+    #angle from degrees to radians
+    angle = math.radians(angle)
+    sin = math.sin(angle)
+    cos = math.cos(angle)
+    x = vector[0]
+    y = vector[1]
+    nx = x * cos - y * sin
+    ny = x * sin + y * cos
+    print(nx,ny)
+    return nx, ny
 
             

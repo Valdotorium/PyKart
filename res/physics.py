@@ -12,7 +12,7 @@ def Draw(obj):
         #negative because it is somehow inverted
         BodyRotation = -utils.RadiansToDegrees(obj.PymunkBodies[c].angle)
         BodyPosition = obj.PymunkBodies[c].position
-        print(BodyPosition,  BodyRotation)
+        #print(BodyPosition,  BodyRotation)
         PartTextures = obj.PhysicsOutputData[c]["PartTextures"]
         cc = 0
         while cc < len(PartTextures):
@@ -40,14 +40,15 @@ def CheckJoints(obj):
         if obj.PymunkJoints[c]!= None:
             JointImpulse = obj.PymunkJoints[c].impulse
             ImpulseLimit = obj.VehicleJoints[c]["JointData"]["BreakPoint"]
-            print(len(obj.PymunkJoints), len(obj.VehicleJoints))
-            print("Impulse of joint ", c, ":", JointImpulse)
+            #print(len(obj.PymunkJoints), len(obj.VehicleJoints))
+            #print("Impulse of joint ", c, ":", JointImpulse)
             if JointImpulse > ImpulseLimit:
                 obj.space.remove(obj.PymunkJoints[c])
                 obj.VehicleJoints[c] = None
                 obj.PymunkJoints[c] = None
         c += 1
 def simulate(obj, fps):
+    #print(utils.RotateVector(obj.TestVector, obj.TestAngle))
     obj.space.step(1/fps)
     #draeing the poligon with the list of points obj.GroundPolygon
     pygame.draw.polygon(obj.screen, (0,0,0),obj.GroundPolygon)
@@ -72,6 +73,7 @@ def setup(obj):
     obj.body_floor.shape.elasticity = Env["Physics"]["Bounce"]
     obj.body_floor.shape.filter = pymunk.ShapeFilter(categories= 4, mask= 7)
     obj.space.add(obj.body_floor, obj.body_floor.shape)
+    obj.RotationOfSelectedPart = 0
 
 def TransferStage(obj):
     obj.gm = "game"
