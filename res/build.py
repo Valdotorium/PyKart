@@ -37,6 +37,7 @@ def setup(obj):
     #if joints have snapped together, it stores their data
     obj.SnappedJointData = None
     obj.SelectedBuiltPart = None
+    obj.RotationOfSelectedPart = 0
     obj.Errormessage = None
 
 def run(obj):
@@ -133,6 +134,7 @@ def run(obj):
         c = 0
         while c < len(SelectedPartJoints):
             JointPosition = SelectedPartJoints[c]["Pos"]
+            JointPosition = utils.RotateVector(JointPosition, obj.RotationOfSelectedPart)
             FJointPosition = utils.AddTuples(JointPosition, (mx,my))
             JointPositionsOfSelectedPart.append(FJointPosition)
 
@@ -158,12 +160,12 @@ def run(obj):
                                     print("joint pairing is invalid")
                                 #if both involved joints are providers, the joint data of the child part will get applied
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
-                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],obj.partdict[obj.selectedPart]["Joints"][cc]["Pos"]] }
+                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc]] }
                                     obj.IndexOfSnappedJoint = cc
                                     #The Joints Data that will be saved to obj.VehicleJoints
                                 #if the new part is a acceptor and its parent is a provider, the joint data of the child part will get applied
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
-                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],obj.partdict[obj.selectedPart]["Joints"][cc]["Pos"]] }
+                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc]] }
                                     obj.IndexOfSnappedJoint = cc
                                     #The Joints Data that will be saved to obj.VehicleJoints, format {JoinedParts: [Int,Int], JointData:{},PositionData: [Vec2d,Vec2d]}
                                     #JoinedParts stores the indexes of the two parts in obj.Vehicle
@@ -172,7 +174,7 @@ def run(obj):
                                     #obj.Jointpositions[c][1] is a tuple containing the world coordinates of the joint.
                                 #vice versa
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
-                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],obj.partdict[obj.selectedPart]["Joints"][cc]["Pos"]] }
+                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc]] }
                                     obj.IndexOfSnappedJoint = cc
                                     #The Joints Data that will be saved to obj.VehicleJoints
                     cc += 1
@@ -183,15 +185,17 @@ def run(obj):
         textur = obj.partdict[obj.selectedPart]["Stex"]
         textur = obj.textures[textur]
         textur = pygame.transform.scale(textur, utils.Scale(obj,[64,64]))
+        #applying rotation 
+        textur = pygame.transform.rotate(textur, obj.RotationOfSelectedPart)
         obj.screen.blit(textur, (mx, my))
     #----------------------------- Getting Temporary Joint Positions of the SelectedPart (if it snapped, at a new position) --------------------------------------------------------
     JointPositionsOfSelectedPart = []
     if obj.selectedPart != "":
         SelectedPartJoints = obj.partdict[obj.selectedPart]["Joints"]
-        
         c = 0
         while c < len(SelectedPartJoints):
             JointPosition = SelectedPartJoints[c]["Pos"]
+            JointPosition = utils.RotateVector(JointPosition, obj.RotationOfSelectedPart)
             FJointPosition = utils.AddTuples(JointPosition, (mx,my))
             JointPositionsOfSelectedPart.append(FJointPosition)
 
@@ -222,6 +226,7 @@ def run(obj):
                         "Index": len(obj.Vehicle),
                         "Textures": obj.partdict[obj.selectedPart]["Textures"],
                         "Pos": (mx,my),
+                        "Rotation": obj.RotationOfSelectedPart,
                         "refundValue": obj.partdict[obj.selectedPart]["Cost"],
                         "CanStandAlone": True,
                         "Joints": obj.partdict[obj.selectedPart]["Joints"],
@@ -239,10 +244,12 @@ def run(obj):
                     #part gets unselected
                     obj.SnappedJointData = None
                     obj.selectedPart = ""
+                    obj.RotationOfSelectedPart = 0
         else:
             #the part gets unselected
             obj.selectedPart = ""
             obj.SnappedJointData = None
+            obj.RotationOfSelectedPart = 0
             obj.Errormessage = interactions.Errormessage("Part Placement Invalid", 100, obj)
     #------------------------------Drawing dots at the currently selected parts joints --------------------------------
     if obj.selectedPart != "":

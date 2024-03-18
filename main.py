@@ -79,9 +79,9 @@ class Game():
         #res.interactions.interactions.ButtonArea(Exo)
         if self.gm == "game":
             if pygame.key.get_pressed()[pygame.K_w]:
-                Exo.TestAngle += 1
+                Exo.TestAngle += 7.2
             if pygame.key.get_pressed()[pygame.K_s]:
-                Exo.TestAngle -= 1
+                Exo.TestAngle -= 7.2
             if pygame.key.get_pressed()[pygame.K_a]:
                 Exo.X_Position -= 20
             if pygame.key.get_pressed()[pygame.K_d]:
@@ -92,6 +92,10 @@ class Game():
             res.physics.simulate(Exo, fps)
             
         if self.gm =="build":
+            if pygame.key.get_pressed()[pygame.K_a]:
+                Exo.RotationOfSelectedPart -= 7.2
+            if pygame.key.get_pressed()[pygame.K_d]:
+                Exo.RotationOfSelectedPart += 7.2
             #buiding mode
             Exo.screen.fill((180, 190, 230))
             res.build.run(Exo)
