@@ -187,10 +187,15 @@ def run(obj):
         textur = pygame.transform.scale(textur, utils.Scale(obj,[64,64]))
         #applying rotation 
         textur = pygame.transform.rotate(textur, obj.RotationOfSelectedPart)
-        obj.screen.blit(textur, (mx, my))
+        #rectangle for part rotation cuz it works somehow
+        texture_rect = textur.get_rect(center = (mx,my))
+        obj.screen.blit(textur, texture_rect)
     #----------------------------- Getting Temporary Joint Positions of the SelectedPart (if it snapped, at a new position) --------------------------------------------------------
     JointPositionsOfSelectedPart = []
     if obj.selectedPart != "":
+        #TODO #7, this can probably be done by: centering all blitted graphics around their center point instead of their top left corner
+        #(utils function for that?)
+        #they will then always be referenced by their center point (which could be the anchor of the part)
         SelectedPartJoints = obj.partdict[obj.selectedPart]["Joints"]
         c = 0
         while c < len(SelectedPartJoints):
@@ -213,6 +218,7 @@ def run(obj):
                 c = 0
                 while c < len(obj.Vehicle):
                     if obj.Vehicle[c] != None:
+                        #todo 7
                         if (mx,my) == obj.Vehicle[c]["Pos"]:
                             PartIsValid = False
                             obj.Errormessage = interactions.Errormessage("Part Placement Invalid", 100, obj)
