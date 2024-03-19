@@ -99,6 +99,7 @@ def run(obj):
             while cc < len(obj.Vehicle[c]["Textures"]):
                 #data of the texture stored in "Textures"
                 PositionOfTexture = utils.AddTuples(obj.Vehicle[c]["Pos"],TexturesOfPart[cc]["Pos"])
+
                 textur = TexturesOfPart[cc]["Image"]
                 textur = obj.textures[textur]
                 textur = pygame.transform.scale(textur, utils.Scale(obj,[64,64]))
@@ -107,12 +108,14 @@ def run(obj):
                 #rectangle for part rotation cuz it works somehow
                 texture_rect = textur.get_rect(center = PositionOfTexture)
                 obj.screen.blit(textur, texture_rect)
+                #centering the part at its center point
+                PositionOfTexture = utils.SubstractTuples(PositionOfTexture,obj.Vehicle[c]["Center"])
                 IsClicked = interactions.ClickArea(PositionOfTexture, utils.MultiplyTuple(TexturesOfPart[cc]["Size"], scaleX))
                 if IsClicked:
                     obj.SelectedBuiltPart = c
                     print("user just selected part ", c, " of Vehicle")
                     #draeing a rect at the position of the texture with the size of the texture
-                    pygame.draw.rect(obj.screen, (50,50,50), (obj.Vehicle[c]["Pos"][0], obj.Vehicle[c]["Pos"][1],round(TexturesOfPart[cc]["Size"][0] * scaleX), round(TexturesOfPart[cc]["Size"][1] * scaleX)), 2,2)
+                    pygame.draw.rect(obj.screen, (50,50,50), (PositionOfTexture[0], PositionOfTexture[1],round(TexturesOfPart[cc]["Size"][0] * scaleX), round(TexturesOfPart[cc]["Size"][1] * scaleX)), 2,2)
                 cc += 1
         c += 1
     #------------------------------Drawing the Joints-----------------------------------------------------------
@@ -261,6 +264,7 @@ def run(obj):
                         "Textures": obj.partdict[obj.selectedPart]["Textures"],
                         "Pos": (mx,my),
                         "Rotation": obj.RotationOfSelectedPart,
+                        "Center": obj.partdict[obj.selectedPart]["Center"], 
                         "refundValue": obj.partdict[obj.selectedPart]["Cost"],
                         "CanStandAlone": True,
                         "Joints": Joints,
@@ -313,7 +317,7 @@ def run(obj):
             obj.SelectedBuiltPart = None
     #------------------------------Marking the selected part-------------------------------------
     if obj.SelectedBuiltPart != None:
-        RectPos = obj.Vehicle[obj.SelectedBuiltPart]["Pos"]
+        RectPos = utils.SubstractTuples(obj.Vehicle[obj.SelectedBuiltPart]["Pos"], obj.Vehicle[obj.SelectedBuiltPart]["Center"])
         pygame.draw.rect(obj.screen, (50,50,50), (RectPos[0], RectPos[1],int(64 * scaleX), int(64 * scaleX) ), 2,2)
     #------------------------------The Reload Vehicle Button---------------------------------------
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
