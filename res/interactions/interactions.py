@@ -22,6 +22,18 @@ def ButtonArea(obj, image, pos, size):
                 return False
         else:
             return False
+def ClickArea(pos, size):
+    if pygame.mouse.get_pressed()[0]:#
+        mx, my = pygame.mouse.get_pos()
+
+        # is the button clicked?  (is the mouse within a box at pos with size when the click occurs?)
+        if mx >= pos[0] and mx <= pos[0] + size[0]:
+            if my >= pos[1] and my <= pos[1] + size[1]:
+                return True
+            else:
+                return False
+        else:
+            return False
 class Errormessage():
     def __init__(self, message, duration, obj):
         self.message = message

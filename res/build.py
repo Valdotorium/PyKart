@@ -99,7 +99,15 @@ def run(obj):
             while cc < len(obj.Vehicle[c]["Textures"]):
                 #data of the texture stored in "Textures"
                 PositionOfTexture = utils.AddTuples(obj.Vehicle[c]["Pos"],TexturesOfPart[cc]["Pos"])
-                IsClicked = interactions.ButtonArea(obj,obj.textures[TexturesOfPart[cc]["Image"]],PositionOfTexture,  utils.MultiplyTuple(TexturesOfPart[cc]["Size"], scaleX))
+                textur = TexturesOfPart[cc]["Image"]
+                textur = obj.textures[textur]
+                textur = pygame.transform.scale(textur, utils.Scale(obj,[64,64]))
+                #applying rotation 
+                textur = pygame.transform.rotate(textur, obj.Vehicle[c]["Rotation"])
+                #rectangle for part rotation cuz it works somehow
+                texture_rect = textur.get_rect(center = PositionOfTexture)
+                obj.screen.blit(textur, texture_rect)
+                IsClicked = interactions.ClickArea(PositionOfTexture, utils.MultiplyTuple(TexturesOfPart[cc]["Size"], scaleX))
                 if IsClicked:
                     obj.SelectedBuiltPart = c
                     print("user just selected part ", c, " of Vehicle")
@@ -129,17 +137,24 @@ def run(obj):
     #----------------------------- Getting Temporary Joint Positions of the SelectedPart --------------------------------------------------------
     JointPositionsOfSelectedPart = []
     if obj.selectedPart != "":
+        #TODO #7, this can probably be done by: centering all blitted graphics around their center point instead of their top left corner
+        #(utils function for that?)
+        #they will then always be referenced by their center point (which could be the anchor of the part)
         SelectedPartJoints = obj.partdict[obj.selectedPart]["Joints"]
-        
+        #stores the joints positions relative to the center of the part
+        RelativeJointPositionsOfSelectedPart = []
         c = 0
         while c < len(SelectedPartJoints):
             JointPosition = SelectedPartJoints[c]["Pos"]
-            JointPosition = utils.RotateVector(JointPosition, obj.RotationOfSelectedPart)
+            #Centering the part
+            JointPosition = utils.SubstractTuples(JointPosition,obj.partdict[obj.selectedPart]["Center"])
+            #rotating the joints position
+            JointPosition = utils.RotateVector(JointPosition, -obj.RotationOfSelectedPart)
             FJointPosition = utils.AddTuples(JointPosition, (mx,my))
             JointPositionsOfSelectedPart.append(FJointPosition)
+            RelativeJointPositionsOfSelectedPart.append(JointPosition)
 
-            c += 1
-        #print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}")  
+            c += 1 
     #------------------------------Sanpping to joints when close to them-------------------------------------------------------------------------
     obj.SnappedJointData = None
     obj.IndexOfSnappedJoint = None
@@ -152,7 +167,7 @@ def run(obj):
                     #check if a joint of the part curently selected is closer than 15 * scaleX pixels to a placed joint
                     if obj.JointPositions[c][1][0] - 15 * scaleX < JointPositionsOfSelectedPart[cc][0] < obj.JointPositions[c][1][0] + 15 * scaleX:
                         if obj.JointPositions[c][1][1] - 15 * scaleX < JointPositionsOfSelectedPart[cc][1] < obj.JointPositions[c][1][1] + 15 * scaleX:
-                            mx,my = (obj.JointPositions[c][1][0] - SelectedPartJoints[cc]["Pos"][0], obj.JointPositions[c][1][1] - SelectedPartJoints[cc]["Pos"][1])
+                            mx,my = (obj.JointPositions[c][1][0] - RelativeJointPositionsOfSelectedPart[cc][0], obj.JointPositions[c][1][1] - RelativeJointPositionsOfSelectedPart[cc][1])
                             #check if pairing of joints is invalid (if both joints have type "Accept")
                             if cc < len(obj.Vehicle[obj.JointPositions[c][0]]["Joints"]) and cc < len(obj.partdict[obj.selectedPart]["Joints"]):
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][cc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
@@ -197,12 +212,18 @@ def run(obj):
         #(utils function for that?)
         #they will then always be referenced by their center point (which could be the anchor of the part)
         SelectedPartJoints = obj.partdict[obj.selectedPart]["Joints"]
+        #stores the joints positions relative to the center of the part
+        RelativeJointPositionsOfSelectedPart = []
         c = 0
         while c < len(SelectedPartJoints):
             JointPosition = SelectedPartJoints[c]["Pos"]
-            JointPosition = utils.RotateVector(JointPosition, obj.RotationOfSelectedPart)
+            #Centering the part
+            JointPosition = utils.SubstractTuples(JointPosition,obj.partdict[obj.selectedPart]["Center"])
+            #rotating the joints position
+            JointPosition = utils.RotateVector(JointPosition, -obj.RotationOfSelectedPart)
             FJointPosition = utils.AddTuples(JointPosition, (mx,my))
             JointPositionsOfSelectedPart.append(FJointPosition)
+            RelativeJointPositionsOfSelectedPart.append(JointPosition)
 
             c += 1
         #print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}") 
@@ -224,7 +245,14 @@ def run(obj):
                             obj.Errormessage = interactions.Errormessage("Part Placement Invalid", 100, obj)
                             print("part placement failed due to invalid positioning")
                     c += 1
-                #saving the part that has been placed and its data to obj.Vehicle                
+                #saving the part that has been placed and its data to obj.Vehicle   
+
+                #overwriting the joints prositions (for rotation) 
+                Joints = obj.partdict[obj.selectedPart]["Joints"]
+                jc = 0
+                while jc < len(Joints):
+                    Joints[jc]["Pos"] = RelativeJointPositionsOfSelectedPart[jc]
+                    jc += 1         
                 if PartIsValid:
                     PlacedPart = {
                         #ready to store as json
@@ -235,7 +263,7 @@ def run(obj):
                         "Rotation": obj.RotationOfSelectedPart,
                         "refundValue": obj.partdict[obj.selectedPart]["Cost"],
                         "CanStandAlone": True,
-                        "Joints": obj.partdict[obj.selectedPart]["Joints"],
+                        "Joints": Joints,
                         "Hitbox": obj.partdict[obj.selectedPart]["Hitbox"],
                         "Properties": obj.partdict[obj.selectedPart]["Properties"],
                     }

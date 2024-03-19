@@ -3,6 +3,7 @@
     "Index": 3,
     "Type": "Stability",
     "Cost": 300,
+    "Center": [32,32],
     "Stex": "frame_corner.png",
     "Properties": {
         "Rot": 0,

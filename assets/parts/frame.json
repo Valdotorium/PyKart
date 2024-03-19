@@ -3,6 +3,7 @@
     "Index": 2,
     "Type": "Stability",
     "Cost": 500,
+    "Center": [32,32],
     "Stex": "metal_frame_selectet.png",
     "Properties": {
         "Rot": 0,

@@ -4,6 +4,7 @@
     "Type": "Stability",
     "Cost": 4000,
     "Stex": "weight.png",
+    "Center": [32,32],
     "Properties": {
         "Rot": 0,
         "Friction": 0.99,

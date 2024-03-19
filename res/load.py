@@ -94,5 +94,7 @@ def respond(obj):
             print(f"loaded vehicle hitboxes: ", obj.VehicleHitboxes)
         except:
             raise ImportError("Vehicle File not found")
+    #TODO: #8 
+    #implement scalability by scaling all size values of parts by scaleX before starting in building mode
 
     utils.displayTextCenter(obj, "All Done!")

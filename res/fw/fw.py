@@ -83,5 +83,7 @@ def RotateVector(vector, angle):
     ny = x * sin + y * cos
     print(nx,ny)
     return nx, ny
+def SubstractTuples(tuple1, tuple2):
+    return tuple1[0] - tuple2[0], tuple1[1] - tuple2[1]
 
             
