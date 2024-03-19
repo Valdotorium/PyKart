@@ -48,6 +48,7 @@ class Game():
         self.CFG_Reload_Latest_Vehicle = False
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200, 800)
+        self.KeyCooldown = 0
 
         #options,olease set fit and fullscreen to false
         self.S_Fitscreen = False
@@ -92,13 +93,26 @@ class Game():
             res.physics.simulate(Exo, fps)
             
         if self.gm =="build":
-            if pygame.key.get_pressed()[pygame.K_a]:
-                Exo.RotationOfSelectedPart -= 7.2
-            if pygame.key.get_pressed()[pygame.K_d]:
-                Exo.RotationOfSelectedPart += 7.2
+            if Exo.KeyCooldown <= 0:
+                if pygame.key.get_pressed()[pygame.K_p]:
+                    #precision mode
+                    if pygame.key.get_pressed()[pygame.K_d]:
+                        Exo.RotationOfSelectedPart -= 9
+                        Exo.KeyCooldown = 20
+                    if pygame.key.get_pressed()[pygame.K_a]:
+                        Exo.RotationOfSelectedPart += 9
+                        Exo.KeyCooldown = 20
+                else:
+                    if pygame.key.get_pressed()[pygame.K_d]:
+                        Exo.RotationOfSelectedPart -= 45
+                        Exo.KeyCooldown = 30
+                    if pygame.key.get_pressed()[pygame.K_a]:
+                        Exo.RotationOfSelectedPart += 45
+                        Exo.KeyCooldown = 30
             #buiding mode
             Exo.screen.fill((180, 190, 230))
             res.build.run(Exo)
+            Exo.KeyCooldown -= 1
         if self.gm == "transfer":
             res.transfer.run(Exo)
             res.physics.TransferStage(Exo)

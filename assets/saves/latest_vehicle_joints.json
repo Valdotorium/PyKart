@@ -1,1 +1,1 @@
-[{"JoinedParts": [0, 1], "JointData": {"BreakPoint": 9000, "Type": "Spring", "Data": {"Distance": 72, "Damping": 40, "Stiffness": 2000}}, "PositionData": [[464.62493733008233, 414.95446567891264], [475.0, 412.0]]}]
+[{"JoinedParts": [0, 1], "JointData": {"BreakPoint": 18000, "Hardness": 0.98, "Type": "Solid", "Data": {}}, "PositionData": [[436.62741699796953, 407.62741699796953], [438.0, 402.74516600406093]]}]

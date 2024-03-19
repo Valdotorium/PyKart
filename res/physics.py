@@ -48,7 +48,6 @@ def CheckJoints(obj):
                 obj.PymunkJoints[c] = None
         c += 1
 def simulate(obj, fps):
-    #print(utils.RotateVector(obj.TestVector, obj.TestAngle))
     obj.space.step(1/fps)
     #draeing the poligon with the list of points obj.GroundPolygon
     pygame.draw.polygon(obj.screen, (0,0,0),obj.GroundPolygon)
@@ -89,7 +88,8 @@ def TransferStage(obj):
             PartPosition = obj.Vehicle[c]["Pos"]
             #draw a box with the parts size at part position
             HitboxOfPart = obj.Vehicle[c]["Hitbox"]
-            
+            #applying rotation
+            Angle = -utils.DegreesToRadians(obj.Vehicle[c]["Rotation"])
             hitbox_body = pymunk.Body(1,100,body_type=pymunk.Body.DYNAMIC)
             hitbox_body.position = utils.AddTuples(PartPosition, HitboxOfPart["Pos"])
             #the following variables can be used for drawing the hitboxes
@@ -106,6 +106,8 @@ def TransferStage(obj):
             HitboxPosition = HitboxOfPart["Pos"]
             #defining shapes of hitboxes
             if HitboxOfPart["Type"] == "Rect":
+                #centering the Hitbox
+                HitboxPosition = utils.SubstractTuples(HitboxPosition, obj.Vehicle[c]["Center"])
                 HitboxVertices = []
                 #top left corner
                 HitboxVertices.append(HitboxPosition)
@@ -118,17 +120,23 @@ def TransferStage(obj):
                 print("Hitbox (rect)vertices for part: ",c," : ", HitboxVertices)
                 obj.PhysicsOutputData[rc]["Size"] = HitboxVertices
                 hitbox_shape = pymunk.Poly(hitbox_body, HitboxVertices)
+                hitbox_body.angle = Angle
                 obj.PymunkBodies.append(hitbox_body)
 
             elif HitboxOfPart["Type"] == "Circle":
                 HitboxPosition = utils.AddTuples(PartPosition, HitboxOfPart["Pos"])
+                #centering the Hitbox
+                HitboxPosition = utils.SubstractTuples(HitboxPosition, obj.Vehicle[c]["Center"])
                 hitbox_shape = pymunk.Circle(hitbox_body, HitboxOfPart["Size"])
                 print("radius of hitbox for part ",c," : ", HitboxOfPart["Size"])
                 obj.PhysicsOutputData[rc]["Size"] = [HitboxPosition,HitboxOfPart["Size"]]
+                hitbox_body.angle = Angle
                 obj.PymunkBodies.append(hitbox_body)
             elif HitboxOfPart["Type"] == "Poly":
                 cc = 0
                 HitboxPosition = utils.AddTuples(PartPosition, HitboxOfPart["Pos"])
+                #centering the Hitbox
+                HitboxPosition = utils.SubstractTuples(HitboxPosition, obj.Vehicle[c]["Center"])
                 HitboxVertices = []
                 while cc < len(HitboxOfPart["Size"]):
                     HitboxVertices.append(utils.AddTuples(HitboxPosition, HitboxOfPart["Size"][cc]))
@@ -137,6 +145,8 @@ def TransferStage(obj):
                 obj.PhysicsOutputData[rc]["Size"] = HitboxVertices
                 print("Hitbox (poly)vertices for part: ",c," : ", HitboxVertices)
                 print("Physics output data :", obj.PhysicsOutputData)
+                #applying rotation
+                hitbox_body.angle = Angle
                 obj.PymunkBodies.append(hitbox_body)
 
             hitbox_shape.mass = obj.Vehicle[c]["Properties"]["Weight"]

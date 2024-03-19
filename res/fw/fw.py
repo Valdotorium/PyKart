@@ -52,6 +52,8 @@ def MultiplyTuple(tuple1, factor):
     return tuple1[0] * factor, tuple1[1] * factor
 def RadiansToDegrees(radians):
     return radians * 180 / 3.14159265359
+def DegreesToRadians(degrees):
+    return degrees * 3.14159265359 / 180
 def Negative(*args):
     c = 0
     ReturnArgs = []

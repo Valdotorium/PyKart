@@ -139,13 +139,13 @@ def run(obj):
     #print("all joints:", obj.JointPositions)
     #----------------------------- Getting Temporary Joint Positions of the SelectedPart --------------------------------------------------------
     JointPositionsOfSelectedPart = []
+    #stores the joints positions relative to the center of the part
+    RelativeJointPositionsOfSelectedPart = []
     if obj.selectedPart != "":
         #TODO #7, this can probably be done by: centering all blitted graphics around their center point instead of their top left corner
         #(utils function for that?)
         #they will then always be referenced by their center point (which could be the anchor of the part)
         SelectedPartJoints = obj.partdict[obj.selectedPart]["Joints"]
-        #stores the joints positions relative to the center of the part
-        RelativeJointPositionsOfSelectedPart = []
         c = 0
         while c < len(SelectedPartJoints):
             JointPosition = SelectedPartJoints[c]["Pos"]
@@ -210,13 +210,14 @@ def run(obj):
         obj.screen.blit(textur, texture_rect)
     #----------------------------- Getting Temporary Joint Positions of the SelectedPart (if it snapped, at a new position) --------------------------------------------------------
     JointPositionsOfSelectedPart = []
+    #stores the joints positions relative to the center of the part
+    RelativeJointPositionsOfSelectedPart = []
     if obj.selectedPart != "":
         #TODO #7, this can probably be done by: centering all blitted graphics around their center point instead of their top left corner
         #(utils function for that?)
         #they will then always be referenced by their center point (which could be the anchor of the part)
         SelectedPartJoints = obj.partdict[obj.selectedPart]["Joints"]
-        #stores the joints positions relative to the center of the part
-        RelativeJointPositionsOfSelectedPart = []
+
         c = 0
         while c < len(SelectedPartJoints):
             JointPosition = SelectedPartJoints[c]["Pos"]
