@@ -8,6 +8,8 @@ import res.build
 import res.interactions
 import res.transfer
 import res.procedural
+import res.controls
+import res.mechanics
 from copy import deepcopy as deepcopy
 #load files in othe directories like this: os.path.dirname(__file__) + "/folder/folder/file.png"
 #put scripts into top-level directory, put images or other "universal files" into _internal in dist/main
@@ -75,45 +77,24 @@ class Game():
         self.X_Position = 0
         self.Y_Position = 0
         self.pi =3.1415926535897932384626433832795
+        self.Throttle = 0
         
     def run(self):
     
         #res.interactions.interactions.ButtonArea(Exo)
         if self.gm == "game":
-            if pygame.key.get_pressed()[pygame.K_w]:
-                Exo.TestAngle += 7.2
-            if pygame.key.get_pressed()[pygame.K_s]:
-                Exo.TestAngle -= 7.2
-            if pygame.key.get_pressed()[pygame.K_a]:
-                Exo.X_Position -= 20
-            if pygame.key.get_pressed()[pygame.K_d]:
-                Exo.X_Position += 20
             Exo.screen.fill((160,180,210))
             #running the physics
             res.procedural.WritePolygonPositions(Exo)
             res.physics.simulate(Exo, fps)
+            res.controls.GameControls(Exo)
+            res.mechanics.GameMechanics(Exo)
             
         if self.gm =="build":
-            if Exo.KeyCooldown <= 0:
-                if pygame.key.get_pressed()[pygame.K_p]:
-                    #precision mode
-                    if pygame.key.get_pressed()[pygame.K_d]:
-                        Exo.RotationOfSelectedPart -= 9
-                        Exo.KeyCooldown = 20
-                    if pygame.key.get_pressed()[pygame.K_a]:
-                        Exo.RotationOfSelectedPart += 9
-                        Exo.KeyCooldown = 20
-                else:
-                    if pygame.key.get_pressed()[pygame.K_d]:
-                        Exo.RotationOfSelectedPart -= 45
-                        Exo.KeyCooldown = 30
-                    if pygame.key.get_pressed()[pygame.K_a]:
-                        Exo.RotationOfSelectedPart += 45
-                        Exo.KeyCooldown = 30
             #buiding mode
             Exo.screen.fill((180, 190, 230))
             res.build.run(Exo)
-            Exo.KeyCooldown -= 1
+            res.controls.BuildControls(Exo)
         if self.gm == "transfer":
             res.transfer.run(Exo)
             res.physics.TransferStage(Exo)
