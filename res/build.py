@@ -339,5 +339,6 @@ def run(obj):
             VehicleHitboxFile = open(CurrentPath+"/assets/saves/latest_vehicle_hitboxes.json")
             obj.VehicleHitboxes = json.load(VehicleHitboxFile)
             print(f"loaded vehicle hitboxes: ", obj.VehicleHitboxes)
+            obj.gm = "transfer"
         except:
             raise ImportError("Vehicle File not found")

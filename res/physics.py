@@ -82,6 +82,8 @@ def TransferStage(obj):
     obj.VehicleOriginalIndexes = []
     #storing types  of parts and indexes of their bodies in PymunkBodies, used for game calculations
     obj.VehicleTypes = []
+    #vehicle without nonetype objects
+    obj.NewVehicle = []
     #creating hitboxes
     c = 0
     rc = 0
@@ -172,6 +174,7 @@ def TransferStage(obj):
             rc += 1
             obj.VehicleOriginalIndexes.append(c)
             obj.VehicleTypes.append((obj.Vehicle[c]["Type"], c))
+            obj.NewVehicle.append(obj.Vehicle[c])
         c += 1
     c = 0
     rc = 0
