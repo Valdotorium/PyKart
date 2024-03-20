@@ -8,6 +8,7 @@ import res.build
 import res.interactions
 import res.transfer
 import res.procedural
+from copy import deepcopy as deepcopy
 #load files in othe directories like this: os.path.dirname(__file__) + "/folder/folder/file.png"
 #put scripts into top-level directory, put images or other "universal files" into _internal in dist/main
 #create a window in fullscreen size with a rectangle in it

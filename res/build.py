@@ -2,6 +2,8 @@ import pygame
 import random,json,os
 from .interactions import interactions as interactions
 from .fw import fw as utils
+import copy
+
 """WARNING: BARELY READABLE CODE
 This program does not perform very complex operations, but reading it with all the dictionary indexing can be quite challenging
 here are some examples:
@@ -59,7 +61,7 @@ def run(obj):
     while c < len(obj.partdict):
         gap = 10
         cc = 0
-        TexturesOfPart = obj.partdict[list(obj.partdict)[c]]["Textures"]
+        TexturesOfPart =obj.partdict[list(obj.partdict)[c]]["Textures"]
         #THE "BASE" POSITION (like "Pos" of part in obj.vehicle)
         #data of the texture stored in "Textures" of each part, here retrieved from partdict
         PositionOfTexture_X = 64 * c + 64 + gap*c
@@ -78,7 +80,7 @@ def run(obj):
                 obj.SelectedBuiltPart = None
                 UserHasSelectedPart = True
                 print(f"User just cligged on part {obj.partdict[list(obj.partdict)[c]]["Name"]}")
-                obj.selectedPart = obj.partdict[list(obj.partdict)[c]]["Name"]
+                obj.selectedPart = copy.deepcopy(obj.partdict)[list(obj.partdict)[c]]["Name"]
             cc += 1
         c += 1
         
@@ -145,7 +147,7 @@ def run(obj):
         #TODO #7, this can probably be done by: centering all blitted graphics around their center point instead of their top left corner
         #(utils function for that?)
         #they will then always be referenced by their center point (which could be the anchor of the part)
-        SelectedPartJoints = obj.partdict[obj.selectedPart]["Joints"]
+        SelectedPartJoints = copy.deepcopy(obj.partdict[obj.selectedPart])["Joints"]
         c = 0
         while c < len(SelectedPartJoints):
             JointPosition = SelectedPartJoints[c]["Pos"]
@@ -200,7 +202,7 @@ def run(obj):
     #------------------------------Drawing the selected part at mouse pos-------------------------------------
     if obj.selectedPart != "":
         #jos code
-        textur = obj.partdict[obj.selectedPart]["Stex"]
+        textur = copy.deepcopy(obj.partdict[obj.selectedPart])["Stex"]
         textur = obj.textures[textur]
         textur = pygame.transform.scale(textur, utils.Scale(obj,[64,64]))
         #applying rotation 
@@ -216,8 +218,7 @@ def run(obj):
         #TODO #7, this can probably be done by: centering all blitted graphics around their center point instead of their top left corner
         #(utils function for that?)
         #they will then always be referenced by their center point (which could be the anchor of the part)
-        SelectedPartJoints = obj.partdict[obj.selectedPart]["Joints"]
-
+        SelectedPartJoints = copy.deepcopy(obj.partdict[obj.selectedPart])["Joints"]
         c = 0
         while c < len(SelectedPartJoints):
             JointPosition = SelectedPartJoints[c]["Pos"]
@@ -252,7 +253,7 @@ def run(obj):
                 #saving the part that has been placed and its data to obj.Vehicle   
 
                 #overwriting the joints prositions (for rotation) 
-                Joints = obj.partdict[obj.selectedPart]["Joints"]
+                Joints = copy.deepcopy(obj.partdict[obj.selectedPart])["Joints"]
                 jc = 0
                 while jc < len(Joints):
                     Joints[jc]["Pos"] = RelativeJointPositionsOfSelectedPart[jc]
