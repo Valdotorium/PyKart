@@ -24,7 +24,10 @@ def Draw(obj):
             #many fixes need to be done here
             Image = pygame.transform.scale(Image, PartTextures[cc]["Size"])
             Image = pygame.transform.rotate(Image, Rotation)
-            obj.screen.blit(Image, Position)
+            #applying rotation 
+            #rectangle for part rotation cuz it works somehow
+            texture_rect = Image.get_rect(center = Position)
+            obj.screen.blit(Image, texture_rect)
             cc += 1
         c+=1
 
@@ -55,7 +58,7 @@ def simulate(obj, fps):
     #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
     #draw(obj.Vehicle) <--will be used for textures later
     #Draw(obj)
-    PhysDraw(obj)
+    Draw(obj)
     CheckJoints(obj)
 def OldRefreshPolygon(obj):
     print(f"initializing ground poly with vertices: ", obj.GroundPolygon)
@@ -107,6 +110,7 @@ def TransferStage(obj):
             obj.PhysicsOutputData.append({"Type":HitboxOfPart["Type"],
                                       "Pos":HitboxOfPart["Pos"],
                                       "PartName": obj.Vehicle[c]["name"],
+                                      "Center": obj.Vehicle[c]["Center"],
                                       "PartTextures": obj.Vehicle[c]["Textures"]
                                       })
             HitboxPosition = HitboxOfPart["Pos"]
