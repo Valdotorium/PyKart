@@ -182,15 +182,18 @@ def TransferStage(obj):
             PartnerA = obj.VehicleJoints[c]["JoinedParts"][0]
             PartnerB = obj.VehicleJoints[c]["JoinedParts"][1]
             #the size of the hitbox of PartnerA / 2
-            AnchorA = obj.Vehicle[PartnerA]["Hitbox"]["Anchor"]
+            AnchorA = utils.RotateVector(obj.Vehicle[PartnerA]["Hitbox"]["Anchor"], -obj.Vehicle[PartnerA]["Rotation"])
+            Vector = utils.RotateVector([32,32], -obj.Vehicle[PartnerA]["Rotation"])
+            AnchorA = utils.SubstractTuples(AnchorA, Vector)
             #the size of the hitbox of PartnerB / 2
-            AnchorB = obj.Vehicle[PartnerB]["Hitbox"]["Anchor"]
+            AnchorB = utils.RotateVector(obj.Vehicle[PartnerB]["Hitbox"]["Anchor"], -obj.Vehicle[PartnerB]["Rotation"])
             #finding the indexes of joined parts in PymunkBodies
             PartnerA = obj.VehicleOriginalIndexes.index(PartnerA)
             PartnerB = obj.VehicleOriginalIndexes.index(PartnerB)
             PartnerA = obj.PymunkBodies[PartnerA]
             PartnerB = obj.PymunkBodies[PartnerB]
             JointData = obj.VehicleJoints[c]["JointData"]
+            print("loaded joint anchor data:", AnchorA, AnchorB)
             JointType = JointData["Type"]
             if JointType == "Spring":
 
