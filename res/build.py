@@ -55,6 +55,7 @@ def run(obj):
     #background for inventory tiles
     TileBackgroundImg = obj.textures["UI_tile.png"]
     TileBackgroundImg = pygame.transform.scale(TileBackgroundImg, utils.Scale(obj,(64,64)))
+    PositionOfTexture_X = 64
     #background for the building area
     BuildBackgroundImg = pygame.transform.scale(TileBackgroundImg,( round(obj.dimensions[0] * 0.75), round(obj.dimensions[1] * 0.75)))
     obj.screen.blit(BuildBackgroundImg, (obj.dimensions[0] / 8, obj.dimensions[1] / 8))
@@ -64,7 +65,7 @@ def run(obj):
         TexturesOfPart =obj.partdict[list(obj.partdict)[c]]["Textures"]
         #THE "BASE" POSITION (like "Pos" of part in obj.vehicle)
         #data of the texture stored in "Textures" of each part, here retrieved from partdict
-        PositionOfTexture_X = 64 * c + 64 + gap*c
+
         #1/10 screen y's from the bottom:
         PositionOfTexture_Y = obj.dimensions[1] - round(obj.dimensions[1] / 10)
         #the position of the top left corner of the part
@@ -82,6 +83,7 @@ def run(obj):
                 print(f"User just cligged on part {obj.partdict[list(obj.partdict)[c]]["Name"]}")
                 obj.selectedPart = copy.deepcopy(obj.partdict)[list(obj.partdict)[c]]["Name"]
             cc += 1
+        PositionOfTexture_X += obj.partdict[list(obj.partdict)[c]]["Textures"][0]["Size"][0] + 16
         c += 1
         
     #------------------------------The play button----------------------------------------------------------------
@@ -265,6 +267,7 @@ def run(obj):
                         "Index": len(obj.Vehicle),
                         "Textures": obj.partdict[obj.selectedPart]["Textures"],
                         "Pos": (mx,my),
+                        "Type": obj.partdict[obj.selectedPart]["Type"],
                         "Rotation": obj.RotationOfSelectedPart,
                         "Center": obj.partdict[obj.selectedPart]["Center"], 
                         "refundValue": obj.partdict[obj.selectedPart]["Cost"],

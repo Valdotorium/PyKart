@@ -80,6 +80,8 @@ def TransferStage(obj):
     obj.PhysicsOutputData = []
     obj.PymunkBodies = []
     obj.VehicleOriginalIndexes = []
+    #storing types  of parts and indexes of their bodies in PymunkBodies, used for game calculations
+    obj.VehicleTypes = []
     #creating hitboxes
     c = 0
     rc = 0
@@ -144,7 +146,6 @@ def TransferStage(obj):
                 hitbox_shape = pymunk.Poly(hitbox_body, HitboxVertices)
                 obj.PhysicsOutputData[rc]["Size"] = HitboxVertices
                 print("Hitbox (poly)vertices for part: ",c," : ", HitboxVertices)
-                print("Physics output data :", obj.PhysicsOutputData)
                 #applying rotation
                 hitbox_body.angle = Angle
                 obj.PymunkBodies.append(hitbox_body)
@@ -170,9 +171,11 @@ def TransferStage(obj):
             #rc is a counter value for all parts that are != Nine to prevent IOOR errors
             rc += 1
             obj.VehicleOriginalIndexes.append(c)
+            obj.VehicleTypes.append((obj.Vehicle[c]["Type"], c))
         c += 1
     c = 0
     rc = 0
+    print("VehicleTypes: ", obj.VehicleTypes)
     obj.PymunkJoints = []
     #print("VehicleJoints: " + str(obj.VehicleJoints))
     #oV[c] = some item c in obj.Vehicle
@@ -193,7 +196,6 @@ def TransferStage(obj):
             PartnerA = obj.PymunkBodies[PartnerA]
             PartnerB = obj.PymunkBodies[PartnerB]
             JointData = obj.VehicleJoints[c]["JointData"]
-            print("loaded joint anchor data:", AnchorA, AnchorB)
             JointType = JointData["Type"]
             if JointType == "Spring":
 

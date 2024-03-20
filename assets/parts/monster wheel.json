@@ -1,0 +1,51 @@
+{
+    "Name": "Monster Wheel",
+    "Index": 6,
+    "Type": "Wheel",
+    "Cost": 8500,
+    "Stex": "wheel.png",
+    "Center": [64,64],
+    "Properties": {
+        "Rot": 0,
+        "FuelUse": 0.2,
+        "MaxImpulse": 1080,
+        "MaxForce": 1000,
+        "MinForce": 50,
+        "Friction": 0.75,
+        "Weight": 75,
+        "Bounciness": 0.2,
+        "JoiningBehavior": "Accept"
+    },
+    "JointData": {
+        "BreakPoint": 16000,
+        "Type": "Spring",
+        "Data":{
+            "Distance": 120,
+            "Damping": 70,
+            "Stiffness": 3000
+        }
+    },
+    "Build":{
+        "NeedsJoint": 1,
+        "HasRotation": 1
+    },
+    "Joints":[
+        {
+            "Type": "Accept",
+            "Pos": [64,0]
+        }
+    ],
+    "Hitbox":{
+        "Pos": [64,64],
+        "Type": "Circle",
+        "Size": 64,
+        "Anchor": [0,0],
+        "CollisionType": "Semi",
+        "HasTwoAnchors": false
+    },
+    "Textures": [{
+        "Image": "wheel.png",
+        "Pos": [0,0],
+        "Size": [128,128]
+    }]
+}
