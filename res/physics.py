@@ -183,7 +183,9 @@ def TransferStage(obj):
     while c < len(obj.VehicleJoints):
         if obj.VehicleJoints[c] != None:
             PartnerA = obj.VehicleJoints[c]["JoinedParts"][0]
+            IndexTypePartnerA = PartnerA
             PartnerB = obj.VehicleJoints[c]["JoinedParts"][1]
+            IndexTypePartnerB = PartnerB
             #the size of the hitbox of PartnerA / 2
             AnchorA = utils.RotateVector(obj.Vehicle[PartnerA]["Hitbox"]["Anchor"], -obj.Vehicle[PartnerA]["Rotation"])
             Vector = utils.RotateVector(obj.Vehicle[PartnerA]["Center"], -obj.Vehicle[PartnerA]["Rotation"])
@@ -203,7 +205,7 @@ def TransferStage(obj):
                 Joint = pymunk.constraints.DampedSpring(PartnerA,PartnerB,AnchorA,AnchorB, JointData["Data"]["Distance"], JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
                 obj.PymunkJoints.append(Joint)
                 obj.space.add(Joint)
-                Joint = pymunk.constraints.GrooveJoint(PartnerA, PartnerB, AnchorA, (AnchorA[0], AnchorA[1] + JointData["Data"]["Distance"]), AnchorB)
+                Joint = pymunk.constraints.GrooveJoint(PartnerA, PartnerB, AnchorA, utils.AddTuples(AnchorA,(utils.RotateVector((0,JointData["Data"]["Distance"]), -obj.Vehicle[IndexTypePartnerB]["Rotation"]))), AnchorB)
                 obj.PymunkJoints.append(Joint)
                 obj.space.add(Joint)
 
