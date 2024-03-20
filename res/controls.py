@@ -2,7 +2,9 @@ import pygame
 
 def GameControls(obj):
     if pygame.key.get_pressed()[pygame.K_SPACE]:
-        obj.Throttle += 5
+        obj.Throttle += 4
+    if pygame.key.get_pressed()[pygame.K_b]:
+        obj.Throttle -= 6
 
 def BuildControls(obj):
     if obj.KeyCooldown <= 0:

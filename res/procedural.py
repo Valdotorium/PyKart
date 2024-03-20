@@ -53,6 +53,6 @@ def WritePolygonPositions(obj):
         x += 1
     #edge point
     PolygonPoints.append(((x - 1) * round(obj.dimensions[0] / obj.CFG_Terrain_X_Scale), 10000))
-    obj.GroundPolygon = [(-600, 600), (1800, 600), (1800, 900), (-600, 900)] #provisorisch
+    obj.GroundPolygon = [(-600, 600), (200000, 6000), (1800, 900), (-600, 900)] #provisorisch
     #print("THE GROUND POLYGON IS AT:", PolygonPoints)
     #print(f"drawing poly from terrain item {startx} to terrain item {x}")

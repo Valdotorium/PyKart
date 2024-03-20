@@ -6,13 +6,13 @@ import pymunk.constraints
 
 def Draw(obj):
     c = 0
-    if obj.CFG_debug_mode:
-        obj.space.debug_draw(obj.draw_options)
+    #obj.space.debug_draw(obj.draw_options)
     while c < len(obj.PymunkBodies):
         #negative because it is somehow inverted
         BodyRotation = -utils.RadiansToDegrees(obj.PymunkBodies[c].angle)
-        BodyPosition = obj.PymunkBodies[c].position
-        #print(BodyPosition,  BodyRotation)
+        #scrolling camera?
+        BodyPosition = (obj.PymunkBodies[c].position[0] - obj.X_Position, obj.PymunkBodies[c].position[1] - obj.Y_Position)
+        print(BodyPosition,  BodyRotation)
         PartTextures = obj.PhysicsOutputData[c]["PartTextures"]
         cc = 0
         while cc < len(PartTextures):
@@ -58,7 +58,7 @@ def simulate(obj, fps):
     #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
     #draw(obj.Vehicle) <--will be used for textures later
     #Draw(obj)
-    Draw(obj)
+    PhysDraw(obj)
     CheckJoints(obj)
 def OldRefreshPolygon(obj):
     print(f"initializing ground poly with vertices: ", obj.GroundPolygon)
