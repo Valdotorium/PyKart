@@ -43,6 +43,7 @@ def CheckJoints(obj):
             #print(len(obj.PymunkJoints), len(obj.VehicleJoints))
             #print("Impulse of joint ", c, ":", JointImpulse)
             if JointImpulse > ImpulseLimit:
+                print("JointImpulse of joint ", c, "(", JointImpulse, ") was too high, it broke.")
                 obj.space.remove(obj.PymunkJoints[c])
                 obj.VehicleJoints[c] = None
                 obj.PymunkJoints[c] = None
@@ -134,14 +135,13 @@ def TransferStage(obj):
                 obj.PymunkBodies.append(hitbox_body)
             elif HitboxOfPart["Type"] == "Poly":
                 cc = 0
-                HitboxPosition = utils.AddTuples(PartPosition, HitboxOfPart["Pos"])
-                #centering the Hitbox
-                HitboxPosition = utils.SubstractTuples(HitboxPosition, obj.Vehicle[c]["Center"])
+                HitboxPosition = HitboxOfPart["Pos"]
                 HitboxVertices = []
                 while cc < len(HitboxOfPart["Size"]):
-                    HitboxVertices.append(utils.AddTuples(HitboxPosition, HitboxOfPart["Size"][cc]))
+                    VerticePos  = utils.SubstractTuples(HitboxPosition, obj.Vehicle[c]["Center"])
+                    HitboxVertices.append(utils.AddTuples(VerticePos, HitboxOfPart["Size"][cc]))
                     cc += 1
-                hitbox_shape = pymunk.Poly(hitbox_body, HitboxOfPart["Size"])
+                hitbox_shape = pymunk.Poly(hitbox_body, HitboxVertices)
                 obj.PhysicsOutputData[rc]["Size"] = HitboxVertices
                 print("Hitbox (poly)vertices for part: ",c," : ", HitboxVertices)
                 print("Physics output data :", obj.PhysicsOutputData)
@@ -183,7 +183,7 @@ def TransferStage(obj):
             PartnerB = obj.VehicleJoints[c]["JoinedParts"][1]
             #the size of the hitbox of PartnerA / 2
             AnchorA = utils.RotateVector(obj.Vehicle[PartnerA]["Hitbox"]["Anchor"], -obj.Vehicle[PartnerA]["Rotation"])
-            Vector = utils.RotateVector([32,32], -obj.Vehicle[PartnerA]["Rotation"])
+            Vector = utils.RotateVector(obj.Vehicle[PartnerA]["Center"], -obj.Vehicle[PartnerA]["Rotation"])
             AnchorA = utils.SubstractTuples(AnchorA, Vector)
             #the size of the hitbox of PartnerB / 2
             AnchorB = utils.RotateVector(obj.Vehicle[PartnerB]["Hitbox"]["Anchor"], -obj.Vehicle[PartnerB]["Rotation"])

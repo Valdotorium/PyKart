@@ -1,0 +1,46 @@
+{
+    "Name": "Connector type breaker",
+    "Index": 5,
+    "Type": "Stability",
+    "Cost": 3000,
+    "Center": [64,32],
+    "Stex": "SpringConnector.png",
+    "Properties": {
+        "Rot": 0,
+        "Friction": 0.95,
+        "Weight": 16,
+        "Bounciness": 0.06,
+        "JoiningBehavior": "Accept"
+
+    },
+    "JointData": {
+        "BreakPoint": 5000,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Joints":[
+        {
+            "Type": "Accept",
+            "Pos": [0,32]
+        },
+        {
+            "Type": "Accept",
+            "Pos": [128,32]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Poly",
+            "Size":[[0,16], [128,16], [128,48], [0,48]],
+            "Anchor":[64,32],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "SpringConnector.png",
+        "Pos": [0,0],
+        "Size": [128,64]
+    }]
+    
+}

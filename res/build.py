@@ -104,7 +104,7 @@ def run(obj):
 
                 textur = TexturesOfPart[cc]["Image"]
                 textur = obj.textures[textur]
-                textur = pygame.transform.scale(textur, utils.Scale(obj,[64,64]))
+                textur = pygame.transform.scale(textur, utils.Scale(obj,obj.Vehicle[c]["Textures"][0]["Size"]))
                 #applying rotation 
                 textur = pygame.transform.rotate(textur, obj.Vehicle[c]["Rotation"])
                 #rectangle for part rotation cuz it works somehow
@@ -204,7 +204,7 @@ def run(obj):
         #jos code
         textur = copy.deepcopy(obj.partdict[obj.selectedPart])["Stex"]
         textur = obj.textures[textur]
-        textur = pygame.transform.scale(textur, utils.Scale(obj,[64,64]))
+        textur = pygame.transform.scale(textur, utils.Scale(obj,obj.partdict[obj.selectedPart]["Textures"][0]["Size"]))
         #applying rotation 
         textur = pygame.transform.rotate(textur, obj.RotationOfSelectedPart)
         #rectangle for part rotation cuz it works somehow
