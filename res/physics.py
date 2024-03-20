@@ -97,6 +97,7 @@ def TransferStage(obj):
             Angle = -utils.DegreesToRadians(obj.Vehicle[c]["Rotation"])
             hitbox_body = pymunk.Body(1,100,body_type=pymunk.Body.DYNAMIC)
             hitbox_body.position = utils.AddTuples(PartPosition, HitboxOfPart["Pos"])
+            
             #the following variables can be used for drawing the hitboxes
             hitbox_body.properties = {"Type":HitboxOfPart["Type"],
                                       "Pos":HitboxOfPart["Pos"],
@@ -129,6 +130,8 @@ def TransferStage(obj):
                 obj.PymunkBodies.append(hitbox_body)
 
             elif HitboxOfPart["Type"] == "Circle":
+                #centering the body
+                hitbox_body.position = utils.SubstractTuples(hitbox_body.position,obj.Vehicle[c]["Center"])
                 HitboxPosition = utils.AddTuples(PartPosition, HitboxOfPart["Pos"])
                 #centering the Hitbox
                 HitboxPosition = utils.SubstractTuples(HitboxPosition, obj.Vehicle[c]["Center"])

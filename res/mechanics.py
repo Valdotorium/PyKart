@@ -12,7 +12,7 @@ def Throttle(obj):
     c = 0
     while c < len(obj.PymunkBodies):
         if obj.VehicleTypes[c][0]=="Wheel":
-            force = [obj.Throttle * 40,0]
+            force = [obj.Throttle * obj.NewVehicle[c]["Properties"]["Force"],0]
             point = (0, -obj.NewVehicle[c]["Center"][0])
             obj.PymunkBodies[c].apply_force_at_local_point(force, point)
         c += 1

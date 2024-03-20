@@ -5,7 +5,7 @@
     "Physics":{
         "MaterialStiffness": 1,
         "OxygenPresent": true,
-        "Friction": 0.4,
+        "Friction": 1,
         "Bounce": 0.15
     }
 }
