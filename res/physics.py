@@ -6,13 +6,22 @@ import pymunk.constraints
 
 def Draw(obj):
     c = 0
+    
+    obj.TransferredPolygon = []
+    #print("GP:", obj.GroundPolygon)
+    while c < len(obj.GroundPolygon):
+        obj.TransferredPolygon.append(utils.AddTuples(obj.GroundPolygon[c], (-obj.X_Position, -obj.Y_Position)))
+        c += 1
+    pygame.draw.polygon(obj.screen, (0,0,0),obj.TransferredPolygon)
+    obj.body_floor.shape.update
+    c = 0
     #obj.space.debug_draw(obj.draw_options)
     while c < len(obj.PymunkBodies):
         #negative because it is somehow inverted
         BodyRotation = -utils.RadiansToDegrees(obj.PymunkBodies[c].angle)
         #scrolling camera?
         BodyPosition = (obj.PymunkBodies[c].position[0] - obj.X_Position, obj.PymunkBodies[c].position[1] - obj.Y_Position)
-        print(BodyPosition,  BodyRotation)
+        #print(BodyPosition,  BodyRotation)
         PartTextures = obj.PhysicsOutputData[c]["PartTextures"]
         cc = 0
         while cc < len(PartTextures):
@@ -54,10 +63,9 @@ def CheckJoints(obj):
 def simulate(obj, fps):
     obj.space.step(1/fps)
     #draeing the poligon with the list of points obj.GroundPolygon
-    pygame.draw.polygon(obj.screen, (0,0,0),obj.GroundPolygon)
     #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
     #draw(obj.Vehicle) <--will be used for textures later
-    #Draw(obj)
+    Draw(obj)
     PhysDraw(obj)
     CheckJoints(obj)
 def OldRefreshPolygon(obj):
@@ -71,11 +79,13 @@ def setup(obj):
     #static floor of the simulation
     obj.body_floor = pymunk.Body(1, 100, body_type=pymunk.Body.STATIC)
     obj.body_floor.position = (0,0)
+    print("loaded ground:", obj.GroundPolygon)
     obj.body_floor.shape = pymunk.Poly(obj.body_floor, obj.GroundPolygon)
     obj.body_floor.shape.friction = Env["Physics"]["Friction"]
     obj.body_floor.shape.elasticity = Env["Physics"]["Bounce"]
     obj.body_floor.shape.filter = pymunk.ShapeFilter(categories= 4, mask= 7)
     obj.space.add(obj.body_floor, obj.body_floor.shape)
+    print("poly vec2d:", obj.body_floor.shape.get_vertices())
     obj.RotationOfSelectedPart = 0
 
 def TransferStage(obj):
