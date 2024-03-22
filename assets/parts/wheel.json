@@ -16,12 +16,12 @@
         "JoiningBehavior": "Accept"
     },
     "JointData": {
-        "BreakPoint": 15000,
+        "BreakPoint": 12000,
         "Type": "Spring",
         "Data":{
             "Distance": 72,
-            "Damping": 40,
-            "Stiffness": 2000
+            "Damping": 50,
+            "Stiffness": 3500
         }
     },
     "Build":{

@@ -99,7 +99,7 @@ def CreateGroundPolygon(obj, Env):
         VectAX = VectA[0]
         VectBX = VectB[0]
         #vertices for the poly, one poly for every x position in obj.GroundRelief
-        Vertices = [(VectAX , 9000), (VectBX, 9000), VectA, VectB]
+        Vertices = [(VectAX , 9000), (VectBX, 9000), VectB, VectA]
         obj.body_floor.shape = pymunk.Poly(obj.body_floor, Vertices)
         obj.body_floor.shape.friction = Env["Physics"]["Friction"]
         obj.body_floor.shape.elasticity = Env["Physics"]["Bounce"]
@@ -111,8 +111,9 @@ def CreateGroundPolygon(obj, Env):
     #creating GroundPolygon (adding bottom edges)
     print("ground relief:",obj.GroundRelief)
     obj.GroundPolygon = obj.GroundRelief
+    print(obj.GroundRelief[len(obj.GroundRelief)-1])
+    obj.GroundPolygon.append((obj.GroundRelief[len(obj.GroundRelief)-1][0],9000))
     obj.GroundPolygon.append((0,9000))
-    obj.GroundPolygon.append((obj.GroundRelief[c-1][0],9000))
     print(obj.GroundPolygon)
 
             

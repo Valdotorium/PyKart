@@ -67,7 +67,7 @@ class Game():
         #self.S_Terrain_Scale_Factor = 1
         #new terrain settings:
         self.CFG_Terrain_Scale = 29 #must be below CFG_Terrain_X_Scale
-        self.CFG_Render_Distance = 100
+        self.CFG_Render_Distance = 1000
         self.CFG_Terrain_Detail = 5
         self.CFG_Terrain_Upscale_Factor = 100
 
