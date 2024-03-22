@@ -317,7 +317,7 @@ def run(obj):
                 if obj.VehicleJoints[c] != None:
                     if obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][0] or obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][1]:
                         #removed joints are still list items, but they will be ignored 
-                        obj.VehicleJoints[c] = None
+                        obj.VehicleJoints.pop(c)
                 c += 1
             obj.SelectedBuiltPart = None
     #------------------------------Marking the selected part-------------------------------------

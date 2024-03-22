@@ -198,35 +198,36 @@ def TransferStage(obj):
             IndexTypePartnerA = PartnerA
             PartnerB = obj.VehicleJoints[c]["JoinedParts"][1]
             IndexTypePartnerB = PartnerB
-            #the size of the hitbox of PartnerA / 2
-            AnchorA = utils.RotateVector(obj.Vehicle[PartnerA]["Hitbox"]["Anchor"], -obj.Vehicle[PartnerA]["Rotation"])
-            Vector = utils.RotateVector(obj.Vehicle[PartnerA]["Center"], -obj.Vehicle[PartnerA]["Rotation"])
-            AnchorA = utils.SubstractTuples(AnchorA, Vector)
-            #the size of the hitbox of PartnerB / 2
-            AnchorB = utils.RotateVector(obj.Vehicle[PartnerB]["Hitbox"]["Anchor"], -obj.Vehicle[PartnerB]["Rotation"])
-            #finding the indexes of joined parts in PymunkBodies
-            PartnerA = obj.VehicleOriginalIndexes.index(PartnerA)
-            PartnerB = obj.VehicleOriginalIndexes.index(PartnerB)
-            PartnerA = obj.PymunkBodies[PartnerA]
-            PartnerB = obj.PymunkBodies[PartnerB]
-            JointData = obj.VehicleJoints[c]["JointData"]
-            JointType = JointData["Type"]
-            if JointType == "Spring":
+            if obj.Vehicle[PartnerA] != None and obj.Vehicle[PartnerB] != None:
+                #the size of the hitbox of PartnerA / 2
+                AnchorA = utils.RotateVector(obj.Vehicle[PartnerA]["Hitbox"]["Anchor"], -obj.Vehicle[PartnerA]["Rotation"])
+                Vector = utils.RotateVector(obj.Vehicle[PartnerA]["Center"], -obj.Vehicle[PartnerA]["Rotation"])
+                AnchorA = utils.SubstractTuples(AnchorA, Vector)
+                #the size of the hitbox of PartnerB / 2
+                AnchorB = utils.RotateVector(obj.Vehicle[PartnerB]["Hitbox"]["Anchor"], -obj.Vehicle[PartnerB]["Rotation"])
+                #finding the indexes of joined parts in PymunkBodies
+                PartnerA = obj.VehicleOriginalIndexes.index(PartnerA)
+                PartnerB = obj.VehicleOriginalIndexes.index(PartnerB)
+                PartnerA = obj.PymunkBodies[PartnerA]
+                PartnerB = obj.PymunkBodies[PartnerB]
+                JointData = obj.VehicleJoints[c]["JointData"]
+                JointType = JointData["Type"]
+                if JointType == "Spring":
 
-                #creating the joint, assuming joint is facing down, need to fix later
-                Joint = pymunk.constraints.DampedSpring(PartnerA,PartnerB,AnchorA,AnchorB, JointData["Data"]["Distance"], JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
-                obj.PymunkJoints.append(Joint)
-                obj.space.add(Joint)
-                Joint = pymunk.constraints.GrooveJoint(PartnerA, PartnerB, AnchorA, utils.AddTuples(AnchorA,(utils.RotateVector((0,JointData["Data"]["Distance"]), -obj.Vehicle[IndexTypePartnerB]["Rotation"]))), AnchorB)
-                obj.PymunkJoints.append(Joint)
-                obj.space.add(Joint)
+                    #creating the joint, assuming joint is facing down, need to fix later
+                    Joint = pymunk.constraints.DampedSpring(PartnerA,PartnerB,AnchorA,AnchorB, JointData["Data"]["Distance"], JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
+                    obj.PymunkJoints.append(Joint)
+                    obj.space.add(Joint)
+                    Joint = pymunk.constraints.GrooveJoint(PartnerA, PartnerB, AnchorA, utils.AddTuples(AnchorA,(utils.RotateVector((0,JointData["Data"]["Distance"]), -obj.Vehicle[IndexTypePartnerB]["Rotation"]))), AnchorB)
+                    obj.PymunkJoints.append(Joint)
+                    obj.space.add(Joint)
 
-            if JointType == "Solid":
-                #relative position of the pivot joint t the position of PartnerA
-                PivotPoint = obj.VehicleJoints[c]["PositionData"][0]
-                Joint = pymunk.constraints.PivotJoint(PartnerA,PartnerB,PivotPoint)
-                Joint.collide_bodies = True
-                print("Creating PivotJoint at position:",PivotPoint)
-                obj.PymunkJoints.append(Joint)
-                obj.space.add(Joint)
+                if JointType == "Solid":
+                    #relative position of the pivot joint t the position of PartnerA
+                    PivotPoint = obj.VehicleJoints[c]["PositionData"][0]
+                    Joint = pymunk.constraints.PivotJoint(PartnerA,PartnerB,PivotPoint)
+                    Joint.collide_bodies = True
+                    print("Creating PivotJoint at position:",PivotPoint)
+                    obj.PymunkJoints.append(Joint)
+                    obj.space.add(Joint)
         c += 1
