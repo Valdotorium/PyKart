@@ -8,7 +8,7 @@ def Draw(obj):
     c = 0
     
     obj.TransferredPolygon = []
-    #print("GP:", obj.GroundPolygon)
+    print("GP:", obj.GroundPolygon)
     while c < len(obj.GroundPolygon):
         obj.TransferredPolygon.append(utils.AddTuples(obj.GroundPolygon[c], (-obj.X_Position, -obj.Y_Position)))
         c += 1
@@ -66,7 +66,7 @@ def simulate(obj, fps):
     #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
     #draw(obj.Vehicle) <--will be used for textures later
     Draw(obj)
-    PhysDraw(obj)
+    #PhysDraw(obj)
     CheckJoints(obj)
 def OldRefreshPolygon(obj):
     print(f"initializing ground poly with vertices: ", obj.GroundPolygon)
@@ -77,15 +77,7 @@ def setup(obj):
     obj.space = pymunk.Space()#creating the space
     obj.space.gravity = Env["Gravity"]
     #static floor of the simulation
-    obj.body_floor = pymunk.Body(1, 100, body_type=pymunk.Body.STATIC)
-    obj.body_floor.position = (0,0)
-    print("loaded ground:", obj.GroundPolygon)
-    obj.body_floor.shape = pymunk.Poly(obj.body_floor, obj.GroundPolygon)
-    obj.body_floor.shape.friction = Env["Physics"]["Friction"]
-    obj.body_floor.shape.elasticity = Env["Physics"]["Bounce"]
-    obj.body_floor.shape.filter = pymunk.ShapeFilter(categories= 4, mask= 7)
-    obj.space.add(obj.body_floor, obj.body_floor.shape)
-    print("poly vec2d:", obj.body_floor.shape.get_vertices())
+    utils.CreateGroundPolygon(obj, Env)
     obj.RotationOfSelectedPart = 0
 
 def TransferStage(obj):

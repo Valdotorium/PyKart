@@ -1,4 +1,5 @@
 import pygame, math
+import pymunk
 #some small helpers to make code shorter and maybe more radable
 def getScreenSize():
     try:
@@ -86,5 +87,32 @@ def RotateVector(vector, angle):
     return nx, ny
 def SubstractTuples(tuple1, tuple2):
     return tuple1[0] - tuple2[0], tuple1[1] - tuple2[1]
+def CreateGroundPolygon(obj, Env):
+    obj.body_floor = pymunk.Body(1, 100, body_type=pymunk.Body.STATIC)
+    obj.body_floor.position = (0,0)
+    c = 0
+    GroundPolygons = []
+    obj.space.add(obj.body_floor)
+    while c < len(obj.GroundRelief) - 1:
+        VectA = obj.GroundRelief[c]
+        VectB = obj.GroundRelief[c+1]
+        VectAX = VectA[0]
+        VectBX = VectB[0]
+        #vertices for the poly, one poly for every x position in obj.GroundRelief
+        Vertices = [(VectAX , 9000), (VectBX, 9000), VectA, VectB]
+        obj.body_floor.shape = pymunk.Poly(obj.body_floor, Vertices)
+        obj.body_floor.shape.friction = Env["Physics"]["Friction"]
+        obj.body_floor.shape.elasticity = Env["Physics"]["Bounce"]
+        obj.body_floor.shape.filter = pymunk.ShapeFilter(categories= 4, mask= 7)
+        GroundPolygons.append(obj.body_floor.shape)
+        obj.space.add(obj.body_floor.shape)
+        c += 1
+
+    #creating GroundPolygon (adding bottom edges)
+    print("ground relief:",obj.GroundRelief)
+    obj.GroundPolygon = obj.GroundRelief
+    obj.GroundPolygon.append((0,9000))
+    obj.GroundPolygon.append((obj.GroundRelief[c-1][0],9000))
+    print(obj.GroundPolygon)
 
             

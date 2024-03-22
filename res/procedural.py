@@ -1,4 +1,5 @@
 import random
+import pymunk
 
 def Noise(obj, scale, variability):
         #main  terrain generator function
@@ -40,7 +41,6 @@ def generate_chunk(obj):
     print("generated terrain: " + str(obj.Terrain)) 
 def WritePolygonPositions(obj):
     #making tuples (x,y) out of the y positions of the future polygon vertices stored in obj.Terrain
-    obj.GroundPolygon = []
     x = round((obj.X_Position - 100) / round(obj.dimensions[0] / obj.CFG_Terrain_X_Scale))
     endx = round((obj.X_Position + obj.dimensions[0]*1.1) / round(obj.dimensions[0] / obj.CFG_Terrain_X_Scale))
     PolygonPoints = []
@@ -53,6 +53,6 @@ def WritePolygonPositions(obj):
         x += 1
     #edge point
     PolygonPoints.append(((x - 1) * round(obj.dimensions[0] / obj.CFG_Terrain_X_Scale), 10000))
-    obj.GroundPolygon = [(12000, 600),(-4000, 1100), (-4000, 1900), (12000, 1900)] #provisorisch
+    obj.GroundRelief = [(0, 600), (200, 650), (1000, 400), (1500, 400), (1800, 500), (2200, 340), (2400, 320), (3200, 200), (4000, -300), (8000, -200), (9000, -1500)] #provisorisch
     #print("THE GROUND POLYGON IS AT:", PolygonPoints)
     #print(f"drawing poly from terrain item {startx} to terrain item {x}")
