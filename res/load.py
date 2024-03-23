@@ -74,6 +74,20 @@ def respond(obj):
                 print(f"loaded environment: ", obj.Environment)
             except:
                 raise ImportError("Environment File not found")
+            soundfiles = os.listdir(CurrentPath+"/assets/sounds")
+            sounds = {}
+            #loading all the images into the game
+            for sound in soundfiles:
+                loadedsound = pygame.image.load(CurrentPath+"/assets/sounds/"+sound)
+
+                utils.clear(obj.screen)
+                #center the text
+
+                utils.displayTextCenter(obj,f"loaded sound {sound}")
+                sounds[sound] = loadedsound
+                time.sleep(0.05)
+            print("LOG: loaded all images into:", sounds)
+            obj.sounds = sounds
         else:
             exit
     else:

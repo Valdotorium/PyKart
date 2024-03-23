@@ -1,0 +1,19 @@
+----SOUNDS----(added 23.3.2024)
+(metal-crash-1)Metal Moving by TheMinkman -- https://freesound.org/s/359134/ -- License: Creative Commons 0
+(metal-crash-2)Metal Object Movement by TheMinkman -- https://freesound.org/s/359134/ -- License: Creative Commons 0
+(metal-crash-3)Clank Car Crash Collision by qubodup -- https://freesound.org/s/151624/ -- License: Creative Commons 0
+(metal-crash-3)crash.wav by sagetyrtle -- https://freesound.org/s/40158/ -- License: Creative Commons 0
+(metal-crash-4)Metal Door Slam_SoundSmith.wav by Lunardrive -- https://freesound.org/s/48980/ -- License: Creative Commons 0
+(suspension-1)Car Land/Hit by JustInvoke -- https://freesound.org/s/446135/ -- License: Attribution 4.0
+(tyre-1,tyre-2,tyre-3)tyre_impacts.flac by Troutpack -- https://freesound.org/s/590111/ -- License: Attribution 4.0
+(suspension-2)Breaking through a wooden door.wav by ethanchase7744 -- https://freesound.org/s/441665/ -- License: Creative Commons 0
+
+----PROGAMMING----
+JoEragon
+Valdotorium
+
+----GRAPHICS----
+JoEragon
+Valdotorium
+Sky2202
+ItzMooseboy
