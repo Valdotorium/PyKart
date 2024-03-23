@@ -101,6 +101,9 @@ def setup(obj):
     #static floor of the simulation
     utils.CreateGroundPolygon(obj, Env)
     obj.RotationOfSelectedPart = 0
+    obj.VehicleMotorPower = 0
+    obj.VehicleFuel = 0
+    obj.VehicleFuelUse = 0
 
 def TransferStage(obj):
     obj.gm = "game"
@@ -116,6 +119,7 @@ def TransferStage(obj):
     rc = 0
     while c < len(obj.Vehicle):
         if obj.Vehicle[c]!= None:
+            #creating the joints and hitboxes ------------------------------------------------------------------------------------------------
             PartJoints = obj.Vehicle[c]["Joints"]
             PartPosition = obj.Vehicle[c]["Pos"]
             #draw a box with the parts size at part position
@@ -186,7 +190,7 @@ def TransferStage(obj):
             hitbox_shape.mass = obj.Vehicle[c]["Properties"]["Weight"]
             hitbox_shape.elasticity = obj.Vehicle[c]["Properties"]["Bounciness"]
             hitbox_shape.friction = obj.Vehicle[c]["Properties"]["Friction"]
-            #different Collision Categories
+            #different Collision Categories ------------------------------------------------------------------------------------------------    
             #default (all)
             CategoryNum = 4
             CategoryMask = 7
@@ -206,6 +210,7 @@ def TransferStage(obj):
             obj.VehicleOriginalIndexes.append(c)
             obj.VehicleTypes.append((obj.Vehicle[c]["Type"], c))
             obj.NewVehicle.append(obj.Vehicle[c])
+            #Assigning Values, such as motor power and fuel etc ----------------------------------------------------------------
         c += 1
     c = 0
     rc = 0
