@@ -14,6 +14,8 @@ LOG START 1.3.2024
 20.3.2024 ----- fully implemented part rotation
 20.3.2024 ----- partially fixed testure drawing in drive mode
 20.3.2024 ----- added gas pedal
+22.3.2024 ----- working preset terrain
+23.3.2024 ----- added sounds
 
 TODO (alternativer plan):
 -23.3.2024-adding the procedural terrain

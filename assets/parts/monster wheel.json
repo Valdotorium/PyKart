@@ -46,5 +46,10 @@
         "Image": "wheel.png",
         "Pos": [0,0],
         "Size": [128,128]
-    }]
+    }],
+    "Sounds": {
+        "Crash": [["tyre_1.wav",1], ["tyre_2.wav",1], ["tyre_3.wav",1]],
+        "Active": [[]],
+        "Idle":[[]]
+    }
 }

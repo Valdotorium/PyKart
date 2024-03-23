@@ -16,6 +16,7 @@ from copy import deepcopy as deepcopy
 #create a window in fullscreen size with a rectangle in it
 #load file template:     grass = pygame.image.load(os.path.dirname(__file__)+"/textures/grass.png")
 pygame.init()
+pygame.mixer.init()
 pygame.font.init()
 
 #main loop

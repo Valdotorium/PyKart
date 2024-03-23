@@ -41,6 +41,10 @@
         "Image": "SpringConnector.png",
         "Pos": [0,0],
         "Size": [128,64]
-    }]
-    
+    }],
+    "Sounds": {
+        "Crash": [["suspension_2.wav",0.5], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Active": [[]],
+        "Idle":[[]]
+    }
 }

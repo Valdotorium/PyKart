@@ -3,12 +3,13 @@ import pymunk
 import pymunk.pygame_util
 from .fw import fw as utils
 import pymunk.constraints
+import random
 
 def Draw(obj):
     c = 0
     
     obj.TransferredPolygon = []
-    print("GP:", obj.GroundPolygon)
+    #print("GP:", obj.GroundPolygon)
     while c < len(obj.GroundPolygon):
         obj.TransferredPolygon.append(utils.AddTuples(obj.GroundPolygon[c], (-obj.X_Position, -obj.Y_Position)))
         c += 1
@@ -56,9 +57,30 @@ def CheckJoints(obj):
             #print("Impulse of joint ", c, ":", JointImpulse)
             if JointImpulse > ImpulseLimit:
                 print("JointImpulse of joint ", c, "(", JointImpulse, ") was too high, it broke.")
+                VolumeFactor = JointImpulse / ImpulseLimit
+                Sounds = obj.VehicleJoints[c]["SoundData"]
+                r = random.randint(0, len(Sounds) -1)
+                Sound = Sounds[r][0]
+                print(Sound)
+                Sound = obj.sounds[Sound]
+                print(Sound)
+                Sound.set_volume(Sounds[r][1] * VolumeFactor)
+                pygame.mixer.Sound.play(Sound)
                 obj.space.remove(obj.PymunkJoints[c])
                 obj.VehicleJoints[c] = None
                 obj.PymunkJoints[c] = None
+            elif JointImpulse > ImpulseLimit/3:
+                VolumeFactor = JointImpulse / ImpulseLimit
+                Sounds = obj.VehicleJoints[c]["SoundData"]
+                r = random.randint(0, len(Sounds) -1)
+                Sound = Sounds[r][0]
+                print(Sound)
+                Sound = obj.sounds[Sound]
+                print(Sound)
+                Sound.set_volume(Sounds[r][1] * VolumeFactor)
+                pygame.mixer.Sound.play(Sound)
+
+                
         c += 1
 def simulate(obj, fps):
     obj.space.step(1/fps)

@@ -54,7 +54,7 @@ def respond(obj):
 
                 utils.displayTextCenter(obj,f"loaded image {image}")
                 textures[image] = loadedimage
-                time.sleep(0.05)
+                time.sleep(0.02)
             print("LOG: loaded all images into:", textures)
             obj.textures = textures
 
@@ -65,7 +65,7 @@ def respond(obj):
                 utils.DecodePart(loadedpart, obj)
                 utils.clear(obj.screen)
                 utils.displayTextCenter(obj,f"loaded part {part}")
-                time.sleep(0.05)
+                time.sleep(0.02)
             print("all parts loaded to game: ", obj.partdict)
             print("all parts loaded to shop: ", obj.shopdict)
             try:
@@ -78,14 +78,14 @@ def respond(obj):
             sounds = {}
             #loading all the images into the game
             for sound in soundfiles:
-                loadedsound = pygame.image.load(CurrentPath+"/assets/sounds/"+sound)
+                loadedsound = pygame.mixer.Sound(CurrentPath+"/assets/sounds/"+sound)
 
                 utils.clear(obj.screen)
                 #center the text
 
                 utils.displayTextCenter(obj,f"loaded sound {sound}")
                 sounds[sound] = loadedsound
-                time.sleep(0.05)
+                time.sleep(0.02)
             print("LOG: loaded all images into:", sounds)
             obj.sounds = sounds
         else:
