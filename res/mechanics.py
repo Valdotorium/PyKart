@@ -27,7 +27,6 @@ def camera(obj):
     ReferencePosition = obj.PymunkBodies[0].position
     obj.X_Position = round(ReferencePosition[0]) - obj.dimensions[0] / 2
     obj.Y_Position = round(ReferencePosition[1]) - obj.dimensions[1] / 2
-    print(obj.X_Position, obj.Y_Position)
 def GameMechanics(obj):
     Throttle(obj)
     camera(obj)

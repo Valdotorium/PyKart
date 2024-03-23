@@ -22,11 +22,11 @@
     },
     "Joints":[
         {
-            "Type": "Accept",
+            "Type": "Provide",
             "Pos": [0,32]
         },
         {
-            "Type": "Accept",
+            "Type": "Provide",
             "Pos": [128,32]
         }
     ],

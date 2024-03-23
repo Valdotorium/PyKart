@@ -214,7 +214,7 @@ def TransferStage(obj):
                 JointType = JointData["Type"]
                 if JointType == "Spring":
 
-                    #creating the joint, assuming joint is facing down, need to fix later
+                    print("Creating SpringJoint between anchors:",AnchorA, AnchorB)
                     Joint = pymunk.constraints.DampedSpring(PartnerA,PartnerB,AnchorA,AnchorB, JointData["Data"]["Distance"], JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
                     obj.PymunkJoints.append(Joint)
                     obj.space.add(Joint)

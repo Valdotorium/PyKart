@@ -111,7 +111,6 @@ def CreateGroundPolygon(obj, Env):
     #creating GroundPolygon (adding bottom edges)
     print("ground relief:",obj.GroundRelief)
     obj.GroundPolygon = obj.GroundRelief
-    print(obj.GroundRelief[len(obj.GroundRelief)-1])
     obj.GroundPolygon.append((obj.GroundRelief[len(obj.GroundRelief)-1][0],9000))
     obj.GroundPolygon.append((0,9000))
     print(obj.GroundPolygon)
