@@ -114,5 +114,36 @@ def CreateGroundPolygon(obj, Env):
     obj.GroundPolygon.append((obj.GroundRelief[len(obj.GroundRelief)-1][0],9000))
     obj.GroundPolygon.append((0,9000))
     print(obj.GroundPolygon)
+def GetConnectedParts(obj,joint):
+    #joint should come from obj.vehiclejoints
+    PartA = obj.NewVehicle[joint["JoinedParts"][0]]
+    PartB = obj.NewVehicle[joint["JoinedParts"][1]]
+    IndexPartA = joint["JoinedParts"][0]
+    IndexPartB = joint["JoinedParts"][1]
+    print(IndexPartA,IndexPartB)
+    return [PartA,PartB]
+def JointHasType(obj,joint, type):
+    #check if a joint is connected to a part of a specific type
+    PartA = obj.NewVehicle[joint["JoinedParts"][0]]
+    PartB = obj.NewVehicle[joint["JoinedParts"][1]]
+    if type == PartA["Type"]:
+        return PartA
+    elif type == PartB["Type"]:
+        return PartB
+    else: 
+        return False
+def JointHasName(obj,joint,name):
+    #check if a joint is connected to a part with a specific name
+    #try to avoid using this function
+    PartA = obj.NewVehicle[joint["JoinedParts"][0]]
+    PartB = obj.NewVehicle[joint["JoinedParts"][1]]
+    if name == PartA["Name"]:
+        return PartA
+    elif name == PartB["Name"]:
+        return PartB
+    else: 
+        return False
+
+
 
             

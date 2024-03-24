@@ -4,6 +4,7 @@ import pymunk.pygame_util
 from .fw import fw as utils
 import pymunk.constraints
 import random
+import pyglet.media
 
 def Draw(obj):
     c = 0
@@ -55,32 +56,44 @@ def CheckJoints(obj):
             ImpulseLimit = obj.VehicleJoints[c]["JointData"]["BreakPoint"]
             #print(len(obj.PymunkJoints), len(obj.VehicleJoints))
             #print("Impulse of joint ", c, ":", JointImpulse)
+            #perform mechanics here
+            #is the joint connecting an Engine and an Wheel?
+            if utils.JointHasType(obj, obj.VehicleJoints[c], "Engine") != False and utils.JointHasType(obj, obj.VehicleJoints[c], "Wheel") != False:
+                #if yes, perform engine mechanics with the two parts
+                pass
+                #mechanics.Engine(obj,utils.JointHasType(obj, obj.VehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.VehicleJoints[c], "Wheel"))
             if JointImpulse > ImpulseLimit:
                 print("JointImpulse of joint ", c, "(", JointImpulse, ") was too high, it broke.")
                 VolumeFactor = JointImpulse / ImpulseLimit
                 Sounds = obj.VehicleJoints[c]["SoundData"]
+                #selecting a random sounds from a list of sounds
                 r = random.randint(0, len(Sounds) -1)
                 Sound = Sounds[r][0]
-                print(Sound)
+                #get the sound object
                 Sound = obj.sounds[Sound]
-                print(Sound)
-                Sound.set_volume(Sounds[r][1] * VolumeFactor)
-                pygame.mixer.Sound.play(Sound)
+                #create a player for it
+                Player = Sound.play()
+                #setting the players volume
+                Player.volume = Sounds[r][1] * VolumeFactor
+                #playing the sound object
+                Player.play()
                 obj.space.remove(obj.PymunkJoints[c])
                 obj.VehicleJoints[c] = None
                 obj.PymunkJoints[c] = None
             elif JointImpulse > ImpulseLimit/3:
                 VolumeFactor = JointImpulse / ImpulseLimit
                 Sounds = obj.VehicleJoints[c]["SoundData"]
+                #selecting a random sounds from a list of sounds
                 r = random.randint(0, len(Sounds) -1)
                 Sound = Sounds[r][0]
-                print(Sound)
+                #get the sound object
                 Sound = obj.sounds[Sound]
-                print(Sound)
-                Sound.set_volume(Sounds[r][1] * VolumeFactor)
-                pygame.mixer.Sound.play(Sound)
-
-                
+                #create a player for it
+                Player = Sound.play()
+                #setting the players volume
+                Player.volume = Sounds[r][1] * VolumeFactor
+                #playing the sound
+                Player.play()      
         c += 1
 def simulate(obj, fps):
     obj.space.step(1/fps)

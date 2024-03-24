@@ -30,3 +30,5 @@ def camera(obj):
 def GameMechanics(obj):
     Throttle(obj)
     camera(obj)
+def Engine(obj,EnginePart, WheelPart):
+    pass

@@ -1,7 +1,7 @@
 {
     "Name": "Weight Block",
     "Index": 4,
-    "Type": "Stability",
+    "Type": "Engine",
     "Cost": 4000,
     "Stex": "weight.png",
     "Center": [32,32],

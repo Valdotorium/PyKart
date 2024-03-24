@@ -3,6 +3,7 @@ import time
 import os
 from .fw import fw as utils
 import json
+import pyglet.media
 def respond(obj):
     """This script is responsible for loading the games assets, such as images and parts. it will load everything in the folder it finds.
     WARNING: In py2app, the assets folder must be included TWICE in several locations of the app, see py2app.txt"""
@@ -76,9 +77,9 @@ def respond(obj):
                 raise ImportError("Environment File not found")
             soundfiles = os.listdir(CurrentPath+"/assets/sounds")
             sounds = {}
-            #loading all the images into the game
+            #loading all the sounds into the game
             for sound in soundfiles:
-                loadedsound = pygame.mixer.Sound(CurrentPath+"/assets/sounds/"+sound)
+                loadedsound = pyglet.media.StaticSource(pyglet.media.load(CurrentPath+"/assets/sounds/"+sound))
 
                 utils.clear(obj.screen)
                 #center the text
