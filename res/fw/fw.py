@@ -124,8 +124,8 @@ def GetConnectedParts(obj,joint):
     return [PartA,PartB]
 def JointHasType(obj,joint, type):
     #check if a joint is connected to a part of a specific type
-    PartA = obj.NewVehicle[joint["JoinedParts"][0]]
-    PartB = obj.NewVehicle[joint["JoinedParts"][1]]
+    PartA = obj.Vehicle[joint["JoinedParts"][0]]
+    PartB = obj.Vehicle[joint["JoinedParts"][1]]
     if type == PartA["Type"]:
         return PartA
     elif type == PartB["Type"]:
@@ -143,6 +143,9 @@ def JointHasName(obj,joint,name):
         return PartB
     else: 
         return False
+
+
+
 
 
 

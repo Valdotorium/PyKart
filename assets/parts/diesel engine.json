@@ -1,20 +1,21 @@
 {
-    "Name": "Weight Block",
+    "Name": "Diesel Engine",
     "Index": 4,
-    "Type": "Stability",
-    "Cost": 4000,
-    "Stex": "weight.png",
+    "Type": "Engine",
+    "Cost": 10000,
+    "Stex": "diesel_engine.png",
     "Center": [32,32],
     "Properties": {
         "Rot": 0,
-        "Friction": 0.99,
-        "Weight": 150,
-        "Bounciness": 0.002,
-        "JoiningBehavior": "Provide"
+        "Friction": 1.25,
+        "Weight": 80,
+        "Bounciness": 0.004,
+        "JoiningBehavior": "Provide",
+        "Power": 200
 
     },
     "JointData": {
-        "BreakPoint": 30000,
+        "BreakPoint": 27500,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{
@@ -46,12 +47,12 @@
             "CollisionType": "Full"
         },
     "Textures": [{
-        "Image": "weight.png",
+        "Image": "diesel_engine.png",
         "Pos": [0,0],
         "Size": [64,64]
     }],
     "Sounds": {
-        "Crash": [["suspension_2.wav",0.5], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Crash": [["tyre_2.wav",1], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
         "Active": [[]],
         "Idle":[[]]
     }

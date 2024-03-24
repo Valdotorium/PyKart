@@ -6,6 +6,55 @@ import pymunk.constraints
 import random
 import pyglet.media
 
+
+"""IMPORTANT NOTE: Because i did not implement vehicle parts as objects :/,
+the game now gets managed using parallel lists. That means, a part is represented by indexes in lists.
+So, for example, list index 2 in obj.PymunkBodies, obj.NewVehicle and obj.VehicleTypes refers to the same part
+Here a list of lists that are compatible with each other:
+
+obj.Vehicle is not compatible with anything, as well as obj.VehicleJoints
+
+obj.NewVehicle, obj.PymunkBodies, obj.VehicleTypes (and maybe obj.PartData if i add that)refer to the same body
+
+obj.NewVehicleJoints and obj.PymunkJoints refer to the same joints
+
+How to for example get the parts a joint links:
+obj.NewVehicleJoints["JoinedParts"] is a tuple containing the parts a joint is linked with.
+However, there currently is no way of finding out to which joint a part is connected, so game mechanics are currently
+build around joints.
+sorry and will do better in the next game, Valdotorium, 24/3/2024"""
+#mechanics
+
+"""Function that makes wheels go brrrrrrr"""
+def ApplyThrottle(obj, WheelPart, Force):
+    if 0 < obj.Throttle < 0.5:
+        obj.Throttle = 0
+    if obj.Throttle > 100:
+        obj.Throttle = 100
+    #same conditions as before, but negative
+    if -0.5 < obj.Throttle < 0:
+        obj.Throttle = 0
+    if obj.Throttle < -100:
+        obj.Throttle = -100
+    else:
+        obj.Throttle = obj.Throttle * 0.96
+    #apply forces to pymunk bodies
+    c = WheelPart
+    force = [obj.Throttle * Force,0]
+    point = (0, -obj.NewVehicle[c]["Center"][0])
+    obj.PymunkBodies[c].apply_force_at_local_point(force, point)
+"""Making wheels connected to motors spin"""
+def Engine(obj,EnginePart, WheelPart):
+    #TODO: for more features: store the obj.NewVehicle as a list of Part objects (new class),
+    #for easier value management of individual parts
+    if obj.Throttle != 0:
+        IndexOfWheelBody = obj.NewVehicle.index(WheelPart)
+        EnginePower = EnginePart["Properties"]["Power"]
+        ApplyThrottle(obj, IndexOfWheelBody, EnginePower)
+
+
+#physics
+"""Drawing the Vehicle"""
 def Draw(obj):
     c = 0
     
@@ -41,61 +90,77 @@ def Draw(obj):
             obj.screen.blit(Image, texture_rect)
             cc += 1
         c+=1
-
+"""Drawing the pymunk physics simulation"""
 def PhysDraw(obj):
     obj.space.debug_draw(obj.draw_options)
+"""Checking if joints need to be broken, playing crashing sounds, performing core game mechanics besides physics(why is this here?)"""
 def CheckJoints(obj):
     #checking the latest impulse divided by fps
     #if the impulse exceeds a set limit, the joint breaks
     c = 0
-    while c < len(obj.PymunkJoints) and c < len(obj.VehicleJoints):
+    while c < len(obj.PymunkJoints) and c < len(obj.NewVehicleJoints):
         #TODO: #6 
         #Fix a bug where the list index is OOR, because items maybe get removed asynchronously. check.
-        if obj.PymunkJoints[c]!= None:
+        if obj.PymunkJoints[c]!= None and obj.NewVehicleJoints[c] != None:
             JointImpulse = obj.PymunkJoints[c].impulse
-            ImpulseLimit = obj.VehicleJoints[c]["JointData"]["BreakPoint"]
+            ImpulseLimit = obj.NewVehicleJoints[c]["JointData"]["BreakPoint"]
             #print(len(obj.PymunkJoints), len(obj.VehicleJoints))
             #print("Impulse of joint ", c, ":", JointImpulse)
             #perform mechanics here
             #is the joint connecting an Engine and an Wheel?
-            if utils.JointHasType(obj, obj.VehicleJoints[c], "Engine") != False and utils.JointHasType(obj, obj.VehicleJoints[c], "Wheel") != False:
+            if utils.JointHasType(obj, obj.NewVehicleJoints[c], "Engine") != False and utils.JointHasType(obj, obj.NewVehicleJoints[c], "Wheel") != False:
                 #if yes, perform engine mechanics with the two parts
-                pass
+                Engine(obj,utils.JointHasType(obj, obj.NewVehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.NewVehicleJoints[c], "Wheel"))
                 #mechanics.Engine(obj,utils.JointHasType(obj, obj.VehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.VehicleJoints[c], "Wheel"))
             if JointImpulse > ImpulseLimit:
                 print("JointImpulse of joint ", c, "(", JointImpulse, ") was too high, it broke.")
-                VolumeFactor = JointImpulse / ImpulseLimit
-                Sounds = obj.VehicleJoints[c]["SoundData"]
-                #selecting a random sounds from a list of sounds
-                r = random.randint(0, len(Sounds) -1)
-                Sound = Sounds[r][0]
-                #get the sound object
-                Sound = obj.sounds[Sound]
-                #create a player for it
-                Player = Sound.play()
-                #setting the players volume
-                Player.volume = Sounds[r][1] * VolumeFactor
-                #playing the sound object
-                Player.play()
+                if not obj.SoundInFrame:
+                    VolumeFactor = JointImpulse / ImpulseLimit
+                    Sounds = obj.VehicleJoints[c]["SoundData"]
+                    #selecting a random sounds from a list of sounds
+                    r = random.randint(0, len(Sounds) -1)
+                    Sound = Sounds[r][0]
+                    #get the sound object
+                    Sound = obj.sounds[Sound]
+                    #create a player for it
+                    obj.SoundInFrame = True
+                    Player = Sound.play()
+                    #setting the players volume
+                    if Sounds[r][1]*VolumeFactor > 0.99:
+                        Player.volume = 1
+                    else:
+                        Player.volume = Sounds[r][1] * VolumeFactor
+                    #playing the sound object
+                    print("latest played sound:", Sounds[r][0])
+                    Player.play()
                 obj.space.remove(obj.PymunkJoints[c])
+                obj.NewVehicleJoints[c] = None
                 obj.VehicleJoints[c] = None
                 obj.PymunkJoints[c] = None
             elif JointImpulse > ImpulseLimit/3:
-                VolumeFactor = JointImpulse / ImpulseLimit
-                Sounds = obj.VehicleJoints[c]["SoundData"]
-                #selecting a random sounds from a list of sounds
-                r = random.randint(0, len(Sounds) -1)
-                Sound = Sounds[r][0]
-                #get the sound object
-                Sound = obj.sounds[Sound]
-                #create a player for it
-                Player = Sound.play()
-                #setting the players volume
-                Player.volume = Sounds[r][1] * VolumeFactor
-                #playing the sound
-                Player.play()      
+                if not obj.SoundInFrame:
+                    VolumeFactor = JointImpulse / ImpulseLimit
+                    Sounds = obj.VehicleJoints[c]["SoundData"]
+                    #selecting a random sounds from a list of sounds
+                    r = random.randint(0, len(Sounds) -1)
+                    Sound = Sounds[r][0]
+                    #get the sound object
+                    Sound = obj.sounds[Sound]
+                    #create a player for it
+                    obj.SoundInFrame = True
+                    Player = Sound.play()
+                    #setting the players volume
+                    if Sounds[r][1]*VolumeFactor > 0.99:
+                        Player.volume = 1
+                    else:
+                        Player.volume = Sounds[r][1] * VolumeFactor
+                    #playing the sound object
+                    print("latest played sound:", Sounds[r][0])
+                    Player.play()
         c += 1
+"""The pymunk physics simulation"""
 def simulate(obj, fps):
+    obj.SoundInFrame = False
     obj.space.step(1/fps)
     #draeing the poligon with the list of points obj.GroundPolygon
     #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
@@ -103,10 +168,11 @@ def simulate(obj, fps):
     Draw(obj)
     #PhysDraw(obj)
     CheckJoints(obj)
+
 def OldRefreshPolygon(obj):
     print(f"initializing ground poly with vertices: ", obj.GroundPolygon)
     obj.body_floor.shape = pymunk.Poly(obj.body_floor, obj.GroundPolygon)
-
+"""Setting some variables"""
 def setup(obj):
     Env = obj.Environment
     obj.space = pymunk.Space()#creating the space
@@ -117,7 +183,9 @@ def setup(obj):
     obj.VehicleMotorPower = 0
     obj.VehicleFuel = 0
     obj.VehicleFuelUse = 0
-
+"""Function for translating the old data stored in obj.Vehicle and obj.VehicleJoints into  pymunk joints and bodies.
+Creates obj.NewVehicle, obj.VehicleTypes, obj.NewVehicleJoints, obj.PymunkBodies, obj.PymunkJoints (versions of the old data with
+"None" objects removed"""
 def TransferStage(obj):
     obj.gm = "game"
     obj.PhysicsOutputData = []
@@ -127,6 +195,7 @@ def TransferStage(obj):
     obj.VehicleTypes = []
     #vehicle without nonetype objects
     obj.NewVehicle = []
+    obj.NewVehicleJoints = []
     #creating hitboxes
     c = 0
     rc = 0
@@ -239,6 +308,7 @@ def TransferStage(obj):
             PartnerB = obj.VehicleJoints[c]["JoinedParts"][1]
             IndexTypePartnerB = PartnerB
             if obj.Vehicle[PartnerA] != None and obj.Vehicle[PartnerB] != None:
+                obj.NewVehicleJoints.append(obj.VehicleJoints[c])
                 #the size of the hitbox of PartnerA / 2
                 AnchorA = utils.RotateVector(obj.Vehicle[PartnerA]["Hitbox"]["Anchor"], -obj.Vehicle[PartnerA]["Rotation"])
                 Vector = utils.RotateVector(obj.Vehicle[PartnerA]["Center"], -obj.Vehicle[PartnerA]["Rotation"])

@@ -51,7 +51,7 @@
         "Size": [128,128]
     }],
     "Sounds": {
-        "Crash": [["metal_crash_1.wav",0.6], ["metal_crash_2.wav",0.6]],
+        "Crash": [["metal_crash_1.wav",0.6]],
         "Active": [[]],
         "Idle":[[]]
     }
