@@ -9,14 +9,14 @@ def GameControls(obj):
         if event.type == pygame.MOUSEWHEEL:
             print("Scroll")
             print(event.x, event.y)
-            if event.x < 0 or event.y < 0:
+            if event.y < 0:
                 obj.GameZoom += 0.01
-            elif event.x > 0 or event.y > 0:
+            elif event.y > 0:
                 obj.GameZoom -= 0.01
-    if obj.GameZoom < 0.5:
-        obj.GameZoom = 0.5
-    if obj.GameZoom > 1.5:
-        obj.GameZoom = 1.5
+    if obj.GameZoom < 0.7:
+        obj.GameZoom = 0.7
+    if obj.GameZoom > 1.15:
+        obj.GameZoom = 1.15
     
 
 def BuildControls(obj):

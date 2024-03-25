@@ -18,9 +18,8 @@ LOG START 1.3.2024
 23.3.2024 ----- added sounds
 
 TODO
--New Building UI
+-new joint sounds, engine sounds
 -Hover Boxes
--Zooming while driving
 -Terrain graphics
 -Procedural Terrain generation
 -new textures

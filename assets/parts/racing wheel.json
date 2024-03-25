@@ -3,7 +3,7 @@
     "Index": 87659,
     "Type": "Wheel",
     "Cost": 16999,
-    "Stex": "racing_wheel.png",
+    "Stex": "racing_wheelNew.png",
     "Center": [32,32],
     "Properties": {
         "Rot": 0,
@@ -43,7 +43,7 @@
         "HasTwoAnchors": false
     },
     "Textures": [{
-        "Image": "racing_wheel.png",
+        "Image": "racing_wheelNew.png",
         "Pos": [0,0],
         "Size": [64,64]
     }],

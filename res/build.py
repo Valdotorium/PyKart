@@ -210,7 +210,7 @@ def run(obj):
     #------------------------------Upon placement, check if the position of the parts center is within a valid rectangle (BuildBackgroundImg)--------------------------------
     if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not obj.UserHasSelectedPart and obj.CFG_Build_Enforce_Rules:
         #is the user trying to place an "unjoined" accepting joint?
-        if  obj.dimensions[0] * 0.2 < mx < 0.8 * obj.dimensions[0] and obj.dimensions[1] * 0.125 < my < 0.675 * obj.dimensions[1]:
+        if  obj.dimensions[0] * 0.1 < mx < 0.9 * obj.dimensions[0] and obj.dimensions[1] * 0.12 < my < 0.725 * obj.dimensions[1]:
             #if the mouse is touching BuildBackgroundImg, the part gets placed
             if obj.SnappedJointData == None and obj.partdict[obj.selectedPart]["Properties"]["JoiningBehavior"] != "Accept" or obj.SnappedJointData != None:
                 #checking if the position of the part is otherwise invalid
@@ -264,7 +264,7 @@ def run(obj):
                     obj.SnappedJointData = None
                     obj.selectedPart = ""
                     obj.RotationOfSelectedPart = 0
-        elif not obj.dimensions[0] * 0.2 < mx < 0.8 * obj.dimensions[0] or not obj.dimensions[1] * 0.125 < my < 0.675 * obj.dimensions[1]:
+        elif not obj.dimensions[0] * 0.1 < mx < 0.9 * obj.dimensions[0] or not obj.dimensions[1] * 0.12 < my < 0.725 * obj.dimensions[1]:
             pass
         else:
             #the part gets unselected

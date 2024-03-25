@@ -186,7 +186,7 @@ class BuildUI():
                 if part["Type"] == category:
                     self.parts[category].append(part["Name"])
         print(self.categories, self.parts)
-        self.ClickCooldown = 20
+        self.ClickCooldown = 10
         self.ScrollXSpeed = 0
     def run(self, obj):
         #Button for switching the category, displaying the name of the current category
@@ -204,10 +204,10 @@ class BuildUI():
             self.ScrollX = 0
             if self.categories.index(self.CurrentCategory) + 1 < len(self.categories):
                 self.CurrentCategory = self.categories[self.categories.index(self.CurrentCategory) + 1]
-                self.ClickCooldown = 20
+                self.ClickCooldown = 10
             else:
                 self.CurrentCategory = self.categories[0]
-                self.ClickCooldown = 20
+                self.ClickCooldown = 10
             self.setup(obj)
         self.ClickCooldown -= 1
         #tile image as background for the building ui, scaled to cover the bottom quarter of the screen

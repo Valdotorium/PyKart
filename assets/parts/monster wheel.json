@@ -1,9 +1,9 @@
 {
     "Name": "Monster Wheel",
     "Index": 6,
-    "Type": "Wheeeeeel",
+    "Type": "Wheel",
     "Cost": 8500,
-    "Stex": "wheel.png",
+    "Stex": "monster_wheelNew.png",
     "Center": [64,64],
     "Properties": {
         "Rot": 0,
@@ -43,7 +43,7 @@
         "HasTwoAnchors": false
     },
     "Textures": [{
-        "Image": "wheel.png",
+        "Image": "monster_wheelNew.png",
         "Pos": [0,0],
         "Size": [128,128]
     }],

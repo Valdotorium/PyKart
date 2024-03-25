@@ -4,7 +4,7 @@
     "Type": "Stability",
     "Cost": 300,
     "Center": [32,32],
-    "Stex": "frame_corner.png",
+    "Stex": "frame_cornerNew.png",
     "Properties": {
         "Rot": 0,
         "Friction": 0.94,
@@ -41,7 +41,7 @@
         "CollisionType": "Full"
     },
     "Textures": [{
-        "Image": "frame_corner.png",
+        "Image": "frame_cornerNew.png",
         "Pos": [0,0],
         "Size": [64,64]
     }],

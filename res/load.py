@@ -48,14 +48,16 @@ def respond(obj):
             textures = {}
             #loading all the images into the game
             for image in imagefiles:
-                loadedimage = pygame.image.load(CurrentPath+"/assets/images/"+image)
+                if image != ".DS_Store":
+                    print("loaded image: ", image)
+                    loadedimage = pygame.image.load(CurrentPath+"/assets/images/"+image)
 
-                utils.clear(obj.screen)
-                #center the text
+                    utils.clear(obj.screen)
+                    #center the text
 
-                utils.displayTextCenter(obj,f"loaded image {image}")
-                textures[image] = loadedimage
-                time.sleep(0.02)
+                    utils.displayTextCenter(obj,f"loaded image {image}")
+                    textures[image] = loadedimage
+                    time.sleep(0.02)
             print("LOG: loaded all images into:", textures)
             obj.textures = textures
 

@@ -3,7 +3,7 @@
     "Index": 1,
     "Type": "Wheel",
     "Cost": 1500,
-    "Stex": "wheel.png",
+    "Stex": "wheelNew.png",
     "Center": [32,32],
     "Properties": {
         "Rot": 0,
@@ -43,7 +43,7 @@
         "HasTwoAnchors": false
     },
     "Textures": [{
-        "Image": "wheel.png",
+        "Image": "wheelNew.png",
         "Pos": [0,0],
         "Size": [64,64]
     }],
