@@ -11,7 +11,7 @@
         "MaxImpulse": 1080,
         "Force": 2.5,
         "Friction": 0.7,
-        "Weight": 75,
+        "Weight": 70,
         "Bounciness": 0.2,
         "JoiningBehavior": "Accept"
     },
@@ -20,8 +20,8 @@
         "Type": "Spring",
         "Data":{
             "Distance": 120,
-            "Damping": 50,
-            "Stiffness": 5000
+            "Damping": 35,
+            "Stiffness": 6000
         }
     },
     "Build":{

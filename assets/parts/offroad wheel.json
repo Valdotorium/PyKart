@@ -11,17 +11,17 @@
         "MaxImpulse": 1080,
         "Force": 2,
         "Friction": 2.25,
-        "Weight": 65,
+        "Weight": 62,
         "Bounciness": 0.2,
         "JoiningBehavior": "Accept"
     },
     "JointData": {
-        "BreakPoint": 54000,
+        "BreakPoint": 58000,
         "Type": "Spring",
         "Data":{
             "Distance": 100,
-            "Damping": 40,
-            "Stiffness": 5200
+            "Damping": 25,
+            "Stiffness": 8000
         }
     },
     "Build":{

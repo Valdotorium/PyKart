@@ -8,7 +8,7 @@
     "Properties": {
         "Rot": 0,
         "Friction": 1.25,
-        "Weight": 115,
+        "Weight": 105,
         "Bounciness": 0.004,
         "JoiningBehavior": "Provide",
         "Power": 540
@@ -29,6 +29,10 @@
         {
             "Type": "Provide",
             "Pos": [0, 32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [32, 64]
         }
     ],
     "Hitbox":{

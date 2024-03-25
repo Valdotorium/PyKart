@@ -8,7 +8,7 @@
     "Properties": {
         "Rot": 0,
         "Friction": 1.25,
-        "Weight": 180,
+        "Weight": 160,
         "Bounciness": 0.004,
         "JoiningBehavior": "Provide",
         "Power": 750

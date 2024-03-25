@@ -20,8 +20,8 @@
         "Type": "Spring",
         "Data":{
             "Distance": 64,
-            "Damping": 8,
-            "Stiffness": 8000
+            "Damping": 1,
+            "Stiffness": 15000
         }
     },
     "Build":{

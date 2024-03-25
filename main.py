@@ -80,6 +80,7 @@ class Game():
         self.Y_Position = 0
         self.pi =3.1415926535897932384626433832795
         self.Throttle = 0
+        self.VehicleSpeed = 0
         self.SoundPlayer = pyglet.media.Player()
         
     def run(self):

@@ -57,7 +57,6 @@ def Engine(obj,EnginePart, WheelPart):
 """Drawing the Vehicle"""
 def Draw(obj):
     c = 0
-    
     obj.TransferredPolygon = []
     #print("GP:", obj.GroundPolygon)
     while c < len(obj.GroundPolygon):

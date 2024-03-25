@@ -22,7 +22,7 @@ TODO
 -Hover Boxes
 -Terrain graphics
 -Procedural Terrain generation
--new textures
+-cockpits
 -name and logo
 
 Further ideas:
