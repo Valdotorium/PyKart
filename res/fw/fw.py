@@ -1,5 +1,6 @@
 import pygame, math
 import pymunk
+import copy
 #some small helpers to make code shorter and maybe more radable
 def getScreenSize():
     try:
@@ -77,6 +78,8 @@ def Negative(*args):
         return ReturnArgs[0]
 def RotateVector(vector, angle):
     #angle from degrees to radians
+    while angle > 360:
+        angle = angle - 360
     angle = math.radians(angle)
     sin = math.sin(angle)
     cos = math.cos(angle)
@@ -143,7 +146,111 @@ def JointHasName(obj,joint,name):
         return PartB
     else: 
         return False
+class BuildUI():
+    def __init__(self, obj):
+        self.categories = []
+        self.parts = {}
+        self.partdict = obj.partdict
+        self.setup(obj)
+        self.ScrollX = 0
+        self.dimensions = obj.dimensions
+        self.textures = obj.textures
+        self.font = obj.font
+        self.largefont = obj.largefont
+        self.CurrentCategory = self.categories[0]
+    def AddCategory(self, category):
+        self.categories.append(category)
+    def ClickArea(self,pos, size):
+        if pygame.mouse.get_pressed()[0]:
+            mx, my = pygame.mouse.get_pos()
 
+            # is the button clicked?  (is the mouse within a box at pos with size when the click occurs?)
+            if mx >= pos[0] and mx <= pos[0] + size[0]:
+                if my >= pos[1] and my <= pos[1] + size[1]:
+                    return True
+                else:
+                    return False
+            else:
+                return False
+    def setup(self, obj):
+        #finding out which categories exist
+        for part in self.partdict.values():
+            if part["Type"] not in self.categories:
+                self.AddCategory(part["Type"])
+        self.categories.sort()
+        #finding out which parts exist
+        self.parts = {}
+        for category in self.categories:
+            self.parts[category] = []
+            for part in self.partdict.values():
+                if part["Type"] == category:
+                    self.parts[category].append(part["Name"])
+        print(self.categories, self.parts)
+        self.ClickCooldown = 20
+        self.ScrollXSpeed = 0
+    def run(self, obj):
+        #Button for switching the category, displaying the name of the current category
+        text = self.largefont.render(self.CurrentCategory, True, (20,20,20))
+        pos = (obj.dimensions[0] * 0.05 - text.get_width() / 2, obj.dimensions[1] * 0.65)
+        Image = self.textures["UI_tile.png"]
+        #scale the image to the size of the text
+        ButtonSize = (text.get_width() + 25, text.get_height() + 25)
+        Image = pygame.transform.scale(Image, ButtonSize)
+        obj.screen.blit(Image, pos)
+        obj.screen.blit(text, (pos[0] + 12.5, pos[1] + 12.5))
+        IsClicked = self.ClickArea(pos,ButtonSize)
+        if IsClicked and self.ClickCooldown < 0:
+            print("Clicked")
+            self.ScrollX = 0
+            if self.categories.index(self.CurrentCategory) + 1 < len(self.categories):
+                self.CurrentCategory = self.categories[self.categories.index(self.CurrentCategory) + 1]
+                self.ClickCooldown = 20
+            else:
+                self.CurrentCategory = self.categories[0]
+                self.ClickCooldown = 20
+            self.setup(obj)
+        self.ClickCooldown -= 1
+        #tile image as background for the building ui, scaled to cover the bottom quarter of the screen
+        Image = self.textures["UI_tile.png"]
+        Image = pygame.transform.scale(Image, (obj.dimensions[0] * 2, obj.dimensions[1] * 0.25))
+        obj.screen.blit(Image, (-200, obj.dimensions[1] * 0.75))
+        
+        #drawing the parts of the categories
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEWHEEL:
+                print("Scroll")
+                print(event.x, event.y)
+                if event.x < 0 or event.y < 0:
+                    self.ScrollXSpeed = -5
+                elif event.x > 0 or event.y > 0:
+                    self.ScrollXSpeed = 5
+        if -0.05 < self.ScrollXSpeed < 0.05 and self.ScrollXSpeed != 0:
+            self.ScrollXSpeed = 0
+        else:
+            self.ScrollXSpeed *= 0.95
+        self.ScrollX += self.ScrollXSpeed
+
+        #drawing the parts of the current category, repositioned using scrollx
+        X = round(obj.dimensions[0] / 20)
+        gap = 15
+        for part in self.parts[self.CurrentCategory]:
+            if part in self.partdict:
+                part = self.partdict[part]
+                Image = self.textures[part["Textures"][0]["Image"]]
+                Image = pygame.transform.scale(Image, part["Textures"][0]["Size"])
+                obj.screen.blit(Image, ( X + self.ScrollX, obj.dimensions[1] * 0.85))
+                #making the part clickable
+                IsClicked = self.ClickArea((X + self.ScrollX, obj.dimensions[1] * 0.85), part["Textures"][0]["Size"])
+                X += part["Textures"][0]["Size"][0] + gap
+                if IsClicked and self.ClickCooldown < 0:
+                    print("Clicked")
+                    self.ClickCooldown = 20
+                    obj.selectedPart = part["Name"]
+                    obj.UserHasSelectedPart = True
+
+
+
+        
 
 
 

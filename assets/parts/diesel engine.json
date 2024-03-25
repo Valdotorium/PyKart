@@ -11,11 +11,11 @@
         "Weight": 80,
         "Bounciness": 0.004,
         "JoiningBehavior": "Provide",
-        "Power": 200
+        "Power": 350
 
     },
     "JointData": {
-        "BreakPoint": 27500,
+        "BreakPoint": 60000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{

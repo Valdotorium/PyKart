@@ -17,15 +17,17 @@ LOG START 1.3.2024
 22.3.2024 ----- working preset terrain
 23.3.2024 ----- added sounds
 
-TODO (alternativer plan):
--23.3.2024-adding the procedural terrain
--25.3.2024-implementing motors
--28.3.2024-getting graphics to work for vehicle
--4.4.2024--implementing a gyroscope
--7.4.2024--visuals and audio
+TODO
+-New Building UI
+-Hover Boxes
+-Zooming while driving
+-Terrain graphics
+-Procedural Terrain generation
+-new textures
+-name and logo
 
 Further ideas:
--categorize build UI
+-moving placed parts
 -fuel system
 -different planets
 -money

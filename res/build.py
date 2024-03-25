@@ -41,50 +41,20 @@ def setup(obj):
     obj.SelectedBuiltPart = None
     obj.RotationOfSelectedPart = 0
     obj.Errormessage = None
+    obj.BuildUI = utils.BuildUI(obj)
 
 def run(obj):
     PartIsValid = True
     scaleX = obj.scalefactor
     mx, my = pygame.mouse.get_pos()
-    UserHasSelectedPart = False
+    obj.UserHasSelectedPart = False
 
     #--------------------------Drawing the part inventory---------------------------------------------------
     inventoryTileImage = obj.textures["UI_tile.png"]
     obj.inventoryTile = pygame.transform.scale(inventoryTileImage, utils.Scale(obj, (64,64)))
     c = 0
     #background for inventory tiles
-    TileBackgroundImg = obj.textures["UI_tile.png"]
-    TileBackgroundImg = pygame.transform.scale(TileBackgroundImg, utils.Scale(obj,(64,64)))
-    PositionOfTexture_X = 64
-    #background for the building area
-    BuildBackgroundImg = pygame.transform.scale(TileBackgroundImg,( round(obj.dimensions[0] * 0.75), round(obj.dimensions[1] * 0.75)))
-    obj.screen.blit(BuildBackgroundImg, (obj.dimensions[0] / 8, obj.dimensions[1] / 8))
-    while c < len(obj.partdict):
-        gap = 10
-        cc = 0
-        TexturesOfPart =obj.partdict[list(obj.partdict)[c]]["Textures"]
-        #THE "BASE" POSITION (like "Pos" of part in obj.vehicle)
-        #data of the texture stored in "Textures" of each part, here retrieved from partdict
-
-        #1/10 screen y's from the bottom:
-        PositionOfTexture_Y = obj.dimensions[1] - round(obj.dimensions[1] / 10)
-        #the position of the top left corner of the part
-        #BasePositionOfTexture = [PositionOfTexture_X, PositionOfTexture_Y]
-        while cc < len(obj.partdict[list(obj.partdict)[c]]["Textures"]):
-            #THE "BASE" POSITION (like "Pos" of part in obj.vehicle)
-            #adding relative position of texture
-            PositionOfTexture = [PositionOfTexture_X, PositionOfTexture_Y]
-            #the position of the texture
-            PositionOfTexture = utils.Scale(obj,utils.AddTuples(PositionOfTexture, TexturesOfPart[cc]["Pos"]))
-            IsClicked = interactions.ButtonArea(obj,obj.textures[TexturesOfPart[cc]["Image"]],PositionOfTexture, (TexturesOfPart[cc]["Size"][0] * scaleX, TexturesOfPart[cc]["Size"][1] * scaleX))
-            if IsClicked:
-                obj.SelectedBuiltPart = None
-                UserHasSelectedPart = True
-                print(f"User just cligged on part {obj.partdict[list(obj.partdict)[c]]["Name"]}")
-                obj.selectedPart = copy.deepcopy(obj.partdict)[list(obj.partdict)[c]]["Name"]
-            cc += 1
-        PositionOfTexture_X += obj.partdict[list(obj.partdict)[c]]["Textures"][0]["Size"][0] + 16
-        c += 1
+    obj.BuildUI.run(obj)
         
     #------------------------------The play button----------------------------------------------------------------
     PlayButtonImg = obj.textures["PlayButton.png"]
@@ -179,7 +149,6 @@ def run(obj):
                             #TODO: only one joint can be created in snapping, fix later.
                             ccc = 0
                             while ccc < len(obj.Vehicle[obj.JointPositions[c][0]]["Joints"]) and cc < len(obj.partdict[obj.selectedPart]["Joints"]):
-                                print(ccc, cc)
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][ccc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
                                     PartIsValid = False
                                     print("joint pairing is invalid")
@@ -205,7 +174,6 @@ def run(obj):
                                 ccc += 1
                     cc += 1
             c += 1
-    print(obj.SnappedJointData)
     #------------------------------Drawing the selected part at mouse pos-------------------------------------
     if obj.selectedPart != "":
         #jos code
@@ -240,11 +208,11 @@ def run(obj):
             c += 1
         #print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}") 
     #------------------------------Upon placement, check if the position of the parts center is within a valid rectangle (BuildBackgroundImg)--------------------------------
-    if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not UserHasSelectedPart and obj.CFG_Build_Enforce_Rules:
+    if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not obj.UserHasSelectedPart and obj.CFG_Build_Enforce_Rules:
         #is the user trying to place an "unjoined" accepting joint?
-        if obj.SnappedJointData == None and obj.partdict[obj.selectedPart]["Properties"]["JoiningBehavior"] != "Accept" or obj.SnappedJointData != None:
+        if  obj.dimensions[0] * 0.2 < mx < 0.8 * obj.dimensions[0] and obj.dimensions[1] * 0.125 < my < 0.675 * obj.dimensions[1]:
             #if the mouse is touching BuildBackgroundImg, the part gets placed
-            if obj.dimensions[0] * 0.125 < mx < 0.875 * obj.dimensions[0] and obj.dimensions[1] * 0.125 < my < 0.875 * obj.dimensions[1]:
+            if obj.SnappedJointData == None and obj.partdict[obj.selectedPart]["Properties"]["JoiningBehavior"] != "Accept" or obj.SnappedJointData != None:
                 #checking if the position of the part is otherwise invalid
 
                 #is the part exactly placed on another part?
@@ -296,6 +264,8 @@ def run(obj):
                     obj.SnappedJointData = None
                     obj.selectedPart = ""
                     obj.RotationOfSelectedPart = 0
+        elif not obj.dimensions[0] * 0.2 < mx < 0.8 * obj.dimensions[0] or not obj.dimensions[1] * 0.125 < my < 0.675 * obj.dimensions[1]:
+            pass
         else:
             #the part gets unselected
             obj.selectedPart = ""
@@ -331,7 +301,7 @@ def run(obj):
     #------------------------------Marking the selected part-------------------------------------
     if obj.SelectedBuiltPart != None:
         RectPos = utils.SubstractTuples(obj.Vehicle[obj.SelectedBuiltPart]["Pos"], obj.Vehicle[obj.SelectedBuiltPart]["Center"])
-        pygame.draw.rect(obj.screen, (50,50,50), (RectPos[0], RectPos[1],int(64 * scaleX), int(64 * scaleX) ), 2,2)
+        pygame.draw.rect(obj.screen, (250,225,225), (RectPos[0], RectPos[1],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][0],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][1]), 2,2)
     #------------------------------The Reload Vehicle Button---------------------------------------
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
     ReloadButton = interactions.ButtonArea(obj, obj.textures["ReloadButton.png"], utils.Scale(obj,(150,50)), utils.Scale(obj,[64,64]))

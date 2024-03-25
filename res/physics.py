@@ -49,7 +49,7 @@ def Engine(obj,EnginePart, WheelPart):
     #for easier value management of individual parts
     if obj.Throttle != 0:
         IndexOfWheelBody = obj.NewVehicle.index(WheelPart)
-        EnginePower = EnginePart["Properties"]["Power"]
+        EnginePower = EnginePart["Properties"]["Power"] * WheelPart["Properties"]["Force"]
         ApplyThrottle(obj, IndexOfWheelBody, EnginePower)
 
 
@@ -137,7 +137,7 @@ def CheckJoints(obj):
                 obj.NewVehicleJoints[c] = None
                 obj.VehicleJoints[c] = None
                 obj.PymunkJoints[c] = None
-            elif JointImpulse > ImpulseLimit/3:
+            elif JointImpulse > ImpulseLimit/3.7:
                 if not obj.SoundInFrame:
                     VolumeFactor = JointImpulse / ImpulseLimit
                     Sounds = obj.VehicleJoints[c]["SoundData"]
