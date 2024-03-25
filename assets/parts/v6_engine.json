@@ -2,20 +2,20 @@
     "Name": "Old Engine",
     "Index": 4,
     "Type": "Engine",
-    "Cost": 10000,
-    "Stex": "old_engine.png",
+    "Cost": 14000,
+    "Stex": "V6_engine.png",
     "Center": [32,32],
     "Properties": {
         "Rot": 0,
         "Friction": 1.25,
-        "Weight": 80,
+        "Weight": 70,
         "Bounciness": 0.004,
         "JoiningBehavior": "Provide",
-        "Power": 180
+        "Power": 280
 
     },
     "JointData": {
-        "BreakPoint": 60000,
+        "BreakPoint": 64000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{
@@ -47,7 +47,7 @@
             "CollisionType": "Full"
         },
     "Textures": [{
-        "Image": "old_engine.png",
+        "Image": "V6_engine.png",
         "Pos": [0,0],
         "Size": [64,64]
     }],

@@ -40,8 +40,8 @@ def ApplyThrottle(obj, WheelPart, Force):
         obj.Throttle = obj.Throttle * 0.96
     #apply forces to pymunk bodies
     c = WheelPart
-    force = [obj.Throttle * Force,0]
-    point = (0, -obj.NewVehicle[c]["Center"][0])
+    force = [-obj.Throttle * Force,0]
+    point = (0, obj.NewVehicle[c]["Center"][1])
     obj.PymunkBodies[c].apply_force_at_local_point(force, point)
 """Making wheels connected to motors spin"""
 def Engine(obj,EnginePart, WheelPart):

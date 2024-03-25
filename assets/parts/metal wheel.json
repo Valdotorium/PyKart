@@ -1,27 +1,27 @@
 {
-    "Name": "Wheel",
-    "Index": 1,
+    "Name": "Metal Wheel",
+    "Index": 87659,
     "Type": "Wheel",
-    "Cost": 1500,
-    "Stex": "wheelNew.png",
+    "Cost": 8000,
+    "Stex": "metal_ball.png",
     "Center": [32,32],
     "Properties": {
         "Rot": 0,
-        "FuelUse": 0.2,
+        "FuelUse": 0.6,
         "MaxImpulse": 1080,
-        "Force": 1,
-        "Friction": 1,
-        "Weight": 25,
-        "Bounciness": 0.1,
+        "Force": 1.6,
+        "Friction": 0.5,
+        "Weight": 80,
+        "Bounciness": 0,
         "JoiningBehavior": "Accept"
     },
     "JointData": {
-        "BreakPoint": 18000,
+        "BreakPoint": 50000,
         "Type": "Spring",
         "Data":{
-            "Distance": 72,
-            "Damping": 35,
-            "Stiffness": 3500
+            "Distance": 64,
+            "Damping": 8,
+            "Stiffness": 8000
         }
     },
     "Build":{
@@ -43,7 +43,7 @@
         "HasTwoAnchors": false
     },
     "Textures": [{
-        "Image": "wheelNew.png",
+        "Image": "metal_ball.png",
         "Pos": [0,0],
         "Size": [64,64]
     }],
