@@ -1,20 +1,20 @@
 {
-    "Name": "Metal Frame",
+    "Name": "Stable Metal Frame",
     "Index": 2,
     "Type": "Stability",
     "Cost": 500,
     "Center": [32,32],
-    "Stex": "frameNew.png",
+    "Stex": "stable_frame.png",
     "Properties": {
         "Rot": 0,
         "Friction": 0.95,
-        "Weight": 35,
+        "Weight": 50,
         "Bounciness": 0.015,
         "JoiningBehavior": "Provide"
 
     },
     "JointData": {
-        "BreakPoint": 38000,
+        "BreakPoint": 62000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{
@@ -46,7 +46,7 @@
             "CollisionType": "Full"
         },
     "Textures": [{
-        "Image": "frameNew.png",
+        "Image": "stable_frame.png",
         "Pos": [0,0],
         "Size": [64,64]
     }],

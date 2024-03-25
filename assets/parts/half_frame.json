@@ -1,20 +1,20 @@
 {
-    "Name": "Metal Frame",
+    "Name": "Half Metal Frame",
     "Index": 2,
     "Type": "Stability",
-    "Cost": 500,
-    "Center": [32,32],
-    "Stex": "frameNew.png",
+    "Cost": 300,
+    "Center": [32,16],
+    "Stex": "half_frame.png",
     "Properties": {
         "Rot": 0,
         "Friction": 0.95,
-        "Weight": 35,
+        "Weight": 17,
         "Bounciness": 0.015,
         "JoiningBehavior": "Provide"
 
     },
     "JointData": {
-        "BreakPoint": 38000,
+        "BreakPoint": 30000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{
@@ -27,28 +27,28 @@
         },
         {
             "Type": "Provide",
-            "Pos": [64,32]
+            "Pos": [64,16]
         },
         {
             "Type": "Provide",
-            "Pos": [32, 64]
+            "Pos": [32, 32]
         },
         {
             "Type": "Provide",
-            "Pos": [0, 32]
+            "Pos": [0, 16]
         }
     ],
     "Hitbox":{
             "Pos": [0,0],
             "Type": "Rect",
-            "Size":[64,64],
-            "Anchor":[32,32],
+            "Size":[64,32],
+            "Anchor":[32,16],
             "CollisionType": "Full"
         },
     "Textures": [{
-        "Image": "frameNew.png",
+        "Image": "half_frame.png",
         "Pos": [0,0],
-        "Size": [64,64]
+        "Size": [64,32]
     }],
     "Sounds": {
         "Crash": [["suspension_2.wav",0.5], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],

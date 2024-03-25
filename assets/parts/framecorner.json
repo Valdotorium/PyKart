@@ -13,7 +13,7 @@
         "JoiningBehavior": "Provide"
     },
     "JointData": {
-        "BreakPoint": 30000,
+        "BreakPoint": 26000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{

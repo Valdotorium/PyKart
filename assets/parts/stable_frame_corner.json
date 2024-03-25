@@ -1,34 +1,29 @@
 {
-    "Name": "Metal Frame",
-    "Index": 2,
+    "Name": "Stable Metal Frame corner",
+    "Index": 3,
     "Type": "Stability",
-    "Cost": 500,
+    "Cost": 600,
     "Center": [32,32],
-    "Stex": "frameNew.png",
+    "Stex": "stable_frame_corner.png",
     "Properties": {
         "Rot": 0,
-        "Friction": 0.95,
-        "Weight": 35,
-        "Bounciness": 0.015,
+        "Friction": 0.94,
+        "Weight": 32,
+        "Bounciness": 0.03,
         "JoiningBehavior": "Provide"
-
     },
     "JointData": {
-        "BreakPoint": 38000,
+        "BreakPoint": 54000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{
         }
     },
+    "Build":{
+        "NeedsJoint": 0,
+        "HasRotation": 1
+    },
     "Joints":[
-        {
-            "Type": "Provide",
-            "Pos": [32,0]
-        },
-        {
-            "Type": "Provide",
-            "Pos": [64,32]
-        },
         {
             "Type": "Provide",
             "Pos": [32, 64]
@@ -36,17 +31,21 @@
         {
             "Type": "Provide",
             "Pos": [0, 32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [32, 32]
         }
     ],
     "Hitbox":{
-            "Pos": [0,0],
-            "Type": "Rect",
-            "Size":[64,64],
-            "Anchor":[32,32],
-            "CollisionType": "Full"
-        },
+        "Pos": [0,0],
+        "Type": "Poly",
+        "Size":[[0,0], [0,64], [64,64]],
+        "Anchor": [32,32],
+        "CollisionType": "Full"
+    },
     "Textures": [{
-        "Image": "frameNew.png",
+        "Image": "stable_frame_corner.png",
         "Pos": [0,0],
         "Size": [64,64]
     }],
@@ -55,5 +54,5 @@
         "Active": [[]],
         "Idle":[[]]
     }
-    
+
 }
