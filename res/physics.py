@@ -61,7 +61,7 @@ def Draw(obj):
     obj.TransferredPolygon = []
     #print("GP:", obj.GroundPolygon)
     while c < len(obj.GroundPolygon):
-        obj.TransferredPolygon.append(utils.AddTuples(obj.GroundPolygon[c], (-obj.X_Position, -obj.Y_Position)))
+        obj.TransferredPolygon.append(utils.MultiplyTuple(utils.AddTuples(obj.GroundPolygon[c], (-obj.X_Position, -obj.Y_Position)), obj.GameZoom))
         c += 1
     pygame.draw.polygon(obj.screen, (0,0,0),obj.TransferredPolygon)
     obj.body_floor.shape.update
@@ -79,10 +79,10 @@ def Draw(obj):
             Image = PartTextures[cc]["Image"]
             #getting the actual image object:
             Image = obj.textures[Image]
-            Position = utils.AddTuples(BodyPosition, PartTextures[cc]["Pos"])
+            Position = utils.AddTuples(utils.MultiplyTuple(BodyPosition, obj.GameZoom), utils.MultiplyTuple(PartTextures[cc]["Pos"], obj.GameZoom))
             Rotation = BodyRotation
             #many fixes need to be done here
-            Image = pygame.transform.scale(Image, PartTextures[cc]["Size"])
+            Image = pygame.transform.scale(Image, utils.MultiplyTuple(PartTextures[cc]["Size"], obj.GameZoom))
             Image = pygame.transform.rotate(Image, Rotation)
             #applying rotation 
             #rectangle for part rotation cuz it works somehow
@@ -174,6 +174,7 @@ def OldRefreshPolygon(obj):
     obj.body_floor.shape = pymunk.Poly(obj.body_floor, obj.GroundPolygon)
 """Setting some variables"""
 def setup(obj):
+    obj.GameZoom = 1
     Env = obj.Environment
     obj.space = pymunk.Space()#creating the space
     obj.space.gravity = Env["Gravity"]
