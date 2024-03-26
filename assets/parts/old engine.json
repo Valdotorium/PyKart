@@ -11,7 +11,7 @@
         "Weight": 70,
         "Bounciness": 0.004,
         "JoiningBehavior": "Provide",
-        "Power": 180
+        "Power": 380
 
     },
     "JointData": {

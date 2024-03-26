@@ -265,8 +265,10 @@ class Display:
         NullOrientation = (0,0)
         self.HandAngle = variable * multiplicator
         self.HandAngle = math.radians(self.HandAngle)
-        if self.HandAngle > self.maxRotation:
-            self.HandAngle = self.maxRotation
+        if self.HandAngle > math.radians(self.maxRotation):
+            self.HandAngle = math.radians(self.maxRotation)
+        elif self.HandAngle < -1:
+            self.HandAngle = -1
         self.Handangle = -self.HandAngle
         self.HandPosition = self.position
     def update(self, obj, value, multiplicator):

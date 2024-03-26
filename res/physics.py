@@ -60,22 +60,42 @@ def LimitAngularVelocity(body):
 def DisplayDistance(obj):
     x = obj.X_Position + 30
     text = str(round(x / 32)) + " M"
-    obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (700,obj.dimensions[1] -100))
+    obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (140,obj.dimensions[1] -80))
 #physics
-"""Drawing the Vehicle"""
-def Draw(obj):
+def DrawBackground(obj):
     c = 0
     obj.TransferredPolygon = []
     #print("GP:", obj.GroundPolygon)
     while c < len(obj.GroundPolygon):
         obj.TransferredPolygon.append(utils.MultiplyTuple(utils.AddTuples(obj.GroundPolygon[c], (-obj.X_Position, -obj.Y_Position)), obj.GameZoom))
         c += 1
-    pygame.draw.polygon(obj.screen, (0,0,0),obj.TransferredPolygon)
+    #print("Transferred polygon: ", obj.TransferredPolygon)
+    #invert y of the last two points
+    obj.TransferredPolygon[-2] = list(obj.TransferredPolygon[-2])
+    obj.TransferredPolygon[-2][1] = -obj.TransferredPolygon[-2][1]
+    obj.TransferredPolygon[-1] = list(obj.TransferredPolygon[-1])
+    obj.TransferredPolygon[-1][1] = -obj.TransferredPolygon[-1][1]
+    pygame.draw.polygon(obj.screen, (140,150,190),obj.TransferredPolygon)
     obj.body_floor.shape.update
+    #colors of the ground above the ground texture
+    Groundcolors = [(120, 200, 110), (170,120, 40), (150, 110, 0), (120, 100, 0)]
+    #drawing lines on the edges of the ground poly
+    cc = 0
+    while cc < len(Groundcolors):
+        CurrentColor = Groundcolors[cc]
+        c = 0
+        while c < len(obj.TransferredPolygon) - 3:
+            pygame.draw.line(obj.screen, CurrentColor, (obj.TransferredPolygon[c][0],obj.TransferredPolygon[c][1] +cc * 35), (obj.TransferredPolygon[c+1][0],obj.TransferredPolygon[c+1][1] +cc * 35), 36)
+            c += 1
+        cc += 1
+    #the ground texture
+"""Drawing the Vehicle"""
+def Draw(obj):
+    #drawing the background
+    DrawBackground(obj)
     c = 0
     #obj.space.debug_draw(obj.draw_options)
     while c < len(obj.PymunkBodies):
-        print(obj.PymunkBodies[c].angular_velocity)
         LimitAngularVelocity(obj.PymunkBodies[c])
         #negative because it is somehow inverted
         BodyRotation = -utils.RadiansToDegrees(obj.PymunkBodies[c].angle)
@@ -100,7 +120,7 @@ def Draw(obj):
             cc += 1
         c+=1
     #calculating rpm using some random variables
-    obj.rpm = int(obj.VehicleSpeed * 8) + int(obj.Throttle * 110) + random.randint(896, 904)
+    obj.rpm = int(obj.VehicleSpeed * 10) + int(obj.Throttle * 75) + random.randint(896, 904)
     #drawing speed and rpm display
     obj.SpeedDisplay.update(obj,obj.VehicleSpeed, 0.95)
     obj.RPMDisplay.update(obj,obj.rpm, 0.045)

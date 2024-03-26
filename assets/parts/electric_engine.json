@@ -8,10 +8,10 @@
     "Properties": {
         "Rot": 0,
         "Friction": 1.25,
-        "Weight": 160,
+        "Weight": 170,
         "Bounciness": 0.004,
         "JoiningBehavior": "Provide",
-        "Power": 750
+        "Power": 1600
 
     },
     "JointData": {

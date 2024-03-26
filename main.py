@@ -87,7 +87,7 @@ class Game():
     
         #res.interactions.interactions.ButtonArea(Exo)
         if self.gm == "game":
-            Exo.screen.fill((160,180,210))
+            Exo.screen.fill((120,120,120))
             #running the physics
             res.procedural.WritePolygonPositions(Exo)
             res.physics.simulate(Exo, fps)
