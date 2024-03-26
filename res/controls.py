@@ -2,9 +2,9 @@ import pygame
 
 def GameControls(obj):
     if pygame.key.get_pressed()[pygame.K_SPACE]:
-        obj.Throttle += 3
+        obj.Throttle += 2.4
     if pygame.key.get_pressed()[pygame.K_b]:
-        obj.Throttle -= 5
+        obj.Throttle -= 4.6
     for event in pygame.event.get():
         if event.type == pygame.MOUSEWHEEL:
             print("Scroll")

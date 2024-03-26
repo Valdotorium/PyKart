@@ -51,8 +51,16 @@ def Engine(obj,EnginePart, WheelPart):
         IndexOfWheelBody = obj.NewVehicle.index(WheelPart)
         EnginePower = EnginePart["Properties"]["Power"] * WheelPart["Properties"]["Force"]
         ApplyThrottle(obj, IndexOfWheelBody, EnginePower)
-
-
+#preventing things from spinning too fast
+def LimitAngularVelocity(body):
+    if -200 < body.angular_velocity < 200:
+        body.angular_velocity = body.angular_velocity * 0.9984
+    else:
+        body.angular_velocity = body.angular_velocity * 0.9956
+def DisplayDistance(obj):
+    x = obj.X_Position + 30
+    text = str(round(x / 32)) + " M"
+    obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (700,obj.dimensions[1] -100))
 #physics
 """Drawing the Vehicle"""
 def Draw(obj):
@@ -67,6 +75,8 @@ def Draw(obj):
     c = 0
     #obj.space.debug_draw(obj.draw_options)
     while c < len(obj.PymunkBodies):
+        print(obj.PymunkBodies[c].angular_velocity)
+        LimitAngularVelocity(obj.PymunkBodies[c])
         #negative because it is somehow inverted
         BodyRotation = -utils.RadiansToDegrees(obj.PymunkBodies[c].angle)
         #scrolling camera?
@@ -90,10 +100,12 @@ def Draw(obj):
             cc += 1
         c+=1
     #calculating rpm using some random variables
-    obj.rpm = int(obj.VehicleSpeed * 8) + int(obj.Throttle * 30) + 800
+    obj.rpm = int(obj.VehicleSpeed * 8) + int(obj.Throttle * 110) + random.randint(896, 904)
     #drawing speed and rpm display
     obj.SpeedDisplay.update(obj,obj.VehicleSpeed, 0.95)
     obj.RPMDisplay.update(obj,obj.rpm, 0.045)
+    #displaying distance
+    DisplayDistance(obj)
     print(obj.rpm)
 """Drawing the pymunk physics simulation"""
 def PhysDraw(obj):
@@ -193,7 +205,7 @@ def setup(obj):
 
     #initialize speed and rpm display
     obj.SpeedDisplay = utils.Display(obj, "Speed_display.png",(160,obj.dimensions[1]-120), 315, 1.6)
-    obj.RPMDisplay = utils.Display(obj, "Rpm_display.png",(obj.dimensions[0] - 160,obj.dimensions[1]-120), 315, 1.9)
+    obj.RPMDisplay = utils.Display(obj, "Rpm_display.png",(obj.dimensions[0] - 160,obj.dimensions[1]-120), 315, 1.6)
 """Function for translating the old data stored in obj.Vehicle and obj.VehicleJoints into  pymunk joints and bodies.
 Creates obj.NewVehicle, obj.VehicleTypes, obj.NewVehicleJoints, obj.PymunkBodies, obj.PymunkJoints (versions of the old data with
 "None" objects removed"""
