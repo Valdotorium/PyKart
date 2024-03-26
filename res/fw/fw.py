@@ -249,8 +249,38 @@ class BuildUI():
                     obj.UserHasSelectedPart = True
 
 
+class Display:
+    def __init__(self, obj,texture, position, maxRotation, scale):
+        self.range = range
+        self.maxRotation = maxRotation
+        self.position = position
+        self.scale = scale
+        self.hand_texture = obj.textures["hand.png"]
+        self.hand_texture = pygame.transform.scale(self.hand_texture, (32 * self.scale,128 * self.scale))
+        self.texture = obj.textures[texture]
 
         
+        self.position = position
+    def RotateHand(self, variable, multiplicator):
+        NullOrientation = (0,0)
+        self.HandAngle = variable * multiplicator
+        self.HandAngle = math.radians(self.HandAngle)
+        if self.HandAngle > self.maxRotation:
+            self.HandAngle = self.maxRotation
+        self.Handangle = -self.HandAngle
+        self.HandPosition = self.position
+    def update(self, obj, value, multiplicator):
+        self.RotateHand(value, multiplicator)
+        print(self.HandAngle)
+        self.HandAngle -= math.radians(90) #because of the flipped y axis of pygame
+        self.texture = pygame.transform.scale(self.texture, (128 * self.scale, 128 * self.scale))
+        bg_rect = self.texture.get_rect(center = self.position)
+        obj.screen.blit(self.texture, bg_rect)
+        texture = pygame.transform.rotate(self.hand_texture, math.degrees(-self.HandAngle))
+        texture_rect = texture.get_rect(center = self.position)
+            
+        obj.screen.blit(texture, texture_rect)
+        pygame.draw.circle(obj.screen, (20,20,20), self.position, round(74 * self.scale), round(10 * self.scale))
 
 
 

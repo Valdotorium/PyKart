@@ -40,8 +40,8 @@ def ApplyThrottle(obj, WheelPart, Force):
         obj.Throttle = obj.Throttle * 0.96
     #apply forces to pymunk bodies
     c = WheelPart
-    force = [-obj.Throttle * Force,0]
-    point = (0, obj.NewVehicle[c]["Center"][1])
+    force = [obj.Throttle * Force,0]
+    point = (0, -obj.NewVehicle[c]["Center"][1])
     obj.PymunkBodies[c].apply_force_at_local_point(force, point)
 """Making wheels connected to motors spin"""
 def Engine(obj,EnginePart, WheelPart):
@@ -89,6 +89,12 @@ def Draw(obj):
             obj.screen.blit(Image, texture_rect)
             cc += 1
         c+=1
+    #calculating rpm using some random variables
+    obj.rpm = int(obj.VehicleSpeed * 8) + int(obj.Throttle * 30) + 800
+    #drawing speed and rpm display
+    obj.SpeedDisplay.update(obj,obj.VehicleSpeed, 0.95)
+    obj.RPMDisplay.update(obj,obj.rpm, 0.045)
+    print(obj.rpm)
 """Drawing the pymunk physics simulation"""
 def PhysDraw(obj):
     obj.space.debug_draw(obj.draw_options)
@@ -183,6 +189,11 @@ def setup(obj):
     obj.VehicleMotorPower = 0
     obj.VehicleFuel = 0
     obj.VehicleFuelUse = 0
+    obj.rpm = 0
+
+    #initialize speed and rpm display
+    obj.SpeedDisplay = utils.Display(obj, "Speed_display.png",(160,obj.dimensions[1]-120), 315, 1.6)
+    obj.RPMDisplay = utils.Display(obj, "Rpm_display.png",(obj.dimensions[0] - 160,obj.dimensions[1]-120), 315, 1.9)
 """Function for translating the old data stored in obj.Vehicle and obj.VehicleJoints into  pymunk joints and bodies.
 Creates obj.NewVehicle, obj.VehicleTypes, obj.NewVehicleJoints, obj.PymunkBodies, obj.PymunkJoints (versions of the old data with
 "None" objects removed"""
@@ -328,7 +339,8 @@ def TransferStage(obj):
                     Joint = pymunk.constraints.DampedSpring(PartnerA,PartnerB,AnchorA,AnchorB, JointData["Data"]["Distance"], JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
                     obj.PymunkJoints.append(Joint)
                     obj.space.add(Joint)
-                    Joint = pymunk.constraints.GrooveJoint(PartnerA, PartnerB, AnchorA, utils.AddTuples(AnchorA,(utils.RotateVector((0,JointData["Data"]["Distance"]), -obj.Vehicle[IndexTypePartnerB]["Rotation"]))), AnchorB)
+                    print("Vector of grrove:",(AnchorA,(utils.RotateVector((0,JointData["Data"]["Distance"]), -(obj.Vehicle[IndexTypePartnerB]["Rotation"]- obj.Vehicle[IndexTypePartnerA]["Rotation"])))) )
+                    Joint = pymunk.constraints.GrooveJoint(PartnerA, PartnerB, AnchorA, utils.AddTuples(AnchorA,(utils.RotateVector((0,JointData["Data"]["Distance"]), -(obj.Vehicle[IndexTypePartnerB]["Rotation"]- obj.Vehicle[IndexTypePartnerA]["Rotation"])))), AnchorB)
                     obj.PymunkJoints.append(Joint)
                     obj.space.add(Joint)
 
