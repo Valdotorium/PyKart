@@ -5,6 +5,8 @@ from .fw import fw as utils
 import pymunk.constraints
 import random
 import pyglet.media
+import os
+from .interactions import interactions as interactions
 
 
 """IMPORTANT NOTE: Because i did not implement vehicle parts as objects :/,
@@ -130,6 +132,10 @@ def Draw(obj):
     obj.RPMDisplay.update(obj,obj.rpm, 0.045)
     #displaying distance
     DisplayDistance(obj)
+    CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
+    ReloadButton = interactions.ButtonArea(obj, obj.textures["ReloadButton.png"], utils.Scale(obj,(150,50)), utils.Scale(obj,[64,64]))
+    if ReloadButton:
+        obj.restart = True
 """Drawing the pymunk physics simulation"""
 def PhysDraw(obj):
     obj.space.debug_draw(obj.draw_options)

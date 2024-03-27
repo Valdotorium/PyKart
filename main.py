@@ -12,6 +12,8 @@ import res.controls
 import res.mechanics
 from copy import deepcopy as deepcopy
 import pyglet.media
+import res.interactions.interactions as interactions
+import res.fw.fw as utils
 #load files in othe directories like this: os.path.dirname(__file__) + "/folder/folder/file.png"
 #put scripts into top-level directory, put images or other "universal files" into _internal in dist/main
 #create a window in fullscreen size with a rectangle in it
@@ -23,7 +25,9 @@ pygame.font.init()
 #main loop
 running = True
 fps = 60
+frame = 0
 inputvalues = []
+
 class Game():
     def __init__(self):
         #game stuff
@@ -54,6 +58,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200, 800)
         self.KeyCooldown = 0
+        
 
         #options,olease set fit and fullscreen to false
         self.S_Fitscreen = False
@@ -84,6 +89,7 @@ class Game():
         self.VehicleSpeed = 0
         self.SoundPlayer = pyglet.media.Player()
         self.GroundPolygons = []
+        self.restart = False
         
     def run(self):
     
@@ -92,9 +98,9 @@ class Game():
             Exo.screen.fill((120,120,120))
             #running the physics
             res.procedural.WritePolygonPositions(Exo)
-            res.physics.simulate(Exo, fps)
             res.controls.GameControls(Exo)
             res.mechanics.GameMechanics(Exo)
+            res.physics.simulate(Exo, fps)
             
         if self.gm =="build":
             #buiding mode
@@ -104,9 +110,24 @@ class Game():
         if self.gm == "transfer":
             res.transfer.run(Exo)
             res.physics.TransferStage(Exo)
+    def reset(self):
+            self.gm = "build"
+            self.restart = False
+            del(self.space)
+            self.GroundPolygons = []
+            self.X_Position = 0
+            self.Y_Position = 0
+            self.pi =3.1415926535897932384626433832795
+            self.Throttle = 0
+            self.VehicleSpeed = 0
+            res.procedural.WritePolygonPositions(self)
+            res.physics.setup(self)
 
+def resetFrames(obj, frame):
+    frame = 1
+    obj.reset()
+    return frame
 
-frame = 0
 clock = pygame.time.Clock()
 while running:
     if frame > 0:
@@ -139,10 +160,14 @@ while running:
         res.procedural.WritePolygonPositions(Exo)
         res.physics.setup(Exo)
         Exo.draw_options = pymunk.pygame_util.DrawOptions(Exo.screen)
-        frame += 1
+    frame += 1
+
     Exo.run()
     #handling error messages
     if Exo.Errormessage != None:
         Exo.Errormessage.update(Exo)
     pygame.display.flip()
     clock.tick(fps)
+    if Exo.gm == "game":
+        if Exo.restart:
+            frame = resetFrames(Exo, frame)
