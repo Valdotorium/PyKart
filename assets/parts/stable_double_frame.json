@@ -14,7 +14,7 @@
 
     },
     "JointData": {
-        "BreakPoint": 90000,
+        "BreakPoint": 94000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{

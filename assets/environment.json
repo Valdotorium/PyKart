@@ -1,5 +1,5 @@
 {
-    "Gravity": [0,220],
+    "Gravity": [0,340],
     "Name": "Earth",
     "Terrain":{},
     "Physics":{

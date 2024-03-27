@@ -22,3 +22,5 @@ def run(obj):
     with open(CurrentPath + "/assets/saves/latest_vehicle_hitboxes.json", "w") as outfile: 
         json.dump(obj.VehicleHitboxes, outfile)
     
+    obj.Environment = obj.biomes[obj.SelectedEnvironment]
+    

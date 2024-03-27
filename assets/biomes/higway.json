@@ -1,0 +1,18 @@
+{
+    "Gravity": [0,340],
+    "Name": "Highway",
+    "Terrain":{
+        "Scale": 70,
+        "Flatness": 7,
+        "Difficulty": 2.8,
+        "Layers": 3,
+        "StartVariability": 2,
+        "StartScale": 24,
+        "UpscaleFactor": 2
+    },
+    "Physics":{
+        "Friction": 1,
+        "Bounce": 0.04,
+        "Oxygen": true
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "Gravity": [0,340],
+    "Name": "Hillside",
+    "Terrain":{
+        "Scale": 70,
+        "Flatness": 5,
+        "Difficulty": 2.5,
+        "Layers": 3,
+        "StartVariability": 10,
+        "StartScale": 24,
+        "UpscaleFactor": 2.5
+    },
+    "Physics":{
+        "Friction": 1,
+        "Bounce": 0.04,
+        "Oxygen": true
+    }
+}

@@ -16,7 +16,7 @@
         "JoiningBehavior": "Accept"
     },
     "JointData": {
-        "BreakPoint": 18000,
+        "BreakPoint": 20000,
         "Type": "Spring",
         "Data":{
             "Distance": 72,

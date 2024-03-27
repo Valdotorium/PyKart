@@ -9,7 +9,7 @@ def Noise(obj, scale, variability):
         Height_Change = 0
         Terrain_Direction = 0
         #should be renamed flatness, the higher, the flatter the terrain
-        steepness = obj.CFG_Terrain_Flatness
+        steepness = obj.Environment["Terrain"]["Flatness"]
         
         while x < len(obj.Terrain):
             r = random.uniform(0,100)
@@ -39,7 +39,7 @@ def Noise(obj, scale, variability):
                 Terrain_Direction = -1
             
             x += 1
-            difficultyFactor = obj.CFG_Terrain_Difficulty_Increase
+            difficultyFactor = obj.Environment["Terrain"]["Difficulty"]
             difficultyFactor /= 10000
             steepness -= difficultyFactor + steepness * (difficultyFactor / 10)
             if steepness > 20:
@@ -62,17 +62,18 @@ def setup(obj):
         x += 1
 
 def generate_chunk(obj):
-    Noise(obj, 24, 18)
-    Noise(obj, 8, 30)
-    Noise(obj, 4, 56)
-    print("total terrain length:", len(obj.Terrain) * obj.CFG_Terrain_X_Scale)
+    c = 1
+    while c < obj.Environment["Terrain"]["Layers"] + 1:
+        Noise(obj, round(obj.Environment["Terrain"]["StartScale"] / (obj.Environment["Terrain"]["UpscaleFactor"] * c)), obj.Environment["Terrain"]["StartVariability"] * (obj.Environment["Terrain"]["UpscaleFactor"] * c))
+        c += 1
+    print("total terrain length:", len(obj.Terrain) * obj.Environment["Terrain"]["Scale"])
 
     
 def WritePolygonPositions(obj):
     
     #making tuples (x,y) out of the y positions of the future polygon vertices stored in obj.Terrain
-    x = round((obj.X_Position + obj.CFG_Terrain_X_Scale * 8) /obj.CFG_Terrain_X_Scale)
-    endx = round((obj.X_Position + obj.dimensions[0]*2.2)/ obj.CFG_Terrain_X_Scale)
+    x = round((obj.X_Position + obj.Environment["Terrain"]["Scale"] * 8) /obj.Environment["Terrain"]["Scale"])
+    endx = round((obj.X_Position + obj.dimensions[0]*2.2)/ obj.Environment["Terrain"]["Scale"])
     PolygonPoints = []
     obj.StaticPolygon = []
     #Edge point
@@ -83,8 +84,8 @@ def WritePolygonPositions(obj):
     
     while x < round(endx):
         Point = obj.Terrain[x]
-        PolygonPoints.append(((x - 10) * round(obj.CFG_Terrain_X_Scale) - obj.X_Position, Point))
-        obj.StaticPolygon.append(((x - 10) * round(obj.CFG_Terrain_X_Scale) , obj.Terrain[x]))
+        PolygonPoints.append(((x - 10) * round(obj.Environment["Terrain"]["Scale"]) - obj.X_Position, Point))
+        obj.StaticPolygon.append(((x - 10) * round(obj.Environment["Terrain"]["Scale"]) , obj.Terrain[x]))
         x += 1
     #edge point
     obj.GroundRelief = PolygonPoints#provisorisch

@@ -50,3 +50,5 @@ obj.JointPositions speichert die Positionen aller Joints im Baumodus als Liste
 
 obj.VehicleJoints speichert die Daten (beteiligte Teile, physisches) aller Joints im Fahrzeug
 
+obj.biomes speichert alle terrain generator einstellungen für alle biome
+

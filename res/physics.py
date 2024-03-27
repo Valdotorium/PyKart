@@ -224,11 +224,11 @@ def OldRefreshPolygon(obj):
 """Setting some variables"""
 def setup(obj):
     obj.GameZoom = 1
+    obj.Environment = obj.biomes[obj.SelectedEnvironment]
     Env = obj.Environment
     obj.space = pymunk.Space()#creating the space
     obj.space.gravity = Env["Gravity"]
     #static floor of the simulation
-    utils.CreateGroundPolygon(obj, Env)
     obj.RotationOfSelectedPart = 0
     obj.VehicleMotorPower = 0
     obj.VehicleFuel = 0

@@ -90,7 +90,7 @@ class Game():
         self.SoundPlayer = pyglet.media.Player()
         self.GroundPolygons = []
         self.restart = False
-        
+        self.SelectedEnvironment = "Hillside"
     def run(self):
     
         #res.interactions.interactions.ButtonArea(Exo)
@@ -110,6 +110,11 @@ class Game():
         if self.gm == "transfer":
             res.transfer.run(Exo)
             res.physics.TransferStage(Exo)
+            res.procedural.setup(Exo)
+            res.procedural.generate_chunk(Exo)
+            res.procedural.WritePolygonPositions(Exo)
+        if self.gm == "biomeselection":
+            pass
     def reset(self):
             self.gm = "build"
             self.restart = False
@@ -155,10 +160,8 @@ while running:
         #res.terrain.generate(Exo)
         #res.terrain.place(Exo)
         res.build.setup(Exo)
-        res.procedural.setup(Exo)
-        res.procedural.generate_chunk(Exo)
-        res.procedural.WritePolygonPositions(Exo)
         res.physics.setup(Exo)
+        
         Exo.draw_options = pymunk.pygame_util.DrawOptions(Exo.screen)
     frame += 1
 
