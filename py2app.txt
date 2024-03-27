@@ -10,5 +10,5 @@
 TODO nach fertigstellung:
 "assets und res in Resources einfügen, assets ernout in Resources/lib/Python 3.12 einfügen
 
-latest app generation: 12.3.2024
+latest app generation: 27.3.2024
 latest distribution test: 12.3.2024
