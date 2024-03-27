@@ -68,13 +68,13 @@ class Game():
         #scale factor
         #self.S_Terrain_Scale_Factor = 1
         #new terrain settings:
-        self.CFG_Terrain_Scale = 29 #must be below CFG_Terrain_X_Scale
+        self.CFG_Terrain_Scale = 69 #must be below CFG_Terrain_X_Scale
         self.CFG_Render_Distance = 1000
         self.CFG_Terrain_Detail = 5
         self.CFG_Terrain_Upscale_Factor = 100
 
         #size of each "point" in the ground polygon. 10 is 1/10 of the screen x size
-        self.CFG_Terrain_X_Scale = 30
+        self.CFG_Terrain_X_Scale = 70
         self.CFG_Terrain_Noise_Downscale = 5
         self.X_Position = 0
         self.Y_Position = 0
@@ -82,6 +82,7 @@ class Game():
         self.Throttle = 0
         self.VehicleSpeed = 0
         self.SoundPlayer = pyglet.media.Player()
+        self.GroundPolygons = []
         
     def run(self):
     

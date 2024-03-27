@@ -8,7 +8,6 @@ def respond(obj):
     """This script is responsible for loading the games assets, such as images and parts. it will load everything in the folder it finds.
     WARNING: In py2app, the assets folder must be included TWICE in several locations of the app, see py2app.txt"""
     print("ive loaded from the source package!")
-    time.sleep(1)
     #getting the window size
     obj.dimensions = utils.getScreenSize()
     print("LOG: screen dimensions are:", obj.dimensions)
@@ -30,7 +29,6 @@ def respond(obj):
         pygame.display.set_caption("Project Exoplanet")
     obj.dimensions = obj.dimensions[0]
     utils.displayTextCenter(obj,"finding files")
-    time.sleep(0.2)
     #locating the game assets
 
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
@@ -38,7 +36,6 @@ def respond(obj):
 
     print("LOG: found gamefiles in:", gamefiles)
     utils.displayTextCenter(obj,"checking for necessary files")
-    time.sleep(0.2)
     if "assets" in gamefiles:
         print("file loader path is: ", CurrentPath)
         utils.displayTextCenter(obj,"found assets folder")
@@ -57,7 +54,6 @@ def respond(obj):
 
                     utils.displayTextCenter(obj,f"loaded image {image}")
                     textures[image] = loadedimage
-                    time.sleep(0.02)
             print("LOG: loaded all images into:", textures)
             obj.textures = textures
 
@@ -68,7 +64,6 @@ def respond(obj):
                 utils.DecodePart(loadedpart, obj)
                 utils.clear(obj.screen)
                 utils.displayTextCenter(obj,f"loaded part {part}")
-                time.sleep(0.02)
             print("all parts loaded to game: ", obj.partdict)
             print("all parts loaded to shop: ", obj.shopdict)
             try:
@@ -88,7 +83,6 @@ def respond(obj):
 
                 utils.displayTextCenter(obj,f"loaded sound {sound}")
                 sounds[sound] = loadedsound
-                time.sleep(0.02)
             print("LOG: loaded all images into:", sounds)
             obj.sounds = sounds
         else:

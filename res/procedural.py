@@ -5,9 +5,12 @@ def Noise(obj, scale, variability):
         #main  terrain generator function
         print("----------------------------------------------------------------")
         x = 0
-        Height_Change = random.uniform(-obj.CFG_Terrain_Scale * scale, obj.CFG_Terrain_Scale * scale)
+        #Height_Change = random.uniform(-obj.CFG_Terrain_Scale * scale, obj.CFG_Terrain_Scale * scale)
+        Height_Change = 0
         Terrain_Direction = 0
-
+        #should be renamed flatness, the higher, the flatter the terrain
+        steepness = 4
+        
         while x < len(obj.Terrain):
             r = random.uniform(0,100)
             if r < variability:
@@ -19,40 +22,69 @@ def Noise(obj, scale, variability):
                 Terrain_Direction = -3
            
             if Terrain_Direction > 0:
-                Height_Change += random.uniform(0, ((obj.CFG_Terrain_Scale * scale) / 50) * Terrain_Direction)
+                Height_Change += random.uniform(0, ((obj.CFG_Terrain_Scale * scale) / 50) * (Terrain_Direction / steepness))
             elif Terrain_Direction < 0:
-                Height_Change += random.uniform(-((obj.CFG_Terrain_Scale * scale )/ 50) * -Terrain_Direction, 0)
+                Height_Change += random.uniform(-((obj.CFG_Terrain_Scale * scale )/ 50) * (-Terrain_Direction / steepness), 0)
             Height_Change * scale
+
             obj.Terrain[x] += Height_Change
             obj.Terrain[x] = round(obj.Terrain[x])
+            if obj.Terrain[x] < -50000:
+                obj.Terrain[x] = -50000
+                Height_Change = 0
+                Terrain_Direction = 1
+            if obj.Terrain[x] > 50000:
+                obj.Terrain[x] = 50000
+                Height_Change = 0
+                Terrain_Direction = -1
+            
             x += 1
+            steepness -= 0.00011 + steepness * 0.0000041
+            if steepness > 8:
+                steepness = 8
+            if steepness < 0.1:
+                steepness = 0.1
+            if x == 4000:
+               print("steepness at 280000px:",steepness)
+            if x == 8000:
+               print("steepness at 560000px:",steepness)
+            if x == 12000:
+               print("steepness at 740000px:",steepness)
+        print("steepness at end:",steepness)
 def setup(obj):
     obj.Terrain = []
     x = 0
-    while x < obj.CFG_Render_Distance * obj.CFG_Terrain_Detail:
-        obj.Terrain.append(0)
+    while x < 50000:
+        obj.Terrain.append(650)
         x += 1
 
 def generate_chunk(obj):
-    Noise(obj, 24, 13)
-    Noise(obj, 6, 20)
-    Noise(obj, 2, 31)
+    Noise(obj, 24, 18)
+    Noise(obj, 8, 30)
+    Noise(obj, 4, 56)
+    print("total terrain length:", len(obj.Terrain) * obj.CFG_Terrain_X_Scale)
 
-    print("generated terrain: " + str(obj.Terrain)) 
+    
 def WritePolygonPositions(obj):
+    
     #making tuples (x,y) out of the y positions of the future polygon vertices stored in obj.Terrain
-    x = round((obj.X_Position - 100) / round(obj.dimensions[0] / obj.CFG_Terrain_X_Scale))
-    endx = round((obj.X_Position + obj.dimensions[0]*1.1) / round(obj.dimensions[0] / obj.CFG_Terrain_X_Scale))
+    x = round((obj.X_Position + obj.CFG_Terrain_X_Scale * 8) /obj.CFG_Terrain_X_Scale)
+    endx = round((obj.X_Position + obj.dimensions[0]*2.2)/ obj.CFG_Terrain_X_Scale)
     PolygonPoints = []
-    startx = x
+    obj.StaticPolygon = []
     #Edge point
-    PolygonPoints.append((0, 10000))
+    if x < 0: 
+        x = 0
+    if endx < 2:
+        endx = 2
+    
     while x < round(endx):
-        Point = obj.Terrain[x] + obj.Y_Position
-        PolygonPoints.append((x * round(obj.dimensions[0] / obj.CFG_Terrain_X_Scale) - obj.X_Position, Point))
+        Point = obj.Terrain[x]
+        PolygonPoints.append(((x - 10) * round(obj.CFG_Terrain_X_Scale) - obj.X_Position, Point))
+        obj.StaticPolygon.append(((x - 10) * round(obj.CFG_Terrain_X_Scale) , obj.Terrain[x]))
         x += 1
     #edge point
-    PolygonPoints.append(((x - 1) * round(obj.dimensions[0] / obj.CFG_Terrain_X_Scale), 10000))
-    obj.GroundRelief = [(-1000, 700), (4980,700),(5000,900),(5250, 900),(5270,700), (9980, 700), (10100, 650), (10200, 900), (11700, 900), (11800, 700), (12400,700), (30000, 1800),(70000, 1800), (80000, 1400), (94000, 0),(90000, -7250)] #provisorisch
+    obj.GroundRelief = PolygonPoints#provisorisch
+
     #print("THE GROUND POLYGON IS AT:", PolygonPoints)
     #print(f"drawing poly from terrain item {startx} to terrain item {x}")

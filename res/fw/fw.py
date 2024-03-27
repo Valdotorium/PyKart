@@ -91,32 +91,37 @@ def RotateVector(vector, angle):
 def SubstractTuples(tuple1, tuple2):
     return tuple1[0] - tuple2[0], tuple1[1] - tuple2[1]
 def CreateGroundPolygon(obj, Env):
+    #TODO #10 #completely rewrite this function
+    c = 0
+    while c < len(obj.GroundPolygons):
+        if obj.GroundPolygons[c]!= None:
+            obj.space.remove(obj.GroundPolygons[c])
+        c += 1
     obj.body_floor = pymunk.Body(1, 100, body_type=pymunk.Body.STATIC)
     obj.body_floor.position = (0,0)
+    obj.GroundPolygons = []
     c = 0
-    GroundPolygons = []
+    obj.GroundPolygon = []
     obj.space.add(obj.body_floor)
-    while c < len(obj.GroundRelief) - 1:
-        VectA = obj.GroundRelief[c]
-        VectB = obj.GroundRelief[c+1]
+    print(obj.X_Position)
+    while c < len(obj.StaticPolygon) - 1:
+        VectA = obj.StaticPolygon[c]
+        VectB = obj.StaticPolygon[c+1]
         VectAX = VectA[0]
         VectBX = VectB[0]
         #vertices for the poly, one poly for every x position in obj.GroundRelief
-        Vertices = [(VectAX , 9000), (VectBX, 9000), VectB, VectA]
+        Vertices = [(VectAX , 55000), (VectBX, 55000), VectB, VectA]
         obj.body_floor.shape = pymunk.Poly(obj.body_floor, Vertices)
         obj.body_floor.shape.friction = Env["Physics"]["Friction"]
         obj.body_floor.shape.elasticity = Env["Physics"]["Bounce"]
         obj.body_floor.shape.filter = pymunk.ShapeFilter(categories= 4, mask= 7)
-        GroundPolygons.append(obj.body_floor.shape)
+        obj.GroundPolygons.append(obj.body_floor.shape)
         obj.space.add(obj.body_floor.shape)
         c += 1
+        obj.GroundPolygon.append(obj.GroundRelief[c])
+    
 
-    #creating GroundPolygon (adding bottom edges)
-    print("ground relief:",obj.GroundRelief)
-    obj.GroundPolygon = obj.GroundRelief
-    obj.GroundPolygon.append((obj.GroundRelief[len(obj.GroundRelief)-1][0],9000))
-    obj.GroundPolygon.append((0,9000))
-    print(obj.GroundPolygon)
+    
 def GetConnectedParts(obj,joint):
     #joint should come from obj.vehiclejoints
     PartA = obj.NewVehicle[joint["JoinedParts"][0]]

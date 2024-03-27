@@ -8,14 +8,14 @@
     "Properties": {
         "Rot": 0,
         "Friction": 1.25,
-        "Weight": 170,
+        "Weight": 150,
         "Bounciness": 0.004,
         "JoiningBehavior": "Provide",
-        "Power": 1600
+        "Power": 1200
 
     },
     "JointData": {
-        "BreakPoint": 96000,
+        "BreakPoint": 120000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{

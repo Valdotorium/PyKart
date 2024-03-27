@@ -64,11 +64,15 @@ def DisplayDistance(obj):
 #physics
 def DrawBackground(obj):
     c = 0
+    #check this function for mistakes(#10)
     obj.TransferredPolygon = []
     #print("GP:", obj.GroundPolygon)
     while c < len(obj.GroundPolygon):
-        obj.TransferredPolygon.append(utils.MultiplyTuple(utils.AddTuples(obj.GroundPolygon[c], (-obj.X_Position, -obj.Y_Position)), obj.GameZoom))
+        obj.TransferredPolygon.append(utils.MultiplyTuple(utils.AddTuples(obj.GroundPolygon[c], (0, -obj.Y_Position)), obj.GameZoom))
         c += 1
+    obj.TransferredPolygon.append((obj.GroundPolygon[-1][0], 55000))
+    obj.TransferredPolygon.append((0, 55000))
+
     #print("Transferred polygon: ", obj.TransferredPolygon)
     #invert y of the last two points
     obj.TransferredPolygon[-2] = list(obj.TransferredPolygon[-2])
@@ -126,7 +130,6 @@ def Draw(obj):
     obj.RPMDisplay.update(obj,obj.rpm, 0.045)
     #displaying distance
     DisplayDistance(obj)
-    print(obj.rpm)
 """Drawing the pymunk physics simulation"""
 def PhysDraw(obj):
     obj.space.debug_draw(obj.draw_options)
@@ -197,6 +200,8 @@ def CheckJoints(obj):
         c += 1
 """The pymunk physics simulation"""
 def simulate(obj, fps):
+    Env = obj.Environment
+    utils.CreateGroundPolygon(obj, Env)
     obj.SoundInFrame = False
     obj.space.step(1/fps)
     #draeing the poligon with the list of points obj.GroundPolygon
@@ -385,3 +390,6 @@ def TransferStage(obj):
                     obj.PymunkJoints.append(Joint)
                     obj.space.add(Joint)
         c += 1
+
+    #convenient vehicle placement 
+    
