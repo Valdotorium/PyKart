@@ -18,7 +18,9 @@ LOG START 1.3.2024
 23.3.2024 ----- added sounds
 25.3.2024 ----- completely new textures, large content updates
 26.3.2024 ----- added terrain textures
-27.3.2024 ----- game is now replayable, added procedural terrain (or at least enough terrain)
+27.3.2024 ----- game is now replayable, added procedural terrain (or at least enough terrain), game is now playable
+----------------------------------------------------------------VERSION NUMBERS----------------------------------------------------------------
+v0.1 ---- 27.3.2024 ---- added procedural terrain
 
 TODO
 siehe heft
