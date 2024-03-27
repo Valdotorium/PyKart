@@ -1,27 +1,27 @@
 {
-    "Name": "Wheel",
+    "Name": "Large Wheel",
     "Index": 1,
     "Type": "Wheel",
-    "Cost": 1500,
-    "Stex": "wheelNew.png",
-    "Center": [32,32],
+    "Cost": 2500,
+    "Stex": "large_wheel.png",
+    "Center": [48,48],
     "Properties": {
         "Rot": 0,
         "FuelUse": 0.2,
         "MaxImpulse": 1080,
-        "Force": 1,
+        "Force": 1.4,
         "Friction": 1,
-        "Weight": 20,
+        "Weight": 34,
         "Bounciness": 0.1,
         "JoiningBehavior": "Accept"
     },
     "JointData": {
-        "BreakPoint": 18000,
+        "BreakPoint": 26000,
         "Type": "Spring",
         "Data":{
-            "Distance": 72,
-            "Damping": 10,
-            "Stiffness": 5000
+            "Distance": 100,
+            "Damping": 2.4,
+            "Stiffness": 1600
         }
     },
     "Build":{
@@ -31,21 +31,21 @@
     "Joints":[
         {
             "Type": "Accept",
-            "Pos": [32,0]
+            "Pos": [48,0]
         }
     ],
     "Hitbox":{
-        "Pos": [32,32],
+        "Pos": [48,48],
         "Type": "Circle",
-        "Size": 32,
+        "Size": 48,
         "Anchor": [0,0],
         "CollisionType": "Semi",
         "HasTwoAnchors": false
     },
     "Textures": [{
-        "Image": "wheelNew.png",
+        "Image": "large_wheel.png",
         "Pos": [0,0],
-        "Size": [64,64]
+        "Size": [96,96]
     }],
     "Sounds": {
         "Crash": [["tyre_1.wav",1], ["tyre_2.wav",1], ["tyre_3.wav",1]],

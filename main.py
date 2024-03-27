@@ -69,13 +69,14 @@ class Game():
         #self.S_Terrain_Scale_Factor = 1
         #new terrain settings:
         self.CFG_Terrain_Scale = 69 #must be below CFG_Terrain_X_Scale
-        self.CFG_Render_Distance = 1000
-        self.CFG_Terrain_Detail = 5
         self.CFG_Terrain_Upscale_Factor = 100
-
         #size of each "point" in the ground polygon. 10 is 1/10 of the screen x size
         self.CFG_Terrain_X_Scale = 70
-        self.CFG_Terrain_Noise_Downscale = 5
+        #1 extremely slow, 3 normal, 5 hard, 8 fast, 12 extremely fast
+        self.CFG_Terrain_Difficulty_Increase = 3.4
+        #20 plain , 8 minimal noise, 6 low noise, 5 normal, 3 hillside, 2 mountainous
+        self.CFG_Terrain_Flatness = 4.8
+
         self.X_Position = 0
         self.Y_Position = 0
         self.pi =3.1415926535897932384626433832795

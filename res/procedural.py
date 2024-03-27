@@ -9,7 +9,7 @@ def Noise(obj, scale, variability):
         Height_Change = 0
         Terrain_Direction = 0
         #should be renamed flatness, the higher, the flatter the terrain
-        steepness = 4
+        steepness = obj.CFG_Terrain_Flatness
         
         while x < len(obj.Terrain):
             r = random.uniform(0,100)
@@ -39,11 +39,14 @@ def Noise(obj, scale, variability):
                 Terrain_Direction = -1
             
             x += 1
-            steepness -= 0.00011 + steepness * 0.0000041
-            if steepness > 8:
-                steepness = 8
-            if steepness < 0.1:
-                steepness = 0.1
+            difficultyFactor = obj.CFG_Terrain_Difficulty_Increase
+            difficultyFactor /= 10000
+            steepness -= difficultyFactor + steepness * (difficultyFactor / 10)
+            if steepness > 20:
+                steepness = 20
+            if steepness < 0.3:
+                steepness = 0.3
+            #1 screen = around 40 m
             if x == 4000:
                print("steepness at 280000px:",steepness)
             if x == 8000:
