@@ -64,6 +64,7 @@ def setup(obj):
 def generate_chunk(obj):
     c = 1
     while c < obj.Environment["Terrain"]["Layers"] + 1:
+        #scaling the variability and scale values by the upscalefactor by the terrain and generating noise woth the new values
         Noise(obj, round(obj.Environment["Terrain"]["StartScale"] / (obj.Environment["Terrain"]["UpscaleFactor"] * c)), obj.Environment["Terrain"]["StartVariability"] * (obj.Environment["Terrain"]["UpscaleFactor"] * c))
         c += 1
     print("total terrain length:", len(obj.Terrain) * obj.Environment["Terrain"]["Scale"])
@@ -81,7 +82,7 @@ def WritePolygonPositions(obj):
         x = 0
     if endx < 2:
         endx = 2
-    
+    #the polygon points between x and enx get rendered
     while x < round(endx):
         Point = obj.Terrain[x]
         PolygonPoints.append(((x - 10) * round(obj.Environment["Terrain"]["Scale"]) - obj.X_Position, Point))

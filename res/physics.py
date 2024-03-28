@@ -76,7 +76,7 @@ def DrawBackground(obj):
     obj.TransferredPolygon.append((0, 55000))
 
     #print("Transferred polygon: ", obj.TransferredPolygon)
-    #invert y of the last two points
+    #invert y of the last two points (esentially inverting the y axis, because pygame)
     obj.TransferredPolygon[-2] = list(obj.TransferredPolygon[-2])
     obj.TransferredPolygon[-2][1] = -obj.TransferredPolygon[-2][1]
     obj.TransferredPolygon[-1] = list(obj.TransferredPolygon[-1])

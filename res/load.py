@@ -87,13 +87,11 @@ def respond(obj):
             obj.sounds = sounds
             biomefiles = os.listdir(CurrentPath+"/assets/biomes")
             biomes = {}
-            #loading all the sounds into the game
+            #loading all the biomes into the game
             for biome in biomefiles:
                 loadedbiome = json.load(open(CurrentPath+"/assets/biomes/"+biome))
 
                 utils.clear(obj.screen)
-                #center the text
-
                 utils.displayTextCenter(obj,f"loaded sound {sound}")
                 biomes[loadedbiome["Name"]] = loadedbiome
             print("LOG: loaded all biomes into:", biomes)

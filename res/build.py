@@ -23,6 +23,12 @@ this creates a clickable area for the object obj, which has the image of the cc-
 PositionOfTexture, which is the top left corner of the texture. The size of the texture is (TexturesOfPart[cc]["Size"][0] * scaleX, TexturesOfPart[cc]["Size"][1] * scaleX), which is a tuple
 containing the sizes of the cc-th texture of the part multiplied by the UI scaling factor scaleX.
 I hope this helps. -Valdotorium-
+KEYBINDS IN BUILD MODE:
+A,D rotate 
+A/D + P precision rotate
+M Move Part
+X Delete Part
+S Unslect Part
 """
 def setup(obj):
     scaleX = obj.dimensions[0] / 1200
@@ -39,6 +45,7 @@ def setup(obj):
     #if joints have snapped together, it stores their data
     obj.SnappedJointData = None
     obj.SelectedBuiltPart = None
+    obj.UserHasSelectedPart = False
     obj.RotationOfSelectedPart = 0
     obj.Errormessage = None
     obj.BuildUI = utils.BuildUI(obj)
@@ -47,7 +54,6 @@ def run(obj):
     PartIsValid = True
     scaleX = obj.scalefactor
     mx, my = pygame.mouse.get_pos()
-    obj.UserHasSelectedPart = False
 
     #--------------------------Drawing the part inventory---------------------------------------------------
     inventoryTileImage = obj.textures["UI_tile.png"]
@@ -279,13 +285,18 @@ def run(obj):
             pygame.draw.circle(obj.screen, (200,0,0), JointPositionsOfSelectedPart[c], 5 * scaleX)
             c += 1
     #------------------------------The Unselect Part Button-------------------------------------
+    #dragging should now be possible
+    if obj.UserHasSelectedPart:
+        if not pygame.mouse.get_pressed()[0]:
+            obj.UserHasSelectedPart = False
     if obj.SelectedBuiltPart != None:
         UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(350,50)), utils.Scale(obj,[64,64]))
-        if UnselectButton:
+        if UnselectButton or pygame.key.get_pressed()[pygame.K_s]:
             obj.SelectedBuiltPart = None
+        
         #---------------------The Delete Part Button--------------------------------
         DeleteButton = interactions.ButtonArea(obj, obj.textures["DeleteButton.png"], utils.Scale(obj,(250,50)), utils.Scale(obj,[64,64]))
-        if DeleteButton:
+        if DeleteButton or pygame.key.get_pressed()[pygame.K_x]:
             #removed parts are still list items, but they will be ignored
             obj.Vehicle[obj.SelectedBuiltPart] = None
             print(f"part {obj.SelectedBuiltPart} deleted")
@@ -294,10 +305,35 @@ def run(obj):
             while c < len(obj.VehicleJoints):
                 if obj.VehicleJoints[c] != None:
                     if obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][0] or obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][1]:
-                        #removed joints are still list items, but they will be ignored 
+                        #removed joints are still list items, but they will be ignored -NOT ANYMORE
                         obj.VehicleJoints.pop(c)
                 c += 1
             obj.SelectedBuiltPart = None
+    #------------------------------The Move Part Button------------------------------------------
+        MoveButton = interactions.ButtonArea(obj, obj.textures["MoveButton.png"], utils.Scale(obj,(450,50)), utils.Scale(obj,[64,64]))
+        if MoveButton or pygame.key.get_pressed()[pygame.K_m]:
+            #esentially deleting the part
+            SelectedPart = obj.SelectedBuiltPart
+            obj.selectedPart = obj.Vehicle[SelectedPart]["name"]
+            #storing the position of the part that is going to be deleted
+            PartPosition = obj.Vehicle[SelectedPart]["Pos"]
+            PartPosition =utils.AddTuples(PartPosition, obj.Vehicle[SelectedPart]["Center"])
+            #removed parts are still list items, but they will be ignored
+            obj.Vehicle[obj.SelectedBuiltPart] = None
+            print(f"part {obj.SelectedBuiltPart} deleted")
+            #removing all joints that are connected to the built part
+            c = 0
+            while c < len(obj.VehicleJoints):
+                if obj.VehicleJoints[c] != None:
+                    if obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][0] or obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][1]:
+                        #removed joints are still list items, but they will be ignored -NOT ANYMORE
+                        obj.VehicleJoints.pop(c)
+                c += 1
+            obj.SelectedBuiltPart = None
+            obj.UserHasSelectedPart = True
+            #setting mouse pos to pos of selected part
+            pygame.mouse.set_pos(PartPosition)
+            mx, my = pygame.mouse.get_pos()
     #------------------------------Marking the selected part-------------------------------------
     if obj.SelectedBuiltPart != None:
         RectPos = utils.SubstractTuples(obj.Vehicle[obj.SelectedBuiltPart]["Pos"], obj.Vehicle[obj.SelectedBuiltPart]["Center"])
