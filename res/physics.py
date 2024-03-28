@@ -92,7 +92,7 @@ def DrawBackground(obj):
         CurrentColor = Groundcolors[cc]
         c = 0
         while c < len(obj.TransferredPolygon) - 3:
-            if  not obj.Environment["Visuals"]["HasSurfaceMarkings"]:
+            if  not obj.Environment["Visuals"]["HasSurfaceMarkings"] or cc != 0:
                 pygame.draw.line(obj.screen, CurrentColor, (obj.TransferredPolygon[c][0],obj.TransferredPolygon[c][1] +y), (obj.TransferredPolygon[c+1][0],obj.TransferredPolygon[c+1][1] +y), obj.Environment["Visuals"]["LayerHeights"][cc])
             else:
                 #white striped surface

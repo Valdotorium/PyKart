@@ -63,12 +63,19 @@ def run(obj):
     obj.BuildUI.run(obj)
         
     #------------------------------The play button----------------------------------------------------------------
-    PlayButtonImg = obj.textures["PlayButton.png"]
-    PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[64,64]))
-    PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,50]), utils.Scale(obj,[64,64]))
-    if PlayButton:
-        print("User just cligged on the play button")
-        obj.gm = "transfer"
+    PlacedPartCount = 0
+    while c < len(obj.Vehicle):
+        if obj.Vehicle[c] != None:
+            PlacedPartCount += 1
+        c += 1
+    if PlacedPartCount >= 5:
+        #only vehicles with five or more parts are allowed
+        PlayButtonImg = obj.textures["PlayButton.png"]
+        PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[64,64]))
+        PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,50]), utils.Scale(obj,[64,64]))
+        if PlayButton:
+            print("User just cligged on the play button")
+            obj.gm = "transfer"
     #------------------------------Drawing the Vehicle--------------------------------------------------------
         
     c = 0

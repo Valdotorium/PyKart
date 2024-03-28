@@ -90,7 +90,7 @@ class Game():
         self.SoundPlayer = pyglet.media.Player()
         self.GroundPolygons = []
         self.restart = False
-        self.SelectedEnvironment = "Hillside"
+        self.SelectedEnvironment = "Moon"
         self.Cursor = interactions.Cursor(self)
         pygame.mouse.set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
     def run(self):
