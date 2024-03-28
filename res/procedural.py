@@ -44,8 +44,8 @@ def Noise(obj, scale, variability):
             steepness -= difficultyFactor + steepness * (difficultyFactor / 10)
             if steepness > 20:
                 steepness = 20
-            if steepness < 0.3:
-                steepness = 0.3
+            if steepness < 0.2:
+                steepness = 0.2
             #1 screen = around 40 m
             if x == 4000:
                print("steepness at 280000px:",steepness)
@@ -75,6 +75,7 @@ def WritePolygonPositions(obj):
     #making tuples (x,y) out of the y positions of the future polygon vertices stored in obj.Terrain
     x = round((obj.X_Position + obj.Environment["Terrain"]["Scale"] * 8) /obj.Environment["Terrain"]["Scale"])
     endx = round((obj.X_Position + obj.dimensions[0]*2.2)/ obj.Environment["Terrain"]["Scale"])
+    obj.EndItemOfRendering = endx
     PolygonPoints = []
     obj.StaticPolygon = []
     #Edge point

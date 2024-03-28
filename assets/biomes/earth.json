@@ -1,17 +1,23 @@
 {
     "Gravity": [0,340],
     "Name": "Hillside",
+    "Background": [120, 150, 170],
+    "Visuals":{
+        "GroundColors": [[120, 200, 110], [170,120, 40], [150, 110, 0], [120, 100, 0]],  
+        "LayerHeights": [25,30,35,35],
+        "HasSurfaceMarkings": false
+    },
     "Terrain":{
         "Scale": 70,
-        "Flatness": 5,
-        "Difficulty": 2.5,
+        "Flatness": 2.5,
+        "Difficulty": 4,
         "Layers": 3,
-        "StartVariability": 10,
+        "StartVariability": 30,
         "StartScale": 24,
-        "UpscaleFactor": 2.5
+        "UpscaleFactor": 1.2
     },
     "Physics":{
-        "Friction": 1,
+        "Friction": 0.75,
         "Bounce": 0.04,
         "Oxygen": true
     }

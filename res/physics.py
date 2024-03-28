@@ -81,18 +81,34 @@ def DrawBackground(obj):
     obj.TransferredPolygon[-2][1] = -obj.TransferredPolygon[-2][1]
     obj.TransferredPolygon[-1] = list(obj.TransferredPolygon[-1])
     obj.TransferredPolygon[-1][1] = -obj.TransferredPolygon[-1][1]
-    pygame.draw.polygon(obj.screen, (140,150,190),obj.TransferredPolygon)
+    pygame.draw.polygon(obj.screen, obj.Environment["Background"],obj.TransferredPolygon)
     obj.body_floor.shape.update
     #colors of the ground above the ground texture
-    Groundcolors = [(120, 200, 110), (170,120, 40), (150, 110, 0), (120, 100, 0)]
+    Groundcolors = obj.Environment["Visuals"]["GroundColors"]
     #drawing lines on the edges of the ground poly
     cc = 0
+    y = 0
     while cc < len(Groundcolors):
         CurrentColor = Groundcolors[cc]
         c = 0
         while c < len(obj.TransferredPolygon) - 3:
-            pygame.draw.line(obj.screen, CurrentColor, (obj.TransferredPolygon[c][0],obj.TransferredPolygon[c][1] +cc * 35), (obj.TransferredPolygon[c+1][0],obj.TransferredPolygon[c+1][1] +cc * 35), 36)
+            if  not obj.Environment["Visuals"]["HasSurfaceMarkings"]:
+                pygame.draw.line(obj.screen, CurrentColor, (obj.TransferredPolygon[c][0],obj.TransferredPolygon[c][1] +y), (obj.TransferredPolygon[c+1][0],obj.TransferredPolygon[c+1][1] +y), obj.Environment["Visuals"]["LayerHeights"][cc])
+            else:
+                #white striped surface
+                if obj.EndItemOfRendering % 2 == 0:
+                    if c % 2 == 0:
+                        CurrentColor = (220,220,220)
+                    else:
+                        CurrentColor = Groundcolors[cc]
+                else:
+                    if c % 2 == 1:
+                        CurrentColor = (220,220,220)
+                    else:
+                        CurrentColor = Groundcolors[cc]
+                pygame.draw.line(obj.screen, CurrentColor, (obj.TransferredPolygon[c][0],obj.TransferredPolygon[c][1] +y), (obj.TransferredPolygon[c+1][0],obj.TransferredPolygon[c+1][1] +y), obj.Environment["Visuals"]["LayerHeights"][cc])
             c += 1
+        y += obj.Environment["Visuals"]["LayerHeights"][cc]
         cc += 1
     #the ground texture
 """Drawing the Vehicle"""

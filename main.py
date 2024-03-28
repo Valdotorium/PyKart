@@ -91,6 +91,8 @@ class Game():
         self.GroundPolygons = []
         self.restart = False
         self.SelectedEnvironment = "Hillside"
+        self.Cursor = interactions.Cursor(self)
+        pygame.mouse.set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
     def run(self):
     
         #res.interactions.interactions.ButtonArea(Exo)
@@ -115,6 +117,9 @@ class Game():
             res.procedural.WritePolygonPositions(Exo)
         if self.gm == "biomeselection":
             pass
+        if pygame.mouse.get_pressed()[0] and self.Cursor.CurrentAnimation == None:
+            self.Cursor.Click()
+        self.Cursor.update(self)
     def reset(self):
             self.gm = "build"
             self.restart = False

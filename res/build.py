@@ -191,6 +191,7 @@ def run(obj):
         #rectangle for part rotation cuz it works somehow
         texture_rect = textur.get_rect(center = (mx,my))
         obj.screen.blit(textur, texture_rect)
+        obj.Cursor.SetArrows()
     #----------------------------- Getting Temporary Joint Positions of the SelectedPart (if it snapped, at a new position) --------------------------------------------------------
     JointPositionsOfSelectedPart = []
     #stores the joints positions relative to the center of the part
@@ -270,6 +271,7 @@ def run(obj):
                     obj.SnappedJointData = None
                     obj.selectedPart = ""
                     obj.RotationOfSelectedPart = 0
+                    obj.Cursor.SetDefault()
         elif not obj.dimensions[0] * 0.1 < mx < 0.9 * obj.dimensions[0] or not obj.dimensions[1] * 0.12 < my < 0.725 * obj.dimensions[1]:
             pass
         else:
@@ -297,6 +299,7 @@ def run(obj):
         #---------------------The Delete Part Button--------------------------------
         DeleteButton = interactions.ButtonArea(obj, obj.textures["DeleteButton.png"], utils.Scale(obj,(250,50)), utils.Scale(obj,[64,64]))
         if DeleteButton or pygame.key.get_pressed()[pygame.K_x]:
+            obj.Cursor.SetDelete()
             #removed parts are still list items, but they will be ignored
             obj.Vehicle[obj.SelectedBuiltPart] = None
             print(f"part {obj.SelectedBuiltPart} deleted")
@@ -309,6 +312,7 @@ def run(obj):
                         obj.VehicleJoints.pop(c)
                 c += 1
             obj.SelectedBuiltPart = None
+        
     #------------------------------The Move Part Button------------------------------------------
         MoveButton = interactions.ButtonArea(obj, obj.textures["MoveButton.png"], utils.Scale(obj,(450,50)), utils.Scale(obj,[64,64]))
         if MoveButton or pygame.key.get_pressed()[pygame.K_m]:
@@ -334,6 +338,7 @@ def run(obj):
             #setting mouse pos to pos of selected part
             pygame.mouse.set_pos(PartPosition)
             mx, my = pygame.mouse.get_pos()
+            obj.Cursor.SetArrows()
     #------------------------------Marking the selected part-------------------------------------
     if obj.SelectedBuiltPart != None:
         RectPos = utils.SubstractTuples(obj.Vehicle[obj.SelectedBuiltPart]["Pos"], obj.Vehicle[obj.SelectedBuiltPart]["Center"])

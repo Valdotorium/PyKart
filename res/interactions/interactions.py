@@ -48,3 +48,68 @@ class Errormessage():
         if self.ticks >= self.duration:
             obj.Errormessage = None
             del(self)
+class Cursor():
+    def __init__(self, obj):
+        self.font = obj.largeboldfont
+        self.animationticks = 0
+        self.mode = "Default"
+        self.CurrentAnimation = None
+        self.color = (120,120,120)
+        self.radius = 12
+        self.thickness = 2
+    def update(self, obj):
+        print(self.CurrentAnimation,self.animationticks)
+        self.position = pygame.mouse.get_pos()
+        if self.CurrentAnimation == "Delete":
+            if self.animationticks >= 11:
+                self.animationticks = 0
+                self.CurrentAnimation = None
+            if self.animationticks <= 8:
+                self.color = (120 + 8 * self.animationticks,120 + 8 * self.animationticks,120 + 8 * self.animationticks)
+                self.radius = 16
+                self.thickness = int(3+self.animationticks/2)
+                pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
+                startpos = self.position
+                pygame.draw.line(obj.screen, (180, 140, 0), (startpos[0] - self.animationticks * 2, startpos[1] - self.animationticks * 2), (startpos[0] + self.animationticks * 2, startpos[1] + self.animationticks * 2), 11)
+                pygame.draw.line(obj.screen, (180, 140, 0), (startpos[0] + self.animationticks * 2, startpos[1] - self.animationticks * 2), (startpos[0] - self.animationticks * 2, startpos[1] + self.animationticks * 2), 11)
+                print("fgf",self.CurrentAnimation,self.animationticks)
+        if self.CurrentAnimation == None:
+            
+            self.animationticks = 0
+            #cursor animations
+            self.mode = "Default"
+            self.color = (120,120,120)
+            self.radius = 16
+            self.thickness = 2
+            pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
+        if self.CurrentAnimation == "ArrowsOut":
+            if self.animationticks >= 10:
+                self.animationticks = 10
+            if self.animationticks <= 10:
+                self.color = (120 + 5 * self.animationticks,120 + 5 * self.animationticks,120 + 5 * self.animationticks)
+                self.radius = int(16-self.animationticks/3)
+                self.thickness = int(3+self.animationticks/3)
+                pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
+            
+        if self.CurrentAnimation == "Click":
+            if self.animationticks >= 10:
+                self.animationticks = 0
+                self.CurrentAnimation = None
+            if self.animationticks <= 8:
+                self.color = (120 + 8 * self.animationticks,120 + 8 * self.animationticks,120 + 8 * self.animationticks)
+                self.radius = 16
+                self.thickness = int(3+self.animationticks/2)
+                pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
+        self.animationticks += 1
+
+    def SetArrows(self):
+        self.CurrentAnimation = "ArrowsOut"
+    def SetDefault(self):
+        self.CurrentAnimation = None
+    def SetDelete(self):
+        self.CurrentAnimation = "Delete"
+    def Click(self):
+        if self.CurrentAnimation == None:
+            self.CurrentAnimation = "Click"
+
+

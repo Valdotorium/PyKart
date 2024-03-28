@@ -1,12 +1,18 @@
 {
     "Gravity": [0,340],
     "Name": "Highway",
+    "Background": [120, 150, 170],
+    "Visuals":{
+        "GroundColors": [[155, 150, 148], [143, 142, 140]],  
+        "LayerHeights": [40,40],
+        "HasSurfaceMarkings": true
+    },
     "Terrain":{
         "Scale": 70,
-        "Flatness": 7,
+        "Flatness": 3.5,
         "Difficulty": 2.8,
-        "Layers": 3,
-        "StartVariability": 2,
+        "Layers": 1,
+        "StartVariability": 8,
         "StartScale": 24,
         "UpscaleFactor": 2
     },

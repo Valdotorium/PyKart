@@ -1,14 +1,20 @@
 {
     "Gravity": [0,120],
     "Name": "Moon",
+    "Background": [150, 150, 150],
+    "Visuals":{
+        "GroundColors": [[200, 200, 200], [160,160, 170], [110, 110, 117], [120, 100, 0]],  
+        "LayerHeights": [20,30,34,36],
+        "HasSurfaceMarkings": false  
+    },
     "Terrain":{
         "Scale": 70,
-        "Flatness": 1,
+        "Flatness": 2.85,
         "Difficulty": 2.5,
-        "Layers": 2,
-        "StartVariability": 20,
+        "Layers": 3,
+        "StartVariability": 14,
         "StartScale": 24,
-        "UpscaleFactor": 3
+        "UpscaleFactor": 2
     },
     "Physics":{
         "Friction": 1,
