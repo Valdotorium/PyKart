@@ -117,7 +117,7 @@ class Game():
             res.procedural.generate_chunk(Exo)
             res.procedural.WritePolygonPositions(Exo)
         if self.gm == "biomeselection":
-            res.biomes.BiomeSelection(Exo)
+            self.BiomeSelector.update(self)
         if pygame.mouse.get_pressed()[0] and self.Cursor.CurrentAnimation == None:
             self.Cursor.Click()
         self.Cursor.update(self)
@@ -159,6 +159,7 @@ while running:
         Exo = Game()
 
         res.load.respond(Exo)
+        Exo.BiomeSelector = res.biomes.BiomeSelection(Exo)
         Exo.screen.fill((100,100,100))
         pygame.display.flip()
         time.sleep(1)
