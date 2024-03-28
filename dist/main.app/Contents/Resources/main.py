@@ -2,7 +2,7 @@ import pygame, os, sys
 import time
 import pymunk,pymunk.pygame_util
 import res.load
-import res.terrain
+import res.biomes
 import res.physics
 import res.build  
 import res.interactions

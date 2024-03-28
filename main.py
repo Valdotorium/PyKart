@@ -2,7 +2,7 @@ import pygame, os, sys
 import time
 import pymunk,pymunk.pygame_util
 import res.load
-import res.terrain
+import res.biomes
 import res.physics
 import res.build  
 import res.interactions
@@ -87,6 +87,7 @@ class Game():
         self.pi =3.1415926535897932384626433832795
         self.Throttle = 0
         self.VehicleSpeed = 0
+        self.money = 0
         self.SoundPlayer = pyglet.media.Player()
         self.GroundPolygons = []
         self.restart = False
@@ -116,7 +117,7 @@ class Game():
             res.procedural.generate_chunk(Exo)
             res.procedural.WritePolygonPositions(Exo)
         if self.gm == "biomeselection":
-            pass
+            res.biomes.BiomeSelection(Exo)
         if pygame.mouse.get_pressed()[0] and self.Cursor.CurrentAnimation == None:
             self.Cursor.Click()
         self.Cursor.update(self)

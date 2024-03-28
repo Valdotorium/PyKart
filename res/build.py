@@ -75,7 +75,7 @@ def run(obj):
         PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,50]), utils.Scale(obj,[64,64]))
         if PlayButton:
             print("User just cligged on the play button")
-            obj.gm = "transfer"
+            obj.gm = "biomeselection"
     #------------------------------Drawing the Vehicle--------------------------------------------------------
         
     c = 0

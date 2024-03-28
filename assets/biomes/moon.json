@@ -2,6 +2,7 @@
     "Gravity": [0,120],
     "Name": "Moon",
     "Background": [150, 150, 150],
+    "Preview": "preview_moon.png",
     "Visuals":{
         "GroundColors": [[200, 200, 200], [160,160, 170], [110, 110, 117], [110, 107, 108]],  
         "LayerHeights": [20,30,34,36],
