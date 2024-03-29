@@ -17,7 +17,8 @@ class BiomeSelection():
         CurrentItem = 0
         CurrentBiome = list(self.Biomes)[CurrentItem]
         CurrentBiome = self.Biomes[CurrentBiome]
-        XPos = obj.dimensions[0] / 2 - 400
+        startX = obj.dimensions[0] / 2 - 500
+        XPos = startX
         c = 0
         while c < len(self.Biomes):
             mx, my = pygame.mouse.get_pos()
@@ -41,7 +42,7 @@ class BiomeSelection():
             #draw a white rect around the biome image with width 5
             pygame.draw.rect(obj.screen, (255,255,255), (XPos, obj.dimensions[1] / 2 - 250,500,500), 6,6)
 
-            self.CurrentHoveredBiome = round((mx  - (obj.dimensions[0] / 2 - 400)- 90 + self.ScrollX) / 180)
+            self.CurrentHoveredBiome = round((mx  - (startX)- 90 + self.ScrollX) / 180)
             if self.CurrentHoveredBiome < 0:
                 self.CurrentHoveredBiome = 0
             if self.CurrentHoveredBiome > len(self.Biomes) - 1:

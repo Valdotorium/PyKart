@@ -20,7 +20,7 @@
         "UpscaleFactor": 1.2
     },
     "Physics":{
-        "Friction": 0.75,
+        "Friction": 0.8,
         "Bounce": 0.04,
         "Oxygen": true
     }
