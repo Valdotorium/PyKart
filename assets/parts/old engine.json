@@ -2,7 +2,7 @@
     "Name": "Old Engine",
     "Index": 4,
     "Type": "Engine",
-    "Cost": 10000,
+    "Cost": 8000,
     "Stex": "old_engine.png",
     "Center": [32,32],
     "Properties": {

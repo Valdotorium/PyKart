@@ -44,10 +44,10 @@ class Game():
         self.largefont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
         self.largeboldfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator-Bold.ttf"
         #initializing the font
-        self.font = pygame.font.Font(self.font, 16)
-        self.boldfont = pygame.font.Font(self.boldfont, 16)
+        self.font = pygame.font.Font(self.font, 22)
+        self.boldfont = pygame.font.Font(self.boldfont, 24)
         self.largefont = pygame.font.Font(self.largefont, 32)
-        self.largeboldfont = pygame.font.Font(self.largeboldfont, 32)
+        self.largeboldfont = pygame.font.Font(self.largeboldfont, 36)
         #dev options
         self.CFG_extensive_logs = True
         self.CFG_visuals = True
@@ -87,7 +87,7 @@ class Game():
         self.pi =3.1415926535897932384626433832795
         self.Throttle = 0
         self.VehicleSpeed = 0
-        self.money = 0
+        self.money = 12000
         self.SoundPlayer = pyglet.media.Player()
         self.GroundPolygons = []
         self.restart = False
@@ -142,7 +142,7 @@ def resetFrames(obj, frame):
 
 clock = pygame.time.Clock()
 while running:
-    if frame > 0:
+    if frame > 0:        
         running = Exo.running
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

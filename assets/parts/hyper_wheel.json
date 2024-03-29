@@ -2,26 +2,26 @@
     "Name": "Hyper Wheel",
     "Index": 87659,
     "Type": "Wheel",
-    "Cost": 16999,
+    "Cost": 30000,
     "Stex": "hyper_wheel.png",
     "Center": [32,32],
     "Properties": {
         "Rot": 0,
         "FuelUse": 0.6,
         "MaxImpulse": 1080,
-        "Force": 4,
-        "Friction": 1.5,
+        "Force": 3.25,
+        "Friction": 1.45,
         "Weight": 28,
         "Bounciness": 0.03,
         "JoiningBehavior": "Accept"
     },
     "JointData": {
-        "BreakPoint": 42000,
+        "BreakPoint": 36000,
         "Type": "Spring",
         "Data":{
             "Distance": 66,
-            "Damping": 1.6,
-            "Stiffness": 9000
+            "Damping": 1.5,
+            "Stiffness": 15000
         }
     },
     "Build":{

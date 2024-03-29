@@ -3,7 +3,7 @@
     "Name": "Moon",
     "Background": [150, 150, 150],
     "Preview": "preview_moon.png",
-    "MoneyMultiplicator": 0.4,
+    "MoneyMultiplicator": 0.5,
     "Description": "Less Gravity and Greyscale",
     "Visuals":{
         "GroundColors": [[200, 200, 200], [160,160, 170], [110, 110, 117], [110, 107, 108]],  

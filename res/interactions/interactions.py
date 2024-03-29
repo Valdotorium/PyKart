@@ -100,6 +100,16 @@ class Cursor():
                 self.radius = 16
                 self.thickness = int(3+self.animationticks/2)
                 pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
+        
+        if self.CurrentAnimation == "Buy":
+            if self.animationticks >= 10:
+                self.animationticks = 0
+                self.CurrentAnimation = None
+            if self.animationticks <= 10:
+                self.color = (100 - 3 * self.animationticks,120 + 6 * self.animationticks,100 - 3 * self.animationticks)
+                self.radius = 16 + self.animationticks / 2 + (20 - self.animationticks) / 3
+                self.thickness = int(3+self.animationticks / 1.5)
+                pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
         self.animationticks += 1
 
     def SetArrows(self):
@@ -111,5 +121,7 @@ class Cursor():
     def Click(self):
         if self.CurrentAnimation == None:
             self.CurrentAnimation = "Click"
+    def SetBuy(self):
+        self.CurrentAnimation = "Buy"
 
 

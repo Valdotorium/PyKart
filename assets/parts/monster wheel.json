@@ -2,7 +2,7 @@
     "Name": "Monster Wheel",
     "Index": 6,
     "Type": "Wheel",
-    "Cost": 8500,
+    "Cost":16000,
     "Stex": "monster_wheelNew.png",
     "Center": [64,64],
     "Properties": {

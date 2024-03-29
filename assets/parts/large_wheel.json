@@ -2,7 +2,7 @@
     "Name": "Large Wheel",
     "Index": 1,
     "Type": "Wheel",
-    "Cost": 2500,
+    "Cost": 5000,
     "Stex": "large_wheel.png",
     "Center": [48,48],
     "Properties": {

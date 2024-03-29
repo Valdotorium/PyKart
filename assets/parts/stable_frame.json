@@ -2,7 +2,7 @@
     "Name": "Stable Metal Frame",
     "Index": 2,
     "Type": "Stability",
-    "Cost": 500,
+    "Cost": 1000,
     "Center": [32,32],
     "Stex": "stable_frame.png",
     "Properties": {

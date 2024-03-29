@@ -267,6 +267,7 @@ def run(obj):
                         "ActiveSounds": obj.partdict[obj.selectedPart]["Sounds"]["Active"],
                         "ConstraintSounds": obj.partdict[obj.selectedPart]["Sounds"]["Constraints"]
                     }
+                    obj.partdict[obj.selectedPart]["Count"] -= 1
                     #if a joint need to be formed, its data will be created here
                     if obj.SnappedJointData != None:
                         PlacedPart["JoinedWith"] = obj.SnappedJointData["JoinedParts"]
@@ -308,6 +309,7 @@ def run(obj):
         DeleteButton = interactions.ButtonArea(obj, obj.textures["DeleteButton.png"], utils.Scale(obj,(250,50)), utils.Scale(obj,[64,64]))
         if DeleteButton or pygame.key.get_pressed()[pygame.K_x]:
             obj.Cursor.SetDelete()
+            obj.partdict[obj.Vehicle[obj.SelectedBuiltPart]["name"]]["Count"] += 1
             #removed parts are still list items, but they will be ignored
             obj.Vehicle[obj.SelectedBuiltPart] = None
             print(f"part {obj.SelectedBuiltPart} deleted")
@@ -324,6 +326,7 @@ def run(obj):
     #------------------------------The Move Part Button------------------------------------------
         MoveButton = interactions.ButtonArea(obj, obj.textures["MoveButton.png"], utils.Scale(obj,(450,50)), utils.Scale(obj,[64,64]))
         if MoveButton or pygame.key.get_pressed()[pygame.K_m]:
+            obj.partdict[obj.Vehicle[obj.SelectedBuiltPart]["name"]]["Count"] += 1
             #esentially deleting the part
             SelectedPart = obj.SelectedBuiltPart
             obj.selectedPart = obj.Vehicle[SelectedPart]["name"]

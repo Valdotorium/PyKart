@@ -2,19 +2,19 @@
     "Name": "Hyper Engine",
     "Index": 2,
     "Type": "Engine",
-    "Cost": 30000,
+    "Cost": 40000,
     "Center": [32,64],
     "Stex": "hyper_engine.png",
     "Properties": {
         "Rot": 0,
         "Friction": 0.95,
-        "Weight": 120,
+        "Weight": 134,
         "Bounciness": 0.015,
         "JoiningBehavior": "Provide",
-        "Power": 1800
+        "Power": 2000
     },
     "JointData": {
-        "BreakPoint": 100000,
+        "BreakPoint": 104000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{

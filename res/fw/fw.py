@@ -31,6 +31,8 @@ def clear(screen):
 def DecodePart(part, obj):
     #loading parts into the game
     obj.partdict[part["Name"]] = part
+    #count stores how many of these parts have been purchased
+    obj.partdict[part["Name"]]["Count"] = 0
     obj.shopdict[part["Name"]] = {"Type" : part["Type"], "Cost":part["Cost"], "Textures":part["Textures"]}
 def Scale(obj,element):
     #scaling things, fitting screen sizes, necessary for "dynamic" UI
@@ -90,6 +92,15 @@ def RotateVector(vector, angle):
     return nx, ny
 def SubstractTuples(tuple1, tuple2):
     return tuple1[0] - tuple2[0], tuple1[1] - tuple2[1]
+def DisplayMoney(obj):
+        #displaying the money that is in obj
+        text = obj.largefont.render(str(obj.money), True, (20,20,20))
+        pos = (obj.dimensions[0] * 0.09 - text.get_width() / 2, obj.dimensions[1] * 0.14)
+        obj.screen.blit(text, pos)
+        #drawing the hand
+        Image = obj.textures["coin.png"]
+        Image = pygame.transform.scale(Image, (50 ,50))
+        obj.screen.blit(Image, (obj.dimensions[0] * 0.05 - text.get_width() / 2-16, obj.dimensions[1] * 0.15 - 16))
 def CreateGroundPolygon(obj, Env):
     #TODO #10 #completely rewrite this function
     c = 0
@@ -242,16 +253,49 @@ class BuildUI():
             if part in self.partdict:
                 part = self.partdict[part]
                 Image = self.textures[part["Textures"][0]["Image"]]
+                Cost = part["Cost"]
+                #draw low alpha version if part is not available
                 Image = pygame.transform.scale(Image, part["Textures"][0]["Size"])
+
                 obj.screen.blit(Image, ( X + self.ScrollX, obj.dimensions[1] * 0.85))
                 #making the part clickable
                 IsClicked = self.ClickArea((X + self.ScrollX, obj.dimensions[1] * 0.85), part["Textures"][0]["Size"])
-                X += part["Textures"][0]["Size"][0] + gap
-                if IsClicked and self.ClickCooldown < 0:
+                X += part["Textures"][0]["Size"][0]  / 2 - 16
+                #only select if part is available
+                if IsClicked and self.ClickCooldown < 0 and obj.partdict[part["Name"]]["Count"] > 0: 
                     print("Clicked")
                     self.ClickCooldown = 20
                     obj.selectedPart = part["Name"]
                     obj.UserHasSelectedPart = True
+                #buy part if money is enough
+                if IsClicked and self.ClickCooldown < 0 and obj.money >= Cost:
+                    print("Clicked")
+                    self.ClickCooldown = 20
+                    obj.money -= Cost
+                    obj.partdict[part["Name"]]["Count"] += 1
+                    obj.Cursor.SetBuy()
+                #display the cost above the image
+                if part["Cost"] > obj.money:
+                    textcolor = (130, 50, 20)
+                else:
+                    textcolor = (20, 20, 20)
+                text = self.font.render(str(Cost), True, textcolor)
+                pos = (X + self.ScrollX - text.get_width() / 2 + 30, obj.dimensions[1] * 0.8)
+                obj.screen.blit(text, pos)
+
+                CoinImage = obj.textures["coin.png"]
+                CoinImage = pygame.transform.scale(CoinImage, (25,25))
+                obj.screen.blit(CoinImage, (X + self.ScrollX - text.get_width() / 2, obj.dimensions[1] * 0.8))
+                DisplayMoney(obj)
+                #display the available part count at the top right of the part img
+                if part["Count"] == 0:
+                    textcolor = (130, 50, 20)
+                else:
+                    textcolor = (20, 20, 20)
+                text = self.font.render("x"+str(part["Count"]), True, textcolor)
+                pos = (X + 10 + self.ScrollX, obj.dimensions[1] * 0.825)
+                obj.screen.blit(text, pos)
+                X += part["Textures"][0]["Size"][0]  / 2 + gap + 16
 
 
 class Display:

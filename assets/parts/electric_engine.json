@@ -2,7 +2,7 @@
     "Name": "Electric Engine",
     "Index": 4,
     "Type": "Engine",
-    "Cost": 24000,
+    "Cost": 30000,
     "Stex": "electronic_engine.png",
     "Center": [64,32],
     "Properties": {

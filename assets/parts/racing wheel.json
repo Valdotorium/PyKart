@@ -2,7 +2,7 @@
     "Name": "Racing Wheel",
     "Index": 87659,
     "Type": "Wheel",
-    "Cost": 16999,
+    "Cost": 15000,
     "Stex": "racing_wheelNew.png",
     "Center": [32,32],
     "Properties": {

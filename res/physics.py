@@ -60,9 +60,20 @@ def LimitAngularVelocity(body):
     else:
         body.angular_velocity = body.angular_velocity * 0.9956
 def DisplayDistance(obj):
-    x = obj.X_Position + 30
+    x = obj.X_Position + 10
+    obj.MetersTravelled = round(x/32)
     text = str(round(x / 32)) + " M"
-    obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (140,obj.dimensions[1] -80))
+    obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (120,obj.dimensions[1] -80))
+
+def DisplayEarnedMoney(obj):
+    mult = round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled)
+    text = "+" + str(mult)
+    #display coin image in front of text
+
+    CoinImage = obj.textures["coin.png"]
+    CoinImage = pygame.transform.scale(CoinImage, (30,30))
+    obj.screen.blit(CoinImage, (990,obj.dimensions[1] -80))
+    obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (1018,obj.dimensions[1] -80))
 #physics
 def DrawBackground(obj):
     c = 0
@@ -148,10 +159,13 @@ def Draw(obj):
     obj.RPMDisplay.update(obj,obj.rpm, 0.045)
     #displaying distance
     DisplayDistance(obj)
+    DisplayEarnedMoney(obj)
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
     if -8 < obj.VehicleSpeed < 8:
         ReloadButton = interactions.ButtonArea(obj, obj.textures["ReloadButton.png"], utils.Scale(obj,(150,50)), utils.Scale(obj,[64,64]))
         if ReloadButton:
+            #add the meters travelled as money
+            obj.money += obj.MetersTravelled
             obj.restart = True
 """Drawing the pymunk physics simulation"""
 def PhysDraw(obj):
@@ -233,6 +247,7 @@ def simulate(obj, fps):
     Draw(obj)
     #PhysDraw(obj)
     CheckJoints(obj)
+    utils.DisplayMoney(obj)
 
 def OldRefreshPolygon(obj):
     print(f"initializing ground poly with vertices: ", obj.GroundPolygon)
