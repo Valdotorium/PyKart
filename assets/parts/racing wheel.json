@@ -50,6 +50,7 @@
     "Sounds": {
         "Crash": [["tyre_1.wav",1], ["tyre_2.wav",1], ["tyre_3.wav",1]],
         "Active": [[]],
+        "Constraints":[[]],
         "Idle":[[]]
     }
 }

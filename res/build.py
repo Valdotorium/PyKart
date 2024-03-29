@@ -264,7 +264,8 @@ def run(obj):
                         "Properties": obj.partdict[obj.selectedPart]["Properties"],
                         "CrashSounds": obj.partdict[obj.selectedPart]["Sounds"]["Crash"],
                         "IdleSounds": obj.partdict[obj.selectedPart]["Sounds"]["Idle"],
-                        "ActiveSounds": obj.partdict[obj.selectedPart]["Sounds"]["Active"]
+                        "ActiveSounds": obj.partdict[obj.selectedPart]["Sounds"]["Active"],
+                        "ConstraintSounds": obj.partdict[obj.selectedPart]["Sounds"]["Constraints"]
                     }
                     #if a joint need to be formed, its data will be created here
                     if obj.SnappedJointData != None:

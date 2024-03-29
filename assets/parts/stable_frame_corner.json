@@ -52,6 +52,7 @@
     "Sounds": {
         "Crash": [["suspension_2.wav",0.5], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
         "Active": [[]],
+        "Constraints":[[]],
         "Idle":[[]]
     }
 

@@ -1,20 +1,20 @@
 {
-    "Name": "Container",
+    "Name": "Half Empty Frame",
     "Index": 2,
-    "Type": "Freight",
-    "Cost": 1200,
-    "Center": [64,64],
-    "Stex": "Container.png",
+    "Type": "Stability",
+    "Cost": 180,
+    "Center": [32,16],
+    "Stex": "empty_half_frame.png",
     "Properties": {
         "Rot": 0,
-        "Friction": 0.96,
-        "Weight": 400,
-        "Bounciness": 0.01,
+        "Friction": 0.92,
+        "Weight": 10,
+        "Bounciness": 0.025,
         "JoiningBehavior": "Provide"
 
     },
     "JointData": {
-        "BreakPoint": 70000,
+        "BreakPoint": 18000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{
@@ -23,35 +23,35 @@
     "Joints":[
         {
             "Type": "Provide",
-            "Pos": [64,0]
+            "Pos": [32,0]
         },
         {
             "Type": "Provide",
-            "Pos": [128,64]
+            "Pos": [64,16]
         },
         {
             "Type": "Provide",
-            "Pos": [64, 128]
+            "Pos": [32, 32]
         },
         {
             "Type": "Provide",
-            "Pos": [0, 64]
+            "Pos": [0, 16]
         }
     ],
     "Hitbox":{
             "Pos": [0,0],
             "Type": "Rect",
-            "Size":[128,128],
-            "Anchor":[64,64],
+            "Size":[64,32],
+            "Anchor":[32,16],
             "CollisionType": "Full"
         },
     "Textures": [{
-        "Image": "Container.png",
+        "Image": "empty_half_frame.png",
         "Pos": [0,0],
-        "Size": [128,128]
+        "Size": [64,32]
     }],
     "Sounds": {
-        "Crash": [["metal_crash_1.wav",0.6]],
+        "Crash": [["suspension_2.wav",0.5], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
         "Active": [[]],
         "Constraints":[[]],
         "Idle":[[]]
