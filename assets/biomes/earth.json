@@ -3,6 +3,8 @@
     "Name": "Hillside",
     "Background": [120, 150, 170],
     "Preview": "preview_hillside.png",
+    "MoneyMultiplicator": 1,
+    "Description": "The Classic",
     "Visuals":{
         "GroundColors": [[120, 200, 110], [170,120, 40], [150, 110, 0], [120, 100, 0]],  
         "LayerHeights": [25,30,35,35],

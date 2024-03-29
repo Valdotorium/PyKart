@@ -3,6 +3,8 @@
     "Name": "Highway",
     "Background": [120, 150, 170],
     "Preview": "preview_highway.png",
+    "MoneyMultiplicator": 0.5,
+    "Description": "A smooth ride",
     "Visuals":{
         "GroundColors": [[155, 150, 148], [143, 142, 140]],  
         "LayerHeights": [40,40],

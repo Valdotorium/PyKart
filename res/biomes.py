@@ -55,7 +55,11 @@ class BiomeSelection():
                 print(self.TicksInCurrentSelectedBiome)
                 obj.screen.blit(BiomeImage, (XPos, obj.dimensions[1] / 2 - 250))
                 #draw a white rect around the biome image with width 5
-                pygame.draw.rect(obj.screen, (255,255,255), (XPos, obj.dimensions[1] / 2 - 250,500,500), 6,6)
+
+                if self.TicksInCurrentSelectedBiome < 36:
+                    pygame.draw.rect(obj.screen, (255,255,255), (XPos, obj.dimensions[1] / 2 - 250,500,500), 4+int(self.TicksInCurrentSelectedBiome / 3),4+int(self.TicksInCurrentSelectedBiome / 3))
+                else:
+                    pygame.draw.rect(obj.screen, (255,255,255), (XPos, obj.dimensions[1] / 2 - 250,500,500), 16,16)
                 if 100 < self.TicksInCurrentSelectedBiome < 355:
                     PlayButtonImg.set_alpha(self.TicksInCurrentSelectedBiome - 100)
                     print("DDDD")
@@ -90,6 +94,18 @@ class BiomeSelection():
         text = obj.largeboldfont.render(BiomeName, True, (20,20,20))
         #display it at the top centered
         obj.screen.blit(text, (obj.dimensions[0] / 2 - text.get_width()/ 2, 100))
+
+        text  = "Money Multiplicator: "+ str(self.Biomes[BiomeName]["MoneyMultiplicator"])
+        text = obj.largefont.render(text, True, (20,20,20))
+        #display at the bottom, centered
+        obj.screen.blit(text, (obj.dimensions[0] / 2 - text.get_width()/ 2, obj.dimensions[1] - 130))
+
+        text = self.Biomes[BiomeName]["Description"]
+        text = obj.largefont.render(text, True, (20,20,20))
+
+        #display at the bottom, centered
+        obj.screen.blit(text, (obj.dimensions[0] / 2 - text.get_width()/ 2, obj.dimensions[1] - 90))
+
         
 
 

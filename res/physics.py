@@ -241,6 +241,7 @@ def OldRefreshPolygon(obj):
 def setup(obj):
     obj.GameZoom = 1
     obj.Environment = obj.biomes[obj.SelectedEnvironment]
+    print("started with env gravity:", obj.Environment["Gravity"])
     Env = obj.Environment
     obj.space = pymunk.Space()#creating the space
     obj.space.gravity = Env["Gravity"]

@@ -112,6 +112,7 @@ class Game():
             res.controls.BuildControls(Exo)
         if self.gm == "transfer":
             res.transfer.run(Exo)
+            res.physics.setup(Exo)
             res.physics.TransferStage(Exo)
             res.procedural.setup(Exo)
             res.procedural.generate_chunk(Exo)
@@ -167,7 +168,7 @@ while running:
         #res.terrain.generate(Exo)
         #res.terrain.place(Exo)
         res.build.setup(Exo)
-        res.physics.setup(Exo)
+        #res.physics.setup(Exo)
         
         Exo.draw_options = pymunk.pygame_util.DrawOptions(Exo.screen)
     frame += 1
