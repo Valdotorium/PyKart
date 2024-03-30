@@ -2,21 +2,21 @@
     "Name": "Offroad Monster Wheel",
     "Index": 6,
     "Type": "Wheel",
-    "Cost": 15000,
+    "Cost": 14000,
     "Stex": "Offroad_Wheel.png",
     "Center": [48,48],
     "Properties": {
         "Rot": 0,
         "FuelUse": 0.2,
         "MaxImpulse": 1080,
-        "Force": 2.25,
+        "Force": 3.3,
         "Friction": 2.25,
         "Weight": 42,
         "Bounciness": 0.2,
         "JoiningBehavior": "Accept"
     },
     "JointData": {
-        "BreakPoint": 60000,
+        "BreakPoint": 48000,
         "Type": "Spring",
         "Data":{
             "Distance": 92,

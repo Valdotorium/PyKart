@@ -1,8 +1,8 @@
 {
-    "Name": "Weight Block",
+    "Name": "Packet",
     "Index": 4,
     "Type": "Freight",
-    "Cost": 4000,
+    "Cost": 2000,
     "Stex": "packet.png",
     "Center": [32,32],
     "Properties": {
@@ -14,7 +14,7 @@
 
     },
     "JointData": {
-        "BreakPoint": 10000,
+        "BreakPoint": 7000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{

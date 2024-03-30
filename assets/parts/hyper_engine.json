@@ -2,7 +2,7 @@
     "Name": "Hyper Engine",
     "Index": 2,
     "Type": "Engine",
-    "Cost": 40000,
+    "Cost": 35000,
     "Center": [32,64],
     "Stex": "hyper_engine.png",
     "Properties": {
@@ -14,7 +14,7 @@
         "Power": 2000
     },
     "JointData": {
-        "BreakPoint": 104000,
+        "BreakPoint": 86000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{
@@ -48,7 +48,7 @@
     }],
     "Sounds": {
         "Crash": [["suspension_2.wav",0.5], ["metal_crash_1.wav",0.5], ["metal_crash_4.wav",0.5]],
-        "Active": [[]],
+        "Active": [["hyper_engine.wav", 0.2]],
         "Constraints":[[]],
         "Idle":[[]]
     }

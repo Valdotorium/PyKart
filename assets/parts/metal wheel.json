@@ -2,21 +2,21 @@
     "Name": "Metal Wheel",
     "Index": 87659,
     "Type": "Wheel",
-    "Cost": 3500,
+    "Cost": 3200,
     "Stex": "metal_ball.png",
     "Center": [32,32],
     "Properties": {
         "Rot": 0,
         "FuelUse": 0.6,
         "MaxImpulse": 1080,
-        "Force": 1.6,
+        "Force": 2,
         "Friction": 0.5,
         "Weight": 60,
         "Bounciness": 0,
         "JoiningBehavior": "Accept"
     },
     "JointData": {
-        "BreakPoint": 50000,
+        "BreakPoint": 40000,
         "Type": "Spring",
         "Data":{
             "Distance": 64,

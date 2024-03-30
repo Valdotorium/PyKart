@@ -2,21 +2,21 @@
     "Name": "Racing Wheel",
     "Index": 87659,
     "Type": "Wheel",
-    "Cost": 15000,
+    "Cost": 12000,
     "Stex": "racing_wheelNew.png",
     "Center": [32,32],
     "Properties": {
         "Rot": 0,
         "FuelUse": 0.6,
         "MaxImpulse": 1080,
-        "Force": 2,
+        "Force": 3,
         "Friction": 1.4,
         "Weight": 24,
         "Bounciness": 0.05,
         "JoiningBehavior": "Accept"
     },
     "JointData": {
-        "BreakPoint": 28000,
+        "BreakPoint": 24000,
         "Type": "Spring",
         "Data":{
             "Distance": 68,

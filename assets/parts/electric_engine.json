@@ -2,7 +2,7 @@
     "Name": "Electric Engine",
     "Index": 4,
     "Type": "Engine",
-    "Cost": 30000,
+    "Cost": 25000,
     "Stex": "electronic_engine.png",
     "Center": [64,32],
     "Properties": {
@@ -53,7 +53,7 @@
     }],
     "Sounds": {
         "Crash": [["tyre_2.wav",1], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
-        "Active": [[]],
+        "Active": [["electric_engine.wav", 0.18]],
         "Constraints":[[]],
         "Idle":[[]]
     }

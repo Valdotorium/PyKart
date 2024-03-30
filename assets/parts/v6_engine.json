@@ -2,7 +2,7 @@
     "Name": "V6 Engine",
     "Index": 4,
     "Type": "Engine",
-    "Cost": 15000,
+    "Cost": 11800,
     "Stex": "V6_engine.png",
     "Center": [32,32],
     "Properties": {
@@ -15,7 +15,7 @@
 
     },
     "JointData": {
-        "BreakPoint": 65000,
+        "BreakPoint": 45000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{
@@ -53,7 +53,7 @@
     }],
     "Sounds": {
         "Crash": [["tyre_2.wav",1], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
-        "Active": [[]],
+        "Active": [["v6_engine.wav", 0.2]],
         "Constraints":[[]],
         "Idle":[[]]
     }

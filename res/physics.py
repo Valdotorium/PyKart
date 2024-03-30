@@ -42,9 +42,9 @@ def ApplyThrottle(obj, WheelPart, Force):
         obj.Throttle = obj.Throttle * 0.96
     #apply forces to pymunk bodies
     c = WheelPart
-    force = [obj.Throttle * Force,0]
+    force = obj.Throttle * Force
     point = (0, -obj.NewVehicle[c]["Center"][1])
-    obj.PymunkBodies[c].apply_force_at_local_point(force, point)
+    obj.PymunkBodies[c].torque = 70 * force
 """Making wheels connected to motors spin"""
 def Engine(obj,EnginePart, WheelPart):
     #TODO: for more features: store the obj.NewVehicle as a list of Part objects (new class),
@@ -55,10 +55,10 @@ def Engine(obj,EnginePart, WheelPart):
         ApplyThrottle(obj, IndexOfWheelBody, EnginePower)
 #preventing things from spinning too fast
 def LimitAngularVelocity(body):
-    if -200 < body.angular_velocity < 200:
-        body.angular_velocity = body.angular_velocity * 0.9984
+    if -160 < body.angular_velocity < 160:
+        body.angular_velocity = body.angular_velocity * 0.9978
     else:
-        body.angular_velocity = body.angular_velocity * 0.9956
+        body.angular_velocity = body.angular_velocity * 0.9942
 def DisplayDistance(obj):
     x = obj.X_Position + 10
     obj.MetersTravelled = round(x/32)
@@ -68,6 +68,7 @@ def DisplayDistance(obj):
 def DisplayEarnedMoney(obj):
     mult = round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled)
     text = "+" + str(mult)
+    obj.DistanceMoneyForRide = round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled)
     #display coin image in front of text
 
     CoinImage = obj.textures["coin.png"]
@@ -165,7 +166,7 @@ def Draw(obj):
         ReloadButton = interactions.ButtonArea(obj, obj.textures["ReloadButton.png"], utils.Scale(obj,(150,50)), utils.Scale(obj,[64,64]))
         if ReloadButton:
             #add the meters travelled as money
-            obj.money += obj.MetersTravelled
+            obj.money += obj.DistanceMoneyForRide
             obj.restart = True
 """Drawing the pymunk physics simulation"""
 def PhysDraw(obj):
@@ -191,49 +192,11 @@ def CheckJoints(obj):
                 #mechanics.Engine(obj,utils.JointHasType(obj, obj.VehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.VehicleJoints[c], "Wheel"))
             if JointImpulse > ImpulseLimit:
                 print("JointImpulse of joint ", c, "(", JointImpulse, ") was too high, it broke.")
-                if not obj.SoundInFrame:
-                    VolumeFactor = JointImpulse / ImpulseLimit
-                    Sounds = obj.VehicleJoints[c]["SoundData"]
-                    #selecting a random sounds from a list of sounds
-                    r = random.randint(0, len(Sounds) -1)
-                    Sound = Sounds[r][0]
-                    #get the sound object
-                    Sound = obj.sounds[Sound]
-                    #create a player for it
-                    obj.SoundInFrame = True
-                    Player = Sound.play()
-                    #setting the players volume
-                    if Sounds[r][1]*VolumeFactor > 0.99:
-                        Player.volume = 1
-                    else:
-                        Player.volume = Sounds[r][1] * VolumeFactor
-                    #playing the sound object
-                    print("latest played sound:", Sounds[r][0])
-                    Player.play()
                 obj.space.remove(obj.PymunkJoints[c])
                 obj.NewVehicleJoints[c] = None
                 obj.VehicleJoints[c] = None
                 obj.PymunkJoints[c] = None
-            elif JointImpulse > ImpulseLimit/3.7:
-                if not obj.SoundInFrame:
-                    VolumeFactor = JointImpulse / ImpulseLimit
-                    Sounds = obj.VehicleJoints[c]["SoundData"]
-                    #selecting a random sounds from a list of sounds
-                    r = random.randint(0, len(Sounds) -1)
-                    Sound = Sounds[r][0]
-                    #get the sound object
-                    Sound = obj.sounds[Sound]
-                    #create a player for it
-                    obj.SoundInFrame = True
-                    Player = Sound.play()
-                    #setting the players volume
-                    if Sounds[r][1]*VolumeFactor > 0.99:
-                        Player.volume = 1
-                    else:
-                        Player.volume = Sounds[r][1] * VolumeFactor
-                    #playing the sound object
-                    print("latest played sound:", Sounds[r][0])
-                    Player.play()
+
         c += 1
 """The pymunk physics simulation"""
 def simulate(obj, fps):

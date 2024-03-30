@@ -2,7 +2,7 @@
     "Name": "Old Engine",
     "Index": 4,
     "Type": "Engine",
-    "Cost": 8000,
+    "Cost": 6500,
     "Stex": "old_engine.png",
     "Center": [32,32],
     "Properties": {
@@ -15,7 +15,7 @@
 
     },
     "JointData": {
-        "BreakPoint": 60000,
+        "BreakPoint": 48000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{
@@ -53,7 +53,7 @@
     }],
     "Sounds": {
         "Crash": [["tyre_2.wav",1], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
-        "Active": [[]],
+        "Active": [["old_engine.wav",0.2]],
         "Constraints":[[]],
         "Idle":[[]]
     }

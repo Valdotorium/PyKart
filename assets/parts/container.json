@@ -2,7 +2,7 @@
     "Name": "Container",
     "Index": 2,
     "Type": "Freight",
-    "Cost": 1200,
+    "Cost": 5000,
     "Center": [64,64],
     "Stex": "Container.png",
     "Properties": {
@@ -14,7 +14,7 @@
 
     },
     "JointData": {
-        "BreakPoint": 70000,
+        "BreakPoint": 50000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{

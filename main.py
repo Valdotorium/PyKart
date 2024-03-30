@@ -10,6 +10,7 @@ import res.transfer
 import res.procedural
 import res.controls
 import res.mechanics
+import res.sounds
 from copy import deepcopy as deepcopy
 import pyglet.media
 import res.interactions.interactions as interactions
@@ -58,6 +59,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200, 800)
         self.KeyCooldown = 0
+        self.CFG_New_Game = True
         
 
         #options,olease set fit and fullscreen to false
@@ -104,6 +106,7 @@ class Game():
             res.controls.GameControls(Exo)
             res.mechanics.GameMechanics(Exo)
             res.physics.simulate(Exo, fps)
+            res.sounds.DrivingSounds(Exo)
             
         if self.gm =="build":
             #buiding mode

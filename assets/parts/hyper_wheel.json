@@ -9,14 +9,14 @@
         "Rot": 0,
         "FuelUse": 0.6,
         "MaxImpulse": 1080,
-        "Force": 3.25,
+        "Force": 4.75,
         "Friction": 1.45,
         "Weight": 28,
         "Bounciness": 0.03,
         "JoiningBehavior": "Accept"
     },
     "JointData": {
-        "BreakPoint": 36000,
+        "BreakPoint": 28000,
         "Type": "Spring",
         "Data":{
             "Distance": 66,
