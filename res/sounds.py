@@ -1,4 +1,4 @@
-import pygame,random,pyglet.media          
+import pygame,random,pyglet.media  ,copy        
 def DrivingSounds(obj):
     c = 0
     #----------------------------------------------------------------SUSPENSION SOUNDS----------------------------------------------------------------
@@ -11,7 +11,7 @@ def DrivingSounds(obj):
                 print("JointImpulse of joint ", c, "(", JointImpulse, ") was too high, it broke.")
                 if not obj.SoundInFrame:
                     VolumeFactor = JointImpulse / ImpulseLimit
-                    Sounds = obj.NewVehicleJoints[c]["SoundData"]
+                    Sounds = copy.deepcopy(obj.NewVehicleJoints[c]["SoundData"])
                     #selecting a random sounds from a list of sounds
                     r = random.randint(0, len(Sounds) -1)
                     Sound = Sounds[r][0]
@@ -31,7 +31,7 @@ def DrivingSounds(obj):
             elif JointImpulse > ImpulseLimit/3:
                 if not obj.SoundInFrame:
                     VolumeFactor = (JointImpulse / ImpulseLimit) / 2
-                    Sounds = obj.NewVehicleJoints[c]["SoundData"]
+                    Sounds = copy.deepcopy(obj.NewVehicleJoints[c]["SoundData"])
                     Sounds.append(["suspension_1.wav", 1])
                     Sounds.append(["suspension_2.wav", 1])
                     Sounds.append(["suspension_3.wav", 1])

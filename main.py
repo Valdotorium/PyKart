@@ -60,6 +60,7 @@ class Game():
         self.CFG_Default_Screen_Size = (1200, 800)
         self.KeyCooldown = 0
         self.CFG_New_Game = True
+        self.TextAnimations = []
         
 
         #options,olease set fit and fullscreen to false
@@ -125,6 +126,8 @@ class Game():
         if pygame.mouse.get_pressed()[0] and self.Cursor.CurrentAnimation == None:
             self.Cursor.Click()
         self.Cursor.update(self)
+        for i in range(len(self.TextAnimations)):
+            self.TextAnimations[i].update(Exo)
     def reset(self):
             self.gm = "build"
             self.restart = False

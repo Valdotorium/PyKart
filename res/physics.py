@@ -45,7 +45,7 @@ def ApplyThrottle(obj, WheelPart, Force):
     c = WheelPart
     force = obj.Throttle * Force
     point = (0, -obj.NewVehicle[c]["Center"][1])
-    obj.PymunkBodies[c].torque = 70 * force
+    obj.PymunkBodies[c].torque = 80 * force
 """Making wheels connected to motors spin"""
 def Engine(obj,EnginePart, WheelPart):
     #TODO: for more features: store the obj.NewVehicle as a list of Part objects (new class),
@@ -67,9 +67,9 @@ def DisplayDistance(obj):
     obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (120,obj.dimensions[1] -80))
 
 def DisplayEarnedMoney(obj):
-    mult = round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled)
+    mult = round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled) + obj.StuntMoneyForRide
     text = "+" + str(mult)
-    obj.DistanceMoneyForRide = round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled)
+    obj.DistanceMoneyForRide = round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled) + obj.StuntMoneyForRide
     #display coin image in front of text
 
     CoinImage = obj.textures["coin.png"]
@@ -167,7 +167,7 @@ def Draw(obj):
         ReloadButton = interactions.ButtonArea(obj, obj.textures["ReloadButton.png"], utils.Scale(obj,(150,50)), utils.Scale(obj,[64,64]))
         if ReloadButton:
             #add the meters travelled as money
-            obj.money += obj.DistanceMoneyForRide
+            obj.money += obj.DistanceMoneyForRide + obj.StuntMoneyForRide
             obj.restart = True
 """Drawing the pymunk physics simulation"""
 def PhysDraw(obj):
@@ -193,14 +193,32 @@ def CheckJoints(obj):
                 #mechanics.Engine(obj,utils.JointHasType(obj, obj.VehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.VehicleJoints[c], "Wheel"))
             if JointImpulse > ImpulseLimit:
                 print("JointImpulse of joint ", c, "(", JointImpulse, ") was too high, it broke.")
+                r = random.randint(1,4)
+                if r == 1:
+                    obj.TextAnimations.append(interactions.TextAnimation("CRUNCH +50", 100, obj))
+                elif r == 2:
+                    obj.TextAnimations.append(interactions.TextAnimation("SMASH + 50", 100, obj))
+                elif r == 3:
+                    obj.TextAnimations.append(interactions.TextAnimation("BONK +50", 100, obj))
+                elif r == 4:
+                    obj.TextAnimations.append(interactions.TextAnimation("CRACK +50", 100, obj))
                 obj.space.remove(obj.PymunkJoints[c])
                 obj.NewVehicleJoints[c] = None
                 obj.VehicleJoints[c] = None
                 obj.PymunkJoints[c] = None
+                obj.StuntMoneyForRide += 50
 
         c += 1
+def DistanceBonuses(obj):
+    if obj._MetersTravelled  <= obj.NextKilometer and obj.MetersTravelled > obj.NextKilometer:
+        obj.NextKilometer += 1000
+        MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 2000) + 0.5)* obj.Environment["MoneyMultiplicator"])
+        obj.StuntMoneyForRide += MoneyBonus
+        text = "Distance Bonus: +" + str(MoneyBonus)
+        obj.TextAnimations.append(interactions.TextAnimation(text, 150, obj))
 """The pymunk physics simulation"""
 def simulate(obj, fps):
+    obj._MetersTravelled = obj.MetersTravelled
     Env = obj.Environment
     utils.CreateGroundPolygon(obj, Env)
     obj.SoundInFrame = False
@@ -212,6 +230,7 @@ def simulate(obj, fps):
     #PhysDraw(obj)
     CheckJoints(obj)
     utils.DisplayMoney(obj)
+    DistanceBonuses(obj)
 
 def OldRefreshPolygon(obj):
     print(f"initializing ground poly with vertices: ", obj.GroundPolygon)
@@ -230,6 +249,12 @@ def setup(obj):
     obj.VehicleFuel = 0
     obj.VehicleFuelUse = 0
     obj.rpm = 0
+    obj.StuntMoneyForRide = 0
+
+    #kilometerwise money bonuses
+    obj.NextKilometer = 1000
+    obj.MetersTravelled = 0
+    obj._MetersTravelled = 0
 
     #initialize speed and rpm display
     obj.SpeedDisplay = utils.Display(obj, "Speed_display.png",(160,obj.dimensions[1]-120), 315, 1.6)

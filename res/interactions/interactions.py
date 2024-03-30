@@ -1,4 +1,4 @@
-import pygame,os
+import pygame,os, random
 
 def ButtonArea(obj, image, pos, size):
    # print("Creating a button at position " + str(pos) + " and size" + str(size))
@@ -124,4 +124,28 @@ class Cursor():
     def SetBuy(self):
         self.CurrentAnimation = "Buy"
 
+
+class TextAnimation():
+    def __init__(self, message, duration, obj):
+        self.message = message
+        self.duration = duration
+        self.font = obj.largeboldfont
+        self.ticks = 0
+        obj.TextAnimations.append(self)
+        xr = random.randint(round(obj.dimensions[0] * 0.4), round(obj.dimensions[0] * 0.6))
+        yr = random.randint(round(obj.dimensions[1] * 0.4), round(obj.dimensions[1] * 0.6))
+        self.pos = (xr, yr)
+    def update(self, obj):
+
+        text = self.font.render(self.message,True, (180, 100, 20))
+        if self.ticks < 10:
+            text = pygame.transform.scale(text, (text.get_width() * (1 + self.ticks / 30), text.get_height() * (1 + self.ticks / 30)))
+        if self.ticks > self.duration - 25:
+            #set alpha, creating a fade out effect
+            alpha = (self.duration - self.ticks) * 10
+            text.set_alpha(alpha)
+        obj.screen.blit(text, self.pos)
+        self.ticks += 1
+        if self.ticks == self.duration:
+            del(self)
 

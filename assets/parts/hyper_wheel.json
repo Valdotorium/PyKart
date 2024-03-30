@@ -11,7 +11,7 @@
         "MaxImpulse": 1080,
         "Force": 4.75,
         "Friction": 1.45,
-        "Weight": 28,
+        "Weight": 36,
         "Bounciness": 0.03,
         "JoiningBehavior": "Accept"
     },
