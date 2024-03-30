@@ -3,7 +3,7 @@
     "Name": "Moon",
     "Background": [150, 150, 150],
     "Preview": "preview_moon.png",
-    "MoneyMultiplicator": 0.5,
+    "MoneyMultiplicator": 1,
     "Description": "Less Gravity and Greyscale",
     "Visuals":{
         "GroundColors": [[200, 200, 200], [160,160, 170], [110, 110, 117], [110, 107, 108]],  
@@ -12,8 +12,8 @@
     },
     "Terrain":{
         "Scale": 70,
-        "Flatness": 2.85,
-        "Difficulty": 2.5,
+        "Flatness": 2.15,
+        "Difficulty": 5,
         "Layers": 3,
         "StartVariability": 14,
         "StartScale": 24,

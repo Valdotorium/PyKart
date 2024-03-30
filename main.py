@@ -182,3 +182,5 @@ while running:
     if Exo.gm == "game":
         if Exo.restart:
             frame = resetFrames(Exo, frame)
+    if running == False:
+        res.transfer.run(Exo)

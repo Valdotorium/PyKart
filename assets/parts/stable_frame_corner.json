@@ -2,7 +2,7 @@
     "Name": "Stable Metal Frame corner",
     "Index": 3,
     "Type": "Stability",
-    "Cost": 600,
+    "Cost": 1200,
     "Center": [32,32],
     "Stex": "stable_frame_corner.png",
     "Properties": {

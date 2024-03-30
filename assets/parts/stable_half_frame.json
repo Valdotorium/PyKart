@@ -2,7 +2,7 @@
     "Name": "Stable Half Metal Frame",
     "Index": 2,
     "Type": "Stability",
-    "Cost": 600,
+    "Cost": 1000,
     "Center": [32,16],
     "Stex": "half_stable_frame.png",
     "Properties": {

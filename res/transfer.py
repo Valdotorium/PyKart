@@ -21,6 +21,11 @@ def run(obj):
     #store the latest vehicles hitboxes
     with open(CurrentPath + "/assets/saves/latest_vehicle_hitboxes.json", "w") as outfile: 
         json.dump(obj.VehicleHitboxes, outfile)
-    
+    with open(CurrentPath + "/assets/saves/partdict.json") as outfile: 
+        loadeddata = json.load(outfile)
+        loadeddata["Parts"] = obj.partdict
+        loadeddata["Money"] = obj.money
+        outfile = open(CurrentPath + "/assets/saves/partdict.json", "w")
+        json.dump(loadeddata, outfile)
     obj.Environment = obj.biomes[obj.SelectedEnvironment]
     

@@ -72,6 +72,17 @@ def respond(obj):
                 print(f"loaded environment: ", obj.Environment)
             except:
                 raise ImportError("Environment File not found")
+            #try loading th partdict and money
+            try:
+                SaveFile = open(CurrentPath+"/assets/saves/partdict.json")
+                loadeddata = json.load(SaveFile)
+                print(f"loaded game reopen data: ", loadeddata)
+                if loadeddata["Parts"] != {}:
+                    obj.partdict = loadeddata["Parts"]
+                if loadeddata["Money"] != None:
+                    obj.money = loadeddata["Money"]
+            except:
+                raise ImportError("Environment File not found")
             soundfiles = os.listdir(CurrentPath+"/assets/sounds")
             sounds = {}
             #loading all the sounds into the game

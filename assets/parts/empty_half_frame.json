@@ -2,7 +2,7 @@
     "Name": "Half Empty Frame",
     "Index": 2,
     "Type": "Stability",
-    "Cost": 180,
+    "Cost": 200,
     "Center": [32,16],
     "Stex": "empty_half_frame.png",
     "Properties": {

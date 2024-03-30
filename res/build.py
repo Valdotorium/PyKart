@@ -49,6 +49,23 @@ def setup(obj):
     obj.RotationOfSelectedPart = 0
     obj.Errormessage = None
     obj.BuildUI = utils.BuildUI(obj)
+    print("loading latest vehicle")
+    CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
+
+    try:
+        VehicleFile = open(CurrentPath+"/assets/saves/latest_vehicle.json")
+        obj.Vehicle = json.load(VehicleFile)
+        print(f"loaded vehicle: ", obj.Vehicle)
+        VehicleJointFile = open(CurrentPath+"/assets/saves/latest_vehicle_joints.json")
+        obj.VehicleJoints = json.load(VehicleJointFile)
+        print(f"loaded vehicle joints: ", obj.VehicleJoints)
+        VehicleHitboxFile = open(CurrentPath+"/assets/saves/latest_vehicle_hitboxes.json")
+        obj.VehicleHitboxes = json.load(VehicleHitboxFile)
+        print(f"loaded vehicle hitboxes: ", obj.VehicleHitboxes)
+        #that could be buggy
+        #obj.gm = "transfer"
+    except:
+            raise ImportError("Vehicle File not found")
 
 def run(obj):
     PartIsValid = True

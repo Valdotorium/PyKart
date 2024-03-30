@@ -2,7 +2,7 @@
     "Name": "Empty Frame",
     "Index": 2,
     "Type": "Stability",
-    "Cost": 300,
+    "Cost": 340,
     "Center": [32,32],
     "Stex": "empty_frame.png",
     "Properties": {
