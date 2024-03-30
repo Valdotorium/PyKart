@@ -195,18 +195,18 @@ def CheckJoints(obj):
                 print("JointImpulse of joint ", c, "(", JointImpulse, ") was too high, it broke.")
                 r = random.randint(1,4)
                 if r == 1:
-                    obj.TextAnimations.append(interactions.TextAnimation("CRUNCH +50", 100, obj))
+                    obj.TextAnimations.append(interactions.TextAnimation("CRUNCH +25", 100, obj))
                 elif r == 2:
-                    obj.TextAnimations.append(interactions.TextAnimation("SMASH + 50", 100, obj))
+                    obj.TextAnimations.append(interactions.TextAnimation("SMASH + 25", 100, obj))
                 elif r == 3:
-                    obj.TextAnimations.append(interactions.TextAnimation("BONK +50", 100, obj))
+                    obj.TextAnimations.append(interactions.TextAnimation("BONK +25", 100, obj))
                 elif r == 4:
-                    obj.TextAnimations.append(interactions.TextAnimation("CRACK +50", 100, obj))
+                    obj.TextAnimations.append(interactions.TextAnimation("CRACK +25", 100, obj))
                 obj.space.remove(obj.PymunkJoints[c])
                 obj.NewVehicleJoints[c] = None
                 obj.VehicleJoints[c] = None
                 obj.PymunkJoints[c] = None
-                obj.StuntMoneyForRide += 50
+                obj.StuntMoneyForRide += 25
 
         c += 1
 def DistanceBonuses(obj):
