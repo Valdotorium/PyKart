@@ -9,6 +9,8 @@ def run(obj):
     #---------------------------------------------------------------- some basics
     BuildVehicle = obj.Vehicle
     PhysicsVehicle = []
+    #removing temporary values from parts
+    
     print("User started with Vehicle: ", obj.Vehicle)
     print("The Vehicles Joints are: ", obj.VehicleJoints)
     #storing the vehicle as json for readability

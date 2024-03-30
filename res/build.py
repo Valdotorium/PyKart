@@ -43,7 +43,7 @@ def setup(obj):
         obj.VehicleJoints = []
         obj.VehicleHitboxes = []
     #if joints have snapped together, it stores their data
-    obj.SnappedJointData = None
+    obj.SnappedJointData = []
     obj.SelectedBuiltPart = None
     obj.UserHasSelectedPart = False
     obj.RotationOfSelectedPart = 0
@@ -163,7 +163,7 @@ def run(obj):
 
             c += 1 
     #------------------------------Sanpping to joints when close to them-------------------------------------------------------------------------
-    obj.SnappedJointData = None
+    obj.SnappedJointData = []
     obj.IndexOfSnappedJoint = None
     if obj.selectedPart != "":
         c = 0
@@ -174,6 +174,7 @@ def run(obj):
                     #check if a joint of the part curently selected is closer than 15 * scaleX pixels to a placed joint
                     if obj.JointPositions[c][1][0] - 15 * scaleX < JointPositionsOfSelectedPart[cc][0] < obj.JointPositions[c][1][0] + 15 * scaleX:
                         if obj.JointPositions[c][1][1] - 15 * scaleX < JointPositionsOfSelectedPart[cc][1] < obj.JointPositions[c][1][1] + 15 * scaleX:
+                            print("Found joint at", cc)
                             mx,my = (obj.JointPositions[c][1][0] - RelativeJointPositionsOfSelectedPart[cc][0], obj.JointPositions[c][1][1] - RelativeJointPositionsOfSelectedPart[cc][1])
                             #check if pairing of joints is invalid (if both joints have type "Accept")
                             #TODO: only one joint can be created in snapping, fix later.
@@ -184,13 +185,11 @@ def run(obj):
                                     print("joint pairing is invalid")
                                 #if both involved joints are providers, the joint data of the child part will get applied
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][ccc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
-                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc]], "SoundData": obj.partdict[obj.selectedPart]["Sounds"]["Crash"]}
-                                    obj.IndexOfSnappedJoint = cc
+                                    obj.SnappedJointData.append({"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc]], "SoundData": obj.partdict[obj.selectedPart]["Sounds"]["Crash"]})
                                     #The Joints Data that will be saved to obj.VehicleJoints
                                 #if the new part is a acceptor and its parent is a provider, the joint data of the child part will get applied
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][ccc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
-                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc]], "SoundData": obj.partdict[obj.selectedPart]["Sounds"]["Crash"] }
-                                    obj.IndexOfSnappedJoint = cc
+                                    obj.SnappedJointData.append({"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc]], "SoundData": obj.partdict[obj.selectedPart]["Sounds"]["Crash"] })
                                     #The Joints Data that will be saved to obj.VehicleJoints, format {JoinedParts: [Int,Int], JointData:{},PositionData: [Vec2d,Vec2d]}
                                     #JoinedParts stores the indexes of the two parts in obj.Vehicle
                                     #JointData stores the joint data of the (in this case) child joint
@@ -198,8 +197,7 @@ def run(obj):
                                     #obj.Jointpositions[c][1] is a tuple containing the world coordinates of the joint.
                                 #vice versa
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][ccc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
-                                    obj.SnappedJointData= {"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc]], "SoundData": obj.partdict[obj.selectedPart]["Sounds"]["Crash"] }
-                                    obj.IndexOfSnappedJoint = cc
+                                    obj.SnappedJointData.append({"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc]], "SoundData": obj.partdict[obj.selectedPart]["Sounds"]["Crash"]})
                                     #The Joints Data that will be saved to obj.VehicleJoints
                                 ccc += 1
                     cc += 1
@@ -243,7 +241,7 @@ def run(obj):
         #is the user trying to place an "unjoined" accepting joint?
         if  obj.dimensions[0] * 0.1 < mx < 0.9 * obj.dimensions[0] and obj.dimensions[1] * 0.12 < my < 0.725 * obj.dimensions[1]:
             #if the mouse is touching BuildBackgroundImg, the part gets placed
-            if obj.SnappedJointData == None and obj.partdict[obj.selectedPart]["Properties"]["JoiningBehavior"] != "Accept" or obj.SnappedJointData != None:
+            if obj.SnappedJointData == [] and obj.partdict[obj.selectedPart]["Properties"]["JoiningBehavior"] != "Accept" or obj.SnappedJointData != []:
                 #checking if the position of the part is otherwise invalid
 
                 #is the part exactly placed on another part?
@@ -282,13 +280,18 @@ def run(obj):
                         "CrashSounds": obj.partdict[obj.selectedPart]["Sounds"]["Crash"],
                         "IdleSounds": obj.partdict[obj.selectedPart]["Sounds"]["Idle"],
                         "ActiveSounds": obj.partdict[obj.selectedPart]["Sounds"]["Active"],
-                        "ConstraintSounds": obj.partdict[obj.selectedPart]["Sounds"]["Constraints"]
+                        "ConstraintSounds": obj.partdict[obj.selectedPart]["Sounds"]["Constraints"],
+                        "JoinedWith": []
                     }
                     obj.partdict[obj.selectedPart]["Count"] -= 1
                     #if a joint need to be formed, its data will be created here
-                    if obj.SnappedJointData != None:
-                        PlacedPart["JoinedWith"] = obj.SnappedJointData["JoinedParts"]
-                        obj.VehicleJoints.append(obj.SnappedJointData)
+                    if obj.SnappedJointData != []:
+                        c = 0
+                        while c < len(obj.SnappedJointData):
+                            PlacedPart["JoinedWith"].append(obj.SnappedJointData[c]["JoinedParts"])
+                            obj.VehicleJoints.append(obj.SnappedJointData[c])
+                            c += 1
+
                     else:
                         PlacedPart["JoinedWith"] = []
                     obj.Vehicle.append(PlacedPart)

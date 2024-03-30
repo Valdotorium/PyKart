@@ -1,6 +1,4 @@
-import pygame,random,pyglet.media
-
-
+import pygame,random,pyglet.media          
 def DrivingSounds(obj):
     c = 0
     #----------------------------------------------------------------SUSPENSION SOUNDS----------------------------------------------------------------
@@ -63,9 +61,6 @@ def DrivingSounds(obj):
         if obj.NewVehicle[c] != None and obj.NewVehicle[c]["Type"] == "Engine":
             Sound = obj.sounds[obj.NewVehicle[c]["ActiveSounds"][0][0]]
             Vol = obj.NewVehicle[c]["ActiveSounds"][0][1]
-            Player = Sound.play()
-            Player.volume = Vol
-            Player.pitch = 0.8+obj.rpm/4000
-            Player.play()
+            #add that part later
 
         c += 1

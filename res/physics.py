@@ -1,5 +1,6 @@
 import pygame
 import pymunk
+import copy
 import pymunk.pygame_util
 from .fw import fw as utils
 import pymunk.constraints
@@ -340,8 +341,8 @@ def TransferStage(obj):
             #rc is a counter value for all parts that are != Nine to prevent IOOR errors
             rc += 1
             obj.VehicleOriginalIndexes.append(c)
-            obj.VehicleTypes.append((obj.Vehicle[c]["Type"], c))
-            obj.NewVehicle.append(obj.Vehicle[c])
+            obj.VehicleTypes.append((copy.deepcopy(obj.Vehicle[c]["Type"]), c))
+            obj.NewVehicle.append(copy.deepcopy(obj.Vehicle[c]))
             #Assigning Values, such as motor power and fuel etc ----------------------------------------------------------------
         c += 1
     c = 0
