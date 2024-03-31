@@ -1,5 +1,5 @@
 {
-    "Gravity": [0,340],
+    "Gravity": [0,360],
     "Name": "Icy Mountains",
     "Background": [150, 155, 195],
     "Preview": "preview_icy.png",

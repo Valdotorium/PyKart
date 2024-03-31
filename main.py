@@ -88,7 +88,7 @@ class Game():
         self.pi =3.1415926535897932384626433832795
         self.Throttle = 0
         self.VehicleSpeed = 0
-        self.money = 12000
+        self.money = 16000
         self.xp = 0
         self.SoundPlayer = pyglet.media.Player()
         self.GroundPolygons = []
@@ -97,6 +97,9 @@ class Game():
         self.Cursor = interactions.Cursor(self)
         pygame.mouse.set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
     def run(self):
+        self.money = round(self.money)
+        self.xp = round(self.xp)
+
     
         #res.interactions.interactions.ButtonArea(Exo)
         if self.gm == "game":

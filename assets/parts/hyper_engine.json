@@ -2,7 +2,7 @@
     "Name": "Hyper Engine",
     "Index": 2,
     "Type": "Engine",
-    "Cost": 35000,
+    "Cost": 36000,
     "Center": [32,64],
     "Stex": "hyper_engine.png",
     "Properties": {

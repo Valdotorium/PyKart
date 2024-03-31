@@ -52,7 +52,7 @@ def Engine(obj,EnginePart, WheelPart):
     #for easier value management of individual parts
     if obj.Throttle != 0:
         IndexOfWheelBody = obj.NewVehicle.index(WheelPart)
-        EnginePower = EnginePart["Properties"]["Power"] * WheelPart["Properties"]["Force"]
+        EnginePower = EnginePart["Properties"]["Power"] * WheelPart["Properties"]["Force"] * (WheelPart["Properties"]["Weight"] / 30)
         ApplyThrottle(obj, IndexOfWheelBody, EnginePower)
 #preventing things from spinning too fast
 def LimitAngularVelocity(body):
@@ -217,9 +217,9 @@ def DistanceBonuses(obj):
         obj.NextKilometer += 1000
         AlertSound = obj.sounds["coinbag.wav"]
         AlertSound.play()
-        MoneyBonus = round((obj.NextKilometer / 12) * ((obj.NextKilometer / 4000) + 0.5)* obj.Environment["MoneyMultiplicator"])
+        MoneyBonus = round((obj.NextKilometer / 12) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 0.875))
         obj.StuntMoneyForRide += MoneyBonus
-        text = "Distance Bonus: +" + str(MoneyBonus)
+        text = "Distance Bonus: +" + str(round(MoneyBonus))
         obj.TextAnimations.append(interactions.TextAnimation(text, 150, obj))
 """The pymunk physics simulation"""
 def simulate(obj, fps):

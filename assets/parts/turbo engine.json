@@ -2,7 +2,7 @@
     "Name": "Turbo Engine",
     "Index": 4,
     "Type": "Engine",
-    "Cost": 19000,
+    "Cost": 20000,
     "Stex": "turbo_engine.png",
     "Center": [32,32],
     "Properties": {

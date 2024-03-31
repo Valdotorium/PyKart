@@ -27,6 +27,7 @@ def run(obj):
         loadeddata = json.load(outfile)
         loadeddata["Parts"] = obj.partdict
         loadeddata["Money"] = obj.money
+        loadeddata["xp"] = obj.xp
         outfile = open(CurrentPath + "/assets/saves/partdict.json", "w")
         json.dump(loadeddata, outfile)
     obj.Environment = obj.biomes[obj.SelectedEnvironment]

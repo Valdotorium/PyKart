@@ -96,12 +96,12 @@ def SubstractTuples(tuple1, tuple2):
 def DisplayMoney(obj):
         #displaying the money that is in obj
         text = obj.largefont.render(str(obj.money), True, (20,20,20))
-        pos = (obj.dimensions[0] * 0.09 - text.get_width() / 2, obj.dimensions[1] * 0.14)
+        pos = (obj.dimensions[0] * 0.09 - text.get_width() / 2, obj.dimensions[1] * 0.16)
         obj.screen.blit(text, pos)
         #drawing the hand
         Image = obj.textures["coin.png"]
         Image = pygame.transform.scale(Image, (50 ,50))
-        obj.screen.blit(Image, (obj.dimensions[0] * 0.05 - text.get_width() / 2-16, obj.dimensions[1] * 0.15 - 16))
+        obj.screen.blit(Image, (obj.dimensions[0] * 0.05 - text.get_width() / 2, obj.dimensions[1] * 0.17 - 16))
 def CreateGroundPolygon(obj, Env):
     #TODO #10 #completely rewrite this function
     c = 0
@@ -348,7 +348,7 @@ class Display:
 
 def DisplayXP(obj):
     text = obj.largefont.render(str(obj.xp), True, (20,20,20))
-    pos = ((obj.dimensions[0] * 0.03 - text.get_width() / 2) - 2, obj.dimensions[1] * 0.2)
+    pos = ((obj.dimensions[0] * 0.03 - text.get_width() / 2) - 2, obj.dimensions[1] * 0.22)
     textpos = (pos[0] + 70, pos[1])
     Image = obj.textures["xp.png"]
     Image = pygame.transform.scale(Image, (50,30))

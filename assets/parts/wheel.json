@@ -9,7 +9,7 @@
         "Rot": 0,
         "FuelUse": 0.2,
         "MaxImpulse": 1080,
-        "Force": 1.4,
+        "Force": 1.5,
         "Friction": 1,
         "Weight": 20,
         "Bounciness": 0.1,

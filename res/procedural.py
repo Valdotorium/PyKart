@@ -12,14 +12,15 @@ def Noise(obj, scale, variability):
         steepness = obj.Environment["Terrain"]["Flatness"]
         
         while x < len(obj.Terrain):
-            r = random.uniform(0,100)
-            if r < variability:
-                Terrain_Direction += random.randint(-1,1)
-            #keeping Terrain_Direction within valid area (-3 to 3)
-            if Terrain_Direction > 3:
-                Terrain_Direction = 3
-            elif Terrain_Direction < -3:
-                Terrain_Direction = -3
+            if x > 70:
+                r = random.uniform(0,100)
+                if r < variability:
+                    Terrain_Direction += random.randint(-1,1)
+                #keeping Terrain_Direction within valid area (-3 to 3)
+                if Terrain_Direction > 3:
+                    Terrain_Direction = 3
+                elif Terrain_Direction < -3:
+                    Terrain_Direction = -3
            
             if Terrain_Direction > 0:
                 Height_Change += random.uniform(0, ((obj.CFG_Terrain_Scale * scale) / 50) * (Terrain_Direction / steepness))
@@ -57,6 +58,7 @@ def Noise(obj, scale, variability):
 def setup(obj):
     obj.Terrain = []
     x = 0
+    obj.Terrain.append(-90000)
     while x < 50000:
         obj.Terrain.append(650)
         x += 1
