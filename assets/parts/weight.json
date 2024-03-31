@@ -10,8 +10,8 @@
         "Friction": 0.99,
         "Weight": 140,
         "Bounciness": 0.002,
-        "JoiningBehavior": "Provide"
-
+        "JoiningBehavior": "Provide",
+        "Value": 0.1
     },
     "JointData": {
         "BreakPoint": 7000,

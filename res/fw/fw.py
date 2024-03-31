@@ -1,6 +1,7 @@
 import pygame, math
 import pymunk
 import copy
+import pyglet.media
 #some small helpers to make code shorter and maybe more radable
 def getScreenSize():
     try:
@@ -205,6 +206,9 @@ class BuildUI():
         self.ClickCooldown = 10
         self.ScrollXSpeed = 0
     def run(self, obj):
+        SelectPartSound = obj.sounds["click.wav"]
+        BuySound = obj.sounds["buy.wav"]
+        AlertSound = obj.sounds["alert.wav"]
         #Button for switching the category, displaying the name of the current category
         text = self.largefont.render(self.CurrentCategory, True, (20,20,20))
         pos = (obj.dimensions[0] * 0.05 - text.get_width() / 2, obj.dimensions[1] * 0.65)
@@ -216,6 +220,7 @@ class BuildUI():
         obj.screen.blit(text, (pos[0] + 12.5, pos[1] + 12.5))
         IsClicked = self.ClickArea(pos,ButtonSize)
         if IsClicked and self.ClickCooldown < 0:
+            SelectPartSound.play()
             print("Clicked")
             self.ScrollX = 0
             if self.categories.index(self.CurrentCategory) + 1 < len(self.categories):
@@ -264,16 +269,21 @@ class BuildUI():
                 #only select if part is available
                 if IsClicked and self.ClickCooldown < 0 and obj.partdict[part["Name"]]["Count"] > 0: 
                     print("Clicked")
+                    SelectPartSound.play()
                     self.ClickCooldown = 20
                     obj.selectedPart = part["Name"]
                     obj.UserHasSelectedPart = True
                 #buy part if money is enough
-                if IsClicked and self.ClickCooldown < 0 and obj.money >= Cost:
+                elif IsClicked and self.ClickCooldown < 0 and obj.money >= Cost:
                     print("Clicked")
                     self.ClickCooldown = 20
                     obj.money -= Cost
                     obj.partdict[part["Name"]]["Count"] += 1
+                    BuySound.play()
                     obj.Cursor.SetBuy()
+                elif IsClicked and self.ClickCooldown < 0 and obj.money < Cost:
+                    AlertSound.play()
+                    self.ClickCooldown = 14
                 #display the cost above the image
                 if part["Cost"] > obj.money:
                     textcolor = (130, 50, 20)

@@ -91,6 +91,8 @@ def run(obj):
         PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[64,64]))
         PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,50]), utils.Scale(obj,[64,64]))
         if PlayButton:
+            SelectSound = obj.sounds["click.wav"]
+            SelectSound.play()
             print("User just cligged on the play button")
             obj.gm = "biomeselection"
     #------------------------------Drawing the Vehicle--------------------------------------------------------
@@ -116,8 +118,12 @@ def run(obj):
                 PositionOfTexture = utils.SubstractTuples(PositionOfTexture,obj.Vehicle[c]["Center"])
                 IsClicked = interactions.ClickArea(PositionOfTexture, utils.MultiplyTuple(TexturesOfPart[cc]["Size"], scaleX))
                 if IsClicked:
-                    obj.SelectedBuiltPart = c
+
                     print("user just selected part ", c, " of Vehicle")
+                    if obj.SelectedBuiltPart != c:
+                        SelectSound = obj.sounds["click.wav"]
+                        SelectSound.play()
+                    obj.SelectedBuiltPart = c
                     #draeing a rect at the position of the texture with the size of the texture
                     pygame.draw.rect(obj.screen, (50,50,50), (PositionOfTexture[0], PositionOfTexture[1],round(TexturesOfPart[cc]["Size"][0] * scaleX), round(TexturesOfPart[cc]["Size"][1] * scaleX)), 2,2)
                 cc += 1
@@ -295,14 +301,30 @@ def run(obj):
                     else:
                         PlacedPart["JoinedWith"] = []
                     obj.Vehicle.append(PlacedPart)
+                    PlaceSound = obj.sounds["select.wav"]
+                    PlaceSound.play()
                     print(f"part {obj.selectedPart} placed at {(mx,my)}")
                     #part gets unselected
                     obj.SnappedJointData = None
                     obj.selectedPart = ""
                     obj.RotationOfSelectedPart = 0
                     obj.Cursor.SetDefault()
+                else:
+                    #part placement invalid, unselect
+                    AlertSound = obj.sounds["alert.wav"]
+                    AlertSound.play()
+                    obj.SnappedJointData = None
+                    obj.selectedPart = ""
+                    obj.RotationOfSelectedPart = 0
+                    obj.Cursor.SetDefault()
         elif not obj.dimensions[0] * 0.1 < mx < 0.9 * obj.dimensions[0] or not obj.dimensions[1] * 0.12 < my < 0.725 * obj.dimensions[1]:
-            pass
+            #part placement invalid, unselect
+            AlertSound = obj.sounds["alert.wav"]
+            AlertSound.play()
+            obj.SnappedJointData = None
+            obj.selectedPart = ""
+            obj.RotationOfSelectedPart = 0
+            obj.Cursor.SetDefault()
         else:
             #the part gets unselected
             obj.selectedPart = ""
@@ -324,10 +346,14 @@ def run(obj):
         UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(350,50)), utils.Scale(obj,[64,64]))
         if UnselectButton or pygame.key.get_pressed()[pygame.K_s]:
             obj.SelectedBuiltPart = None
+            SelectSound = obj.sounds["click.wav"]
+            SelectSound.play()
         
         #---------------------The Delete Part Button--------------------------------
         DeleteButton = interactions.ButtonArea(obj, obj.textures["DeleteButton.png"], utils.Scale(obj,(250,50)), utils.Scale(obj,[64,64]))
         if DeleteButton or pygame.key.get_pressed()[pygame.K_x]:
+            SelectSound = obj.sounds["tyre_2.wav"]
+            SelectSound.play()
             obj.Cursor.SetDelete()
             obj.partdict[obj.Vehicle[obj.SelectedBuiltPart]["name"]]["Count"] += 1
             #removed parts are still list items, but they will be ignored
@@ -346,6 +372,8 @@ def run(obj):
     #------------------------------The Move Part Button------------------------------------------
         MoveButton = interactions.ButtonArea(obj, obj.textures["MoveButton.png"], utils.Scale(obj,(450,50)), utils.Scale(obj,[64,64]))
         if MoveButton or pygame.key.get_pressed()[pygame.K_m]:
+            SelectSound = obj.sounds["click.wav"]
+            SelectSound.play()
             obj.partdict[obj.Vehicle[obj.SelectedBuiltPart]["name"]]["Count"] += 1
             #esentially deleting the part
             SelectedPart = obj.SelectedBuiltPart

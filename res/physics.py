@@ -67,9 +67,9 @@ def DisplayDistance(obj):
     obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (120,obj.dimensions[1] -80))
 
 def DisplayEarnedMoney(obj):
-    mult = round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled) + obj.StuntMoneyForRide
+    mult = round((round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled) + obj.StuntMoneyForRide) *obj.RideMoneyMultiplier) 
     text = "+" + str(mult)
-    obj.DistanceMoneyForRide = round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled) + obj.StuntMoneyForRide
+    obj.DistanceMoneyForRide = round((round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled) + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier)
     #display coin image in front of text
 
     CoinImage = obj.textures["coin.png"]
@@ -231,7 +231,14 @@ def simulate(obj, fps):
     CheckJoints(obj)
     utils.DisplayMoney(obj)
     DistanceBonuses(obj)
-
+def FindFreight(obj):
+    c = 0
+    obj.RideMoneyMultiplier = 1
+    while c < len(obj.NewVehicle):
+        if obj.NewVehicle[c]!= None:
+            if obj.NewVehicle[c]["Type"] == "Freight":
+                obj.RideMoneyMultiplier += obj.NewVehicle[c]["Properties"]["Value"]
+        c += 1
 def OldRefreshPolygon(obj):
     print(f"initializing ground poly with vertices: ", obj.GroundPolygon)
     obj.body_floor.shape = pymunk.Poly(obj.body_floor, obj.GroundPolygon)
@@ -419,5 +426,9 @@ def TransferStage(obj):
                     obj.space.add(Joint)
         c += 1
 
-    #convenient vehicle placement 
+    FindFreight(obj)
+    text = "Freight value: " + str(obj.RideMoneyMultiplier)
+    obj.TextAnimations.append(interactions.TextAnimation(text, 200, obj))
+    #display freight value as text animation
+     
     

@@ -20,6 +20,7 @@ class BiomeSelection():
         startX = obj.dimensions[0] / 2 - 500
         XPos = startX
         c = 0
+        self._CurrentSelectedBiome = self.CurrentSelectedBiome
         while c < len(self.Biomes):
             mx, my = pygame.mouse.get_pos()
             Biome = list(self.Biomes)[c]
@@ -89,6 +90,9 @@ class BiomeSelection():
                 pygame.draw.rect(obj.screen, (255,255,255), (XPos, obj.dimensions[1] / 2 - 250,500,500), 6,6)
                 XPos += 180
             c += 1
+        if self._CurrentSelectedBiome != self.CurrentSelectedBiome:
+            ClickSound = obj.sounds["select_2.wav"]
+            ClickSound.play()
         #text
         BiomeName = list(self.Biomes)[self.CurrentSelectedBiome]
         BiomeName = self.Biomes[BiomeName]["Name"]
