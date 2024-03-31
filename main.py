@@ -16,8 +16,6 @@ import pyglet.media
 import res.interactions.interactions as interactions
 import res.fw.fw as utils
 #load files in othe directories like this: os.path.dirname(__file__) + "/folder/folder/file.png"
-#put scripts into top-level directory, put images or other "universal files" into _internal in dist/main
-#create a window in fullscreen size with a rectangle in it
 #load file template:     grass = pygame.image.load(os.path.dirname(__file__)+"/textures/grass.png")
 pygame.init()
 pygame.mixer.init()
@@ -59,7 +57,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200, 800)
         self.KeyCooldown = 0
-        self.CFG_New_Game = True
+        self.CFG_New_Game = False
         self.TextAnimations = []
         
 
@@ -91,6 +89,7 @@ class Game():
         self.Throttle = 0
         self.VehicleSpeed = 0
         self.money = 12000
+        self.xp = 0
         self.SoundPlayer = pyglet.media.Player()
         self.GroundPolygons = []
         self.restart = False
@@ -128,6 +127,7 @@ class Game():
         self.Cursor.update(self)
         for i in range(len(self.TextAnimations)):
             self.TextAnimations[i].update(Exo)
+        utils.DisplayXP(self)
     def reset(self):
             self.gm = "build"
             self.restart = False

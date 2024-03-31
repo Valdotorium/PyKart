@@ -168,7 +168,10 @@ def Draw(obj):
         if ReloadButton:
             #add the meters travelled as money
             obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
+            obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
             obj.restart = True
+            AlertSound = obj.sounds["alert.wav"]
+            AlertSound.play()
 """Drawing the pymunk physics simulation"""
 def PhysDraw(obj):
     obj.space.debug_draw(obj.draw_options)
@@ -212,6 +215,8 @@ def CheckJoints(obj):
 def DistanceBonuses(obj):
     if obj._MetersTravelled  <= obj.NextKilometer and obj.MetersTravelled > obj.NextKilometer:
         obj.NextKilometer += 1000
+        AlertSound = obj.sounds["coinbag.wav"]
+        AlertSound.play()
         MoneyBonus = round((obj.NextKilometer / 12) * ((obj.NextKilometer / 4000) + 0.5)* obj.Environment["MoneyMultiplicator"])
         obj.StuntMoneyForRide += MoneyBonus
         text = "Distance Bonus: +" + str(MoneyBonus)

@@ -278,6 +278,10 @@ class BuildUI():
                     print("Clicked")
                     self.ClickCooldown = 20
                     obj.money -= Cost
+                    if obj.partdict[part["Name"]]["Count"] == 0:
+                        obj.xp += round(Cost / 4) + 250
+                    else:
+                        obj.xp += round(Cost /6)
                     obj.partdict[part["Name"]]["Count"] += 1
                     BuySound.play()
                     obj.Cursor.SetBuy()
@@ -342,7 +346,14 @@ class Display:
         obj.screen.blit(texture, texture_rect)
         pygame.draw.circle(obj.screen, (20,20,20), self.position, round(74 * self.scale), round(10 * self.scale))
 
-
+def DisplayXP(obj):
+    text = obj.largefont.render(str(obj.xp), True, (20,20,20))
+    pos = ((obj.dimensions[0] * 0.03 - text.get_width() / 2) - 2, obj.dimensions[1] * 0.2)
+    textpos = (pos[0] + 70, pos[1])
+    Image = obj.textures["xp.png"]
+    Image = pygame.transform.scale(Image, (50,30))
+    obj.screen.blit(Image, pos)
+    obj.screen.blit(text, textpos)
 
 
 
