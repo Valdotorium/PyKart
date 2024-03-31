@@ -9,9 +9,9 @@
         "Rot": 0,
         "FuelUse": 0.2,
         "MaxImpulse": 1080,
-        "Force": 1.2,
+        "Force": 1.8,
         "Friction": 1,
-        "Weight": 18,
+        "Weight": 16,
         "Bounciness": 0.1,
         "JoiningBehavior": "Accept"
     },
@@ -20,8 +20,8 @@
         "Type": "Spring",
         "Data":{
             "Distance": 74,
-            "Damping": 17,
-            "Stiffness": 3000
+            "Damping": 18,
+            "Stiffness": 2100
         }
     },
     "Build":{

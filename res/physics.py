@@ -167,7 +167,7 @@ def Draw(obj):
         ReloadButton = interactions.ButtonArea(obj, obj.textures["ReloadButton.png"], utils.Scale(obj,(150,50)), utils.Scale(obj,[64,64]))
         if ReloadButton:
             #add the meters travelled as money
-            obj.money += obj.DistanceMoneyForRide + obj.StuntMoneyForRide
+            obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
             obj.restart = True
 """Drawing the pymunk physics simulation"""
 def PhysDraw(obj):
@@ -212,7 +212,7 @@ def CheckJoints(obj):
 def DistanceBonuses(obj):
     if obj._MetersTravelled  <= obj.NextKilometer and obj.MetersTravelled > obj.NextKilometer:
         obj.NextKilometer += 1000
-        MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 2000) + 0.5)* obj.Environment["MoneyMultiplicator"])
+        MoneyBonus = round((obj.NextKilometer / 12) * ((obj.NextKilometer / 4000) + 0.5)* obj.Environment["MoneyMultiplicator"])
         obj.StuntMoneyForRide += MoneyBonus
         text = "Distance Bonus: +" + str(MoneyBonus)
         obj.TextAnimations.append(interactions.TextAnimation(text, 150, obj))
