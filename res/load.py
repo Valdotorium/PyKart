@@ -87,7 +87,7 @@ def respond(obj):
                 except:
                     raise ImportError("Environment File not found")
             else:
-                obj.money = 12000
+                obj.money = 16000
             soundfiles = os.listdir(CurrentPath+"/assets/sounds")
             sounds = {}
             #loading all the sounds into the game

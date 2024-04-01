@@ -9,12 +9,13 @@
         "Rot": 0,
         "FuelUse": 0.2,
         "MaxImpulse": 1080,
-        "Force": 3.1,
-        "Friction": 2.25,
+        "Force": 3,
+        "Friction": 2.5,
         "Weight": 48,
         "Bounciness": 0.2,
         "JoiningBehavior": "Accept"
     },
+    "Description": "A wheel with much grip, ideal for uneven terrain",
     "ShowProperties": ["Weight", "Force"],
     "JointData": {
         "BreakPoint": 44000,

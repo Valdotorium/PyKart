@@ -43,7 +43,7 @@ class Game():
         self.largefont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
         self.largeboldfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator-Bold.ttf"
         #initializing the font
-        self.font = pygame.font.Font(self.font, 22)
+        self.font = pygame.font.Font(self.font, 16)
         self.boldfont = pygame.font.Font(self.boldfont, 24)
         self.largefont = pygame.font.Font(self.largefont, 32)
         self.largeboldfont = pygame.font.Font(self.largeboldfont, 36)

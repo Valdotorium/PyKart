@@ -14,6 +14,7 @@
         "Power": 1200
 
     },
+    "Description": "Large Box containing everything a electric engine needs. Very heavy and extremely powerful.",
     "ShowProperties": ["Weight", "Power"],
     "JointData": {
         "BreakPoint": 122000,

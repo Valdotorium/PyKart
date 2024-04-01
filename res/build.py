@@ -290,6 +290,7 @@ def run(obj):
                         "ConstraintSounds": obj.partdict[obj.selectedPart]["Sounds"]["Constraints"],
                         "JoinedWith": [],
                         "ShowProperties": obj.partdict[obj.selectedPart]["ShowProperties"],
+                        "Description": obj.partdict[obj.selectedPart]["Description"],
                     }
                     obj.partdict[obj.selectedPart]["Count"] -= 1
                     #if a joint need to be formed, its data will be created here

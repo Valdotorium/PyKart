@@ -13,6 +13,7 @@
         "JoiningBehavior": "Provide"
 
     },
+    "Description": "half frame for everyday vehicle building use.",
     "ShowProperties": ["Weight"],
     "JointData": {
         "BreakPoint": 18200,

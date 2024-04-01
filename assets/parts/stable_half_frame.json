@@ -21,6 +21,7 @@
         "Data":{
         }
     },
+    "Description": "Made out of very stable metal, this is a next-gen version of the half frame",
     "Joints":[
         {
             "Type": "Provide",

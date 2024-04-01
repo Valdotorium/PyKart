@@ -13,6 +13,7 @@
         "JoiningBehavior": "Provide"
 
     },
+    "Description": "Double frame for everyday vehicle building use.",
     "ShowProperties": ["Weight"],
     "JointData": {
         "BreakPoint": 26000,

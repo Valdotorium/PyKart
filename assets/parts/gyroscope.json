@@ -13,6 +13,7 @@
         "JoiningBehavior": "Provide",
         "Force": 4
     },
+    "Description": "Heavy Box containing high-tech machinery.Does not want to spin",
     "ShowProperties": ["Weight"],
     "JointData": {
         "BreakPoint": 50000,

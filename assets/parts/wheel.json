@@ -9,22 +9,23 @@
         "Rot": 0,
         "FuelUse": 0.2,
         "MaxImpulse": 1080,
-        "Force": 1.5,
+        "Force": 1.75,
         "Friction": 1,
-        "Weight": 20,
+        "Weight": 22,
         "Bounciness": 0.1,
         "JoiningBehavior": "Accept"
     },
     "ShowProperties": ["Weight", "Force"],
     "JointData": {
-        "BreakPoint": 12000,
+        "BreakPoint": 11000,
         "Type": "Spring",
         "Data":{
             "Distance": 72,
             "Damping": 10,
-            "Stiffness": 4000
+            "Stiffness": 3000
         }
     },
+    "Description": "A normal wheel with a spring attached to it.",
     "Build":{
         "NeedsJoint": 1,
         "HasRotation": 1

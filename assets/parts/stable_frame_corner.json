@@ -20,6 +20,7 @@
         "Data":{
         }
     },
+    "Description": "Made out of very stable metal, this is a next-gen version of the triangular frame",
     "Build":{
         "NeedsJoint": 0,
         "HasRotation": 1

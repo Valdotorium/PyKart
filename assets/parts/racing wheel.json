@@ -15,6 +15,7 @@
         "Bounciness": 0.05,
         "JoiningBehavior": "Accept"
     },
+    "Description": "A wheel which can resust large amounts of pressure it can spin very fast",
     "ShowProperties": ["Weight", "Force"],
     "JointData": {
         "BreakPoint": 25000,

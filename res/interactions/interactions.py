@@ -181,6 +181,11 @@ class PartUI():
         obj.screen.blit(NameText, (self.pos[0] + 30, self.pos[1] + 30))
         obj.screen.blit(Image, (obj.dimensions[0] / 2 - Image.get_width() / 2, self.pos[1] + 90))
         ImageHeight = Image.get_height()
+
+        text = self.part["Description"].strip("\n")
+        Text = obj.font.render(text, True, (20,20,20))
+        obj.screen.blit(Text, (self.pos[0] + 50 ,self.pos[1]+ ImageHeight + 100))
+        ImageHeight += Text.get_height() + 20
         text = "Type: "+ self.part["Type"]
         Text = self.font.render(text, True, (20,20,20))
         obj.screen.blit(Text, (self.pos[0] + 50 ,self.pos[1]+ ImageHeight + 140))

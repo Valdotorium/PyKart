@@ -21,6 +21,7 @@
         "Data":{
         }
     },
+    "Description": "A packet that wants to be delivered.contains heavy goods",
     "Joints":[
         {
             "Type": "Provide",

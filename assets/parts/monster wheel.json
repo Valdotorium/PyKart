@@ -15,6 +15,7 @@
         "Bounciness": 0.2,
         "JoiningBehavior": "Accept"
     },
+    "Description": "Large wheel, used for creating vehicles that should be fast and able to drive up steep slopes.",
     "ShowProperties": ["Weight", "Force"],
     "JointData": {
         "BreakPoint": 44000,
@@ -22,7 +23,7 @@
         "Data":{
             "Distance": 116,
             "Damping": 6.5,
-            "Stiffness": 8000
+            "Stiffness": 7500
         }
     },
     "Build":{

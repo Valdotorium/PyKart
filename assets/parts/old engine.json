@@ -46,6 +46,7 @@
             "Anchor":[32,32],
             "CollisionType": "Full"
         },
+    "Description": "An old engine with a good amount of power for its price. it is quite heavy",
     "ShowProperties": ["Weight", "Power"],
     "Textures": [{
         "Image": "old_engine.png",

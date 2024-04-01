@@ -15,6 +15,7 @@
         "Bounciness": 0.03,
         "JoiningBehavior": "Accept"
     },
+    "Description": "The best wheel of all time. Heavy. Powerful. High-Tech.",
     "ShowProperties": ["Weight", "Force"],
     "JointData": {
         "BreakPoint": 28000,

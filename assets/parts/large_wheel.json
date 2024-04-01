@@ -22,9 +22,10 @@
         "Data":{
             "Distance": 100,
             "Damping": 2.6,
-            "Stiffness": 3000
+            "Stiffness": 2800
         }
     },
+    "Description": "A upscaled version of the normal wheel.",
     "Build":{
         "NeedsJoint": 1,
         "HasRotation": 1

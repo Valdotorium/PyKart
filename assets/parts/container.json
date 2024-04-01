@@ -13,6 +13,7 @@
         "JoiningBehavior": "Provide",
         "Value": 0.7
     },
+    "Description": "Heavy Box containing very valuable items, do not lose it!",
     "ShowProperties": ["Weight", "Value"],
     "JointData": {
         "BreakPoint": 50000,
