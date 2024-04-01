@@ -15,8 +15,9 @@
         "Bounciness": 0.2,
         "JoiningBehavior": "Accept"
     },
+    "ShowProperties": ["Weight", "Force"],
     "JointData": {
-        "BreakPoint": 48000,
+        "BreakPoint": 44000,
         "Type": "Spring",
         "Data":{
             "Distance": 92,

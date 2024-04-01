@@ -17,7 +17,8 @@
         "Layers": 3,
         "StartVariability": 14,
         "StartScale": 24,
-        "UpscaleFactor": 2
+        "UpscaleFactor": 2,
+        "RandomNoise": [true, true, false]
     },
     "Physics":{
         "Friction": 1,

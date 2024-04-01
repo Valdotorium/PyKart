@@ -12,6 +12,7 @@
         "Bounciness": 0.03,
         "JoiningBehavior": "Provide"
     },
+    "ShowProperties": ["Weight"],
     "JointData": {
         "BreakPoint": 18000,
         "Hardness": 0.98,

@@ -1,7 +1,7 @@
 import random
 import pymunk
 
-def Noise(obj, scale, variability):
+def Noise(obj, scale, variability, randomnoise):
         #main  terrain generator function
         print("----------------------------------------------------------------")
         x = 0
@@ -21,11 +21,17 @@ def Noise(obj, scale, variability):
                     Terrain_Direction = 3
                 elif Terrain_Direction < -3:
                     Terrain_Direction = -3
-           
-            if Terrain_Direction > 0:
-                Height_Change += random.uniform(0, ((obj.CFG_Terrain_Scale * scale) / 50) * (Terrain_Direction / steepness))
-            elif Terrain_Direction < 0:
-                Height_Change += random.uniform(-((obj.CFG_Terrain_Scale * scale )/ 50) * (-Terrain_Direction / steepness), 0)
+                if randomnoise:
+                    if Terrain_Direction > 0:
+                        Height_Change += random.uniform(0, ((obj.CFG_Terrain_Scale * scale) / 50) * (Terrain_Direction / steepness))
+                    elif Terrain_Direction < 0:
+                        Height_Change += random.uniform(-((obj.CFG_Terrain_Scale * scale )/ 50) * (-Terrain_Direction / steepness), 0)
+                else:
+                    Height_Change +=( ((obj.CFG_Terrain_Scale * scale) / 80) * (Terrain_Direction / steepness) )
+                    if Terrain_Direction > 0:
+                        Height_Change += random.uniform(0, ((obj.CFG_Terrain_Scale * scale) / 600) * (Terrain_Direction / steepness))
+                    elif Terrain_Direction < 0:
+                        Height_Change += random.uniform(-((obj.CFG_Terrain_Scale * scale )/ 600) * (-Terrain_Direction / steepness), 0)
             Height_Change * scale
 
             obj.Terrain[x] += Height_Change
@@ -67,7 +73,7 @@ def generate_chunk(obj):
     c = 1
     while c < obj.Environment["Terrain"]["Layers"] + 1:
         #scaling the variability and scale values by the upscalefactor by the terrain and generating noise woth the new values
-        Noise(obj, round(obj.Environment["Terrain"]["StartScale"] / (obj.Environment["Terrain"]["UpscaleFactor"] * c)), obj.Environment["Terrain"]["StartVariability"] * (obj.Environment["Terrain"]["UpscaleFactor"] * c))
+        Noise(obj, round(obj.Environment["Terrain"]["StartScale"] / (obj.Environment["Terrain"]["UpscaleFactor"] * c)), obj.Environment["Terrain"]["StartVariability"] * (obj.Environment["Terrain"]["UpscaleFactor"] * c), obj.Environment["Terrain"]["RandomNoise"][c-1])
         c += 1
     print("total terrain length:", len(obj.Terrain) * obj.Environment["Terrain"]["Scale"])
 

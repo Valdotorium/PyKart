@@ -46,6 +46,7 @@
             "Anchor":[32,32],
             "CollisionType": "Full"
         },
+    "ShowProperties": ["Weight", "Power"],
     "Textures": [{
         "Image": "old_engine.png",
         "Pos": [0,0],

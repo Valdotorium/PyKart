@@ -13,6 +13,7 @@
         "JoiningBehavior": "Provide"
 
     },
+    "ShowProperties": ["Weight"],
     "JointData": {
         "BreakPoint": 18500,
         "Hardness": 0.98,

@@ -15,6 +15,7 @@
         "Bounciness": 0.1,
         "JoiningBehavior": "Accept"
     },
+    "ShowProperties": ["Weight", "Force"],
     "JointData": {
         "BreakPoint": 15000,
         "Type": "Spring",

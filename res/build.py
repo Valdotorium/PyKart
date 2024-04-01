@@ -48,6 +48,7 @@ def setup(obj):
     obj.UserHasSelectedPart = False
     obj.RotationOfSelectedPart = 0
     obj.Errormessage = None
+    obj.CurrentPartUI = interactions.PartUI(obj, None)
     obj.BuildUI = utils.BuildUI(obj)
     print("loading latest vehicle")
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
@@ -287,7 +288,8 @@ def run(obj):
                         "IdleSounds": obj.partdict[obj.selectedPart]["Sounds"]["Idle"],
                         "ActiveSounds": obj.partdict[obj.selectedPart]["Sounds"]["Active"],
                         "ConstraintSounds": obj.partdict[obj.selectedPart]["Sounds"]["Constraints"],
-                        "JoinedWith": []
+                        "JoinedWith": [],
+                        "ShowProperties": obj.partdict[obj.selectedPart]["ShowProperties"],
                     }
                     obj.partdict[obj.selectedPart]["Count"] -= 1
                     #if a joint need to be formed, its data will be created here
@@ -345,6 +347,7 @@ def run(obj):
     if obj.SelectedBuiltPart != None:
         UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(350,50)), utils.Scale(obj,[64,64]))
         if UnselectButton or pygame.key.get_pressed()[pygame.K_s]:
+            obj.CurrentPartUI.part = None
             obj.SelectedBuiltPart = None
             SelectSound = obj.sounds["click.wav"]
             SelectSound.play()
@@ -421,3 +424,13 @@ def run(obj):
             #obj.gm = "transfer"
         except:
             raise ImportError("Vehicle File not found")
+    #------------------------------The Part Info Button---------------------------------------
+    PartInfoButton = interactions.ButtonArea(obj, obj.textures["infoButton.png"], utils.Scale(obj,(550,50)), utils.Scale(obj,[64,64]))
+    if PartInfoButton or pygame.key.get_pressed()[pygame.K_i]:
+        if obj.SelectedBuiltPart != None and obj.CurrentPartUI.part == None:
+            SelectSound = obj.sounds["click.wav"]
+            SelectSound.play()
+            obj.CurrentPartUI.setPart(obj.Vehicle[obj.SelectedBuiltPart])
+    if obj.CurrentPartUI.part != None and obj.SelectedBuiltPart != None:
+        obj.CurrentPartUI.update(obj)
+

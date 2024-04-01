@@ -149,3 +149,49 @@ class TextAnimation():
         if self.ticks == self.duration:
             del(self)
 
+class PartUI():
+    def __init__(self, obj, part):
+        self.boldfont = obj.largeboldfont
+        self.font = obj.largefont
+        self.image = obj.textures["UI_tile_loweralpha.png"]
+        self.size = (800, 600)
+        self.part = None
+        if part != None:
+            self.part = part
+            self.part = part
+            self.PartName = part["name"]
+            self.ShowProperties = part["ShowProperties"]
+            self.PartType = part["Type"]
+        self.image = pygame.transform.scale(self.image, self.size)
+    def setPart(self, part):
+        self.part = part
+        self.part = part
+        self.PartName = part["name"]
+        self.ShowProperties = part["ShowProperties"]
+        self.PartType = part["Type"]
+
+    def update(self, obj):
+
+        NameText = self.boldfont.render(self.PartName, True, (20,20,20))
+        Image = self.part["Textures"][0]["Image"]
+        Image = obj.textures[Image]
+        Image = pygame.transform.scale(Image,(self.part["Textures"][0]["Size"][0] * 2,self.part["Textures"][0]["Size"][1] * 2 ))
+        self.pos = obj.dimensions[0] / 2 - self.size[0] / 2,obj.dimensions[1] / 2 - self.size[1] / 2
+        obj.screen.blit(self.image, self.pos )
+        obj.screen.blit(NameText, (self.pos[0] + 30, self.pos[1] + 30))
+        obj.screen.blit(Image, (obj.dimensions[0] / 2 - Image.get_width() / 2, self.pos[1] + 90))
+        ImageHeight = Image.get_height()
+        text = "Type: "+ self.part["Type"]
+        Text = self.font.render(text, True, (20,20,20))
+        obj.screen.blit(Text, (self.pos[0] + 50 ,self.pos[1]+ ImageHeight + 140))
+        c = 0
+        while c < len(self.part["ShowProperties"]):
+            text = self.part["ShowProperties"][c] + ": "+ str(self.part["Properties"][self.part["ShowProperties"][c]])
+            text = self.font.render(text, True, (20,20,20))
+            obj.screen.blit(text, (self.pos[0] + 50 ,self.pos[1]+ ImageHeight + 180 + c * 40))
+            c += 1
+
+
+    
+
+

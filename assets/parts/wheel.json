@@ -15,13 +15,14 @@
         "Bounciness": 0.1,
         "JoiningBehavior": "Accept"
     },
+    "ShowProperties": ["Weight", "Force"],
     "JointData": {
-        "BreakPoint": 15000,
+        "BreakPoint": 12000,
         "Type": "Spring",
         "Data":{
             "Distance": 72,
             "Damping": 10,
-            "Stiffness": 5000
+            "Stiffness": 4000
         }
     },
     "Build":{

@@ -28,15 +28,15 @@ def DrivingSounds(obj):
                     #playing the sound object
                     print("latest played sound:", Sounds[r][0])
                     Player.play()
-            elif JointImpulse > ImpulseLimit/3:
+            elif JointImpulse > ImpulseLimit/2.8:
                 if not obj.SoundInFrame:
                     VolumeFactor = (JointImpulse / ImpulseLimit) / 2
                     Sounds = copy.deepcopy(obj.NewVehicleJoints[c]["SoundData"])
-                    Sounds.append(["suspension_1.wav", 1])
-                    Sounds.append(["suspension_2.wav", 1])
-                    Sounds.append(["suspension_3.wav", 1])
-                    Sounds.append(["suspension_4.wav", 1])
-                    Sounds.append(["suspension_5.wav", 1])
+                    Sounds.append(["suspension_1.wav", 0.5])
+                    Sounds.append(["suspension_2.wav", 0.5])
+                    Sounds.append(["suspension_3.wav", 0.5])
+                    Sounds.append(["suspension_4.wav", 0.5])
+                    Sounds.append(["suspension_5.wav", 0.5])
                     #selecting a random sounds from a list of sounds
                     r = random.randint(0, len(Sounds) -1)
                     Sound = Sounds[r][0]
