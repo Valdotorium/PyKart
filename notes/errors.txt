@@ -1,2 +1,16 @@
 01: could not get screen sizes
 02: could not load textures
+
+
+async def CommunicationRequest(reciever):
+    status = reciever.sendSignalMessage("Feletonieren?)
+    await reciever.response.response() =>{
+        if "Ja" in reciever.response => () {
+            phone.StartCall(reciever)
+        }
+        else{
+            return Nein => {
+                sendSignalmessage(reciever, "ok)
+            }
+        }
+    }

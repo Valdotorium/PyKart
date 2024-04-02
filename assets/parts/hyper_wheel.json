@@ -2,7 +2,7 @@
     "Name": "Hyper Wheel",
     "Index": 87659,
     "Type": "Wheel",
-    "Cost": 30000,
+    "Cost": 25000,
     "Stex": "hyper_wheel.png",
     "Center": [32,32],
     "Properties": {

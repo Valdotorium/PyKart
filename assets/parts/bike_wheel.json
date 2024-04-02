@@ -2,7 +2,7 @@
     "Name": "Bike Wheel",
     "Index": 1,
     "Type": "Wheel",
-    "Cost": 800,
+    "Cost": 750,
     "Stex": "bike_tyre.png",
     "Center": [32,32],
     "Properties": {
@@ -18,12 +18,12 @@
     "Description": "Small and light-weight wheel, stolen from a bike",
     "ShowProperties": ["Weight", "Force"],
     "JointData": {
-        "BreakPoint": 12500,
+        "BreakPoint": 10000,
         "Type": "Spring",
         "Data":{
             "Distance": 74,
             "Damping": 18,
-            "Stiffness": 1800
+            "Stiffness": 1200
         }
     },
     "Build":{

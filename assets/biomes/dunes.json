@@ -12,8 +12,8 @@
     },
     "Terrain":{
         "Scale": 70,
-        "Flatness": 1.2,
-        "Difficulty": 7,
+        "Flatness": 1.8,
+        "Difficulty": 4.5,
         "Layers": 1,
         "StartVariability": 20,
         "StartScale": 24,

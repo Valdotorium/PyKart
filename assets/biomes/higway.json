@@ -3,7 +3,7 @@
     "Name": "Highway",
     "Background": [120, 150, 170],
     "Preview": "preview_highway.png",
-    "MoneyMultiplicator": 0.3,
+    "MoneyMultiplicator": 0.35,
     "Description": "A smooth ride",
     "Visuals":{
         "GroundColors": [[155, 150, 148], [143, 142, 140]],  
@@ -12,8 +12,8 @@
     },
     "Terrain":{
         "Scale": 70,
-        "Flatness": 3.5,
-        "Difficulty": 4,
+        "Flatness": 3.75,
+        "Difficulty": 6,
         "Layers": 2,
         "StartVariability": 7,
         "StartScale": 24,

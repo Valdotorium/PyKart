@@ -2,7 +2,7 @@
     "Name": "Large Wheel",
     "Index": 1,
     "Type": "Wheel",
-    "Cost": 4500,
+    "Cost": 3800,
     "Stex": "large_wheel.png",
     "Center": [48,48],
     "Properties": {
@@ -17,12 +17,12 @@
     },
     "ShowProperties": ["Weight", "Force"],
     "JointData": {
-        "BreakPoint": 16000,
+        "BreakPoint": 13500,
         "Type": "Spring",
         "Data":{
             "Distance": 100,
             "Damping": 2.6,
-            "Stiffness": 2800
+            "Stiffness": 2700
         }
     },
     "Description": "A upscaled version of the normal wheel.",

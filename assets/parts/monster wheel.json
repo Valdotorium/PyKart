@@ -2,15 +2,15 @@
     "Name": "Monster Wheel",
     "Index": 6,
     "Type": "Wheel",
-    "Cost":16000,
+    "Cost":13000,
     "Stex": "monster_wheelNew.png",
     "Center": [64,64],
     "Properties": {
         "Rot": 0,
         "FuelUse": 0.2,
         "MaxImpulse": 1080,
-        "Force": 3.6,
-        "Friction": 0.85,
+        "Force": 3.2,
+        "Friction": 1.1,
         "Weight": 50,
         "Bounciness": 0.2,
         "JoiningBehavior": "Accept"

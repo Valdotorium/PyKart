@@ -2,7 +2,7 @@
     "Name": "Turbo Engine",
     "Index": 4,
     "Type": "Engine",
-    "Cost": 20000,
+    "Cost": 16000,
     "Stex": "turbo_engine.png",
     "Center": [32,32],
     "Properties": {
@@ -11,12 +11,12 @@
         "Weight": 75,
         "Bounciness": 0.004,
         "JoiningBehavior": "Provide",
-        "Power": 800
+        "Power": 925
 
     },
     "ShowProperties": ["Weight", "Power"],
     "JointData": {
-        "BreakPoint": 65000,
+        "BreakPoint": 62000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{

@@ -13,7 +13,7 @@
     "Terrain":{
         "Scale": 70,
         "Flatness": 2,
-        "Difficulty": 7,
+        "Difficulty": 5,
         "Layers": 3,
         "StartVariability": 14,
         "StartScale": 24,

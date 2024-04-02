@@ -8,6 +8,7 @@ import random
 import pyglet.media
 import os
 from .interactions import interactions as interactions
+from . import particles
 
 
 """IMPORTANT NOTE: Because i did not implement vehicle parts as objects :/,
@@ -52,7 +53,7 @@ def Engine(obj,EnginePart, WheelPart):
     #for easier value management of individual parts
     if obj.Throttle != 0:
         IndexOfWheelBody = obj.NewVehicle.index(WheelPart)
-        EnginePower = EnginePart["Properties"]["Power"] * WheelPart["Properties"]["Force"] * (WheelPart["Properties"]["Weight"] / 30)
+        EnginePower = EnginePart["Properties"]["Power"] * WheelPart["Properties"]["Force"] * (WheelPart["Properties"]["Weight"] / 28)
         ApplyThrottle(obj, IndexOfWheelBody, EnginePower)
 #preventing things from spinning too fast
 def LimitAngularVelocity(body):
@@ -65,7 +66,12 @@ def DisplayDistance(obj):
     obj.MetersTravelled = round(x/32)
     text = str(round(x / 32)) + " M"
     obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (120,obj.dimensions[1] -80))
-
+def UpdateParticles(obj):
+    for particle in obj.particles:
+        particle.update(obj)
+        if particle.frame > particle.duration:
+            print("delete particle")
+            obj.particles.pop(obj.particles.index(particle))
 def DisplayEarnedMoney(obj):
     mult = round((round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled) + obj.StuntMoneyForRide) *obj.RideMoneyMultiplier) 
     text = "+" + str(mult)
@@ -176,13 +182,19 @@ def Draw(obj):
 def PhysDraw(obj):
     obj.space.debug_draw(obj.draw_options)
 """Checking if joints need to be broken, playing crashing sounds, performing core game mechanics besides physics(why is this here?)"""
+
+def Checkparts(obj):
+    c = 0
+    while c < len(obj.PymunkBodies) and c < len(obj.NewVehicle):
+        if obj.NewVehicle[c]["Type"] == "Engine":
+            particles.ParticleEffect(obj, "Exhaust", c)
+        c += 1
+
 def CheckJoints(obj):
     #checking the latest impulse divided by fps
     #if the impulse exceeds a set limit, the joint breaks
     c = 0
     while c < len(obj.PymunkJoints) and c < len(obj.NewVehicleJoints):
-        #TODO: #6 
-        #Fix a bug where the list index is OOR, because items maybe get removed asynchronously. check.
         if obj.PymunkJoints[c]!= None and obj.NewVehicleJoints[c] != None:
             JointImpulse = obj.PymunkJoints[c].impulse
             ImpulseLimit = obj.NewVehicleJoints[c]["JointData"]["BreakPoint"]
@@ -192,6 +204,7 @@ def CheckJoints(obj):
             #is the joint connecting an Engine and an Wheel?
             if utils.JointHasType(obj, obj.NewVehicleJoints[c], "Engine") != False and utils.JointHasType(obj, obj.NewVehicleJoints[c], "Wheel") != False:
                 #if yes, perform engine mechanics with the two parts
+
                 Engine(obj,utils.JointHasType(obj, obj.NewVehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.NewVehicleJoints[c], "Wheel"))
                 #mechanics.Engine(obj,utils.JointHasType(obj, obj.VehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.VehicleJoints[c], "Wheel"))
             if JointImpulse > ImpulseLimit:
@@ -205,6 +218,10 @@ def CheckJoints(obj):
                     obj.TextAnimations.append(interactions.TextAnimation("BONK +25", 100, obj))
                 elif r == 4:
                     obj.TextAnimations.append(interactions.TextAnimation("CRACK +25", 100, obj))
+                ParticlePartA = obj.NewVehicleJoints[c]["JoinedParts"][1]
+                ParticlePartB = obj.NewVehicleJoints[c]["JoinedParts"][0]
+                particles.ParticleEffect(obj, "Break", ParticlePartA)
+                particles.ParticleEffect(obj, "Break", ParticlePartB)
                 obj.space.remove(obj.PymunkJoints[c])
                 obj.NewVehicleJoints[c] = None
                 obj.VehicleJoints[c] = None
@@ -217,9 +234,33 @@ def DistanceBonuses(obj):
         obj.NextKilometer += 1000
         AlertSound = obj.sounds["coinbag.wav"]
         AlertSound.play()
-        MoneyBonus = round((obj.NextKilometer / 12) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 0.875))
+        #extra large bonuses:
+        if obj.NextKilometer == 3000:
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 1.2))
+            text = "2km Distance Bonus: +" + str(round(MoneyBonus))
+        elif obj.NextKilometer == 6000:
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 2))
+            text = "5km Distance Bonus: +" + str(round(MoneyBonus))
+        elif obj.NextKilometer == 11000:
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 2.8))
+            text = " 10km Distance Bonus: +" + str(round(MoneyBonus))
+        elif obj.NextKilometer == 16000:
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 3.5))
+            text = " 15km Distance Bonus: +" + str(round(MoneyBonus))
+        elif obj.NextKilometer == 21000:
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 4))
+            text = " 20km Distance Bonus: +" + str(round(MoneyBonus))
+        elif obj.NextKilometer == 31000:
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 3.5))
+            text = " 30km Distance Bonus: +" + str(round(MoneyBonus))
+        elif obj.NextKilometer == 51000:
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 3))
+            text = " 50km Distance Bonus: +" + str(round(MoneyBonus))
+        else:
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 0.8))
+            text = "Distance Bonus: +" + str(round(MoneyBonus))
         obj.StuntMoneyForRide += MoneyBonus
-        text = "Distance Bonus: +" + str(round(MoneyBonus))
+
         obj.TextAnimations.append(interactions.TextAnimation(text, 150, obj))
 """The pymunk physics simulation"""
 def simulate(obj, fps):
@@ -234,8 +275,11 @@ def simulate(obj, fps):
     Draw(obj)
     #PhysDraw(obj)
     CheckJoints(obj)
+    Checkparts(obj)
     utils.DisplayMoney(obj)
     DistanceBonuses(obj)
+    
+    UpdateParticles(obj)
 def FindFreight(obj):
     c = 0
     obj.RideMoneyMultiplier = 1
@@ -267,6 +311,8 @@ def setup(obj):
     obj.NextKilometer = 1000
     obj.MetersTravelled = 0
     obj._MetersTravelled = 0
+
+    obj.particles.append(particles.Particle([20, 0], [200, 200], "Spark"))
 
     #initialize speed and rpm display
     obj.SpeedDisplay = utils.Display(obj, "Speed_display.png",(160,obj.dimensions[1]-120), 315, 1.6)

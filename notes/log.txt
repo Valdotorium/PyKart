@@ -25,13 +25,8 @@ v0.1 ---- 27.3.2024 ---- added procedural terrain
 TODO
 siehe heft
 
-kleine todos:
-wall at start of terrain
-resolve issues with torque
+GAMETEST TODOS:
 
-Further ideas:
--fuel system
--different planets
--money
--launcher
--with launcher: texture packs and modding options
+->add terrain generation assets
+->add gyroscope, thrusters, engine sounds, highscore counters, generate terrain once at start of game and then load it
+

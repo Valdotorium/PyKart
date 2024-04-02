@@ -43,7 +43,7 @@ class Game():
         self.largefont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
         self.largeboldfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator-Bold.ttf"
         #initializing the font
-        self.font = pygame.font.Font(self.font, 16)
+        self.font = pygame.font.Font(self.font, 18)
         self.boldfont = pygame.font.Font(self.boldfont, 24)
         self.largefont = pygame.font.Font(self.largefont, 32)
         self.largeboldfont = pygame.font.Font(self.largeboldfont, 36)
@@ -88,8 +88,10 @@ class Game():
         self.pi =3.1415926535897932384626433832795
         self.Throttle = 0
         self.VehicleSpeed = 0
-        self.money = 16000
-        self.xp = 0
+    
+        self.money = 15000
+        self.particles = []
+        self.xp = 0        
         self.SoundPlayer = pyglet.media.Player()
         self.GroundPolygons = []
         self.restart = False

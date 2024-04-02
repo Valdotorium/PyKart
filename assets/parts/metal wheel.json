@@ -2,7 +2,7 @@
     "Name": "Metal Wheel",
     "Index": 87659,
     "Type": "Wheel",
-    "Cost": 3200,
+    "Cost": 3000,
     "Stex": "metal_ball.png",
     "Center": [32,32],
     "Properties": {

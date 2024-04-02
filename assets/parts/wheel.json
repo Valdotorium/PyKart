@@ -17,12 +17,12 @@
     },
     "ShowProperties": ["Weight", "Force"],
     "JointData": {
-        "BreakPoint": 11000,
+        "BreakPoint": 8500,
         "Type": "Spring",
         "Data":{
             "Distance": 72,
             "Damping": 10,
-            "Stiffness": 3000
+            "Stiffness": 3200
         }
     },
     "Description": "A normal wheel with a spring attached to it.",
