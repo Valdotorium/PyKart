@@ -50,6 +50,7 @@ def setup(obj):
     obj.Errormessage = None
     obj.CurrentPartUI = interactions.PartUI(obj, None)
     obj.BuildUI = utils.BuildUI(obj)
+    obj.credits = utils.Credits(obj)
     print("loading latest vehicle")
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
     if not obj.CFG_New_Game:
@@ -348,6 +349,7 @@ def run(obj):
     if obj.SelectedBuiltPart != None:
         UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(350,50)), utils.Scale(obj,[64,64]))
         if UnselectButton or pygame.key.get_pressed()[pygame.K_s]:
+            obj.credits.visible = False
             obj.CurrentPartUI.part = None
             obj.SelectedBuiltPart = None
             SelectSound = obj.sounds["click.wav"]
@@ -434,4 +436,9 @@ def run(obj):
             obj.CurrentPartUI.setPart(obj.Vehicle[obj.SelectedBuiltPart])
     if obj.CurrentPartUI.part != None and obj.SelectedBuiltPart != None:
         obj.CurrentPartUI.update(obj)
+    #------------------------------The Credits Button---------------------------------------
+    CreditButton = interactions.ButtonArea(obj, obj.textures["logo.png"], utils.Scale(obj,(obj.dimensions[0] - 100,50)), utils.Scale(obj,[64,64]))
+    if CreditButton:
+        obj.credits.visible = True
+        
 

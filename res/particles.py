@@ -96,6 +96,8 @@ def ParticleEffect(obj, type, partindex):
             print(obj.Throttle)
             obj.particles.append(Particle(ParticleVelocity, ParticlePosition, "Smoke"))
     if type == "Break":
+        pass
+    if type == "Explosion":
         print(partindex)
         r = random.randint(5,15)
         c = 0

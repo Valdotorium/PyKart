@@ -19,14 +19,14 @@ def respond(obj):
             #makes it windowed, but with the size of the full screen
             obj.screen = pygame.display.set_mode(obj.dimensions[0])
         obj.screen.fill((100, 100, 100))
-        pygame.display.set_caption("PyBox Drive") 
+        pygame.display.set_caption("PyKart                                                                                                                            Drive") 
     else:
         #smol version
         screensize = obj.CFG_Default_Screen_Size
         obj.screen = pygame.display.set_mode(screensize)
         obj.screen.fill((100, 100, 100))
         obj.dimensions[0] = screensize
-        pygame.display.set_caption("Project Exoplanet")
+        pygame.display.set_caption("PyKart Drive")
     obj.dimensions = obj.dimensions[0]
     utils.displayTextCenter(obj,"finding files")
     #locating the game assets
@@ -87,7 +87,7 @@ def respond(obj):
                 except:
                     raise ImportError("Environment File not found")
             else:
-                obj.money = 15000
+                obj.money = 150000000
             soundfiles = os.listdir(CurrentPath+"/assets/sounds")
             sounds = {}
             #loading all the sounds into the game

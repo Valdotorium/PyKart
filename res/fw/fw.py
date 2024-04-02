@@ -355,6 +355,74 @@ def DisplayXP(obj):
     obj.screen.blit(Image, pos)
     obj.screen.blit(text, textpos)
 
+class Credits():
+    def __init__(self, obj):
+        self.visible = False
+        self.font = obj.font
+        self.largefont = obj.largefont
+        self.image = obj.textures["UI_tile_loweralpha.png"]
+        self.size = (obj.dimensions[0], obj.dimensions[1])
+        self.image = pygame.transform.scale(self.image, self.size)
+        self.frames = 0
+    
+    def update(self, obj):
+        if self.visible:
+            self.pos = obj.dimensions[0] / 2 - self.size[0] / 2,obj.dimensions[1] / 2 - self.size[1] / 2
+            obj.screen.blit(self.image, self.pos)
+            text = self.largefont.render("Credits", True, (20,20,20))
+            pos = ((obj.dimensions[0] * 0.5 - text.get_width() / 2) - 2, obj.dimensions[1] * 0.1)
+            obj.screen.blit(text, pos)
 
-
+            FreesoundContributors = [
+                "TheMinkman", "qubodup", "sagetyrtle", "Lunardrive", "JustInvoke", "Troutpack", "ethanchase7744", "Romano.Tercero",
+                "MarlonHJ", "wishniak", "reqMan", "PatrickLieberkind", "BaggoNotes", "dland", "plasterbrain", "LittleRobotSoundFactory",
+                "cabled_mess", "tomf_"
+            ]
+            c = 0
+            li = 1
+            l = 1
+            text = "Freesound Contributors"
+            text = self.font.render(text, True, (20,20,20))
+            pos = ((obj.dimensions[0] * 0.5 - text.get_width() / 2) - 2, obj.dimensions[1] * 0.15)
+            obj.screen.blit(text, pos)
+            while c < len(FreesoundContributors):
+                text = self.font.render(FreesoundContributors[c], True, (20,20,20))
+                pos = (obj.dimensions[0] * 0.25 * li- text.get_width() / 2, obj.dimensions[1] * 0.16 + (0.03* obj.dimensions[1] * l))
+                obj.screen.blit(text, pos)
+                li += 1
+                if li == 4:
+                    li = 1
+                    l += 1
+                c += 1
+            CodeContributors = ["Valdotorium - programming, graphics, assets", "JoEragon - programming, assets", "ItzMooseboy - graphics","pygame - game library", "pymunk (chipmunk) - physics library", "pyglet - sound players"]
+            text = "Programmers and Code contributors"
+            l = 1
+            c = 0
+            text = self.largefont.render(text, True, (20,20,20))
+            pos = ((obj.dimensions[0] * 0.5 - text.get_width() / 2) - 2, obj.dimensions[1] * 0.45)
+            obj.screen.blit(text, pos)
+            while c < len(CodeContributors):
+                text = self.font.render(CodeContributors[c], True, (20,20,20))
+                pos = (obj.dimensions[0] * 0.5 - text.get_width() / 2, obj.dimensions[1] * 0.5 + (0.04* obj.dimensions[1] * l))
+                obj.screen.blit(text, pos)
+                l += 1
+                c += 1
             
+            text = "See the app contents 'notes' folder for more credir info."
+            text = self.font.render(text, True, (20,20,20))
+            pos = ((obj.dimensions[0] * 0.5 - text.get_width() / 2) - 2, obj.dimensions[1] * 0.85)
+            obj.screen.blit(text, pos)
+
+            if self.frames > 200:
+                text = "click to exit the credit page"
+                text = self.largefont.render(text, True, (20,20,20))
+                pos = ((obj.dimensions[0] * 0.5 - text.get_width() / 2) - 2, obj.dimensions[1] * 0.8)
+                obj.screen.blit(text, pos)
+                if pygame.mouse.get_pressed()[0]:
+                    self.visible = False
+                    self.frames = 0
+            self.frames += 1
+            
+
+
+         

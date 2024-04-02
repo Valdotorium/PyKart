@@ -1,7 +1,7 @@
 import pygame, os, sys
 import time
 import pymunk,pymunk.pygame_util
-import res.load
+import res.load     
 import res.biomes
 import res.physics
 import res.build  
@@ -133,6 +133,7 @@ class Game():
         for i in range(len(self.TextAnimations)):
             self.TextAnimations[i].update(Exo)
         utils.DisplayXP(self)
+        self.credits.update(self)
     def reset(self):
             self.gm = "build"
             self.restart = False

@@ -11,13 +11,13 @@
         "Weight": 150,
         "Bounciness": 0.004,
         "JoiningBehavior": "Provide",
-        "Power": 1700
+        "Power": 1600
 
     },
     "Description": "Large Box containing everything a electric engine needs. Very heavy and extremely powerful.",
     "ShowProperties": ["Weight", "Power"],
     "JointData": {
-        "BreakPoint": 120000,
+        "BreakPoint": 100000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{

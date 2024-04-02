@@ -11,12 +11,12 @@
         "Weight": 134,
         "Bounciness": 0.015,
         "JoiningBehavior": "Provide",
-        "Power": 2400
+        "Power": 2250
     },
     "Description": "The best engine of all time. Heavy. Powerful. High-Tech.",
     "ShowProperties": ["Weight", "Power"],
     "JointData": {
-        "BreakPoint": 84000,
+        "BreakPoint": 80000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{

@@ -18,12 +18,6 @@
 (select)Menu_Select_00.wav by LittleRobotSoundFactory -- https://freesound.org/s/270401/ -- License: Attribution 4.0
 (select-2)Click 01_Minimal UI Sounds by cabled_mess -- https://freesound.org/s/370962/ -- License: Creative Commons 0
 (coinbag)coinBag.wav by tomf_ -- https://freesound.org/s/121990/ -- License: Creative Commons 0
-----PROGAMMING----
-JoEragon
-Valdotorium
 
-----GRAPHICS----
-JoEragon
-Valdotorium
-Sky2202
-ItzMooseboy
+changes have been made to all sound files.
+Attribution 4.0 license: https://creativecommons.org/licenses/by/4.0/
