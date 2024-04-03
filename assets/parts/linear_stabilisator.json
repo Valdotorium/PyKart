@@ -1,5 +1,5 @@
 {
-    "Name": "Gyroscope",
+    "Name": "Linear Stabilisator",
     "Index": 2,
     "Type": "Control",
     "Cost": 10000,

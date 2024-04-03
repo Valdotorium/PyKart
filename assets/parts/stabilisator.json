@@ -2,7 +2,7 @@
     "Name": "Stabilisator",
     "Index": 2,
     "Type": "Control",
-    "Cost": 15000,
+    "Cost": 16000,
     "Center": [48,48],
     "Stex": "gyroscope_new.png",
     "Properties": {
