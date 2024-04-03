@@ -16,7 +16,7 @@
     "Description": "The best engine of all time. Heavy. Powerful. High-Tech.",
     "ShowProperties": ["Weight", "Power"],
     "JointData": {
-        "BreakPoint": 80000,
+        "BreakPoint": 86000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{

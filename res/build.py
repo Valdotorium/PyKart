@@ -71,6 +71,7 @@ def setup(obj):
 
 def run(obj):
     PartIsValid = True
+    print(obj.RotationOfSelectedPart)
     scaleX = obj.scalefactor
     mx, my = pygame.mouse.get_pos()
 
@@ -137,10 +138,13 @@ def run(obj):
         if obj.Vehicle[c] != None:
             PartJoints = obj.Vehicle[c]["Joints"]
             PartPosition = obj.Vehicle[c]["Pos"]
+            HitboxPosition = obj.Vehicle[c]["Hitbox"]["Pos"]
             #draw every joint of the part
             cc = 0
             while cc < len(PartJoints):
                 JointPosition = PartJoints[cc]["Pos"]
+                if obj.Vehicle[c]["Hitbox"]["Type"] != "Circle":
+                    FinalJointPosition=utils.AddTuples(PartPosition,HitboxPosition)            
                 FinalJointPosition=utils.AddTuples(PartPosition,JointPosition)
                 obj.JointPositions.append([c,FinalJointPosition]) #c is also the index of the joints parent part
                 #print(f"creating joint at pos {FinalJointPosition} with parent {c}")
@@ -158,11 +162,14 @@ def run(obj):
         #(utils function for that?)
         #they will then always be referenced by their center point (which could be the anchor of the part)
         SelectedPartJoints = copy.deepcopy(obj.partdict[obj.selectedPart])["Joints"]
+        HitboxPosition = obj.partdict[obj.selectedPart]["Hitbox"]["Pos"]
         c = 0
         while c < len(SelectedPartJoints):
             JointPosition = SelectedPartJoints[c]["Pos"]
             #Centering the part
             JointPosition = utils.SubstractTuples(JointPosition,obj.partdict[obj.selectedPart]["Center"])
+            if obj.partdict[obj.selectedPart]["Hitbox"]["Type"] != "Circle":
+                JointPosition = utils.AddTuples(JointPosition,HitboxPosition)
             #rotating the joints position
             JointPosition = utils.RotateVector(JointPosition, -obj.RotationOfSelectedPart)
             FJointPosition = utils.AddTuples(JointPosition, (mx,my))
@@ -231,18 +238,21 @@ def run(obj):
         #(utils function for that?)
         #they will then always be referenced by their center point (which could be the anchor of the part)
         SelectedPartJoints = copy.deepcopy(obj.partdict[obj.selectedPart])["Joints"]
+        HitboxPosition = obj.partdict[obj.selectedPart]["Hitbox"]["Pos"]
         c = 0
         while c < len(SelectedPartJoints):
             JointPosition = SelectedPartJoints[c]["Pos"]
             #Centering the part
             JointPosition = utils.SubstractTuples(JointPosition,obj.partdict[obj.selectedPart]["Center"])
+            if obj.partdict[obj.selectedPart]["Hitbox"]["Type"] != "Circle":
+                JointPosition = utils.AddTuples(JointPosition,HitboxPosition)
             #rotating the joints position
             JointPosition = utils.RotateVector(JointPosition, -obj.RotationOfSelectedPart)
             FJointPosition = utils.AddTuples(JointPosition, (mx,my))
             JointPositionsOfSelectedPart.append(FJointPosition)
             RelativeJointPositionsOfSelectedPart.append(JointPosition)
 
-            c += 1
+            c += 1 
         #print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}") 
     #------------------------------Upon placement, check if the position of the parts center is within a valid rectangle (BuildBackgroundImg)--------------------------------
     if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not obj.UserHasSelectedPart and obj.CFG_Build_Enforce_Rules:
@@ -407,6 +417,7 @@ def run(obj):
     #------------------------------Marking the selected part-------------------------------------
     if obj.SelectedBuiltPart != None:
         RectPos = utils.SubstractTuples(obj.Vehicle[obj.SelectedBuiltPart]["Pos"], obj.Vehicle[obj.SelectedBuiltPart]["Center"])
+        RectPos = utils.AddTuples(RectPos, obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Pos"])
         pygame.draw.rect(obj.screen, (250,225,225), (RectPos[0], RectPos[1],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][0],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][1]), 2,2)
     #------------------------------The Reload Vehicle Button---------------------------------------
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))

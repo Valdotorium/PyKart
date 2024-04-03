@@ -9,8 +9,8 @@
         "Rot": 0,
         "FuelUse": 0.6,
         "MaxImpulse": 1080,
-        "Force": 4,
-        "Friction": 1.45,
+        "Force": 3.3,
+        "Friction": 1.55,
         "Weight": 36,
         "Bounciness": 0.03,
         "JoiningBehavior": "Accept"

@@ -18,7 +18,7 @@
     "Description": "A wheel with much grip, ideal for uneven terrain",
     "ShowProperties": ["Weight", "Force"],
     "JointData": {
-        "BreakPoint": 44000,
+        "BreakPoint": 47000,
         "Type": "Spring",
         "Data":{
             "Distance": 92,

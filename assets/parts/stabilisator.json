@@ -1,22 +1,23 @@
 {
-    "Name": "Gyroscope",
+    "Name": "Stabilisator",
     "Index": 2,
     "Type": "Control",
-    "Cost": 10000,
-    "Center": [32,32],
-    "Stex": "gyroscope.png",
+    "Cost": 15000,
+    "Center": [48,48],
+    "Stex": "gyroscope_new.png",
     "Properties": {
         "Rot": 0,
         "Friction": 0.96,
-        "Weight": 70,
+        "Weight": 80,
         "Bounciness": 0.02,
         "JoiningBehavior": "Provide",
-        "Force": 4
+        "LimitsAngularVelocity": 5.25,
+        "Thrust": null
     },
-    "Description": "Heavy Box containing high-tech machinery.Does not want to spin",
-    "ShowProperties": ["Weight"],
+    "Description": "Heavy Box containing high-tech machinery.Does not want to spin. Looks better if placed last.",
+    "ShowProperties": ["Weight", "LimitsAngularVelocity"],
     "JointData": {
-        "BreakPoint": 50000,
+        "BreakPoint": 75000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{
@@ -48,9 +49,9 @@
             "CollisionType": "Full"
         },
     "Textures": [{
-        "Image": "gyroscope.png",
-        "Pos": [0,0],
-        "Size": [64,64]
+        "Image": "gyroscope_new.png",
+        "Pos": [-16,-16],
+        "Size": [96,96]
     }],
     "Sounds": {
         "Crash": [["suspension_2.wav",0.5], ["metal_crash_1.wav",0.5], ["metal_crash_4.wav",0.5]],

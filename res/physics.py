@@ -55,6 +55,10 @@ def Engine(obj,EnginePart, WheelPart):
         IndexOfWheelBody = obj.NewVehicle.index(WheelPart)
         EnginePower = EnginePart["Properties"]["Power"] * WheelPart["Properties"]["Force"] * (WheelPart["Properties"]["Weight"] / 28)
         ApplyThrottle(obj, IndexOfWheelBody, EnginePower)
+def ControlPart(obj, index):
+    Properties = obj.NewVehicle[index]["Properties"]
+    if Properties["LimitsAngularVelocity"] != None:
+        obj.PymunkBodies[index].angular_velocity /= Properties["LimitsAngularVelocity"]
 #preventing things from spinning too fast
 def LimitAngularVelocity(body):
     if -160 < body.angular_velocity < 160:
@@ -146,18 +150,20 @@ def Draw(obj):
         PartTextures = obj.PhysicsOutputData[c]["PartTextures"]
         cc = 0
         while cc < len(PartTextures):
+            PartTextures[cc]["Pos"] = list(PartTextures[cc]["Pos"])
             Image = PartTextures[cc]["Image"]
             #getting the actual image object:
             Image = obj.textures[Image]
-            Position = utils.AddTuples(utils.MultiplyTuple(BodyPosition, obj.GameZoom), utils.MultiplyTuple(PartTextures[cc]["Pos"], obj.GameZoom))
             Rotation = BodyRotation
-            #many fixes need to be done here
             Image = pygame.transform.scale(Image, utils.MultiplyTuple(PartTextures[cc]["Size"], obj.GameZoom))
             Image = pygame.transform.rotate(Image, Rotation)
+            Position = utils.AddTuples(utils.MultiplyTuple(BodyPosition, obj.GameZoom), utils.MultiplyTuple(utils.RotateVector(PartTextures[cc]["Pos"], -BodyRotation), obj.GameZoom))
+
             #applying rotation 
             #rectangle for part rotation cuz it works somehow
             texture_rect = Image.get_rect(center = Position)
             obj.screen.blit(Image, texture_rect)
+            #pygame.draw.circle(obj.screen, (200,200,200), Position, 6)
             cc += 1
         c+=1
     #calculating rpm using some random variables
@@ -188,7 +194,10 @@ def Checkparts(obj):
     while c < len(obj.PymunkBodies) and c < len(obj.NewVehicle):
         if obj.NewVehicle[c]["Type"] == "Engine":
             particles.ParticleEffect(obj, "Exhaust", c)
+        elif obj.NewVehicle[c]["Type"] == "Control":
+            ControlPart(obj, c)
         c += 1
+
 
 def CheckJoints(obj):
     #checking the latest impulse divided by fps
@@ -311,9 +320,6 @@ def setup(obj):
     obj.NextKilometer = 1000
     obj.MetersTravelled = 0
     obj._MetersTravelled = 0
-
-    obj.particles.append(particles.Particle([20, 0], [200, 200], "Spark"))
-
     #initialize speed and rpm display
     obj.SpeedDisplay = utils.Display(obj, "Speed_display.png",(160,obj.dimensions[1]-120), 315, 1.6)
     obj.RPMDisplay = utils.Display(obj, "Rpm_display.png",(obj.dimensions[0] - 160,obj.dimensions[1]-120), 315, 1.6)

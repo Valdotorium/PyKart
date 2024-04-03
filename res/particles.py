@@ -6,9 +6,9 @@ def ChangeColor(color, change):
 def RoundColor(color):
     return (int(color[0]), int(color[1]), int(color[2]))
 class Particle():
-    def __init__(self, Velocity, Position, Type):
+    def __init__(self, Velocity, Position, Type, obj):
         self.Velocity = Velocity
-        self.Position = Position
+        self.Position = list(utils.MultiplyTuple(Position, obj.GameZoom))
         self.Type = Type
         self.frame = 0
         if self.Type == "Smoke":
@@ -94,7 +94,7 @@ def ParticleEffect(obj, type, partindex):
             ParticleVelocity = list(ParticleVelocity)
             ParticlePosition = list(ParticlePosition)
             print(obj.Throttle)
-            obj.particles.append(Particle(ParticleVelocity, ParticlePosition, "Smoke"))
+            obj.particles.append(Particle(ParticleVelocity, ParticlePosition, "Smoke", obj))
     if type == "Break":
         pass
     if type == "Explosion":
@@ -106,9 +106,9 @@ def ParticleEffect(obj, type, partindex):
             ParticlePosition = (-10000,0)
             ParticleVelocity = list((random.randint(-3,3), random.randint(-1,3)))
             if c < 6:
-                obj.particles.append(Particle(ParticlePosition, ParticlePosition, "Spark"))
+                obj.particles.append(Particle(ParticlePosition, ParticlePosition, "Spark", obj))
             else:
-                obj.particles.append(Particle(ParticlePosition, ParticlePosition, "Dust"))
+                obj.particles.append(Particle(ParticlePosition, ParticlePosition, "Dust", obj))
             c += 1
 
 
