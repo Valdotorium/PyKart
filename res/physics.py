@@ -48,7 +48,7 @@ def ApplyThrottle(obj, WheelPart, Force):
     c = WheelPart
     force = obj.Throttle * Force
     point = (0, -obj.NewVehicle[c]["Center"][1])
-    obj.PymunkBodies[c].torque = 40 * force
+    obj.PymunkBodies[c].torque = 28 * force
 """Making wheels connected to motors spin"""
 def Engine(obj,EnginePart, WheelPart):
     #TODO: for more features: store the obj.NewVehicle as a list of Part objects (new class),
@@ -73,7 +73,7 @@ def ControlPart(obj, index):
             if Properties["Angle"][1] != "Permanent":
                 Angle += obj.PymunkBodies[index].angle
             obj.PymunkBodies[index].apply_impulse_at_local_point(utils.RotateVector((Thrust, 0), Angle), Properties["Angle"][2])
-            particleCount = round(round(obj.Throttle / 12) + random.uniform(0, 0.5))
+            particleCount = round(round(obj.Throttle / 30) + random.uniform(0, 0.2))
             if Properties["Thrust"] < 500:
                 particles.RedFlame(obj, index, True, Properties["Angle"][2], particleCount)
             else:

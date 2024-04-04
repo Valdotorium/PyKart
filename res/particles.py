@@ -14,11 +14,10 @@ class Particle():
         if self.Type == "Smoke":
             self.color = [130, 100, 100]
             self.alpha = 55
-            self.alphaDecay = -0.5
-            self.duration = 100
-            self.colorDecay = [0.65, 0.8, 0.8]
+            self.alphaDecay = -0.7
+            self.duration = 60
+            self.colorDecay = [0.7, 0.9, 0.9]
             self.size = random.randint(20, 30)
-            self.sizeDecay = -0.16
             self.shape = "Circle"
             self.randomizeVelocity = 0.6
             self.aerodynamics = True
@@ -26,7 +25,7 @@ class Particle():
             self.alpha = 50
             self.alphaDecay = -0.8
             self.color = [180, 180, 170]
-            self.duration = 100
+            self.duration = 60
             self.colorDecay = [0.4, 0.4, 0.4]
             self.size = random.randint(10, 15)
             self.sizeDecay = -0.09
@@ -35,12 +34,11 @@ class Particle():
             self.aerodynamics = True
         if self.Type == "Spark":
             self.alpha = 160
-            self.alphaDecay = -2
+            self.alphaDecay = -3
             self.color = [180, 180, 60]
-            self.duration = 70
-            self.colorDecay = [-0.6, -1.8, -0.5]
+            self.duration = 30
+            self.colorDecay = [-5, -5, -2]
             self.size = random.randint(6, 14)
-            self.sizeDecay = -0.06
             self.shape = "Circle"
             self.randomizeVelocity = 0.5
             self.aerodynamics = False
@@ -50,22 +48,26 @@ class Particle():
             self.color = [random.randint(180,190), random.randint(130,180), random.randint(50, 70)]
             self.duration = 20
             self.colorDecay = [-6, -5, -2.4]
-            self.size = random.randint(17, 27)
-            self.sizeDecay = -0.8
+            self.size = random.randint(22, 30)
             self.shape = "Square"
             self.randomizeVelocity = 0.5
             self.aerodynamics = False
         if self.Type == "Blue Flame":
-            self.alpha = 210
-            self.alphaDecay = -12
+            self.alpha = 220
+            self.alphaDecay = -15
             self.color = [random.randint(170,190), random.randint(210,230), random.randint(230, 250)]
-            self.duration = 15
+            self.duration = 12
             self.colorDecay = [-9, -10, -12]
-            self.size = random.randint(18, 24)
-            self.sizeDecay = -0.6
+            self.size = random.randint(20, 28)
             self.shape = "Square"
             self.randomizeVelocity = 0.25
             self.aerodynamics = False
+        if self.shape == "Square":
+            self.surface = pygame.Surface((self.size, self.size), pygame.SRCALPHA)
+            pygame.draw.rect(self.surface, RoundColor(self.color), (0,0,self.size, self.size))
+        if self.shape =="Circle":
+            self.surface = pygame.Surface((self.size * 2, self.size * 2), pygame.SRCALPHA)
+            pygame.draw.circle(self.surface, RoundColor(self.color), (self.size, self.size), self.size)
     def update(self,obj):
         self.Position[0] += self.Velocity[0]
         self.Position[1] += self.Velocity[1]
@@ -74,7 +76,6 @@ class Particle():
             self.Velocity[0] += random.uniform(-self.randomizeVelocity, self.randomizeVelocity)
             self.Velocity[1] += random.uniform(-self.randomizeVelocity, self.randomizeVelocity)
         #size and color decay
-        self.size += self.sizeDecay
         #color decay
         self.color = (self.color[0] + self.colorDecay[0], self.color[1] + self.colorDecay[1], self.color[2] + self.colorDecay[2])
         #alpha decay
@@ -92,17 +93,15 @@ class Particle():
         #drawing the particle to the screen
 
         if self.shape == "Circle":
-            surface = pygame.Surface((self.size * 2, self.size * 2), pygame.SRCALPHA)
-            pygame.draw.circle(surface, RoundColor(self.color), (self.size, self.size), self.size)
-            surface.set_alpha(self.alpha)
+
+            self.surface.set_alpha(self.alpha)
             #blit surface to screen
-            obj.screen.blit(surface, (self.Position[0] - self.size / 2, self.Position[1] - self.size / 2))
+            obj.screen.blit(self.surface, (self.Position[0] - self.size / 2, self.Position[1] - self.size / 2))
         if self.shape == "Square":
-            surface = pygame.Surface((self.size, self.size), pygame.SRCALPHA)
-            pygame.draw.rect(surface, RoundColor(self.color), (0,0,self.size, self.size))
-            surface.set_alpha(self.alpha)
+
+            self.surface.set_alpha(self.alpha)
             #blit surface to screen
-            obj.screen.blit(surface, (self.Position[0] - self.size / 2, self.Position[1] - self.size / 2))
+            obj.screen.blit(self.surface, (self.Position[0] - self.size / 2, self.Position[1] - self.size / 2))
 
 def ParticleEffect(obj, type, partindex):
     if type == "Exhaust":

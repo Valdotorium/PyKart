@@ -19,7 +19,7 @@ def respond(obj):
             #makes it windowed, but with the size of the full screen
             obj.screen = pygame.display.set_mode(obj.dimensions[0])
         obj.screen.fill((100, 100, 100))
-        pygame.display.set_caption("PyKart                                                                                                                            Drive") 
+        pygame.display.set_caption("PyKart Drive") 
     else:
         #smol version
         screensize = obj.CFG_Default_Screen_Size
@@ -47,7 +47,7 @@ def respond(obj):
             for image in imagefiles:
                 if image != ".DS_Store":
                     print("loaded image: ", image)
-                    loadedimage = pygame.image.load(CurrentPath+"/assets/images/"+image)
+                    loadedimage = pygame.image.load(CurrentPath+"/assets/images/"+image).convert_alpha()
 
                     utils.clear(obj.screen)
                     #center the text
