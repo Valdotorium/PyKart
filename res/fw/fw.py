@@ -111,12 +111,16 @@ def CreateGroundPolygon(obj, Env):
         if obj.GroundPolygons[c]!= None:
             obj.space.remove(obj.GroundPolygons[c])
         c += 1
-    obj.body_floor = pymunk.Body(1, 100, body_type=pymunk.Body.STATIC)
-    obj.body_floor.position = (0,0)
+    if not obj.HasFloor:
+        obj.body_floor = pymunk.Body(1, 100, body_type=pymunk.Body.STATIC)
+        obj.body_floor.position = (0,0)
+        obj.HasFloor = True
+        obj.space.add(obj.body_floor)
     obj.GroundPolygons = []
-    c = 0
+
     obj.GroundPolygon = []
-    obj.space.add(obj.body_floor)
+
+    c = 0
     print(obj.X_Position)
     while c < len(obj.StaticPolygon) - 1:
         VectA = obj.StaticPolygon[c]
@@ -271,7 +275,8 @@ class BuildUI():
                 #only select if part is available
                 if IsClicked and self.ClickCooldown < 0 and obj.partdict[part["Name"]]["Count"] > 0: 
                     print("Clicked")
-                    SelectPartSound.play()
+                    player = SelectPartSound.play()
+                    del(player)
                     self.ClickCooldown = 20
                     obj.selectedPart = part["Name"]
                     obj.UserHasSelectedPart = True
@@ -285,10 +290,13 @@ class BuildUI():
                     else:
                         obj.xp += round(Cost /6)
                     obj.partdict[part["Name"]]["Count"] += 1
-                    BuySound.play()
+
+                    player = BuySound.play()
+                    del(player)
                     obj.Cursor.SetBuy()
                 elif IsClicked and self.ClickCooldown < 0 and obj.money < Cost:
-                    AlertSound.play()
+                    player = AlertSound.play()
+                    del(player)
                     self.ClickCooldown = 14
                 #display the cost above the image
                 if part["Cost"] > obj.money:
@@ -323,6 +331,7 @@ class Display:
         self.hand_texture = obj.textures["hand.png"]
         self.hand_texture = pygame.transform.scale(self.hand_texture, (32 * self.scale,128 * self.scale))
         self.texture = obj.textures[texture]
+        self.texture = pygame.transform.scale(self.texture, (128 * self.scale, 128 * self.scale))
 
         
         self.position = position
@@ -339,7 +348,7 @@ class Display:
     def update(self, obj, value, multiplicator):
         self.RotateHand(value, multiplicator)
         self.HandAngle -= math.radians(90) #because of the flipped y axis of pygame
-        self.texture = pygame.transform.scale(self.texture, (128 * self.scale, 128 * self.scale))
+
         bg_rect = self.texture.get_rect(center = self.position)
         obj.screen.blit(self.texture, bg_rect)
         texture = pygame.transform.rotate(self.hand_texture, math.degrees(-self.HandAngle))

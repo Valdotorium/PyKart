@@ -193,7 +193,7 @@ def DrawMinimap(obj):
             #draw a circle at the point
             pygame.draw.circle(obj.screen, (240,160,110), (MinimapPolygon[c][0],MinimapPolygon[c][1]), 8, 7)
         c += 1
-    obj.screen.blit(pygame.transform.scale(obj.textures["mapoverlay.png"],(sizeX + 30, sizeY + 30)), (startX -15, startY - 15))
+    obj.screen.blit(obj.MiniMapImage, (startX -15, startY - 15))
 
 """Drawing the Vehicle"""
 def Draw(obj):
@@ -246,7 +246,8 @@ def Draw(obj):
             obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
             obj.restart = True
             AlertSound = obj.sounds["alert.wav"]
-            AlertSound.play()
+            player = AlertSound.play()
+            del(player)
 """Drawing the pymunk physics simulation"""
 def PhysDraw(obj):
     obj.space.debug_draw(obj.draw_options)
@@ -305,7 +306,8 @@ def DistanceBonuses(obj):
     if obj._MetersTravelled  <= obj.NextKilometer and obj.MetersTravelled > obj.NextKilometer:
         obj.NextKilometer += 1000
         AlertSound = obj.sounds["coinbag.wav"]
-        AlertSound.play()
+        player = AlertSound.play()
+        del(player)
         #extra large bonuses:
         if obj.NextKilometer == 3000:
             MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 1.2))
@@ -338,8 +340,10 @@ def DistanceBonuses(obj):
 def simulate(obj, fps):
     obj._MetersTravelled = obj.MetersTravelled
     Env = obj.Environment
+    obj.HasFloor = False
     utils.CreateGroundPolygon(obj, Env)
     obj.SoundInFrame = False
+
     LimitThrottle(obj)
     obj.space.step(1/fps)
     #draeing the poligon with the list of points obj.GroundPolygon
@@ -386,6 +390,7 @@ def setup(obj):
     #initialize speed and rpm display
     obj.SpeedDisplay = utils.Display(obj, "Speed_display.png",(160,obj.dimensions[1]-120), 315, 1.6)
     obj.RPMDisplay = utils.Display(obj, "Rpm_display.png",(obj.dimensions[0] - 160,obj.dimensions[1]-120), 315, 1.6)
+    obj.MiniMapImage = pygame.transform.scale(obj.textures["mapoverlay.png"],(400 + 30, 180 + 30))
 """Function for translating the old data stored in obj.Vehicle and obj.VehicleJoints into  pymunk joints and bodies.
 Creates obj.NewVehicle, obj.VehicleTypes, obj.NewVehicleJoints, obj.PymunkBodies, obj.PymunkJoints (versions of the old data with
 "None" objects removed"""
@@ -549,6 +554,7 @@ def TransferStage(obj):
     FindFreight(obj)
     text = "Freight value: " + str(obj.RideMoneyMultiplier)
     obj.TextAnimations.append(interactions.TextAnimation(text, 200, obj))
+    print("len of TA", len(obj.TextAnimations))
     #display freight value as text animation
      
     

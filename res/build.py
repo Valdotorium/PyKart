@@ -69,18 +69,6 @@ def setup(obj):
             #obj.gm = "transfer"
         except:
                 raise ImportError("Vehicle File not found")
-    c = 0
-    while c < len(obj.Vehicle):
-        if obj.Vehicle[c] == None or obj.Vehicle[c]== "":
-            obj.Vehicle.pop(c)
-        c += 1
-
-    #same loop as above for VehicleJoints
-    c = 0
-    while c < len(obj.VehicleJoints):
-        if obj.VehicleJoints[c] == None or obj.VehicleJoints[c] == "":
-            obj.VehicleJoints.pop(c)
-        c += 1
 
 def run(obj):
     PartIsValid = True
@@ -272,7 +260,7 @@ def run(obj):
         #is the user trying to place an "unjoined" accepting joint?
         if  obj.dimensions[0] * 0.1 < mx < 0.9 * obj.dimensions[0] and obj.dimensions[1] * 0.12 < my < 0.725 * obj.dimensions[1]:
             #if the mouse is touching BuildBackgroundImg, the part gets placed
-            if obj.SnappedJointData == [] and obj.partdict[obj.selectedPart]["Properties"]["JoiningBehavior"] != "Accept" or obj.SnappedJointData != []:
+            if obj.SnappedJointData == [] or obj.SnappedJointData != []:
                 #checking if the position of the part is otherwise invalid
 
                 #is the part exactly placed on another part?
@@ -451,18 +439,7 @@ def run(obj):
             #obj.gm = "transfer"
         except:
             raise ImportError("Vehicle File not found")
-    c = 0
-    while c < len(obj.Vehicle):
-        if obj.Vehicle[c] == None or obj.Vehicle[c]== "":
-            obj.Vehicle.pop(c)
-        c += 1
-
-    #same loop as above for VehicleJoints
-    c = 0
-    while c < len(obj.VehicleJoints):
-        if obj.VehicleJoints[c] == None or obj.VehicleJoints[c] == "":
-            obj.VehicleJoints.pop(c)
-        c += 1
+    
     #------------------------------The Part Info Button---------------------------------------
     PartInfoButton = interactions.ButtonArea(obj, obj.textures["infoButton.png"], utils.Scale(obj,(550,50)), utils.Scale(obj,[64,64]))
     if PartInfoButton or pygame.key.get_pressed()[pygame.K_i]:

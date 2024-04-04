@@ -26,7 +26,7 @@ pygame.font.init()
 
 #main loop
 running = True
-fps = 60
+fps = 48
 frame = 0
 inputvalues = []
 
@@ -60,7 +60,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200, 800)
         self.KeyCooldown = 0
-        self.CFG_New_Game = False
+        self.CFG_New_Game = True
         self.TextAnimations = []
         
 
@@ -92,7 +92,7 @@ class Game():
         self.Throttle = 0
         self.VehicleSpeed = 0
     
-        self.money = 20000
+        self.money = 2200000000
         self.particles = []
         self.xp = 0        
         self.SoundPlayer = pyglet.media.Player()
@@ -138,10 +138,18 @@ class Game():
         utils.DisplayXP(self)
         self.credits.update(self)
     def reset(self):
+
+            self.restart = False
+            for i in self.PymunkBodies:
+                self.PymunkBodies.remove(i)
+            for i in self.PymunkJoints:
+                self.PymunkJoints.remove(i)
+            del(self.space)
+            del(self.BuildUI)
+            del(self.credits)
+            del(self.CurrentPartUI)
             res.build.setup(self)
             self.gm = "build"
-            self.restart = False
-            del(self.space)
             self.GroundPolygons = []
             self.X_Position = 0
             self.Y_Position = 0
