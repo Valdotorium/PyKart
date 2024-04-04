@@ -60,7 +60,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200, 800)
         self.KeyCooldown = 0
-        self.CFG_New_Game = False
+        self.CFG_New_Game = True
         self.TextAnimations = []
         
 
@@ -92,7 +92,7 @@ class Game():
         self.Throttle = 0
         self.VehicleSpeed = 0
     
-        self.money = 20000
+        self.money = 200000
         self.particles = []
         self.xp = 0        
         self.SoundPlayer = pyglet.media.Player()

@@ -102,3 +102,18 @@ def WritePolygonPositions(obj):
 
     #print("THE GROUND POLYGON IS AT:", PolygonPoints)
     #print(f"drawing poly from terrain item {startx} to terrain item {x}")
+    obj.MinimapPolygon = []
+    x = round((obj.X_Position - obj.Environment["Terrain"]["Scale"] * 8) /obj.Environment["Terrain"]["Scale"])
+    endx = round((obj.X_Position + obj.dimensions[0]*25)/ obj.Environment["Terrain"]["Scale"])
+    PolygonPoints = []
+    #Edge point
+    if x < 0: 
+        x = 0
+    if endx < 2:
+        endx = 2
+    #the polygon points between x and enx get rendered
+    while x < round(endx) and endx < len(obj.Terrain):
+        Point = obj.Terrain[x]
+        PolygonPoints.append(((x - 10) * round(obj.Environment["Terrain"]["Scale"]) - obj.X_Position, Point))
+        x += 1
+    obj.MinimapPolygon = PolygonPoints

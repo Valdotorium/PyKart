@@ -10,7 +10,7 @@
         "Friction": 0.96,
         "Weight": 56,
         "Bounciness": 0.02,
-        "JoiningBehavior": "Provide",
+        "JoiningBehavior": "Accept",
         "LimitsAngularVelocity": 3.75,
         "Thrust": null,
         "Angle": null

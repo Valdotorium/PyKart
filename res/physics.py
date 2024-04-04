@@ -48,7 +48,7 @@ def ApplyThrottle(obj, WheelPart, Force):
     c = WheelPart
     force = obj.Throttle * Force
     point = (0, -obj.NewVehicle[c]["Center"][1])
-    obj.PymunkBodies[c].torque = 80 * force
+    obj.PymunkBodies[c].torque = 40 * force
 """Making wheels connected to motors spin"""
 def Engine(obj,EnginePart, WheelPart):
     #TODO: for more features: store the obj.NewVehicle as a list of Part objects (new class),
@@ -92,7 +92,7 @@ def DisplayDistance(obj):
     x = obj.X_Position + 10
     obj.MetersTravelled = round(x/32)
     text = str(round(x / 32)) + " M"
-    obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (120,obj.dimensions[1] -80))
+    obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (415,obj.dimensions[1] -200))
 def UpdateParticles(obj):
     for particle in obj.particles:
         particle.update(obj)
@@ -107,8 +107,8 @@ def DisplayEarnedMoney(obj):
 
     CoinImage = obj.textures["coin.png"]
     CoinImage = pygame.transform.scale(CoinImage, (30,30))
-    obj.screen.blit(CoinImage, (990,obj.dimensions[1] -80))
-    obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (1018,obj.dimensions[1] -80))
+    obj.screen.blit(CoinImage, (665,obj.dimensions[1] -200))
+    obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (710,obj.dimensions[1] -200))
 #physics
 def DrawBackground(obj):
     c = 0
@@ -157,6 +157,44 @@ def DrawBackground(obj):
         y += obj.Environment["Visuals"]["LayerHeights"][cc]
         cc += 1
     #the ground texture
+def DrawMinimap(obj):
+    startX = 400
+    startY = 600
+    sizeX = 400
+    sizeY = 180
+    #draw rect at startx and stary
+    Surface = pygame.Surface((sizeX, sizeY))
+    Surface.fill((180,180,180))
+    Surface.set_alpha(180)
+    obj.screen.blit(Surface, (startX, startY))
+
+    MinimapPolygon = []
+    XOffset = obj.MinimapPolygon[0][0] / 50
+    YOffset = obj.MinimapPolygon[0][1] / 50 - sizeY/2
+    for node in obj.MinimapPolygon:
+        if node[0] < startX + sizeX * 45:
+            node = list(node)
+            MinimapPolygon.append((node[0] /50 + startX - XOffset, node[1] / 50 + startY - YOffset))
+    #draw the minimap polygon
+    c = 0
+    while c < len(MinimapPolygon)-1:
+        MinimapPolygon[c] = list(MinimapPolygon[c])
+        MinimapPolygon[c+1] = list(MinimapPolygon[c+1])
+        if MinimapPolygon[c][1] < startY:
+            MinimapPolygon[c][1] = startY
+        if MinimapPolygon[c+1][1] < startY:
+            MinimapPolygon[c+1][1] = startY
+        if MinimapPolygon[c][1] > startY + sizeY:
+            MinimapPolygon[c][1] = startY + sizeY
+        if MinimapPolygon[c+1][1] > startY + sizeY:
+            MinimapPolygon[c+1][1] = startY + sizeY
+        pygame.draw.line(obj.screen, (255,255,255), (MinimapPolygon[c][0],MinimapPolygon[c][1]), (MinimapPolygon[c+1][0],MinimapPolygon[c+1][1]), 3)
+        if c == 30:
+            #draw a circle at the point
+            pygame.draw.circle(obj.screen, (240,160,110), (MinimapPolygon[c][0],MinimapPolygon[c][1]), 8, 7)
+        c += 1
+    obj.screen.blit(pygame.transform.scale(obj.textures["mapoverlay.png"],(sizeX + 30, sizeY + 30)), (startX -15, startY - 15))
+
 """Drawing the Vehicle"""
 def Draw(obj):
     #drawing the background
@@ -195,6 +233,8 @@ def Draw(obj):
     obj.SpeedDisplay.update(obj,obj.VehicleSpeed, 0.95)
     obj.RPMDisplay.update(obj,obj.rpm, 0.045)
     #displaying distance
+
+    DrawMinimap(obj)
     DisplayDistance(obj)
     DisplayEarnedMoney(obj)
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
