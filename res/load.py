@@ -72,6 +72,12 @@ def respond(obj):
                 print(f"loaded environment: ", obj.Environment)
             except:
                 raise ImportError("Environment File not found")
+            try:
+                TutFile = open(CurrentPath+"/assets/tutorial.json")
+                obj.LoadedTutorial = json.load(TutFile)
+                print(f"loaded tutorial: ", obj.Environment)
+            except:
+                raise ImportError("Tutorial File not found")
             #try loading th partdict and money
             if  not obj.CFG_New_Game:
                 try:

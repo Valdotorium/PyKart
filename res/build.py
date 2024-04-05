@@ -453,5 +453,8 @@ def run(obj):
     CreditButton = interactions.ButtonArea(obj, obj.textures["logo.png"], utils.Scale(obj,(obj.dimensions[0] - 100,50)), utils.Scale(obj,[64,64]))
     if CreditButton:
         obj.credits.visible = True
-        
+    #------------------------------The Tutorial Button---------------------------------------
+    TutButton = interactions.ButtonArea(obj, obj.textures["tutorial.png"], utils.Scale(obj,(obj.dimensions[0] - 200,50)), utils.Scale(obj,[64,64]))
+    if TutButton:
+        obj.gm = "tutorial"
 

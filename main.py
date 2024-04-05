@@ -15,6 +15,7 @@ from copy import deepcopy as deepcopy
 import pyglet.media
 import res.interactions.interactions as interactions
 import res.fw.fw as utils
+import res.tutorial
 #load files in othe directories like this: os.path.dirname(__file__) + "/folder/folder/file.png"
 #load file template:     grass = pygame.image.load(os.path.dirname(__file__)+"/textures/grass.png")
 pygame.init()
@@ -35,7 +36,7 @@ class Game():
         #game stuff
         self.selected_part = ""
         self.running = True
-
+        self.fps = 48
         self.clock = pygame.time.Clock()
         self.fps = fps
         self.partdict = {} # all part data in the game
@@ -101,6 +102,7 @@ class Game():
         self.SelectedEnvironment = "Moon"
         self.Cursor = interactions.Cursor(self)
         pygame.mouse.set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
+        self.clock = pygame.time.Clock()
     def run(self):
         self.money = round(self.money)
         self.xp = round(self.xp)
@@ -130,6 +132,8 @@ class Game():
             res.procedural.WritePolygonPositions(Exo)
         if self.gm == "biomeselection":
             self.BiomeSelector.update(self)
+        if self.gm == "tutorial":
+            self.Tutorial.update(self)
         if pygame.mouse.get_pressed()[0] and self.Cursor.CurrentAnimation == None:
             self.Cursor.Click()
         self.Cursor.update(self)
@@ -137,6 +141,26 @@ class Game():
             self.TextAnimations[i].update(Exo)
         utils.DisplayXP(self)
         self.credits.update(self)
+        self.clock.tick(self.fps)
+        pygame.display.flip()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+                res.transfer.run(Exo)
+                pygame.quit()
+            #q quits the game
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_q:
+                    self.running = False
+                    res.transfer.run(Exo)
+                    pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.running = False
+                    res.transfer.run(Exo)
+                    pygame.quit()
+
+
     def reset(self):
 
             self.restart = False
@@ -164,25 +188,14 @@ def resetFrames(obj, frame):
     obj.reset()
     return frame
 
-clock = pygame.time.Clock()
+
 while running:
     if frame > 0:        
         running = Exo.running
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        #q quits the game
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_q:
-                running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                running = False
 
 
     if frame == 0:
         Exo = Game()
-
         res.load.respond(Exo)
         Exo.BiomeSelector = res.biomes.BiomeSelection(Exo)
         Exo.screen.fill((100,100,100))
@@ -192,19 +205,23 @@ while running:
         #res.terrain.generate(Exo)
         #res.terrain.place(Exo)
         res.build.setup(Exo)
+        Exo.Tutorial = res.tutorial.Tutorial(Exo)
         #res.physics.setup(Exo)
         
         Exo.draw_options = pymunk.pygame_util.DrawOptions(Exo.screen)
-    frame += 1
+        time.sleep(1)
 
+    frame += 1
+    
     Exo.run()
     #handling error messages
     if Exo.Errormessage != None:
         Exo.Errormessage.update(Exo)
-    pygame.display.flip()
-    clock.tick(fps)
+
     if Exo.gm == "game":
         if Exo.restart:
             frame = resetFrames(Exo, frame)
     if running == False:
         res.transfer.run(Exo)
+
+

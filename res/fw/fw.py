@@ -16,15 +16,34 @@ def displayText(obj, text):
     pygame.display.update()
 def displayTextAt(obj, text, pos):
     #displaying text at a variable position
-    txt = obj.largefont.render(text, True, (20, 20, 20))
-    obj.screen.blit(txt, pos)
-    pygame.display.update()
+    if type(text) == str:
+        txt = obj.largefont.render(text, True, (20, 20, 20))
+        obj.screen.blit(txt, pos)
+        pygame.display.update()
+    if type(text) == list:
+        pos = list(pos)
+        y = pos[1]
+        for i in text:
+            displayTextAt(obj, i,(pos[0], y) )
+            y += 30
+            pygame.display.update()
 def displayTextCenter(obj, text):
+
     #displaying text at the center of the screen, only use after the game object has been created
-    txt = obj.largefont.render(text, True, (20, 20, 20))
-    pos = (obj.dimensions[0] / 2 - txt.get_width() / 2, obj.dimensions[1] / 2)
-    obj.screen.blit(txt, pos)
-    pygame.display.update()
+    if type(text) == str:
+        txt = obj.largefont.render(text, True, (20, 20, 20))
+        pos = (obj.dimensions[0] / 2 - txt.get_width() / 2, obj.dimensions[1] / 2)
+        obj.screen.blit(txt, pos)
+        pygame.display.update()
+    if type(text) == list:
+        txt = obj.largefont.render(text[0], True, (20, 20, 20))
+        pos = (obj.dimensions[0] / 2 - txt.get_width() / 2, obj.dimensions[1] / 2)
+        pos = list(pos)
+        y = pos[1]
+        for i in text:
+            displayTextAt(obj, i,(pos[0], y) )
+            y += 30
+            pygame.display.update()
 def clear(screen):
     #...(i wonder what that does)
     screen.fill((100,100,100))
@@ -294,6 +313,7 @@ class BuildUI():
                     player = BuySound.play()
                     del(player)
                     obj.Cursor.SetBuy()
+
                 elif IsClicked and self.ClickCooldown < 0 and obj.money < Cost:
                     player = AlertSound.play()
                     del(player)
@@ -320,6 +340,7 @@ class BuildUI():
                 pos = (X + 10 + self.ScrollX, obj.dimensions[1] * 0.825)
                 obj.screen.blit(text, pos)
                 X += part["Textures"][0]["Size"][0]  / 2 + gap + 16
+                    
 
 
 class Display:
