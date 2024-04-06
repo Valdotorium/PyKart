@@ -147,18 +147,15 @@ class Game():
             if event.type == pygame.QUIT:
                 self.running = False
                 res.transfer.run(Exo)
-                pygame.quit()
             #q quits the game
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
                     self.running = False
                     res.transfer.run(Exo)
-                    pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.running = False
                     res.transfer.run(Exo)
-                    pygame.quit()
 
 
     def reset(self):

@@ -235,27 +235,34 @@ class BuildUI():
         BuySound = obj.sounds["buy.wav"]
         AlertSound = obj.sounds["alert.wav"]
         #Button for switching the category, displaying the name of the current category
-        text = self.largefont.render(self.CurrentCategory, True, (20,20,20))
-        pos = (obj.dimensions[0] * 0.05 - text.get_width() / 2, obj.dimensions[1] * 0.65)
-        Image = self.textures["UI_tile.png"]
-        #scale the image to the size of the text
-        ButtonSize = (text.get_width() + 25, text.get_height() + 25)
-        Image = pygame.transform.scale(Image, ButtonSize)
-        obj.screen.blit(Image, pos)
-        obj.screen.blit(text, (pos[0] + 12.5, pos[1] + 12.5))
-        IsClicked = self.ClickArea(pos,ButtonSize)
-        if IsClicked and self.ClickCooldown < 0:
-            SelectPartSound.play()
-            print("Clicked")
-            self.ScrollX = 0
-            if self.categories.index(self.CurrentCategory) + 1 < len(self.categories):
-                self.CurrentCategory = self.categories[self.categories.index(self.CurrentCategory) + 1]
-                self.ClickCooldown = 10
+        img = self.textures["UI_tile.png"]
+
+        XOffset = 10
+        for category in self.categories:
+            c = self.categories.index(category)
+            text = category
+            pos = (XOffset, obj.dimensions[1] * 0.68)
+            if category != self.CurrentCategory:
+                text = self.largefont.render(text, True, (20,20,20))
             else:
-                self.CurrentCategory = self.categories[0]
-                self.ClickCooldown = 10
-            self.setup(obj)
-        self.ClickCooldown -= 1
+                text = self.largefont.render(text, True, (140,35,25))
+            img = pygame.transform.scale(img, (text.get_width() + 10, text.get_height() + 10))
+
+            XOffset += text.get_width() + 15
+            if category != self.CurrentCategory:
+                IsClicked = self.ClickArea(pos, (text.get_width(), text.get_height()))
+                obj.screen.blit(img, pos)
+                obj.screen.blit(text, (pos[0] + 5, pos[1] + 5))
+                if IsClicked and self.ClickCooldown < 0:
+                    SelectPartSound.play()
+                    print("Clicked")
+                    self.CurrentCategory = category
+                    self.ScrollX = 0
+                    self.setup(obj)
+            else:
+                obj.screen.blit(img, pos)
+                obj.screen.blit(text, (pos[0] + 5, pos[1] + 5))
+            self.ClickCooldown -= 1
         #tile image as background for the building ui, scaled to cover the bottom quarter of the screen
         Image = self.textures["UI_tile.png"]
         Image = pygame.transform.scale(Image, (obj.dimensions[0] * 2, obj.dimensions[1] * 0.25))
