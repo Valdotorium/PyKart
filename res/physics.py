@@ -238,9 +238,9 @@ def Draw(obj):
     DisplayDistance(obj)
     DisplayEarnedMoney(obj)
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
-    if -8 < obj.VehicleSpeed < 8:
-        ReloadButton = interactions.ButtonArea(obj, obj.textures["ReloadButton.png"], utils.Scale(obj,(150,50)), utils.Scale(obj,[64,64]))
-        if ReloadButton:
+    if -14 < obj.VehicleSpeed < 10:
+        ReloadButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(150,50)), utils.Scale(obj,[64,64]))
+        if ReloadButton or pygame.key.get_pressed()[pygame.K_s]:
             #add the meters travelled as money
             obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
             obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier

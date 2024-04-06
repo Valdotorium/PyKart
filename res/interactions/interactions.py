@@ -185,7 +185,7 @@ class PartUI():
         while c < len(self.part["Description"]):
             text = self.font.render(self.part["Description"][c].strip("\n"), True, (20,20,20))
             obj.screen.blit(text, (self.pos[0] + 50 ,self.pos[1]+ ImageHeight + 100))
-            ImageHeight += text.get_height() + 20
+            ImageHeight += text.get_height() + 10
             c += 1
         text = "Type: "+ self.part["Type"]
         Text = self.boldfont.render(text, True, (20,20,20))
@@ -194,7 +194,7 @@ class PartUI():
         while c < len(self.part["ShowProperties"]):
             text = self.part["ShowProperties"][c] + ": "+ str(self.part["Properties"][self.part["ShowProperties"][c]])
             text = self.boldfont.render(text, True, (20,20,20))
-            obj.screen.blit(text, (self.pos[0] + 50 ,self.pos[1]+ ImageHeight + 180 + c * 40))
+            obj.screen.blit(text, (self.pos[0] + 50 ,self.pos[1]+ ImageHeight + 180 + c * 30))
             c += 1
 
 

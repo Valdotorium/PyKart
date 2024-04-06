@@ -92,13 +92,17 @@ def run(obj):
     if PlacedPartCount >= 5:
         #only vehicles with five or more parts are allowed
         PlayButtonImg = obj.textures["PlayButton.png"]
-        PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[64,64]))
-        PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,50]), utils.Scale(obj,[64,64]))
+        PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[80,80]))
+        PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,30]), utils.Scale(obj,[80,80]))
         if PlayButton:
             SelectSound = obj.sounds["click.wav"]
             SelectSound.play()
             print("User just cligged on the play button")
             obj.gm = "biomeselection"
+    else:
+        PlayButtonImg = obj.textures["PlayButtonLocked.png"]
+        PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[80,80]))
+        interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,30]), utils.Scale(obj,[80,80]))
     #------------------------------Drawing the Vehicle--------------------------------------------------------
         
     c = 0
@@ -258,7 +262,7 @@ def run(obj):
     #------------------------------Upon placement, check if the position of the parts center is within a valid rectangle (BuildBackgroundImg)--------------------------------
     if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not obj.UserHasSelectedPart and obj.CFG_Build_Enforce_Rules:
         #is the user trying to place an "unjoined" accepting joint?
-        if  obj.dimensions[0] * 0.1 < mx < 0.9 * obj.dimensions[0] and obj.dimensions[1] * 0.12 < my < 0.725 * obj.dimensions[1]:
+        if  obj.dimensions[0] * 0.1 < mx < 0.9 * obj.dimensions[0] and obj.dimensions[1] * 0.12 < my < 0.66 * obj.dimensions[1]:
             #if the mouse is touching BuildBackgroundImg, the part gets placed
             if obj.SnappedJointData == [] or obj.SnappedJointData != []:
                 #checking if the position of the part is otherwise invalid
@@ -358,7 +362,7 @@ def run(obj):
         if not pygame.mouse.get_pressed()[0]:
             obj.UserHasSelectedPart = False
     if obj.SelectedBuiltPart != None:
-        UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(350,50)), utils.Scale(obj,[64,64]))
+        UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(350,30)), utils.Scale(obj,[80,80]))
         if UnselectButton or pygame.key.get_pressed()[pygame.K_s]:
             obj.credits.visible = False
             obj.CurrentPartUI.part = None
@@ -367,7 +371,7 @@ def run(obj):
             SelectSound.play()
         
         #---------------------The Delete Part Button--------------------------------
-        DeleteButton = interactions.ButtonArea(obj, obj.textures["DeleteButton.png"], utils.Scale(obj,(250,50)), utils.Scale(obj,[64,64]))
+        DeleteButton = interactions.ButtonArea(obj, obj.textures["DeleteButton.png"], utils.Scale(obj,(250,30)), utils.Scale(obj,[80,80]))
         if DeleteButton or pygame.key.get_pressed()[pygame.K_x]:
             SelectSound = obj.sounds["tyre_2.wav"]
             SelectSound.play()
@@ -387,7 +391,7 @@ def run(obj):
             obj.SelectedBuiltPart = None
         
     #------------------------------The Move Part Button------------------------------------------
-        MoveButton = interactions.ButtonArea(obj, obj.textures["MoveButton.png"], utils.Scale(obj,(450,50)), utils.Scale(obj,[64,64]))
+        MoveButton = interactions.ButtonArea(obj, obj.textures["MoveButton.png"], utils.Scale(obj,(450,30)), utils.Scale(obj,[80,80]))
         if MoveButton or pygame.key.get_pressed()[pygame.K_m]:
             SelectSound = obj.sounds["click.wav"]
             SelectSound.play()
@@ -422,7 +426,7 @@ def run(obj):
         pygame.draw.rect(obj.screen, (250,225,225), (RectPos[0], RectPos[1],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][0],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][1]), 2,2)
     #------------------------------The Reload Vehicle Button---------------------------------------
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
-    ReloadButton = interactions.ButtonArea(obj, obj.textures["ReloadButton.png"], utils.Scale(obj,(150,50)), utils.Scale(obj,[64,64]))
+    ReloadButton = interactions.ButtonArea(obj, obj.textures["ReloadButton.png"], utils.Scale(obj,(150,30)), utils.Scale(obj,[80,80]))
     if ReloadButton:
         print("loading latest vehicle")
         try:
@@ -441,7 +445,7 @@ def run(obj):
             raise ImportError("Vehicle File not found")
     
     #------------------------------The Part Info Button---------------------------------------
-    PartInfoButton = interactions.ButtonArea(obj, obj.textures["infoButton.png"], utils.Scale(obj,(550,50)), utils.Scale(obj,[64,64]))
+    PartInfoButton = interactions.ButtonArea(obj, obj.textures["infoButton.png"], utils.Scale(obj,(550,30)), utils.Scale(obj,[80,80]))
     if PartInfoButton or pygame.key.get_pressed()[pygame.K_i]:
         if obj.SelectedBuiltPart != None and obj.CurrentPartUI.part == None:
             SelectSound = obj.sounds["click.wav"]
@@ -450,11 +454,11 @@ def run(obj):
     if obj.CurrentPartUI.part != None and obj.SelectedBuiltPart != None:
         obj.CurrentPartUI.update(obj)
     #------------------------------The Credits Button---------------------------------------
-    CreditButton = interactions.ButtonArea(obj, obj.textures["logo.png"], utils.Scale(obj,(obj.dimensions[0] - 100,50)), utils.Scale(obj,[64,64]))
+    CreditButton = interactions.ButtonArea(obj, obj.textures["logo.png"], utils.Scale(obj,(obj.dimensions[0] - 100,30)), utils.Scale(obj,[80,80]))
     if CreditButton:
         obj.credits.visible = True
     #------------------------------The Tutorial Button---------------------------------------
-    TutButton = interactions.ButtonArea(obj, obj.textures["tutorial.png"], utils.Scale(obj,(obj.dimensions[0] - 200,50)), utils.Scale(obj,[64,64]))
+    TutButton = interactions.ButtonArea(obj, obj.textures["tutorial.png"], utils.Scale(obj,(obj.dimensions[0] - 200,30)), utils.Scale(obj,[80,80]))
     if TutButton:
         obj.gm = "tutorial"
 
