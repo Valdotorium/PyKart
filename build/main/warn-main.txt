@@ -1,0 +1,55 @@
+
+This file lists modules PyInstaller was not able to find. This does not
+necessarily mean this module is required for running your program. Python and
+Python 3rd-party packages include a lot of conditional or optional modules. For
+example the module 'ntpath' only exists on Windows, whereas the module
+'posixpath' only exists on Posix systems.
+
+Types if import:
+* top-level: imported at the top-level - look at these first
+* conditional: imported within an if-statement
+* delayed: imported within a function
+* optional: imported within a try-except-statement
+
+IMPORTANT: Do NOT post this list to the issue-tracker. Use it as a basis for
+            tracking down the missing module yourself. Thanks!
+
+missing module named pyimod02_importers - imported by /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/PyInstaller/hooks/rthooks/pyi_rth_pkgutil.py (delayed), /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/PyInstaller/hooks/rthooks/pyi_rth_pkgres.py (delayed)
+missing module named _winapi - imported by encodings (delayed, conditional, optional), ntpath (optional), subprocess (conditional), shutil (conditional), multiprocessing.connection (optional), multiprocessing.spawn (delayed, conditional), multiprocessing.reduction (conditional), multiprocessing.shared_memory (conditional), multiprocessing.heap (conditional), multiprocessing.popen_spawn_win32 (top-level), mimetypes (optional)
+missing module named msvcrt - imported by subprocess (optional), pyglet.extlibs.png (delayed, conditional), multiprocessing.spawn (delayed, conditional), multiprocessing.popen_spawn_win32 (top-level), getpass (optional)
+missing module named typing_extensions - imported by pkg_resources._vendor.packaging.metadata (conditional, optional), packaging.metadata (conditional, optional)
+missing module named nt - imported by os (delayed, conditional, optional), ntpath (optional), shutil (conditional), importlib._bootstrap_external (conditional), ctypes (delayed, conditional)
+missing module named _manylinux - imported by pkg_resources._vendor.packaging._manylinux (delayed, optional), packaging._manylinux (delayed, optional)
+missing module named winreg - imported by importlib._bootstrap_external (conditional), pygame.sysfont (conditional), platform (delayed, optional), mimetypes (optional), urllib.request (delayed, conditional, optional), pkg_resources._vendor.platformdirs.windows (delayed, optional)
+missing module named jnius - imported by pkg_resources._vendor.platformdirs.android (delayed, optional)
+missing module named platformdirs - imported by pkg_resources._vendor.platformdirs.__main__ (top-level)
+missing module named 'pkg_resources.extern.importlib_resources' - imported by pkg_resources._vendor.jaraco.text (optional)
+missing module named 'pkg_resources.extern.more_itertools' - imported by pkg_resources._vendor.jaraco.functools (top-level)
+missing module named pkg_resources.extern.packaging - imported by pkg_resources.extern (top-level), pkg_resources (top-level)
+missing module named pkg_resources.extern.platformdirs - imported by pkg_resources.extern (top-level), pkg_resources (top-level)
+missing module named _frozen_importlib_external - imported by importlib._bootstrap (delayed), importlib (optional), importlib.abc (optional), zipimport (top-level)
+excluded module named _frozen_importlib - imported by importlib (optional), importlib.abc (optional), zipimport (top-level)
+missing module named 'pkg_resources.extern.jaraco' - imported by pkg_resources (top-level), pkg_resources._vendor.jaraco.text (top-level)
+missing module named vms_lib - imported by platform (delayed, optional)
+missing module named 'java.lang' - imported by platform (delayed, optional)
+missing module named java - imported by platform (delayed)
+missing module named _winreg - imported by platform (delayed, optional)
+missing module named _wmi - imported by platform (optional)
+missing module named multiprocessing.BufferTooShort - imported by multiprocessing (top-level), multiprocessing.connection (top-level)
+missing module named multiprocessing.AuthenticationError - imported by multiprocessing (top-level), multiprocessing.connection (top-level)
+missing module named multiprocessing.get_context - imported by multiprocessing (top-level), multiprocessing.pool (top-level), multiprocessing.managers (top-level), multiprocessing.sharedctypes (top-level)
+missing module named multiprocessing.TimeoutError - imported by multiprocessing (top-level), multiprocessing.pool (top-level)
+missing module named multiprocessing.set_start_method - imported by multiprocessing (top-level), multiprocessing.spawn (top-level)
+missing module named multiprocessing.get_start_method - imported by multiprocessing (top-level), multiprocessing.spawn (top-level)
+missing module named PIL - imported by pyglet.image.codecs.pil (top-level), pyglet.font.user (optional)
+missing module named pyglet.window.BaseWindow - imported by pyglet.window (top-level), pyglet.window.headless (top-level), pyglet.window.cocoa (top-level), pyglet.window.win32 (top-level), pyglet.window.xlib (top-level)
+missing module named 'PIL.Image' - imported by pyglet.font.user (optional)
+missing module named pyogg - imported by pyglet.media.codecs.pyogg (top-level)
+missing module named 'gi.repository' - imported by pyglet.media.codecs.gstreamer (optional)
+missing module named gi - imported by pyglet.media.codecs.gstreamer (optional)
+missing module named OpenGL - imported by pygame (delayed)
+missing module named numpy - imported by pygame.surfarray (top-level), pygame.sndarray (top-level), pygame (delayed)
+missing module named pygame.register_quit - imported by pygame (top-level), pygame.fastevent (top-level)
+missing module named pygame.error - imported by pygame (top-level), pygame.fastevent (top-level)
+missing module named 'pygame.overlay' - imported by pygame (optional)
+missing module named 'pygame.cdrom' - imported by pygame (conditional, optional)

@@ -1,0 +1,61 @@
+{
+    "Name": "Large Control Unit",
+    "Index": 2,
+    "Type": "Control",
+    "Cost": 48000,
+    "Center": [64,64],
+    "Stex": "large_control-unit.png",
+    "Properties": {
+        "Rot": 0,
+        "Friction": 0.96,
+        "Weight": 180,
+        "Bounciness": 0.02,
+        "JoiningBehavior": "Provide",
+        "LimitsAngularVelocity": 1.58,
+        "Thrust": 2150,
+        "Angle": [180, "Permanent", [0,0]]
+        
+    },
+    "Description": ["A very modern control unit, contains a super strong thruster", "and a stabilisator. Does not require engines to operate"],
+    "ShowProperties": ["Weight", "Thrust", "LimitsAngularVelocity"],
+    "JointData": {
+        "BreakPoint": 95000,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [64,0]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [128,64]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [64, 128]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[128,128],
+            "Anchor":[64,64],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "large_control-unit.png",
+        "Pos": [0,0],
+        "Size": [128,128]
+    }],
+    "Sounds": {
+        "Crash": [["suspension_2.wav",0.5], ["metal_crash_1.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+    
+}

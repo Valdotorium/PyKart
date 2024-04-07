@@ -1,0 +1,56 @@
+{
+    "Name": "Linear Stabilisator",
+    "Index": 2,
+    "Type": "Control",
+    "Cost": 10000,
+    "Center": [48,32],
+    "Stex": "linear_gyroscope.png",
+    "Properties": {
+        "Rot": 0,
+        "Friction": 0.96,
+        "Weight": 56,
+        "Bounciness": 0.02,
+        "JoiningBehavior": "Accept",
+        "LimitsAngularVelocity": 3.75,
+        "Thrust": null,
+        "Angle": null
+    },
+    "Description": ["Box containing modern machinery that stabilizes the vehicle.", "Looks better if placed last.", "it will constantly try to prevent rotation","of itself and its neighboring parts"],
+    "ShowProperties": ["Weight", "LimitsAngularVelocity"],
+    "JointData": {
+        "BreakPoint": 65000,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [64,32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [0, 32]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[64,64],
+            "Anchor":[32,32],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "linear_gyroscope.png",
+        "Pos": [-16,0],
+        "Size": [96,64]
+    }],
+    "Sounds": {
+        "Crash": [["suspension_2.wav",0.5], ["metal_crash_1.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+    
+}

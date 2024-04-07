@@ -1,0 +1,58 @@
+{
+    "Name": "Offroad Monster Wheel",
+    "Index": 6,
+    "Type": "Wheel",
+    "Cost": 14000,
+    "Stex": "Offroad_Wheel.png",
+    "Center": [48,48],
+    "Properties": {
+        "Rot": 0,
+        "FuelUse": 0.2,
+        "MaxImpulse": 1080,
+        "Force": 2.8,
+        "Friction": 2.5,
+        "Weight": 48,
+        "Bounciness": 0.2,
+        "JoiningBehavior": "Accept"
+    },
+    "Description": ["A wheel with much grip, ideal for uneven terrain", " connect it to an engine to power it"],
+    "ShowProperties": ["Weight", "Force"],
+    "JointData": {
+        "BreakPoint": 47000,
+        "Type": "Spring",
+        "Data":{
+            "Distance": 92,
+            "Damping": 3.5,
+            "Stiffness": 7500
+        }
+    },
+    "Build":{
+        "NeedsJoint": 1,
+        "HasRotation": 1
+    },
+    "Joints":[
+        {
+            "Type": "Accept",
+            "Pos": [48,0]
+        }
+    ],
+    "Hitbox":{
+        "Pos": [48,48],
+        "Type": "Circle",
+        "Size": 48,
+        "Anchor": [0,0],
+        "CollisionType": "Semi",
+        "HasTwoAnchors": false
+    },
+    "Textures": [{
+        "Image": "Offroad_Wheel.png",
+        "Pos": [0,0],
+        "Size": [96,96]
+    }],
+    "Sounds": {
+        "Crash": [["tyre_1.wav",1], ["tyre_2.wav",1], ["tyre_3.wav",1]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+}

@@ -1,0 +1,58 @@
+{
+    "Name": "Wheel",
+    "Index": 1,
+    "Type": "Wheel",
+    "Cost": 1500,
+    "Stex": "wheelNew.png",
+    "Center": [32,32],
+    "Properties": {
+        "Rot": 0,
+        "FuelUse": 0.2,
+        "MaxImpulse": 1080,
+        "Force": 1.75,
+        "Friction": 1,
+        "Weight": 22,
+        "Bounciness": 0.1,
+        "JoiningBehavior": "Accept"
+    },
+    "ShowProperties": ["Weight", "Force"],
+    "JointData": {
+        "BreakPoint": 8500,
+        "Type": "Spring",
+        "Data":{
+            "Distance": 72,
+            "Damping": 10,
+            "Stiffness": 3200
+        }
+    },
+    "Description": ["A normal wheel with a spring attached to it", "connect it to an engine to power it"],
+    "Build":{
+        "NeedsJoint": 1,
+        "HasRotation": 1
+    },
+    "Joints":[
+        {
+            "Type": "Accept",
+            "Pos": [32,0]
+        }
+    ],
+    "Hitbox":{
+        "Pos": [32,32],
+        "Type": "Circle",
+        "Size": 32,
+        "Anchor": [0,0],
+        "CollisionType": "Semi",
+        "HasTwoAnchors": false
+    },
+    "Textures": [{
+        "Image": "wheelNew.png",
+        "Pos": [0,0],
+        "Size": [64,64]
+    }],
+    "Sounds": {
+        "Crash": [["tyre_1.wav",1], ["tyre_2.wav",1], ["tyre_3.wav",1]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+}

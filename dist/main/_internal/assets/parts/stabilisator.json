@@ -1,0 +1,64 @@
+{
+    "Name": "Stabilisator",
+    "Index": 2,
+    "Type": "Control",
+    "Cost": 16000,
+    "Center": [48,48],
+    "Stex": "gyroscope_new.png",
+    "Properties": {
+        "Rot": 0,
+        "Friction": 0.96,
+        "Weight": 80,
+        "Bounciness": 0.02,
+        "JoiningBehavior": "Accept",
+        "LimitsAngularVelocity": 5.25,
+        "Thrust": null,
+        "Angle": null
+    },
+    "Description": ["Heavy Box containing high-tech machinery.","Does not want to spin. Looks better if placed last.", "it will constantly try to prevent rotation", "of itself and its neighboring parts"],
+    "ShowProperties": ["Weight", "LimitsAngularVelocity"],
+    "JointData": {
+        "BreakPoint": 75000,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [32,0]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [64,32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [32, 64]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [0, 32]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[64,64],
+            "Anchor":[32,32],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "gyroscope_new.png",
+        "Pos": [-16,-16],
+        "Size": [96,96]
+    }],
+    "Sounds": {
+        "Crash": [["suspension_2.wav",0.5], ["metal_crash_1.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+    
+}

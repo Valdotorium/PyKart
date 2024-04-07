@@ -1,0 +1,58 @@
+{
+    "Name": "Large Wheel",
+    "Index": 1,
+    "Type": "Wheel",
+    "Cost": 3800,
+    "Stex": "large_wheel.png",
+    "Center": [48,48],
+    "Properties": {
+        "Rot": 0,
+        "FuelUse": 0.2,
+        "MaxImpulse": 1080,
+        "Force": 1.6,
+        "Friction": 1.2,
+        "Weight": 36,
+        "Bounciness": 0.1,
+        "JoiningBehavior": "Accept"
+    },
+    "ShowProperties": ["Weight", "Force"],
+    "JointData": {
+        "BreakPoint": 13500,
+        "Type": "Spring",
+        "Data":{
+            "Distance": 100,
+            "Damping": 2.6,
+            "Stiffness": 2700
+        }
+    },
+    "Description": ["A upscaled version of the normal wheel", "connect it to an engine to power it."],
+    "Build":{
+        "NeedsJoint": 1,
+        "HasRotation": 1
+    },
+    "Joints":[
+        {
+            "Type": "Accept",
+            "Pos": [48,0]
+        }
+    ],
+    "Hitbox":{
+        "Pos": [48,48],
+        "Type": "Circle",
+        "Size": 48,
+        "Anchor": [0,0],
+        "CollisionType": "Semi",
+        "HasTwoAnchors": false
+    },
+    "Textures": [{
+        "Image": "large_wheel.png",
+        "Pos": [0,0],
+        "Size": [96,96]
+    }],
+    "Sounds": {
+        "Crash": [["tyre_1.wav",1], ["tyre_2.wav",1], ["tyre_3.wav",1]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+}
