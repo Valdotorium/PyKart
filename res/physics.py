@@ -67,7 +67,7 @@ def ControlPart(obj, index):
         #"angle" property format: [Angle of thrust, AngleIsPermanent, Point relative to the center of the body on which the force is applied]
         #AngleIsPermanent is "Permanent" if the angle of thrust should not be changed by the angle nof the part
     if Properties["Thrust"] != None:
-        print(obj.Throttle)
+        #print(obj.Throttle)
         if obj.Throttle > 15:
             Thrust = (Properties["Thrust"] / 100) * obj.Throttle
             Angle = utils.DegreesToRadians(Properties["Angle"][0])
@@ -98,7 +98,7 @@ def UpdateParticles(obj):
     for particle in obj.particles:
         particle.update(obj)
         if particle.frame > particle.duration:
-            print("delete particle")
+            #print("delete particle")
             obj.particles.pop(obj.particles.index(particle))
 def DisplayEarnedMoney(obj):
     mult = round((round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled) + obj.StuntMoneyForRide) *obj.RideMoneyMultiplier) 
@@ -556,8 +556,8 @@ def TransferStage(obj):
 
     FindFreight(obj)
     text = "Freight value: " + str(obj.RideMoneyMultiplier)
+    obj.RideMoneyMultiplier=round(obj.RideMoneyMultiplier)
     obj.TextAnimations.append(interactions.TextAnimation(text, 200, obj))
-    print("len of TA", len(obj.TextAnimations))
     #display freight value as text animation
      
     

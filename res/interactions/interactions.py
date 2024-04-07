@@ -58,7 +58,7 @@ class Cursor():
         self.radius = 12
         self.thickness = 2
     def update(self, obj):
-        print(self.CurrentAnimation,self.animationticks)
+        #print(self.CurrentAnimation,self.animationticks)
         self.position = pygame.mouse.get_pos()
         if self.CurrentAnimation == "Delete":
             if self.animationticks >= 11:
@@ -72,7 +72,7 @@ class Cursor():
                 startpos = self.position
                 pygame.draw.line(obj.screen, (180, 140, 0), (startpos[0] - self.animationticks * 2, startpos[1] - self.animationticks * 2), (startpos[0] + self.animationticks * 2, startpos[1] + self.animationticks * 2), 11)
                 pygame.draw.line(obj.screen, (180, 140, 0), (startpos[0] + self.animationticks * 2, startpos[1] - self.animationticks * 2), (startpos[0] - self.animationticks * 2, startpos[1] + self.animationticks * 2), 11)
-                print("fgf",self.CurrentAnimation,self.animationticks)
+                #print("fgf",self.CurrentAnimation,self.animationticks)
         if self.CurrentAnimation == None:
             
             self.animationticks = 0

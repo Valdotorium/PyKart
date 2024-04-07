@@ -61,7 +61,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200, 800)
         self.KeyCooldown = 0
-        self.CFG_New_Game = True
+        self.CFG_New_Game = False
         self.TextAnimations = []
         
 
@@ -93,7 +93,7 @@ class Game():
         self.Throttle = 0
         self.VehicleSpeed = 0
     
-        self.money = 22000
+        self.money = 22500
         self.particles = []
         self.xp = 0        
         self.SoundPlayer = pyglet.media.Player()
@@ -127,6 +127,7 @@ class Game():
             res.transfer.run(Exo)
             res.physics.setup(Exo)
             res.physics.TransferStage(Exo)
+            res.sounds.setup(Exo)
             res.procedural.setup(Exo)
             res.procedural.generate_chunk(Exo)
             res.procedural.WritePolygonPositions(Exo)

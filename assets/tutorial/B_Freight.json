@@ -1,0 +1,25 @@
+{
+    "Title": "Transporting Freight",
+    "Contents":[
+        {
+            "Element": "TEXT",
+            "Size": "LARGE",
+            "Content": ["Transporting Freight"]
+        },
+        {
+            "Element": "IMG",
+            "Size": [500,300],
+            "Content": "_t_10.png"
+        },
+        {
+            "Element": "TEXT",
+            "Size": "MEDIUM",
+            "Content": ["You can benefit from transporting freight:", 
+        "The money multiplicator of a ride will be increased by the freight part's value property.",
+        "Freight parts are very heavy and only stable vehicles can carry them.",
+        "Avoid integrating freight parts in important structures in your vehicle,",
+        "because their joints are very weak."]
+
+        }
+    ]
+}

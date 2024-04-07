@@ -43,8 +43,7 @@ def DrivingSounds(obj):
                         Player.volume = 1
                     else:
                         Player.volume = Sounds[r][1] * VolumeFactor
-                    #playing the sound object
-                    print("latest played sound:", Sounds[r][0])
+
                     Player.play()
             elif JointImpulse > ImpulseLimit/2.8:
                 if not obj.SoundInFrame:
@@ -69,7 +68,7 @@ def DrivingSounds(obj):
                     else:
                         Player.volume = Sounds[r][1] * VolumeFactor
                     #playing the sound object
-                    print("latest played sound:", Sounds[r][0])
+                    #print("latest played sound:", Sounds[r][0])
                     Player.play()
         c += 1
     #----------------------------------------------------------------ENGINE SOUNDS ----------------------------------------------------------------

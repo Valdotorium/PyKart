@@ -1,4 +1,22 @@
-import pygame,random,pyglet.media  ,copy        
+import pygame,random,pyglet.media  ,copy  
+def setup(obj):
+    obj.engineSoundsPlayer = None
+    for part in obj.NewVehicle:
+        if part!= None and obj.engineSoundsPlayer == None:
+            if part["ActiveSounds"]!= None and part["Type"] == "Engine":
+                Sound = obj.sounds[part["ActiveSounds"][0][0]]
+                Vol = part["ActiveSounds"][0][1]
+                player = pyglet.media.Player()
+                player.volume = Vol
+                player.loop = True
+                player.queue(Sound)
+      
+               
+                obj.engineSoundsPlayer = player
+
+            else:
+                print("No sound data for part:", part["name"])
+    
 def DrivingSounds(obj):
     c = 0
     #----------------------------------------------------------------SUSPENSION SOUNDS----------------------------------------------------------------
@@ -56,11 +74,8 @@ def DrivingSounds(obj):
         c += 1
     #----------------------------------------------------------------ENGINE SOUNDS ----------------------------------------------------------------
     c = 0
-    while c < len(obj.NewVehicle):
+    obj.engineSoundsPlayer.play()
+    pitch = round((1.125 + abs(obj.Throttle) / 260 + abs(obj.rpm / 10000)) * 32)
+    obj.engineSoundsPlayer.pitch = pitch / 32
 
-        if obj.NewVehicle[c] != None and obj.NewVehicle[c]["Type"] == "Engine":
-            Sound = obj.sounds[obj.NewVehicle[c]["ActiveSounds"][0][0]]
-            Vol = obj.NewVehicle[c]["ActiveSounds"][0][1]
-            #add that part later
-
-        c += 1
+    #obj.engineSoundsPlayer.seek(0)

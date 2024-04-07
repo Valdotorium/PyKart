@@ -86,7 +86,6 @@ class Particle():
             self.alpha = 0
 
         self.frame += 1
-        print(self.Type, self.Position)
         if obj.PymunkBodies[0] != None and self.aerodynamics:
             self.Velocity = utils.AddTuples(self.Velocity, utils.MultiplyTuple(obj.PymunkBodies[0].velocity, -0.00025))
         self.Velocity = list(self.Velocity)
@@ -119,7 +118,6 @@ def ParticleEffect(obj, type, partindex):
     if type == "Break":
         pass
     if type == "Explosion":
-        print(partindex)
         r = random.randint(5,15)
         c = 0
         #make the index refer to a body and spawn particles on an anchor point of a constraint

@@ -16,7 +16,7 @@
     "Description": ["cheap half frame for everyday vehicle building use. Not stable at all."],
     "ShowProperties": ["Weight"],
     "JointData": {
-        "BreakPoint": 6800,
+        "BreakPoint": 7500,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{

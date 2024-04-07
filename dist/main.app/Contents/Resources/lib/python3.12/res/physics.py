@@ -9,6 +9,7 @@ import pyglet.media
 import os
 from .interactions import interactions as interactions
 from . import particles
+from. import sounds
 
 
 """IMPORTANT NOTE: Because i did not implement vehicle parts as objects :/,
@@ -231,6 +232,8 @@ def Draw(obj):
     obj.rpm = int(obj.VehicleSpeed * 10) + int(obj.Throttle * 75) + random.randint(896, 904)
     #drawing speed and rpm display
     obj.SpeedDisplay.update(obj,obj.VehicleSpeed, 0.95)
+
+
     obj.RPMDisplay.update(obj,obj.rpm, 0.045)
     #displaying distance
 

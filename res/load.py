@@ -54,6 +54,7 @@ def respond(obj):
 
                     utils.displayTextCenter(obj,f"loaded image {image}")
                     textures[image] = loadedimage
+                    time.sleep(0.01)
             print("LOG: loaded all images into:", textures)
             obj.textures = textures
 
@@ -64,6 +65,7 @@ def respond(obj):
                 utils.DecodePart(loadedpart, obj)
                 utils.clear(obj.screen)
                 utils.displayTextCenter(obj,f"loaded part {part}")
+                time.sleep(0.01)
             print("all parts loaded to game: ", obj.partdict)
             print("all parts loaded to shop: ", obj.shopdict)
             try:
@@ -72,12 +74,17 @@ def respond(obj):
                 print(f"loaded environment: ", obj.Environment)
             except:
                 raise ImportError("Environment File not found")
-            try:
-                TutFile = open(CurrentPath+"/assets/tutorial.json")
-                obj.LoadedTutorial = json.load(TutFile)
-                print(f"loaded tutorial: ", obj.Environment)
-            except:
-                raise ImportError("Tutorial File not found")
+            tutorials = os.listdir(CurrentPath+"/assets/tutorial")
+            tutorials.sort()
+            obj.tutorials = []
+            print(tutorials)
+            for article in tutorials:
+                loadedarticle = json.load(open(CurrentPath+"/assets/tutorial/"+article))
+                obj.tutorials.append(loadedarticle)
+                utils.clear(obj.screen)
+                utils.displayTextCenter(obj,f"loaded article {part}")
+                time.sleep(0.01)
+            print("all parts loaded to game: ", obj.partdict)
             #try loading th partdict and money
             if  not obj.CFG_New_Game:
                 try:
@@ -105,6 +112,7 @@ def respond(obj):
 
                 utils.displayTextCenter(obj,f"loaded sound {sound}")
                 sounds[sound] = loadedsound
+                time.sleep(0.01)
             print("LOG: loaded all sounds into:", sounds)
             obj.sounds = sounds
             biomefiles = os.listdir(CurrentPath+"/assets/biomes")
@@ -116,6 +124,7 @@ def respond(obj):
                 utils.clear(obj.screen)
                 utils.displayTextCenter(obj,f"loaded sound {sound}")
                 biomes[loadedbiome["Name"]] = loadedbiome
+                time.sleep(0.01)
             print("LOG: loaded all biomes into:", biomes)
             obj.biomes = biomes
         else:
@@ -142,3 +151,4 @@ def respond(obj):
     #implement scalability by scaling all size values of parts by scaleX before starting in building mode
 
     utils.displayTextCenter(obj, "All Done!")
+    time.sleep(0.01)

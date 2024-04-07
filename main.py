@@ -42,14 +42,16 @@ class Game():
         self.partdict = {} # all part data in the game
         self.shopdict = {} #includes only part properties necessary while building
         #loading the font files
+        self.smallfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
         self.font = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
         self.boldfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator-Bold.ttf"
         self.largefont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
         self.largeboldfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator-Bold.ttf"
         #initializing the font
+        self.smallfont = pygame.font.Font(self.smallfont, 18)
         self.font = pygame.font.Font(self.font, 20)
         self.boldfont = pygame.font.Font(self.boldfont, 24)
-        self.largefont = pygame.font.Font(self.largefont, 32)
+        self.largefont = pygame.font.Font(self.largefont, 28)
         self.largeboldfont = pygame.font.Font(self.largeboldfont, 36)
         #dev options
         self.CFG_extensive_logs = True
@@ -93,7 +95,7 @@ class Game():
         self.Throttle = 0
         self.VehicleSpeed = 0
     
-        self.money = 220000
+        self.money = 22500
         self.particles = []
         self.xp = 0        
         self.SoundPlayer = pyglet.media.Player()
