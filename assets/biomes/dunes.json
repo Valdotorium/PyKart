@@ -8,7 +8,9 @@
     "Visuals":{
         "GroundColors": [[200, 200, 110], [170,160, 80], [150, 130, 20], [120, 110, 0]],  
         "LayerHeights": [30,30,30,30],
-        "HasSurfaceMarkings": false
+        "HasSurfaceMarkings": false,
+        "Assets": [{"image": "asset_rock_1.png", "size": [150,150], "offset": [-75, -75]}, {"image": "asset_rock_2.png", "size": [100,100], "offset": [-60, -60]}],
+        "AssetFrequency": 3
     },
     "Terrain":{
         "Scale": 70,

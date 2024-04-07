@@ -8,7 +8,9 @@
     "Visuals":{
         "GroundColors": [[155, 150, 148], [143, 142, 140]],  
         "LayerHeights": [40,40],
-        "HasSurfaceMarkings": false
+        "HasSurfaceMarkings": false,
+        "Assets": [{"image":"asset_sign_1.png","size": [100,200], "offset": [0, -160]}],
+        "AssetFrequency": 0.5
     },
     "Terrain":{
         "Scale": 70,

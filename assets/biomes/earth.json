@@ -8,7 +8,9 @@
     "Visuals":{
         "GroundColors": [[120, 200, 110], [170,120, 40], [150, 110, 0], [120, 100, 0]],  
         "LayerHeights": [25,30,35,35],
-        "HasSurfaceMarkings": false
+        "HasSurfaceMarkings": false,
+        "Assets": [],
+        "AssetFrequency": 0
     },
     "Terrain":{
         "Scale": 70,

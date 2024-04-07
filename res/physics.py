@@ -132,9 +132,23 @@ def DrawBackground(obj):
     obj.body_floor.shape.update
     #colors of the ground above the ground texture
     Groundcolors = obj.Environment["Visuals"]["GroundColors"]
+    c = 0
+    while c < len(obj.TransferredPolygon) and c < len(obj.PolygonAssets):
+        if obj.PolygonAssets[c] != None:
+            Point = obj.TransferredPolygon[c]
+            AssetImage = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["image"]
+            AssetImage = obj.textures[AssetImage]
+            AssetSize = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["size"]
+            AssetImage = pygame.transform.scale(AssetImage,AssetSize)
+            AssetOffset = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["offset"]
+            obj.screen.blit(AssetImage, (Point[0] + AssetOffset[0], Point[1] + AssetOffset[1]))
+                           
+        c += 1
     #drawing lines on the edges of the ground poly
     cc = 0
     y = 0
+
+    
     while cc < len(Groundcolors):
         CurrentColor = Groundcolors[cc]
         c = 0

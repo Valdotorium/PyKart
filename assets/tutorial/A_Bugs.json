@@ -18,9 +18,9 @@
         "When rotating some stabilisators, the joints may seem to be at the wrong positions.",
         "The part is in reality still there where the joints are, but the image is shown at the wrong position.",
         "Just snap the joints as usual.",
-        "When something to a wheel part after the wheel part has been placed, different joints are created,",
+        "When connecting something to a wheel after the wheel part has been placed, different joints are created,",
         "and the wheel will behave differently (not really a bug).",
-        "Also, avoid placing smaller wheel at the sides of double frames or othe large parts,",
+        "Also, avoid placing smaller wheel at the sides of double frames or other large parts,",
         "because the length of the spring of a wheel is relative to the center of its parent part."]
         }
     ]
