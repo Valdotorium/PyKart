@@ -73,8 +73,13 @@ def DrivingSounds(obj):
         c += 1
     #----------------------------------------------------------------ENGINE SOUNDS ----------------------------------------------------------------
     c = 0
-    obj.engineSoundsPlayer.play()
-    pitch = round((1.125 + abs(obj.Throttle) / 260 + abs(obj.rpm / 10000)) * 32)
-    obj.engineSoundsPlayer.pitch = pitch / 32
+    try:
+        if obj.engineSoundsPlayer != None:
+            obj.engineSoundsPlayer.play()
+            pitch = round((1.125 + abs(obj.Throttle) / 260 + abs(obj.rpm / 10000)) * 32)
+            obj.engineSoundsPlayer.pitch = pitch / 32
+    except:
+        print("INTERNAL ERROR: Could not play engine sounds")
+        obj.engineSoundsPlayer = None
 
     #obj.engineSoundsPlayer.seek(0)

@@ -358,18 +358,28 @@ def simulate(obj, fps):
     obj._MetersTravelled = obj.MetersTravelled
     Env = obj.Environment
     obj.HasFloor = False
-    utils.CreateGroundPolygon(obj, Env)
-    obj.SoundInFrame = False
+    try:
+        utils.CreateGroundPolygon(obj, Env)
+        obj.SoundInFrame = False
 
-    LimitThrottle(obj)
-    obj.space.step(1/fps)
-    #draeing the poligon with the list of points obj.GroundPolygon
-    #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
-    #draw(obj.Vehicle) <--will be used for textures later
-    Draw(obj)
-    #PhysDraw(obj)
-    CheckJoints(obj)
-    Checkparts(obj)
+        LimitThrottle(obj)
+        obj.space.step(1/fps)
+        #draeing the poligon with the list of points obj.GroundPolygon
+        #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
+        #draw(obj.Vehicle) <--will be used for textures later
+        Draw(obj)
+        #PhysDraw(obj)
+        CheckJoints(obj)
+        Checkparts(obj)
+    except:
+        obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
+        obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
+        obj.restart = True
+        AlertSound = obj.sounds["alert.wav"]
+        player = AlertSound.play()
+        del(player)
+        obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 150, obj))
+        print("INTERNAL ERROR: Could not simulate physics")
     utils.DisplayMoney(obj)
     DistanceBonuses(obj)
     UpdateParticles(obj)

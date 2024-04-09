@@ -12,7 +12,7 @@
         "Bounciness": 0.02,
         "JoiningBehavior": "Provide",
         "LimitsAngularVelocity": null,
-        "Thrust": 400,
+        "Thrust": 999999999999999,
         "Angle": [180, "Permanent", [0,0]]
         
     },

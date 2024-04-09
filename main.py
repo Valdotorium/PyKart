@@ -62,7 +62,7 @@ class Game():
         self.CFG_Reload_Latest_Vehicle = False
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200, 800)
-        self.KeyCooldown = 0
+        self.KeyCooldown = 0 
         self.CFG_New_Game = False
         self.TextAnimations = []
         
@@ -114,7 +114,17 @@ class Game():
         if self.gm == "game":
             Exo.screen.fill((120,120,120))
             #running the physics
-            res.procedural.WritePolygonPositions(Exo)
+            try:
+                res.procedural.WritePolygonPositions(Exo)
+            except:
+                print("INTERNAL ERROR:Failed to write ground polygon")
+                Exo.money += (Exo.DistanceMoneyForRide + Exo.StuntMoneyForRide) * Exo.RideMoneyMultiplier
+                Exo.xp += Exo.MetersTravelled * Exo.RideMoneyMultiplier
+                Exo.restart = True
+                AlertSound = Exo.sounds["alert.wav"]
+                player = AlertSound.play()
+                Exo.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not write ground poly", 150, Exo))
+                del(player)
             res.controls.GameControls(Exo)
             res.mechanics.GameMechanics(Exo)
             res.physics.simulate(Exo, fps)
@@ -123,16 +133,29 @@ class Game():
         if self.gm =="build":
             #buiding mode
             Exo.screen.fill((180, 190, 230))
-            res.build.run(Exo)
-            res.controls.BuildControls(Exo)
+            try:
+                res.build.run(Exo)
+                res.controls.BuildControls(Exo)
+            except:
+                raise Exception("INTERNAL ERROR:Build mode failed to execute")
         if self.gm == "transfer":
-            res.transfer.run(Exo)
-            res.physics.setup(Exo)
-            res.physics.TransferStage(Exo)
-            res.sounds.setup(Exo)
-            res.procedural.setup(Exo)
-            res.procedural.generate_chunk(Exo)
-            res.procedural.WritePolygonPositions(Exo)
+            try:
+                res.transfer.run(Exo)
+                res.physics.setup(Exo)
+                res.physics.TransferStage(Exo)
+                res.sounds.setup(Exo)
+                res.procedural.setup(Exo)
+                res.procedural.generate_chunk(Exo)
+                res.procedural.WritePolygonPositions(Exo)
+            except:
+                print("INTERNAL ERROR:Failed to run transfer game mode")
+                Exo.TextAnimations.append(interactions.TextAnimation("EXCEPTION: failed transfer stage", 150, Exo))
+                Exo.money += (Exo.DistanceMoneyForRide + Exo.StuntMoneyForRide) * Exo.RideMoneyMultiplier
+                Exo.xp += Exo.MetersTravelled * Exo.RideMoneyMultiplier
+                Exo.restart = True
+                AlertSound = Exo.sounds["alert.wav"]
+                player = AlertSound.play()
+                del(player)
         if self.gm == "biomeselection":
             self.BiomeSelector.update(self)
         if self.gm == "tutorial":
@@ -195,6 +218,7 @@ while running:
 
 
     if frame == 0:
+
         Exo = Game()
         res.load.respond(Exo)
         Exo.BiomeSelector = res.biomes.BiomeSelection(Exo)
