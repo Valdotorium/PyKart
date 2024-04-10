@@ -23,22 +23,6 @@
     },
     "Description": ["A packet that wants to be delivered.contains heavy goods.", "Transporting it increases money rewards!"],
     "Joints":[
-        {
-            "Type": "Provide",
-            "Pos": [32,0]
-        },
-        {
-            "Type": "Provide",
-            "Pos": [64,32]
-        },
-        {
-            "Type": "Provide",
-            "Pos": [32, 64]
-        },
-        {
-            "Type": "Provide",
-            "Pos": [0, 32]
-        }
     ],
     "Hitbox":{
             "Pos": [0,0],

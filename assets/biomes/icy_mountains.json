@@ -9,8 +9,9 @@
         "GroundColors": [[210, 210, 230], [180, 180, 195], [145, 145, 155], [115, 115, 120]],  
         "LayerHeights": [15,25,35,35],
         "HasSurfaceMarkings": false,
-        "Assets":[],
-        "AssetFrequency": 0
+        "Assets":[{"image": "asset_sign_4.jpg", "size": [180,220], "offset": [-160, -200]},
+            {"image": "asset_railing_1.jpg", "size": [150,160], "offset": [-130, -105]}],
+        "AssetFrequency": 0.8
     },
     "Terrain":{
         "Scale": 70,

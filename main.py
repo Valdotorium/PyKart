@@ -180,8 +180,14 @@ class Game():
                     res.transfer.run(Exo)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    self.running = False
-                    res.transfer.run(Exo)
+                    print("Player ESC")
+                    Exo.money += (Exo.DistanceMoneyForRide + Exo.StuntMoneyForRide) * Exo.RideMoneyMultiplier
+                    Exo.xp += Exo.MetersTravelled * Exo.RideMoneyMultiplier
+                    Exo.restart = True
+                    AlertSound = Exo.sounds["alert.wav"]
+                    player = AlertSound.play()
+                    Exo.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not write ground poly", 150, Exo))
+                    del(player)
 
 
     def reset(self):
