@@ -23,7 +23,8 @@
         "Delete a part. It will be available in the inventory after deleting it.",
         "Unselect the current selected part or exit the part Information window",
         "Move the current selected part.",
-        "Open a window with information for the current selected part."]
+        "Open a window with information for the current selected part.",
+        "Sell the current selected part, for 75% of its original value.(not shown in the image)"]
         }
     ]
 }

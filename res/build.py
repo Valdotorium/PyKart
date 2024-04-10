@@ -295,7 +295,7 @@ def run(obj):
                         "Type": obj.partdict[obj.selectedPart]["Type"],
                         "Rotation": obj.RotationOfSelectedPart,
                         "Center": obj.partdict[obj.selectedPart]["Center"], 
-                        "refundValue": obj.partdict[obj.selectedPart]["Cost"],
+                        "refundValue": round(obj.partdict[obj.selectedPart]["Cost"] * 0.75),
                         "CanStandAlone": True,
                         "Joints": Joints,
                         "Hitbox": obj.partdict[obj.selectedPart]["Hitbox"],
@@ -419,6 +419,27 @@ def run(obj):
             pygame.mouse.set_pos(PartPosition)
             mx, my = pygame.mouse.get_pos()
             obj.Cursor.SetArrows()
+    #---------------------The Sell Part Button--------------------------------
+        SellButton = interactions.ButtonArea(obj, obj.textures["returnButton.png"], utils.Scale(obj,(650,30)), utils.Scale(obj,[80,80]))
+        if SellButton or pygame.key.get_pressed()[pygame.K_r]:
+            SelectSound = obj.sounds["coinbag.wav"]
+            SelectSound.play()
+            obj.Cursor.SetDelete()
+            #returning 80% of the money to the user
+            obj.money += obj.Vehicle[obj.SelectedBuiltPart]["refundValue"]
+            #removed parts are still list items, but they will be ignored
+            obj.Vehicle[obj.SelectedBuiltPart] = None
+            print(f"part {obj.SelectedBuiltPart} deleted")
+            #removing all joints that are connected to the built part
+            c = 0
+            while c < len(obj.VehicleJoints):
+                if obj.VehicleJoints[c] != None:
+                    if obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][0] or obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][1]:
+                        #removed joints are still list items, but they will be ignored -NOT ANYMORE
+                        obj.VehicleJoints.pop(c)
+                c += 1
+            obj.SelectedBuiltPart = None
+        
     #------------------------------Marking the selected part-------------------------------------
     if obj.SelectedBuiltPart != None:
         RectPos = utils.SubstractTuples(obj.Vehicle[obj.SelectedBuiltPart]["Pos"], obj.Vehicle[obj.SelectedBuiltPart]["Center"])
