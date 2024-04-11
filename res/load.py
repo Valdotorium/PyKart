@@ -9,25 +9,24 @@ def respond(obj):
     WARNING: In py2app, the assets folder must be included TWICE in several locations of the app, see py2app.txt"""
     print("ive loaded from the source package!")
     #getting the window size
-    obj.dimensions = utils.getScreenSize()
+    obj.dimensions = obj.window.get_size()
     print("LOG: screen dimensions are:", obj.dimensions)
     if obj.S_Fitscreen:
         if obj.S_Fullscreen:
             #makes it fullscreen
-            obj.screen = pygame.display.set_mode(obj.dimensions[0], pygame.FULLSCREEN)
+            obj.screen = pygame.display.set_mode(obj.CFG_Default_Screen_Size)
         else:
             #makes it windowed, but with the size of the full screen
-            obj.screen = pygame.display.set_mode(obj.dimensions[0])
+            obj.screen = pygame.display.set_mode(obj.CFG_Default_Screen_Size)
         obj.screen.fill((100, 100, 100))
         pygame.display.set_caption("PyKart Drive") 
     else:
         #smol version
         screensize = obj.CFG_Default_Screen_Size
-        obj.screen = pygame.display.set_mode(screensize)
+        obj.screen = pygame.surface.Surface(screensize).convert_alpha()
         obj.screen.fill((100, 100, 100))
-        obj.dimensions[0] = screensize
-        pygame.display.set_caption("PyKart Drive")
-    obj.dimensions = obj.dimensions[0]
+        #obj.dimensions[0] = screensize
+    #obj.dimensions = obj.dimensions[0]
     utils.displayTextCenter(obj,"finding files")
     #locating the game assets
 

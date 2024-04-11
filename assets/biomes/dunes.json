@@ -17,8 +17,10 @@
             {"image": "asse.jpg", "size": [150,300], "offset": [-120, -260]},
             {"image": "asset_cactus_1.jpg", "size": [200,400], "offset": [-170, -340]},
             {"image": "asset_bush_1.jpg", "size": [120,120], "offset": [-70, -70]},
+            {"image": "asset_bush_2.png", "size": [200,170], "offset": [-170, -120]},
+            {"image": "asset_bush_3.png", "size": [150,200], "offset": [-130, -170]},
             {"image": "asset_cactus_2.jpg", "size": [150,300], "offset": [-120, -260]}],
-        "AssetFrequency": 4.5
+        "AssetFrequency": 4.8
     },
     "Terrain":{
         "Scale": 70,

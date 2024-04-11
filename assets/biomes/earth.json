@@ -18,8 +18,9 @@
             {"image": "asset_tree_3.jpg", "size": [300,600], "offset": [-270, -560]},
             {"image": "asset_sign_4.jpg", "size": [180,220], "offset": [-160, -200]},
             {"image": "asset_bush_1.jpg", "size": [120,120], "offset": [-70, -70]},
+            {"image": "asset_bush_3.png", "size": [150,200], "offset": [-130, -170]},
             {"image": "asset_bush_1.jpg", "size": [200,220], "offset": [-170, -190]}],
-        "AssetFrequency": 5.8
+        "AssetFrequency": 6
     },
     "Terrain":{
         "Scale": 70,
