@@ -16,7 +16,7 @@
     "Description": ["frame for everyday vehicle building use."],
     "ShowProperties": ["Weight"],
     "JointData": {
-        "BreakPoint": 18500,
+        "BreakPoint": 20000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{

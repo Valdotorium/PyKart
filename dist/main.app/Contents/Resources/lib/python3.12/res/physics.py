@@ -49,7 +49,7 @@ def ApplyThrottle(obj, WheelPart, Force):
     c = WheelPart
     force = obj.Throttle * Force
     point = (0, -obj.NewVehicle[c]["Center"][1])
-    obj.PymunkBodies[c].torque = 28 * force
+    obj.PymunkBodies[c].torque = 25 * force
 """Making wheels connected to motors spin"""
 def Engine(obj,EnginePart, WheelPart):
     #TODO: for more features: store the obj.NewVehicle as a list of Part objects (new class),
@@ -67,7 +67,7 @@ def ControlPart(obj, index):
         #"angle" property format: [Angle of thrust, AngleIsPermanent, Point relative to the center of the body on which the force is applied]
         #AngleIsPermanent is "Permanent" if the angle of thrust should not be changed by the angle nof the part
     if Properties["Thrust"] != None:
-        print(obj.Throttle)
+        #print(obj.Throttle)
         if obj.Throttle > 15:
             Thrust = (Properties["Thrust"] / 100) * obj.Throttle
             Angle = utils.DegreesToRadians(Properties["Angle"][0])
@@ -98,7 +98,7 @@ def UpdateParticles(obj):
     for particle in obj.particles:
         particle.update(obj)
         if particle.frame > particle.duration:
-            print("delete particle")
+            #print("delete particle")
             obj.particles.pop(obj.particles.index(particle))
 def DisplayEarnedMoney(obj):
     mult = round((round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled) + obj.StuntMoneyForRide) *obj.RideMoneyMultiplier) 
@@ -132,9 +132,23 @@ def DrawBackground(obj):
     obj.body_floor.shape.update
     #colors of the ground above the ground texture
     Groundcolors = obj.Environment["Visuals"]["GroundColors"]
+    c = 0
+    while c < len(obj.TransferredPolygon) and c < len(obj.PolygonAssets):
+        if obj.PolygonAssets[c] != None:
+            Point = obj.TransferredPolygon[c]
+            AssetImage = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["image"]
+            AssetImage = obj.textures[AssetImage]
+            AssetSize = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["size"]
+            AssetImage = pygame.transform.scale(AssetImage,AssetSize)
+            AssetOffset = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["offset"]
+            obj.screen.blit(AssetImage, (Point[0] + AssetOffset[0], Point[1] + AssetOffset[1]))
+                           
+        c += 1
     #drawing lines on the edges of the ground poly
     cc = 0
     y = 0
+
+    
     while cc < len(Groundcolors):
         CurrentColor = Groundcolors[cc]
         c = 0
@@ -344,18 +358,28 @@ def simulate(obj, fps):
     obj._MetersTravelled = obj.MetersTravelled
     Env = obj.Environment
     obj.HasFloor = False
-    utils.CreateGroundPolygon(obj, Env)
-    obj.SoundInFrame = False
+    try:
+        utils.CreateGroundPolygon(obj, Env)
+        obj.SoundInFrame = False
 
-    LimitThrottle(obj)
-    obj.space.step(1/fps)
-    #draeing the poligon with the list of points obj.GroundPolygon
-    #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
-    #draw(obj.Vehicle) <--will be used for textures later
-    Draw(obj)
-    #PhysDraw(obj)
-    CheckJoints(obj)
-    Checkparts(obj)
+        LimitThrottle(obj)
+        obj.space.step(1/fps)
+        #draeing the poligon with the list of points obj.GroundPolygon
+        #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
+        #draw(obj.Vehicle) <--will be used for textures later
+        Draw(obj)
+        #PhysDraw(obj)
+        CheckJoints(obj)
+        Checkparts(obj)
+    except:
+        obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
+        obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
+        obj.restart = True
+        AlertSound = obj.sounds["alert.wav"]
+        player = AlertSound.play()
+        del(player)
+        obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 150, obj))
+        print("INTERNAL ERROR: Could not simulate physics")
     utils.DisplayMoney(obj)
     DistanceBonuses(obj)
     UpdateParticles(obj)
@@ -556,8 +580,8 @@ def TransferStage(obj):
 
     FindFreight(obj)
     text = "Freight value: " + str(obj.RideMoneyMultiplier)
+    obj.RideMoneyMultiplier=round(obj.RideMoneyMultiplier)
     obj.TextAnimations.append(interactions.TextAnimation(text, 200, obj))
-    print("len of TA", len(obj.TextAnimations))
     #display freight value as text animation
      
     

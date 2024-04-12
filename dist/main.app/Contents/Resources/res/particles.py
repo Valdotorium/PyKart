@@ -113,7 +113,7 @@ def ParticleEffect(obj, type, partindex):
             #make velocity and pos lists
             ParticleVelocity = list(ParticleVelocity)
             ParticlePosition = list(ParticlePosition)
-            print(obj.Throttle)
+            #print(obj.Throttle)
             obj.particles.append(Particle(ParticleVelocity, ParticlePosition, "Smoke", obj))
     if type == "Break":
         pass

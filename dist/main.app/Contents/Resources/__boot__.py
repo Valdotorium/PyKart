@@ -149,7 +149,7 @@ def _setup_openssl():
     import os
     resourcepath = os.environ["RESOURCEPATH"]
     os.environ["SSL_CERT_FILE"] = os.path.join(
-        resourcepath, "openssl.ca", "no-such-file")
+        resourcepath, "openssl.ca", "cert.pem")
     os.environ["SSL_CERT_DIR"] = os.path.join(
         resourcepath, "openssl.ca", "no-such-file")
 

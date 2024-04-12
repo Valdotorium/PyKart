@@ -16,6 +16,8 @@ class Tutorial():
         """the articles of the tutorial are stored in a list as json.
         within the articles, there is a list of lines, having a type and content (e.g "TXT", "Tutorial line text)"""
         self.DrawY = 150
+        SelectPartSound = obj.sounds["click.wav"]
+        AlertSound = obj.sounds["alert.wav"]
         self.cooldown -= 1
         obj.screen.fill((140,140,140))
         pygame.draw.rect(obj.screen, (200, 200, 200), (obj.dimensions[0] / 6, 0, 800, 800))
@@ -23,16 +25,22 @@ class Tutorial():
         if TutButton and self.cooldown < 0 or pygame.key.get_pressed()[pygame.K_s]:
             obj.gm = "build"
             self.cooldown = 8
+            player = AlertSound.play()
+            del(player)
         RightButton = interactions.ButtonArea(obj, obj.textures["ButtonRight.png"], utils.Scale(obj,(obj.dimensions[0] - 60,50)), utils.Scale(obj,[64,64]))
         if RightButton and self.cooldown < 0:
             self.Page += 1
             self.cooldown = 8
             self.Scroll = 0
+            player = obj.sounds["click.wav"].play()
+            del(player)
         LeftButton = interactions.ButtonArea(obj, obj.textures["ButtonLeft.png"], utils.Scale(obj,(30,50)), utils.Scale(obj,[64,64]))
         if LeftButton and self.cooldown < 0:
             self.Page -= 1
             self.cooldown = 8
             self.Scroll = 0
+            player = SelectPartSound.play()
+            del(player)
         if self.Page < 0:
             self.Page = 0
         if self.Page > len(self.contents) - 1:

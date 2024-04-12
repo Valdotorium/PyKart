@@ -16,40 +16,35 @@ import pyglet.media
 import res.interactions.interactions as interactions
 import res.fw.fw as utils
 import res.tutorial
+import asyncio
 #load files in othe directories like this: os.path.dirname(__file__) + "/folder/folder/file.png"
 #load file template:     grass = pygame.image.load(os.path.dirname(__file__)+"/textures/grass.png")
-pygame.init()
-pygame.mixer.init()
-pygame.font.init()
 
-#TODO #11
-#make the game clean up obj.vehicle and associated lists when reloading the building mode (remove nonetype objects)
-
-#main loop
-running = True
-fps = 48
-frame = 0
-inputvalues = []
 
 class Game():
     def __init__(self):
         #game stuff
+        self.window = pygame.display.set_mode((1200,800), pygame.RESIZABLE)
+    
+
         self.selected_part = ""
         self.running = True
         self.fps = 48
         self.clock = pygame.time.Clock()
-        self.fps = fps
+        
         self.partdict = {} # all part data in the game
         self.shopdict = {} #includes only part properties necessary while building
         #loading the font files
+        self.smallfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
         self.font = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
         self.boldfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator-Bold.ttf"
         self.largefont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
         self.largeboldfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator-Bold.ttf"
         #initializing the font
+        self.smallfont = pygame.font.Font(self.smallfont, 18)
         self.font = pygame.font.Font(self.font, 20)
         self.boldfont = pygame.font.Font(self.boldfont, 24)
-        self.largefont = pygame.font.Font(self.largefont, 32)
+        self.largefont = pygame.font.Font(self.largefont, 28)
         self.largeboldfont = pygame.font.Font(self.largeboldfont, 36)
         #dev options
         self.CFG_extensive_logs = True
@@ -59,8 +54,8 @@ class Game():
         self.CFG_Build_Enforce_Rules = True
         self.CFG_Reload_Latest_Vehicle = False
         self.CFG_Enable_Biomes = False
-        self.CFG_Default_Screen_Size = (1200, 800)
-        self.KeyCooldown = 0
+        self.CFG_Default_Screen_Size = (1200,800)
+        self.KeyCooldown = 0 
         self.CFG_New_Game = False
         self.TextAnimations = []
         
@@ -103,6 +98,15 @@ class Game():
         self.Cursor = interactions.Cursor(self)
         pygame.mouse.set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
         self.clock = pygame.time.Clock()
+    def updateWindow(self,window):
+        self.dimensions = (1200,800)
+        self.rldimensions = self.window.get_size()
+        self.screen = pygame.transform.scale(self.screen, self.rldimensions)
+        self.window.fill((100,100,100))
+        self.window.blit(self.screen, (0, 0))
+        pygame.display.flip()
+        self.screen = pygame.transform.scale(self.screen, self.CFG_Default_Screen_Size)
+        self.screen.fill((100,100,100))
     def run(self):
         self.money = round(self.money)
         self.xp = round(self.xp)
@@ -110,27 +114,50 @@ class Game():
     
         #res.interactions.interactions.ButtonArea(Exo)
         if self.gm == "game":
-            Exo.screen.fill((120,120,120))
+            self.screen.fill((120,120,120))
             #running the physics
-            res.procedural.WritePolygonPositions(Exo)
-            res.controls.GameControls(Exo)
-            res.mechanics.GameMechanics(Exo)
-            res.physics.simulate(Exo, fps)
-            res.sounds.DrivingSounds(Exo)
+            try:
+                res.procedural.WritePolygonPositions(self)
+            except:
+                print("INTERNAL ERROR:Failed to write ground polygon")
+                self.money += (self.DistanceMoneyForRide + self.StuntMoneyForRide) * self.RideMoneyMultiplier
+                self.xp += self.MetersTravelled * self.RideMoneyMultiplier
+                self.restart = True
+                AlertSound = self.sounds["alert.wav"]
+                player = AlertSound.play()
+                self.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not write ground poly", 150, self))
+                del(player)
+            res.controls.GameControls(self)
+            res.mechanics.GameMechanics(self)
+            res.physics.simulate(self, self.fps)
+            res.sounds.DrivingSounds(self)
             
         if self.gm =="build":
             #buiding mode
-            Exo.screen.fill((180, 190, 230))
-            res.build.run(Exo)
-            res.controls.BuildControls(Exo)
+            self.screen.fill((180, 190, 230))
+            try:
+                res.build.run(self)
+                res.controls.BuildControls(self)
+            except:
+                raise Exception("INTERNAL ERROR:Build mode failed to execute")
         if self.gm == "transfer":
-            res.transfer.run(Exo)
-            res.physics.setup(Exo)
-            res.physics.TransferStage(Exo)
-            res.sounds.setup(Exo)
-            res.procedural.setup(Exo)
-            res.procedural.generate_chunk(Exo)
-            res.procedural.WritePolygonPositions(Exo)
+            try:
+                res.transfer.run(self)
+                res.physics.setup(self)
+                res.physics.TransferStage(self)
+                res.sounds.setup(self)
+                res.procedural.setup(self)
+                res.procedural.generate_chunk(self)
+                res.procedural.WritePolygonPositions(self)
+            except:
+                print("INTERNAL ERROR:Failed to run transfer game mode")
+                self.TextAnimations.append(interactions.TextAnimation("EXCEPTION: failed transfer stage", 150, self))
+                self.money += (self.DistanceMoneyForRide + self.StuntMoneyForRide) * self.RideMoneyMultiplier
+                self.xp += self.MetersTravelled * self.RideMoneyMultiplier
+                self.restart = True
+                AlertSound = self.sounds["alert.wav"]
+                player = AlertSound.play()
+                del(player)
         if self.gm == "biomeselection":
             self.BiomeSelector.update(self)
         if self.gm == "tutorial":
@@ -139,24 +166,30 @@ class Game():
             self.Cursor.Click()
         self.Cursor.update(self)
         for i in range(len(self.TextAnimations)):
-            self.TextAnimations[i].update(Exo)
+            self.TextAnimations[i].update(self)
         utils.DisplayXP(self)
         self.credits.update(self)
         self.clock.tick(self.fps)
-        pygame.display.flip()
+        self.updateWindow(self.window)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-                res.transfer.run(Exo)
+                res.transfer.run(self)
             #q quits the game
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
                     self.running = False
-                    res.transfer.run(Exo)
+                    res.transfer.run(self)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    self.running = False
-                    res.transfer.run(Exo)
+                    print("Player ESC")
+                    self.money += (self.DistanceMoneyForRide + self.StuntMoneyForRide) *self.RideMoneyMultiplier
+                    self.xp += self.MetersTravelled *self.RideMoneyMultiplier
+                    self.restart = True
+                    AlertSound = self.sounds["alert.wav"]
+                    player = AlertSound.play()
+                    self.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not write ground poly", 150, self))
+                    del(player)
 
 
     def reset(self):
@@ -171,6 +204,8 @@ class Game():
             del(self.credits)
             del(self.CurrentPartUI)
             res.build.setup(self)
+            self.StuntMoneyForRide = 0
+            self.DistanceMoneyForRide = 0
             self.gm = "build"
             self.GroundPolygons = []
             self.X_Position = 0
@@ -186,40 +221,54 @@ def resetFrames(obj, frame):
     obj.reset()
     return frame
 
+async def main():
+    pygame.init()
+    pygame.mixer.init()
+    pygame.font.init()
 
-while running:
-    if frame > 0:        
-        running = Exo.running
+    #TODO #11
+    #make the game clean up obj.vehicle and associated lists when reloading the building mode (remove nonetype objects)
+
+    #main loop
+    running = True
+    fps = 48
+    frame = 0
+    inputvalues = []
+    while running:
+        if frame > 0:        
+            running = Exo.running
 
 
-    if frame == 0:
-        Exo = Game()
-        res.load.respond(Exo)
-        Exo.BiomeSelector = res.biomes.BiomeSelection(Exo)
-        Exo.screen.fill((100,100,100))
-        pygame.display.flip()
-        time.sleep(1)
-        #res.terrain.terrain_quality_presets(Exo)
-        #res.terrain.generate(Exo)
-        #res.terrain.place(Exo)
-        res.build.setup(Exo)
-        Exo.Tutorial = res.tutorial.Tutorial(Exo)
-        #res.physics.setup(Exo)
+        if frame == 0:
+
+            Exo = Game()
+            res.load.respond(Exo)
+            Exo.BiomeSelector = res.biomes.BiomeSelection(Exo)
+            Exo.screen.fill((100,100,100))
+            pygame.display.flip()
+            time.sleep(1)
+            #res.terrain.terrain_quality_presets(Exo)
+            #res.terrain.generate(Exo)
+            #res.terrain.place(Exo)
+            res.build.setup(Exo)
+            Exo.Tutorial = res.tutorial.Tutorial(Exo)
+            #res.physics.setup(Exo)
+            
+            Exo.draw_options = pymunk.pygame_util.DrawOptions(Exo.screen)
+            time.sleep(1)
+
+        frame += 1
         
-        Exo.draw_options = pymunk.pygame_util.DrawOptions(Exo.screen)
-        time.sleep(1)
+        Exo.run()
+        await asyncio.sleep(0)
+        #handling error messages
+        if Exo.Errormessage != None:
+            Exo.Errormessage.update(Exo)
 
-    frame += 1
-    
-    Exo.run()
-    #handling error messages
-    if Exo.Errormessage != None:
-        Exo.Errormessage.update(Exo)
+        if Exo.gm == "game":
+            if Exo.restart:
+                frame = resetFrames(Exo, frame)
+        if running == False:
+            res.transfer.run(Exo)
 
-    if Exo.gm == "game":
-        if Exo.restart:
-            frame = resetFrames(Exo, frame)
-    if running == False:
-        res.transfer.run(Exo)
-
-
+asyncio.run(main())

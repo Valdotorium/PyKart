@@ -58,7 +58,7 @@ class Cursor():
         self.radius = 12
         self.thickness = 2
     def update(self, obj):
-        print(self.CurrentAnimation,self.animationticks)
+        #print(self.CurrentAnimation,self.animationticks)
         self.position = pygame.mouse.get_pos()
         if self.CurrentAnimation == "Delete":
             if self.animationticks >= 11:
@@ -72,7 +72,7 @@ class Cursor():
                 startpos = self.position
                 pygame.draw.line(obj.screen, (180, 140, 0), (startpos[0] - self.animationticks * 2, startpos[1] - self.animationticks * 2), (startpos[0] + self.animationticks * 2, startpos[1] + self.animationticks * 2), 11)
                 pygame.draw.line(obj.screen, (180, 140, 0), (startpos[0] + self.animationticks * 2, startpos[1] - self.animationticks * 2), (startpos[0] - self.animationticks * 2, startpos[1] + self.animationticks * 2), 11)
-                print("fgf",self.CurrentAnimation,self.animationticks)
+                #print("fgf",self.CurrentAnimation,self.animationticks)
         if self.CurrentAnimation == None:
             
             self.animationticks = 0
@@ -80,7 +80,7 @@ class Cursor():
             self.mode = "Default"
             self.color = (120,120,120)
             self.radius = 16
-            self.thickness = 2
+            self.thickness = 3
             pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
         if self.CurrentAnimation == "ArrowsOut":
             if self.animationticks >= 10:
@@ -110,6 +110,16 @@ class Cursor():
                 self.radius = 16 + self.animationticks / 2 + (20 - self.animationticks) / 3
                 self.thickness = int(3+self.animationticks / 1.5)
                 pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
+
+        if self.CurrentAnimation == "Sell":
+            if self.animationticks >= 10:
+                self.animationticks = 0
+                self.CurrentAnimation = None
+            if self.animationticks <= 10:
+                self.color = (100 + 8 * self.animationticks,120 - 6 * self.animationticks,100 - 6 * self.animationticks)
+                self.radius = 16 - int(self.animationticks / 1.5)
+                self.thickness = int(3+self.animationticks / 3)
+                pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
         self.animationticks += 1
 
     def SetArrows(self):
@@ -123,6 +133,8 @@ class Cursor():
             self.CurrentAnimation = "Click"
     def SetBuy(self):
         self.CurrentAnimation = "Buy"
+    def SetSell(self):
+        self.CurrentAnimation = "Sell"
 
 
 class TextAnimation():

@@ -102,6 +102,7 @@ class Game():
         self.dimensions = (1200,800)
         self.rldimensions = self.window.get_size()
         self.screen = pygame.transform.scale(self.screen, self.rldimensions)
+        self.window.fill((100,100,100))
         self.window.blit(self.screen, (0, 0))
         pygame.display.flip()
         self.screen = pygame.transform.scale(self.screen, self.CFG_Default_Screen_Size)

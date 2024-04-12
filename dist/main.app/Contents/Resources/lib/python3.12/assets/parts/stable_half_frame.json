@@ -15,7 +15,7 @@
     },
     "ShowProperties": ["Weight"],
     "JointData": {
-        "BreakPoint": 55000,
+        "BreakPoint": 60000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{

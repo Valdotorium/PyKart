@@ -1,0 +1,26 @@
+{
+    "Title": "Connecting Parts",
+    "Contents":[
+        {
+            "Element": "TEXT",
+            "Size": "LARGE",
+            "Content": ["Connecting Parts with Joints"]
+        },
+        {
+            "Element": "IMG",
+            "Size": [360,200],
+            "Content": "_t_4.png"
+        },
+        {
+            "Element": "TEXT",
+            "Size": "MEDIUM",
+            "Content": ["The red dots on a parts show the locations at which the part", 
+        "cam be connected to other parts.",
+        "If one of the joints of a part snaps to a joint of another part, the parts are connected.",
+        "Avoid placing parts inside of each other. Some parts cannot be connected together, such as wheels.",
+        "The types of joints vary depending on the types of parts connected.",
+        "Joints have a certain stability, and this stability is the one of the newer part's joints.",
+        "Because of this, try to place wheels and control parts last."]
+        }
+    ]
+}

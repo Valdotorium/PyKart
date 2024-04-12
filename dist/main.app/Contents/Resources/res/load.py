@@ -9,25 +9,24 @@ def respond(obj):
     WARNING: In py2app, the assets folder must be included TWICE in several locations of the app, see py2app.txt"""
     print("ive loaded from the source package!")
     #getting the window size
-    obj.dimensions = utils.getScreenSize()
+    obj.dimensions = obj.window.get_size()
     print("LOG: screen dimensions are:", obj.dimensions)
     if obj.S_Fitscreen:
         if obj.S_Fullscreen:
             #makes it fullscreen
-            obj.screen = pygame.display.set_mode(obj.dimensions[0], pygame.FULLSCREEN)
+            obj.screen = pygame.display.set_mode(obj.CFG_Default_Screen_Size)
         else:
             #makes it windowed, but with the size of the full screen
-            obj.screen = pygame.display.set_mode(obj.dimensions[0])
+            obj.screen = pygame.display.set_mode(obj.CFG_Default_Screen_Size)
         obj.screen.fill((100, 100, 100))
         pygame.display.set_caption("PyKart Drive") 
     else:
         #smol version
         screensize = obj.CFG_Default_Screen_Size
-        obj.screen = pygame.display.set_mode(screensize)
+        obj.screen = pygame.surface.Surface(screensize).convert_alpha()
         obj.screen.fill((100, 100, 100))
-        obj.dimensions[0] = screensize
-        pygame.display.set_caption("PyKart Drive")
-    obj.dimensions = obj.dimensions[0]
+        #obj.dimensions[0] = screensize
+    #obj.dimensions = obj.dimensions[0]
     utils.displayTextCenter(obj,"finding files")
     #locating the game assets
 
@@ -54,6 +53,7 @@ def respond(obj):
 
                     utils.displayTextCenter(obj,f"loaded image {image}")
                     textures[image] = loadedimage
+                    time.sleep(0.01)
             print("LOG: loaded all images into:", textures)
             obj.textures = textures
 
@@ -64,6 +64,7 @@ def respond(obj):
                 utils.DecodePart(loadedpart, obj)
                 utils.clear(obj.screen)
                 utils.displayTextCenter(obj,f"loaded part {part}")
+                time.sleep(0.01)
             print("all parts loaded to game: ", obj.partdict)
             print("all parts loaded to shop: ", obj.shopdict)
             try:
@@ -72,12 +73,17 @@ def respond(obj):
                 print(f"loaded environment: ", obj.Environment)
             except:
                 raise ImportError("Environment File not found")
-            try:
-                TutFile = open(CurrentPath+"/assets/tutorial.json")
-                obj.LoadedTutorial = json.load(TutFile)
-                print(f"loaded tutorial: ", obj.Environment)
-            except:
-                raise ImportError("Tutorial File not found")
+            tutorials = os.listdir(CurrentPath+"/assets/tutorial")
+            tutorials.sort()
+            obj.tutorials = []
+            print(tutorials)
+            for article in tutorials:
+                loadedarticle = json.load(open(CurrentPath+"/assets/tutorial/"+article))
+                obj.tutorials.append(loadedarticle)
+                utils.clear(obj.screen)
+                utils.displayTextCenter(obj,f"loaded article {part}")
+                time.sleep(0.01)
+            print("all parts loaded to game: ", obj.partdict)
             #try loading th partdict and money
             if  not obj.CFG_New_Game:
                 try:
@@ -105,6 +111,7 @@ def respond(obj):
 
                 utils.displayTextCenter(obj,f"loaded sound {sound}")
                 sounds[sound] = loadedsound
+                time.sleep(0.01)
             print("LOG: loaded all sounds into:", sounds)
             obj.sounds = sounds
             biomefiles = os.listdir(CurrentPath+"/assets/biomes")
@@ -116,6 +123,7 @@ def respond(obj):
                 utils.clear(obj.screen)
                 utils.displayTextCenter(obj,f"loaded sound {sound}")
                 biomes[loadedbiome["Name"]] = loadedbiome
+                time.sleep(0.01)
             print("LOG: loaded all biomes into:", biomes)
             obj.biomes = biomes
         else:
@@ -142,3 +150,4 @@ def respond(obj):
     #implement scalability by scaling all size values of parts by scaleX before starting in building mode
 
     utils.displayTextCenter(obj, "All Done!")
+    time.sleep(0.01)

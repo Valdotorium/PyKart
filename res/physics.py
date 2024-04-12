@@ -49,7 +49,7 @@ def ApplyThrottle(obj, WheelPart, Force):
     c = WheelPart
     force = obj.Throttle * Force
     point = (0, -obj.NewVehicle[c]["Center"][1])
-    obj.PymunkBodies[c].torque = 28 * force
+    obj.PymunkBodies[c].torque = 25 * force
 """Making wheels connected to motors spin"""
 def Engine(obj,EnginePart, WheelPart):
     #TODO: for more features: store the obj.NewVehicle as a list of Part objects (new class),

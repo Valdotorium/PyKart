@@ -429,6 +429,7 @@ def run(obj):
             obj.money += obj.Vehicle[obj.SelectedBuiltPart]["refundValue"]
             #removed parts are still list items, but they will be ignored
             obj.Vehicle[obj.SelectedBuiltPart] = None
+            obj.Cursor.SetSell()
             print(f"part {obj.SelectedBuiltPart} deleted")
             #removing all joints that are connected to the built part
             c = 0
@@ -478,8 +479,12 @@ def run(obj):
     CreditButton = interactions.ButtonArea(obj, obj.textures["logo.png"], utils.Scale(obj,(obj.dimensions[0] - 100,30)), utils.Scale(obj,[80,80]))
     if CreditButton:
         obj.credits.visible = True
+        player = obj.sounds["click.wav"].play()
+        del(player)
     #------------------------------The Tutorial Button---------------------------------------
     TutButton = interactions.ButtonArea(obj, obj.textures["tutorial.png"], utils.Scale(obj,(obj.dimensions[0] - 230,30)), utils.Scale(obj,[80,80]))
     if TutButton:
         obj.gm = "tutorial"
+        player = obj.sounds["click.wav"].play()
+        del(player)
 

@@ -63,9 +63,20 @@ def Noise(obj, scale, variability, randomnoise):
         print("steepness at end:",steepness)
 def setup(obj):
     obj.Terrain = []
+    obj.TerrainAssets = []
+    AssetChance = obj.Environment["Visuals"]["AssetFrequency"]
+    AssetCount = len(obj.Environment["Visuals"]["Assets"])
     x = 0
     obj.Terrain.append(-90000)
     while x < 50000:
+        r = random.uniform(0,100)
+        if r < AssetChance and x > 40:
+            if AssetCount != 0:
+                obj.TerrainAssets.append(random.randint(0, AssetCount - 1))
+            else:
+                obj.TerrainAssets.append(None)
+        else:
+            obj.TerrainAssets.append(None)
         obj.Terrain.append(650)
         x += 1
 
@@ -106,6 +117,7 @@ def WritePolygonPositions(obj):
     x = round((obj.X_Position - obj.Environment["Terrain"]["Scale"] * 8) /obj.Environment["Terrain"]["Scale"])
     endx = round((obj.X_Position + obj.dimensions[0]*25)/ obj.Environment["Terrain"]["Scale"])
     PolygonPoints = []
+    PolygonAssets = []
     #Edge point
     if x < 0: 
         x = 0
@@ -114,6 +126,10 @@ def WritePolygonPositions(obj):
     #the polygon points between x and enx get rendered
     while x < round(endx) and endx < len(obj.Terrain):
         Point = obj.Terrain[x]
+        Asset = obj.TerrainAssets[x]
         PolygonPoints.append(((x - 10) * round(obj.Environment["Terrain"]["Scale"]) - obj.X_Position, Point))
+        PolygonAssets.append(Asset)
+        #PolygonAssets format: [None, None, [AssetData], None...]
         x += 1
     obj.MinimapPolygon = PolygonPoints
+    obj.PolygonAssets = PolygonAssets

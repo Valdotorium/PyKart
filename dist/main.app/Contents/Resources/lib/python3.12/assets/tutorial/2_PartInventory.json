@@ -1,0 +1,26 @@
+{
+    "Title": "The Part Inventory",
+    "Contents":[
+        {
+            "Element": "TEXT",
+            "Size": "LARGE",
+            "Content": ["The Part Inventory", "Basics"]
+        },
+        {
+            "Element": "IMG",
+            "Size": [500,250],
+            "Content": "_t_2.png"
+        },
+        {
+            "Element": "TEXT",
+            "Size": "MEDIUM",
+            "Content": ["The part inventory is the highlighted area in the image.", 
+        "The inventory shows all the parts organized in categories.",
+        "You can select these categories by clicking the buttons above the inventory.",
+        "In the inventory, the cost of the parts is displayed at the top",
+        "below the cost, you can see how many of the part you own.",
+        "If you click on a part that is currently not available (x0) in your inventory, you buy it.",
+        "else, you can click the part and place it"]
+        }
+    ]
+}
