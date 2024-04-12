@@ -1,0 +1,62 @@
+{
+    "Name": "Half Empty Frame",
+    "Index": 2,
+    "Type": "Stability",
+    "Cost": 200,
+    "Center": [32,16],
+    "Stex": "empty_half_frame.png",
+    "Properties": {
+        "Rot": 0,
+        "Friction": 0.92,
+        "Weight": 10,
+        "Bounciness": 0.025,
+        "JoiningBehavior": "Provide"
+
+    },
+    "Description": ["cheap half frame for everyday vehicle building use. Not stable at all."],
+    "ShowProperties": ["Weight"],
+    "JointData": {
+        "BreakPoint": 7500,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [32,0]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [64,16]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [32, 32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [0, 16]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[64,32],
+            "Anchor":[32,16],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "empty_half_frame.png",
+        "Pos": [0,0],
+        "Size": [64,32]
+    }],
+    "Sounds": {
+        "Crash": [["suspension_2.wav",0.5], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+    
+}

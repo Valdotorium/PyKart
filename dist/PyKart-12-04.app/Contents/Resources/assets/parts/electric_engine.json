@@ -1,0 +1,62 @@
+{
+    "Name": "Electric Engine",
+    "Index": 4,
+    "Type": "Engine",
+    "Cost": 26000,
+    "Stex": "electronic_engine.png",
+    "Center": [64,32],
+    "Properties": {
+        "Rot": 0,
+        "Friction": 1.25,
+        "Weight": 150,
+        "Bounciness": 0.004,
+        "JoiningBehavior": "Provide",
+        "Power": 1600
+
+    },
+    "Description": ["Large Box containing everything a electric engine needs. Very heavy and extremely powerful.", "provides power to connected wheels."],
+    "ShowProperties": ["Weight", "Power"],
+    "JointData": {
+        "BreakPoint": 104000,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [64,0]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [128,32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [64, 64]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [0, 32]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[128,64],
+            "Anchor":[64,32],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "electronic_engine.png",
+        "Pos": [0,0],
+        "Size": [128,64]
+    }],
+    "Sounds": {
+        "Crash": [["tyre_2.wav",1], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Active": [["electric_engine.wav", 0.18]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+}

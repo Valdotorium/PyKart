@@ -1,0 +1,62 @@
+{
+    "Name": "Empty Frame",
+    "Index": 2,
+    "Type": "Stability",
+    "Cost": 340,
+    "Center": [32,32],
+    "Stex": "empty_frame.png",
+    "Properties": {
+        "Rot": 0,
+        "Friction": 0.92,
+        "Weight": 14,
+        "Bounciness": 0.035,
+        "JoiningBehavior": "Provide"
+
+    },
+    "ShowProperties": ["Weight"],
+    "Description": ["cheap frame for everyday vehicle building use. Not very stable."],
+    "JointData": {
+        "BreakPoint": 8500,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [32,0]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [64,32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [32, 64]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [0, 32]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[64,64],
+            "Anchor":[32,32],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "empty_frame.png",
+        "Pos": [0,0],
+        "Size": [64,64]
+    }],
+    "Sounds": {
+        "Crash": [["suspension_2.wav",0.5], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+    
+}

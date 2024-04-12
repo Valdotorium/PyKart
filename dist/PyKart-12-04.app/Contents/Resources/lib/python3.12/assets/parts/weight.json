@@ -1,0 +1,45 @@
+{
+    "Name": "Packet",
+    "Index": 4,
+    "Type": "Freight",
+    "Cost": 2000,
+    "Stex": "packet.png",
+    "Center": [32,32],
+    "Properties": {
+        "Rot": 0,
+        "Friction": 0.99,
+        "Weight": 125,
+        "Bounciness": 0.002,
+        "JoiningBehavior": "Provide",
+        "Value": 0.1
+    },
+    "ShowProperties": ["Weight", "Value"],
+    "JointData": {
+        "BreakPoint": 7000,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Description": ["A packet that wants to be delivered.contains heavy goods.", "Transporting it increases money rewards!"],
+    "Joints":[
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[64,64],
+            "Anchor":[32,32],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "packet.png",
+        "Pos": [0,0],
+        "Size": [64,64]
+    }],
+    "Sounds": {
+        "Crash": [["suspension_2.wav",0.5], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+}

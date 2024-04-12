@@ -1,0 +1,58 @@
+{
+    "Name": "Racing Wheel",
+    "Index": 87659,
+    "Type": "Wheel",
+    "Cost": 10000,
+    "Stex": "racing_wheelNew.png",
+    "Center": [32,32],
+    "Properties": {
+        "Rot": 0,
+        "FuelUse": 0.6,
+        "MaxImpulse": 1080,
+        "Force": 2.65,
+        "Friction": 1.4,
+        "Weight": 26,
+        "Bounciness": 0.05,
+        "JoiningBehavior": "Accept"
+    },
+    "Description": ["A wheel which can resust large amounts of pressure it can spin very fast", "connect it to an engine to power it"],
+    "ShowProperties": ["Weight", "Force"],
+    "JointData": {
+        "BreakPoint": 25000,
+        "Type": "Spring",
+        "Data":{
+            "Distance": 68,
+            "Damping": 3,
+            "Stiffness": 9000
+        }
+    },
+    "Build":{
+        "NeedsJoint": 1,
+        "HasRotation": 1
+    },
+    "Joints":[
+        {
+            "Type": "Accept",
+            "Pos": [32,0]
+        }
+    ],
+    "Hitbox":{
+        "Pos": [32,32],
+        "Type": "Circle",
+        "Size": 32,
+        "Anchor": [0,0],
+        "CollisionType": "Semi",
+        "HasTwoAnchors": false
+    },
+    "Textures": [{
+        "Image": "racing_wheelNew.png",
+        "Pos": [0,0],
+        "Size": [64,64]
+    }],
+    "Sounds": {
+        "Crash": [["tyre_1.wav",1], ["tyre_2.wav",1], ["tyre_3.wav",1]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+}

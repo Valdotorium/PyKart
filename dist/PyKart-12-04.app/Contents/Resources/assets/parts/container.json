@@ -1,0 +1,62 @@
+{
+    "Name": "Container",
+    "Index": 2,
+    "Type": "Freight",
+    "Cost": 5000,
+    "Center": [64,64],
+    "Stex": "Container.png",
+    "Properties": {
+        "Rot": 0,
+        "Friction": 0.96,
+        "Weight": 380,
+        "Bounciness": 0.01,
+        "JoiningBehavior": "Provide",
+        "Value": 0.7
+    },
+    "Description": ["Heavy Box containing very valuable items, do not lose it!", "Transporting it increases money rewards!"],
+    "ShowProperties": ["Weight", "Value"],
+    "JointData": {
+        "BreakPoint": 50000,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [64,0]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [128,64]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [64, 128]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [0, 64]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[128,128],
+            "Anchor":[64,64],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "Container.png",
+        "Pos": [0,0],
+        "Size": [128,128]
+    }],
+    "Sounds": {
+        "Crash": [["metal_crash_1.wav",0.6]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+    
+}

@@ -1,0 +1,58 @@
+{
+    "Name": "Hyper Wheel",
+    "Index": 87659,
+    "Type": "Wheel",
+    "Cost": 25000,
+    "Stex": "hyper_wheel.png",
+    "Center": [32,32],
+    "Properties": {
+        "Rot": 0,
+        "FuelUse": 0.6,
+        "MaxImpulse": 1080,
+        "Force": 3.3,
+        "Friction": 1.55,
+        "Weight": 36,
+        "Bounciness": 0.03,
+        "JoiningBehavior": "Accept"
+    },
+    "Description": ["The best wheel of all time. Heavy. Powerful. High-Tech.", "connect it to an engine to power it"],
+    "ShowProperties": ["Weight", "Force"],
+    "JointData": {
+        "BreakPoint": 28000,
+        "Type": "Spring",
+        "Data":{
+            "Distance": 66,
+            "Damping": 1.5,
+            "Stiffness": 15000
+        }
+    },
+    "Build":{
+        "NeedsJoint": 1,
+        "HasRotation": 1
+    },
+    "Joints":[
+        {
+            "Type": "Accept",
+            "Pos": [32,0]
+        }
+    ],
+    "Hitbox":{
+        "Pos": [32,32],
+        "Type": "Circle",
+        "Size": 32,
+        "Anchor": [0,0],
+        "CollisionType": "Semi",
+        "HasTwoAnchors": false
+    },
+    "Textures": [{
+        "Image": "hyper_wheel.png",
+        "Pos": [0,0],
+        "Size": [64,64]
+    }],
+    "Sounds": {
+        "Crash": [["tyre_1.wav",1], ["tyre_2.wav",1], ["tyre_3.wav",1]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+}

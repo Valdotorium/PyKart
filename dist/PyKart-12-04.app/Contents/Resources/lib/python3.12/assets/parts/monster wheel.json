@@ -1,0 +1,58 @@
+{
+    "Name": "Monster Wheel",
+    "Index": 6,
+    "Type": "Wheel",
+    "Cost":13000,
+    "Stex": "monster_wheelNew.png",
+    "Center": [64,64],
+    "Properties": {
+        "Rot": 0,
+        "FuelUse": 0.2,
+        "MaxImpulse": 1080,
+        "Force": 3.2,
+        "Friction": 1.1,
+        "Weight": 50,
+        "Bounciness": 0.2,
+        "JoiningBehavior": "Accept"
+    },
+    "Description": ["Large wheel, used for creating vehicles","that should be fast and able to drive up steep slopes", "connect it to an engine to ppower it"],
+    "ShowProperties": ["Weight", "Force"],
+    "JointData": {
+        "BreakPoint": 51000,
+        "Type": "Spring",
+        "Data":{
+            "Distance": 116,
+            "Damping": 6.5,
+            "Stiffness": 7500
+        }
+    },
+    "Build":{
+        "NeedsJoint": 1,
+        "HasRotation": 1
+    },
+    "Joints":[
+        {
+            "Type": "Accept",
+            "Pos": [64,0]
+        }
+    ],
+    "Hitbox":{
+        "Pos": [64,64],
+        "Type": "Circle",
+        "Size": 64,
+        "Anchor": [0,0],
+        "CollisionType": "Semi",
+        "HasTwoAnchors": false
+    },
+    "Textures": [{
+        "Image": "monster_wheelNew.png",
+        "Pos": [0,0],
+        "Size": [128,128]
+    }],
+    "Sounds": {
+        "Crash": [["tyre_1.wav",1], ["tyre_2.wav",1], ["tyre_3.wav",1]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+}

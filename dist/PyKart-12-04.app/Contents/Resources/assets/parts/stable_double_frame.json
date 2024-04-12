@@ -1,0 +1,62 @@
+{
+    "Name": "Stable Double Metal Frame",
+    "Index": 2,
+    "Type": "Stability",
+    "Cost": 3500,
+    "Center": [64,32],
+    "Stex": "long_stable_frame.png",
+    "Properties": {
+        "Rot": 0,
+        "Friction": 0.95,
+        "Weight": 62,
+        "Bounciness": 0.015,
+        "JoiningBehavior": "Provide"
+
+    },
+    "Description": ["Made out of very stable metal, this is a next-gen version of the double frame"],
+    "ShowProperties": ["Weight"],
+    "JointData": {
+        "BreakPoint": 74000,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [64,0]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [128,32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [64, 64]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [0, 32]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[128,64],
+            "Anchor":[64,32],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "long_stable_frame.png",
+        "Pos": [0,0],
+        "Size": [128,64]
+    }],
+    "Sounds": {
+        "Crash": [["suspension_2.wav",0.5], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+    
+}

@@ -1,0 +1,62 @@
+{
+    "Name": "Old Engine",
+    "Index": 4,
+    "Type": "Engine",
+    "Cost": 6250,
+    "Stex": "old_engine.png",
+    "Center": [32,32],
+    "Properties": {
+        "Rot": 0,
+        "Friction": 1.25,
+        "Weight": 60,
+        "Bounciness": 0.004,
+        "JoiningBehavior": "Provide",
+        "Power": 330
+
+    },
+    "JointData": {
+        "BreakPoint": 45000,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [32,0]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [64,32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [32, 64]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [0, 32]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[64,64],
+            "Anchor":[32,32],
+            "CollisionType": "Full"
+        },
+    "Description": ["An old engine with a good amount of power for its price. it is quite heavy.", "provides power to connected wheels."],
+    "ShowProperties": ["Weight", "Power"],
+    "Textures": [{
+        "Image": "old_engine.png",
+        "Pos": [0,0],
+        "Size": [64,64]
+    }],
+    "Sounds": {
+        "Crash": [["tyre_2.wav",1], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Active": [["old_engine.wav",0.2]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+}

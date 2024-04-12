@@ -1,0 +1,24 @@
+{
+    "Title": "Rotating Parts",
+    "Contents":[
+        {
+            "Element": "TEXT",
+            "Size": "LARGE",
+            "Content": ["Rotating Parts"]
+        },
+        {
+            "Element": "IMG",
+            "Size": [300,300],
+            "Content": "_t_11.png"
+        },
+        {
+            "Element": "TEXT",
+            "Size": "MEDIUM",
+            "Content": ["Parts can be rotated using the keys A and D.", 
+        "The joints of parts rotate with the part.",
+        "If you press A or D together with P, you can make more precise rotations.",
+        "You can use of this feature by, for example, building a T-shaped vehicle with wheels at its ends,",
+        "that, because of its wheels, can also drive when the vehicle is upside down."]
+        }
+    ]
+}

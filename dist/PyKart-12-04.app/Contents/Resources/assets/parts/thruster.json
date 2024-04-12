@@ -1,0 +1,65 @@
+{
+    "Name": "Thruster",
+    "Index": 2,
+    "Type": "Control",
+    "Cost": 23000,
+    "Center": [32,32],
+    "Stex": "thruster.png",
+    "Properties": {
+        "Rot": 0,
+        "Friction": 0.96,
+        "Weight": 72,
+        "Bounciness": 0.02,
+        "JoiningBehavior": "Provide",
+        "LimitsAngularVelocity": null,
+        "Thrust": 700,
+        "Angle": [180, "Permanent", [0,0]]
+        
+    },
+    "Description": ["A very modern thruster.","It applies strong forces in the direction it is facing.", "does not require engines to operate"],
+    "ShowProperties": ["Weight", "Thrust"],
+    "JointData": {
+        "BreakPoint": 82000,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [32,0]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [64,32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [32, 64]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [0, 32]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[64,64],
+            "Anchor":[32,32],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "thruster.png",
+        "Pos": [0,0],
+        "Size": [64,64]
+    }],
+    "Sounds": {
+        "Crash": [["suspension_2.wav",0.5], ["metal_crash_1.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+    
+}

@@ -1,0 +1,11 @@
+{
+    "Gravity": [0,340],
+    "Name": "Earth",
+    "Terrain":{},
+    "Physics":{
+        "MaterialStiffness": 1,
+        "OxygenPresent": true,
+        "Friction": 1,
+        "Bounce": 0.04
+    }
+}

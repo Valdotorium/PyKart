@@ -20,7 +20,9 @@ import asyncio
 #load files in othe directories like this: os.path.dirname(__file__) + "/folder/folder/file.png"
 #load file template:     grass = pygame.image.load(os.path.dirname(__file__)+"/textures/grass.png")
 
-
+import platform
+if sys.platform == "emscripten":
+    platform.window.canvas.style.imageRendering = "pixelated"
 class Game():
     def __init__(self):
         #game stuff
@@ -56,7 +58,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200,800)
         self.KeyCooldown = 0 
-        self.CFG_New_Game = False
+        self.CFG_New_Game = True
         self.TextAnimations = []
         
 

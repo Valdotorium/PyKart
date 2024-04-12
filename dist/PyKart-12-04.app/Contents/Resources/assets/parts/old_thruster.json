@@ -1,0 +1,61 @@
+{
+    "Name": "Old Thruster",
+    "Index": 2,
+    "Type": "Control",
+    "Cost": 13500,
+    "Center": [32,32],
+    "Stex": "old_thruster.png",
+    "Properties": {
+        "Rot": 0,
+        "Friction": 0.96,
+        "Weight": 50,
+        "Bounciness": 0.02,
+        "JoiningBehavior": "Provide",
+        "LimitsAngularVelocity": null,
+        "Thrust": 400,
+        "Angle": [180, "Permanent", [0,0]]
+        
+    },
+    "Description": ["A old-school, but cheap thruster.", "It applies force in the direction it is facing.", "does not require engines to operate"],
+    "ShowProperties": ["Weight", "Thrust"],
+    "JointData": {
+        "BreakPoint": 50000,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [32,0]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [64,32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [32, 64]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[64,64],
+            "Anchor":[32,32],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "old_thruster.png",
+        "Pos": [0,0],
+        "Size": [64,64]
+    }],
+    "Sounds": {
+        "Crash": [["suspension_2.wav",0.5], ["metal_crash_1.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+    
+}

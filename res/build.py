@@ -111,8 +111,12 @@ def run(obj):
             cc = 0
             TexturesOfPart = obj.Vehicle[c]["Textures"]
             while cc < len(obj.Vehicle[c]["Textures"]):
+                TextureOffset = TexturesOfPart[cc]["Pos"]
+                #rotate the texture offset
+                TextureOffset = utils.RotateVector(TextureOffset, -obj.Vehicle[c]["Rotation"])
+                print("TO: ", TextureOffset)
                 #data of the texture stored in "Textures"
-                PositionOfTexture = utils.AddTuples(obj.Vehicle[c]["Pos"],TexturesOfPart[cc]["Pos"])
+                PositionOfTexture = utils.AddTuples(obj.Vehicle[c]["Pos"],TextureOffset)
 
                 textur = TexturesOfPart[cc]["Image"]
                 textur = obj.textures[textur]
@@ -231,7 +235,10 @@ def run(obj):
         #applying rotation 
         textur = pygame.transform.rotate(textur, obj.RotationOfSelectedPart)
         #rectangle for part rotation cuz it works somehow
-        texture_rect = textur.get_rect(center = (mx,my))
+        TextureOffset =obj.partdict[obj.selectedPart]["Textures"][0]["Pos"]
+        #rotate the texture offset
+        TextureOffset = utils.RotateVector(TextureOffset, -obj.RotationOfSelectedPart)
+        texture_rect = textur.get_rect(center = utils.AddTuples((mx,my), TextureOffset))
         obj.screen.blit(textur, texture_rect)
         obj.Cursor.SetArrows()
     #----------------------------- Getting Temporary Joint Positions of the SelectedPart (if it snapped, at a new position) --------------------------------------------------------
@@ -444,7 +451,7 @@ def run(obj):
     #------------------------------Marking the selected part-------------------------------------
     if obj.SelectedBuiltPart != None:
         RectPos = utils.SubstractTuples(obj.Vehicle[obj.SelectedBuiltPart]["Pos"], obj.Vehicle[obj.SelectedBuiltPart]["Center"])
-        RectPos = utils.AddTuples(RectPos, obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Pos"])
+        RectPos = utils.AddTuples(RectPos, utils.DivideTuple(obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Pos"], 1))
         pygame.draw.rect(obj.screen, (250,225,225), (RectPos[0], RectPos[1],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][0],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][1]), 2,2)
     #------------------------------The Reload Vehicle Button---------------------------------------
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))

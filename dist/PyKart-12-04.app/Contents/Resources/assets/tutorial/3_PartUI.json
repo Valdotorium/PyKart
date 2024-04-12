@@ -1,0 +1,30 @@
+{
+    "Title": "Editing Parts",
+    "Contents":[
+        {
+            "Element": "TEXT",
+            "Size": "LARGE",
+            "Content": ["Editing parts"]
+        },
+        {
+            "Element": "IMG",
+            "Size": [400,250],
+            "Content": "_t_3.png"
+        },
+        {
+            "Element": "TEXT",
+            "Size": "MEDIUM",
+            "Content": ["After clicking to place a part, a lot of buttons pop up at the top of the window", 
+        "The part that is marked with a white box around it is the selected part.",
+        "You can select parts by clicking them.",
+        "Here are the functions of the buttons from the left to the right:",
+        "Drive the Vehicle. The vehicle must consist of at least 5 parts.",
+        "Reload the latest vehicle.",
+        "Delete a part. It will be available in the inventory after deleting it.",
+        "Unselect the current selected part or exit the part Information window",
+        "Move the current selected part.",
+        "Open a window with information for the current selected part.",
+        "Sell the current selected part, for 75% of its original value.(not shown in the image)"]
+        }
+    ]
+}
