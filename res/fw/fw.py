@@ -11,7 +11,7 @@ def getScreenSize():
 def displayLoadText(obj, text):
     #displaying text at a set position (please do not use anymore!)
     txt = obj.largefont.render(text, True, (20, 20, 20))
-    obj.window.blit(txt, (obj.window.get_height() / 2 - 16, obj.window.get_width() / 2 - 50))
+    obj.window.blit(txt, (obj.window.get_width() / 2 - 50, obj.window.get_height() / 2 - 16))
     pygame.display.flip()
 def displayText(obj, text):
     #displaying text at a set position (please do not use anymore!)
