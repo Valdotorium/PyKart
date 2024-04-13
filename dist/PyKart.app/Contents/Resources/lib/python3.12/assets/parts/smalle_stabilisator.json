@@ -1,0 +1,56 @@
+{
+    "Name": "Small Stabilisator",
+    "Index": 2,
+    "Type": "Control",
+    "Cost": 7500,
+    "Center": [16,32],
+    "Stex": "small_stabilisator.png",
+    "Properties": {
+        "Rot": 0,
+        "Friction": 0.96,
+        "Weight": 40,
+        "Bounciness": 0.02,
+        "JoiningBehavior": "Accept",
+        "LimitsAngularVelocity": 7,
+        "Thrust": null,
+        "Angle": null
+    },
+    "Description": ["A small high-tech device that stabilizes vehicles.", "Looks better if placed last.", "it will constantly try to prevent rotation","of itself and its neighboring parts"],
+    "ShowProperties": ["Weight", "LimitsAngularVelocity"],
+    "JointData": {
+        "BreakPoint": 55000,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [32,32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [0, 32]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[32,64],
+            "Anchor":[16,32],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "small_stabilisator.png",
+        "Pos": [0,0],
+        "Size": [32,64]
+    }],
+    "Sounds": {
+        "Crash": [["suspension_2.wav",0.5], ["metal_crash_1.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+    
+}

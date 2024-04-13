@@ -1,0 +1,26 @@
+{
+    "Title": "returning",
+    "Contents":[
+        {
+            "Element": "TEXT",
+            "Size": "LARGE",
+            "Content": ["Ending the Ride"]
+        },
+        {
+            "Element": "IMG",
+            "Size": [500,280],
+            "Content": "_t_8.png"
+        },
+        {
+            "Element": "TEXT",
+            "Size": "MEDIUM",
+            "Content": ["Once you want to end the driving or cannot drive any further, slow down.", 
+        "When you are slow enough, a button appears in the top left of the window.",
+        "Press this button to return to the building mode.",
+        "Then you can probably buy new parts or make improvements to the vehicle.",
+        "Your game data will be stored, so it is safe to quit the game using Q or closing the window.",
+        "Because of performance issues after playing for longer times, make sure to restart the game",
+        "every 10 - 20 minutes. This bug will hopefully be fixed."]
+        }
+    ]
+}

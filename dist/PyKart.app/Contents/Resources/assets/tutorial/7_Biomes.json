@@ -1,0 +1,25 @@
+{
+    "Title": "Biomes",
+    "Contents":[
+        {
+            "Element": "TEXT",
+            "Size": "LARGE",
+            "Content": ["Biomes"]
+        },
+        {
+            "Element": "IMG",
+            "Size": [500,280],
+            "Content": "_t_6.png"
+        },
+        {
+            "Element": "TEXT",
+            "Size": "MEDIUM",
+            "Content": ["Before driving, you must select where to drive.", 
+        "Just hover above the landscape you want to drive in and then click the green start button.",
+        "The Money Multiplier displayed at the bottom of the window",
+        "shows you how much money you'll earn when you drive in this biome.",
+        "You earn money for every meter you drive and every 1000 meters, you get a bonus.",
+        "So try to drive as far as possible!"]
+        }
+    ]
+}

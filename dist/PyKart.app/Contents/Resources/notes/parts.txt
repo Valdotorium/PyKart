@@ -1,0 +1,13 @@
+parts are stored in json files. some difficult thing are explained here:
+
+JOINTS
+joints are the connections between parts. They can hav different properties,
+such as hardness, type, position, etc.
+
+these are stored in a list containing dictionaries, one for each joint of the part.
+the position is stored in a two item list
+the type of each joint tells the game whether the part can be placed alone. A connection to another joint
+is needed when the type of a joint is "Take". If it is "Provide", the joint does not need to be connected.
+
+In the driving game mode each joined also gets assigned its parent and physical values such as hardness,
+and the maximum Force it can resist.

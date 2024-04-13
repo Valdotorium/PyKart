@@ -1,0 +1,58 @@
+{
+    "Name": "Turbo Engine",
+    "Index": 4,
+    "Type": "Engine",
+    "Cost": 18000,
+    "Stex": "turbo_engine.png",
+    "Center": [32,32],
+    "Properties": {
+        "Rot": 0,
+        "Friction": 1.25,
+        "Weight": 75,
+        "Bounciness": 0.004,
+        "JoiningBehavior": "Provide",
+        "Power": 925
+
+    },
+    "ShowProperties": ["Weight", "Power"],
+    "JointData": {
+        "BreakPoint": 62000,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Description": ["A very powerful engine for its size.", "provides power to connected wheels."],
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [64,32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [0, 32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [32, 64]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[64,64],
+            "Anchor":[32,32],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "turbo_engine.png",
+        "Pos": [0,0],
+        "Size": [64,64]
+    }],
+    "Sounds": {
+        "Crash": [["tyre_2.wav",1], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Active": [["turbo_engine.wav",0.3]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+}

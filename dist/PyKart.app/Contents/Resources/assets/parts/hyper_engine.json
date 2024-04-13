@@ -1,0 +1,58 @@
+{
+    "Name": "Hyper Engine",
+    "Index": 2,
+    "Type": "Engine",
+    "Cost": 35000,
+    "Center": [32,64],
+    "Stex": "hyper_engine.png",
+    "Properties": {
+        "Rot": 0,
+        "Friction": 0.95,
+        "Weight": 134,
+        "Bounciness": 0.015,
+        "JoiningBehavior": "Provide",
+        "Power": 2250
+    },
+    "Description": ["The best engine of all time. Heavy. Powerful. High-Tech.", "provides power to connected wheels."],
+    "ShowProperties": ["Weight", "Power"],
+    "JointData": {
+        "BreakPoint": 86000,
+        "Hardness": 0.98,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [64,64]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [32, 128]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [0, 64]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[64,128],
+            "Anchor":[32, 64],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "hyper_engine.png",
+        "Pos": [0,0],
+        "Size": [64,128]
+    }],
+    "Sounds": {
+        "Crash": [["suspension_2.wav",0.5], ["metal_crash_1.wav",0.5], ["metal_crash_4.wav",0.5]],
+        "Active": [["hyper_engine.wav", 0.2]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+    
+}

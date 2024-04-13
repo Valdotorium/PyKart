@@ -1,0 +1,33 @@
+{
+    "Gravity": [0,120],
+    "Name": "Moon",
+    "Background": [150, 150, 150],
+    "Preview": "preview_moon.png",
+    "MoneyMultiplicator": 1,
+    "Description": "Less Gravity and Greyscale",
+    "Visuals":{
+        "GroundColors": [[200, 200, 200], [160,160, 170], [110, 110, 117], [110, 107, 108]],  
+        "LayerHeights": [20,30,34,36],
+        "HasSurfaceMarkings": false,
+        "Assets": [            
+        {"image": "asset_rock_1.png", "size": [100,100], "offset": [-60, -60]},
+        {"image": "asset_rock_2.png", "size": [60,60], "offset": [-50, -50]},
+        {"image": "asset_rock_4.jpg", "size": [80,80], "offset": [-64, -64]}],
+        "AssetFrequency": 5
+    },
+    "Terrain":{
+        "Scale": 70,
+        "Flatness": 2,
+        "Difficulty": 7,
+        "Layers": 3,
+        "StartVariability": 14,
+        "StartScale": 24,
+        "UpscaleFactor": 2,
+        "RandomNoise": [true, true, false]
+    },
+    "Physics":{
+        "Friction": 1,
+        "Bounce": 0.04,
+        "Oxygen": true
+    }
+}
