@@ -40,13 +40,62 @@ def respond(obj):
         utils.displayLoadText(obj,"found assets folder")
         #loading images from the images folder
         if "images" in os.listdir(CurrentPath+"/assets"):
-            imagefiles = os.listdir(CurrentPath+"/assets/images")
+            """Needs to be refactored to make it adapt to the folder structure!"""
+            #TODO #12
             textures = {}
+            #UI image files
+            imagefiles = os.listdir(CurrentPath+"/assets/images/ui")
+            
             #loading all the images into the game
             for image in imagefiles:
                 if image != ".DS_Store":
                     print("loaded image: ", image)
-                    loadedimage = pygame.image.load(CurrentPath+"/assets/images/"+image).convert_alpha()
+                    loadedimage = pygame.image.load(CurrentPath+"/assets/images/ui/"+image).convert_alpha()
+
+                    utils.clear(obj.window)
+                    #center the text
+
+                    utils.displayLoadText(obj,f"loaded image {image}")
+                    textures[image] = loadedimage
+                    #time.sleep(0.01)
+            #asset image files
+            imagefiles = os.listdir(CurrentPath+"/assets/images/assets")
+            
+            #loading all the images into the game
+            for image in imagefiles:
+                if image != ".DS_Store":
+                    print("loaded image: ", image)
+                    loadedimage = pygame.image.load(CurrentPath+"/assets/images/assets/"+image).convert_alpha()
+
+                    utils.clear(obj.window)
+                    #center the text
+
+                    utils.displayLoadText(obj,f"loaded image {image}")
+                    textures[image] = loadedimage
+                    #time.sleep(0.01)
+            #part image files
+            imagefiles = os.listdir(CurrentPath+"/assets/images/parts")
+            
+            #loading all the images into the game
+            for image in imagefiles:
+                if image != ".DS_Store":
+                    print("loaded image: ", image)
+                    loadedimage = pygame.image.load(CurrentPath+"/assets/images/parts/"+image).convert_alpha()
+
+                    utils.clear(obj.window)
+                    #center the text
+
+                    utils.displayLoadText(obj,f"loaded image {image}")
+                    textures[image] = loadedimage
+                    #time.sleep(0.01)
+            #tutorial image files
+            imagefiles = os.listdir(CurrentPath+"/assets/images/tutorial")
+            
+            #loading all the images into the game
+            for image in imagefiles:
+                if image != ".DS_Store":
+                    print("loaded image: ", image)
+                    loadedimage = pygame.image.load(CurrentPath+"/assets/images/tutorial/"+image).convert_alpha()
 
                     utils.clear(obj.window)
                     #center the text
