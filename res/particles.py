@@ -73,8 +73,8 @@ class Particle():
         self.Position[1] += self.Velocity[1]
         #if randomizeVelocity, change the velocity by a very small amount, velocity is a tuple
         if self.randomizeVelocity != False:
-            self.Velocity[0] += random.uniform(-self.randomizeVelocity, self.randomizeVelocity)
-            self.Velocity[1] += random.uniform(-self.randomizeVelocity, self.randomizeVelocity)
+            self.Velocity[0] += random.uniform(-self.randomizeVelocity, self.randomizeVelocity) / obj.fpsFactor
+            self.Velocity[1] += random.uniform(-self.randomizeVelocity, self.randomizeVelocity) / obj.fpsFactor
         #size and color decay
         #color decay
         self.color = (self.color[0] + self.colorDecay[0], self.color[1] + self.colorDecay[1], self.color[2] + self.colorDecay[2])

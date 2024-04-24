@@ -217,7 +217,7 @@ def Draw(obj):
     c = 0
     #obj.space.debug_draw(obj.draw_options)
     while c < len(obj.PymunkBodies):
-        LimitAngularVelocity(obj.PymunkBodies[c])
+        LimitAngularVelocity(obj.PymunkBodies[c], obj)
         #negative because it is somehow inverted
         BodyRotation = -utils.RadiansToDegrees(obj.PymunkBodies[c].angle)
         #scrolling camera?
