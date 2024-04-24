@@ -367,7 +367,7 @@ class Display:
 
         
         self.position = position
-    def RotateHand(self, variable, multiplicator):
+    def RotateHand(self, variable, multiplicator,obj):
         NullOrientation = (0,0)
         self.HandAngle = variable * multiplicator
         self.HandAngle = math.radians(self.HandAngle)
@@ -378,7 +378,7 @@ class Display:
         self.Handangle = -self.HandAngle
         self.HandPosition = self.position
     def update(self, obj, value, multiplicator):
-        self.RotateHand(value, multiplicator)
+        self.RotateHand(value, multiplicator,obj)
         self.HandAngle -= math.radians(90) #because of the flipped y axis of pygame
 
         bg_rect = self.texture.get_rect(center = self.position)

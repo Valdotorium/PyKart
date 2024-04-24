@@ -43,13 +43,13 @@ def LimitThrottle(obj):
     if obj.Throttle < -100:
         obj.Throttle = -100
     else:
-        obj.Throttle = obj.Throttle * 0.96
+        obj.Throttle = obj.Throttle *(1-0.04 / obj.fpsFactor)
 def ApplyThrottle(obj, WheelPart, Force):
     #apply forces to pymunk bodies
     c = WheelPart
     force = obj.Throttle * Force
     point = (0, -obj.NewVehicle[c]["Center"][1])
-    obj.PymunkBodies[c].torque = 25 * force
+    obj.PymunkBodies[c].torque = 25 * force 
 """Making wheels connected to motors spin"""
 def Engine(obj,EnginePart, WheelPart):
     #TODO: for more features: store the obj.NewVehicle as a list of Part objects (new class),
@@ -84,11 +84,11 @@ def ControlPart(obj, index):
 
     
 #preventing things from spinning too fast
-def LimitAngularVelocity(body):
+def LimitAngularVelocity(body,obj):
     if -160 < body.angular_velocity < 160:
-        body.angular_velocity = body.angular_velocity * 0.9978
+        body.angular_velocity = body.angular_velocity * (1-0.0022 / obj.fpsFactor)
     else:
-        body.angular_velocity = body.angular_velocity * 0.9942
+        body.angular_velocity = body.angular_velocity * (1-0.0058 / obj.fpsFactor)
 def DisplayDistance(obj):
     x = obj.X_Position + 10 * 32
     obj.MetersTravelled = round(x/32)
@@ -371,6 +371,9 @@ def simulate(obj, fps):
         #PhysDraw(obj)
         CheckJoints(obj)
         Checkparts(obj)
+        utils.DisplayMoney(obj)
+        DistanceBonuses(obj)
+        UpdateParticles(obj)
     except:
         obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
         obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
@@ -380,9 +383,7 @@ def simulate(obj, fps):
         del(player)
         obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 150, obj))
         print("INTERNAL ERROR: Could not simulate physics")
-    utils.DisplayMoney(obj)
-    DistanceBonuses(obj)
-    UpdateParticles(obj)
+
 def FindFreight(obj):
     c = 0
     obj.RideMoneyMultiplier = 1

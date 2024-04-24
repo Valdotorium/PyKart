@@ -28,6 +28,8 @@ class Game():
         #game stuff
         self.window = pygame.display.set_mode((1200,800), pygame.RESIZABLE)
         self.window.fill((100,100,100))
+        self.lastFrameTime = time.time()
+        self.frameTime = time.time()
     
 
         self.selected_part = ""
@@ -90,7 +92,7 @@ class Game():
         self.pi =3.1415926535897932384626433832795
         self.Throttle = 0
         self.VehicleSpeed = 0
-    
+        self.fpsFactor = 1
         self.money = 22500
         self.particles = []
         self.xp = 0        
@@ -263,6 +265,29 @@ async def main():
         frame += 1
         
         Exo.run()
+        Exo.lastFrameTime = Exo.frameTime
+        Exo.frameTime = time.time()
+        """DynaFrame:
+        print("frametime = ", Exo.frameTime - Exo.lastFrameTime)
+        recentFrameTime = Exo.frameTime - Exo.lastFrameTime
+        if recentFrameTime > (1 / Exo.fps * 1.1):
+            print("regulating FPS down to:", (1/recentFrameTime) * 0.75)
+            Exo.fps = (1/recentFrameTime) * 0.9
+        elif recentFrameTime < (1 / Exo.fps * 0.9):
+            print("regulating FPS up to:", (1/recentFrameTime) * 1.1)
+            Exo.fps = (1/recentFrameTime) * 1.1"""
+        recentFrameTime = Exo.frameTime - Exo.lastFrameTime
+        if 0 < recentFrameTime < 0.02 and Exo.fps >48:
+            Exo.fps = 48
+        elif 0.02 < recentFrameTime < 0.045 and Exo.fps > 32:
+            Exo.fps = 32
+        elif 0.046 < recentFrameTime < 0.08 and Exo.fps > 20:
+            Exo.fps = 20
+        else:
+            Exo.fps = 16
+        Exo.fpsFactor = Exo.fps / 48
+        print("fps: ", Exo.fps, "vspd", Exo.VehicleSpeed)
+
         await asyncio.sleep(0)
         #handling error messages
         if Exo.Errormessage != None:

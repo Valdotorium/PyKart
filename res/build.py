@@ -114,7 +114,6 @@ def run(obj):
                 TextureOffset = TexturesOfPart[cc]["Pos"]
                 #rotate the texture offset
                 TextureOffset = utils.RotateVector(TextureOffset, -obj.Vehicle[c]["Rotation"])
-                print("TO: ", TextureOffset)
                 #data of the texture stored in "Textures"
                 PositionOfTexture = utils.AddTuples(obj.Vehicle[c]["Pos"],TextureOffset)
 
