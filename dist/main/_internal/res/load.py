@@ -9,51 +9,100 @@ def respond(obj):
     WARNING: In py2app, the assets folder must be included TWICE in several locations of the app, see py2app.txt"""
     print("ive loaded from the source package!")
     #getting the window size
-    obj.dimensions = utils.getScreenSize()
+    obj.dimensions = obj.window.get_size()
     print("LOG: screen dimensions are:", obj.dimensions)
     if obj.S_Fitscreen:
         if obj.S_Fullscreen:
             #makes it fullscreen
-            obj.screen = pygame.display.set_mode(obj.dimensions[0], pygame.FULLSCREEN)
+            obj.screen = pygame.display.set_mode(obj.CFG_Default_Screen_Size)
         else:
             #makes it windowed, but with the size of the full screen
-            obj.screen = pygame.display.set_mode(obj.dimensions[0])
+            obj.screen = pygame.display.set_mode(obj.CFG_Default_Screen_Size)
         obj.screen.fill((100, 100, 100))
         pygame.display.set_caption("PyKart Drive") 
     else:
         #smol version
         screensize = obj.CFG_Default_Screen_Size
-        obj.screen = pygame.display.set_mode(screensize)
+        obj.screen = pygame.surface.Surface(screensize).convert_alpha()
         obj.screen.fill((100, 100, 100))
-        obj.dimensions[0] = screensize
-        pygame.display.set_caption("PyKart Drive")
-    obj.dimensions = obj.dimensions[0]
-    utils.displayTextCenter(obj,"finding files")
+        #obj.dimensions[0] = screensize
+    #obj.dimensions = obj.dimensions[0]
+    utils.displayLoadText(obj,"finding files")
     #locating the game assets
 
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
     gamefiles = os.listdir(CurrentPath)
 
     print("LOG: found gamefiles in:", gamefiles)
-    utils.displayTextCenter(obj,"checking for necessary files")
+    utils.displayLoadText(obj,"checking for necessary files")
     if "assets" in gamefiles:
         print("file loader path is: ", CurrentPath)
-        utils.displayTextCenter(obj,"found assets folder")
+        utils.displayLoadText(obj,"found assets folder")
         #loading images from the images folder
         if "images" in os.listdir(CurrentPath+"/assets"):
-            imagefiles = os.listdir(CurrentPath+"/assets/images")
+            """Needs to be refactored to make it adapt to the folder structure!"""
+            #TODO #12
             textures = {}
+            #UI image files
+            imagefiles = os.listdir(CurrentPath+"/assets/images/ui")
+            
             #loading all the images into the game
             for image in imagefiles:
                 if image != ".DS_Store":
                     print("loaded image: ", image)
-                    loadedimage = pygame.image.load(CurrentPath+"/assets/images/"+image).convert_alpha()
+                    loadedimage = pygame.image.load(CurrentPath+"/assets/images/ui/"+image).convert_alpha()
 
-                    utils.clear(obj.screen)
+                    utils.clear(obj.window)
                     #center the text
 
-                    utils.displayTextCenter(obj,f"loaded image {image}")
+                    utils.displayLoadText(obj,f"loaded image {image}")
                     textures[image] = loadedimage
+                    #time.sleep(0.01)
+            #asset image files
+            imagefiles = os.listdir(CurrentPath+"/assets/images/assets")
+            
+            #loading all the images into the game
+            for image in imagefiles:
+                if image != ".DS_Store":
+                    print("loaded image: ", image)
+                    loadedimage = pygame.image.load(CurrentPath+"/assets/images/assets/"+image).convert_alpha()
+
+                    utils.clear(obj.window)
+                    #center the text
+
+                    utils.displayLoadText(obj,f"loaded image {image}")
+                    textures[image] = loadedimage
+                    #time.sleep(0.01)
+            #part image files
+            imagefiles = os.listdir(CurrentPath+"/assets/images/parts")
+            
+            #loading all the images into the game
+            for image in imagefiles:
+                if image != ".DS_Store":
+                    print("loaded image: ", image)
+                    loadedimage = pygame.image.load(CurrentPath+"/assets/images/parts/"+image).convert_alpha()
+
+                    utils.clear(obj.window)
+                    #center the text
+
+                    utils.displayLoadText(obj,f"loaded image {image}")
+                    textures[image] = loadedimage
+                    #time.sleep(0.01)
+            #tutorial image files
+            imagefiles = os.listdir(CurrentPath+"/assets/images/tutorial")
+            
+            #loading all the images into the game
+            for image in imagefiles:
+                if image != ".DS_Store":
+                    print("loaded image: ", image)
+                    loadedimage = pygame.image.load(CurrentPath+"/assets/images/tutorial/"+image).convert_alpha()
+
+                    utils.clear(obj.window)
+                    #center the text
+
+                    utils.displayLoadText(obj,f"loaded image {image}")
+                    textures[image] = loadedimage
+                    #time.sleep(0.01)
             print("LOG: loaded all images into:", textures)
             obj.textures = textures
 
@@ -62,8 +111,9 @@ def respond(obj):
             for part in partfiles:
                 loadedpart = json.load(open(CurrentPath+"/assets/parts/"+part))
                 utils.DecodePart(loadedpart, obj)
-                utils.clear(obj.screen)
-                utils.displayTextCenter(obj,f"loaded part {part}")
+                utils.clear(obj.window)
+                utils.displayLoadText(obj,f"loaded part {part}")
+                #time.sleep(0.01)
             print("all parts loaded to game: ", obj.partdict)
             print("all parts loaded to shop: ", obj.shopdict)
             try:
@@ -72,12 +122,17 @@ def respond(obj):
                 print(f"loaded environment: ", obj.Environment)
             except:
                 raise ImportError("Environment File not found")
-            try:
-                TutFile = open(CurrentPath+"/assets/tutorial.json")
-                obj.LoadedTutorial = json.load(TutFile)
-                print(f"loaded tutorial: ", obj.Environment)
-            except:
-                raise ImportError("Tutorial File not found")
+            tutorials = os.listdir(CurrentPath+"/assets/tutorial")
+            tutorials.sort()
+            obj.tutorials = []
+            print(tutorials)
+            for article in tutorials:
+                loadedarticle = json.load(open(CurrentPath+"/assets/tutorial/"+article))
+                obj.tutorials.append(loadedarticle)
+                utils.clear(obj.window)
+                utils.displayLoadText(obj,f"loaded article {part}")
+                #time.sleep(0.01)
+            print("all parts loaded to game: ", obj.partdict)
             #try loading th partdict and money
             if  not obj.CFG_New_Game:
                 try:
@@ -100,11 +155,12 @@ def respond(obj):
             for sound in soundfiles:
                 loadedsound = pyglet.media.StaticSource(pyglet.media.load(CurrentPath+"/assets/sounds/"+sound))
 
-                utils.clear(obj.screen)
+                utils.clear(obj.window)
                 #center the text
 
-                utils.displayTextCenter(obj,f"loaded sound {sound}")
+                utils.displayLoadText(obj,f"loaded sound {sound}")
                 sounds[sound] = loadedsound
+                #time.sleep(0.01)
             print("LOG: loaded all sounds into:", sounds)
             obj.sounds = sounds
             biomefiles = os.listdir(CurrentPath+"/assets/biomes")
@@ -113,15 +169,16 @@ def respond(obj):
             for biome in biomefiles:
                 loadedbiome = json.load(open(CurrentPath+"/assets/biomes/"+biome))
 
-                utils.clear(obj.screen)
-                utils.displayTextCenter(obj,f"loaded sound {sound}")
+                utils.clear(obj.window)
+                utils.displayLoadText(obj,f"loaded sound {sound}")
                 biomes[loadedbiome["Name"]] = loadedbiome
+                #time.sleep(0.01)
             print("LOG: loaded all biomes into:", biomes)
             obj.biomes = biomes
         else:
             exit
     else:
-        utils.displayTextCenter(obj,"ERROR: no textures folder found")
+        utils.displayLoadText(obj,"ERROR: no textures folder found")
         print("ERRNO_02: No textures or assets folder found in " + CurrentPath)
         exit
     if obj.CFG_Reload_Latest_Vehicle:
@@ -141,4 +198,5 @@ def respond(obj):
     #TODO: #8 
     #implement scalability by scaling all size values of parts by scaleX before starting in building mode
 
-    utils.displayTextCenter(obj, "All Done!")
+    utils.displayLoadText(obj, "All Done!")
+    time.sleep(0.2)

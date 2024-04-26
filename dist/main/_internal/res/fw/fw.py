@@ -8,7 +8,11 @@ def getScreenSize():
         return pygame.display.get_desktop_sizes()
     except:
         raise ValueError("ERRNO_01:Could not get screen size")
-
+def displayLoadText(obj, text):
+    #displaying text at a set position (please do not use anymore!)
+    txt = obj.largefont.render(text, True, (20, 20, 20))
+    obj.window.blit(txt, (obj.window.get_width() / 2 - 50, obj.window.get_height() / 2 - 16))
+    pygame.display.flip()
 def displayText(obj, text):
     #displaying text at a set position (please do not use anymore!)
     txt = obj.largefont.render(text, True, (20, 20, 20))
@@ -363,7 +367,7 @@ class Display:
 
         
         self.position = position
-    def RotateHand(self, variable, multiplicator):
+    def RotateHand(self, variable, multiplicator,obj):
         NullOrientation = (0,0)
         self.HandAngle = variable * multiplicator
         self.HandAngle = math.radians(self.HandAngle)
@@ -374,7 +378,7 @@ class Display:
         self.Handangle = -self.HandAngle
         self.HandPosition = self.position
     def update(self, obj, value, multiplicator):
-        self.RotateHand(value, multiplicator)
+        self.RotateHand(value, multiplicator,obj)
         self.HandAngle -= math.radians(90) #because of the flipped y axis of pygame
 
         bg_rect = self.texture.get_rect(center = self.position)

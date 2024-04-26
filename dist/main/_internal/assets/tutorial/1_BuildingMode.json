@@ -1,0 +1,22 @@
+{
+    "Title": "The Building Mode",
+    "Contents":[
+        {
+            "Element": "TEXT",
+            "Size": "LARGE",
+            "Content": ["The Tutorial", "Welcome to PyKart!"]
+        },
+        {
+            "Element": "IMG",
+            "Size": [500,250],
+            "Content": "_t_1.png"
+        },
+        {
+            "Element": "TEXT",
+            "Size": "MEDIUM",
+            "Content": [
+            "Welcome in the PyKart Tutorial!",
+            "These tutorial pages will show you the basics of the game",
+            "Use the buttons in the top corners to navigate through the pages."]
+        }]
+    }

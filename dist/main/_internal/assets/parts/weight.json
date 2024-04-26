@@ -8,7 +8,7 @@
     "Properties": {
         "Rot": 0,
         "Friction": 0.99,
-        "Weight": 140,
+        "Weight": 125,
         "Bounciness": 0.002,
         "JoiningBehavior": "Provide",
         "Value": 0.1
@@ -23,22 +23,6 @@
     },
     "Description": ["A packet that wants to be delivered.contains heavy goods.", "Transporting it increases money rewards!"],
     "Joints":[
-        {
-            "Type": "Provide",
-            "Pos": [32,0]
-        },
-        {
-            "Type": "Provide",
-            "Pos": [64,32]
-        },
-        {
-            "Type": "Provide",
-            "Pos": [32, 64]
-        },
-        {
-            "Type": "Provide",
-            "Pos": [0, 32]
-        }
     ],
     "Hitbox":{
             "Pos": [0,0],

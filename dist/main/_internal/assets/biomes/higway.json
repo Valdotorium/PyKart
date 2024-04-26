@@ -3,17 +3,26 @@
     "Name": "Highway",
     "Background": [120, 150, 170],
     "Preview": "preview_highway.png",
-    "MoneyMultiplicator": 0.35,
+    "MoneyMultiplicator":0.5,
     "Description": "A smooth ride",
     "Visuals":{
         "GroundColors": [[155, 150, 148], [143, 142, 140]],  
         "LayerHeights": [40,40],
-        "HasSurfaceMarkings": false
+        "HasSurfaceMarkings": false,
+        "Assets": [
+            {"image": "asset_sign_4.jpg", "size": [180,200], "offset": [0, -190]},
+            {"image": "asset_sign_3.jpg", "size": [80,250], "offset": [0, -230]},
+            {"image": "asset_sign_2.jpg", "size": [100,200], "offset": [0, -180]},
+            {"image": "asset_sign_1.jpg", "size": [120,200], "offset": [0, -180]},
+            {"image": "asset_railing_1.jpg", "size": [180,150], "offset": [0, -130]},
+            {"image": "large_wheel.png", "size": [60,60], "offset": [-40, -40]},
+            {"image":"asset_sign_1.png","size": [100,200], "offset": [0, -160]}],
+        "AssetFrequency": 1.6
     },
     "Terrain":{
         "Scale": 70,
         "Flatness": 3.75,
-        "Difficulty": 6,
+        "Difficulty": 5,
         "Layers": 2,
         "StartVariability": 7,
         "StartScale": 24,

@@ -73,8 +73,8 @@ class Particle():
         self.Position[1] += self.Velocity[1]
         #if randomizeVelocity, change the velocity by a very small amount, velocity is a tuple
         if self.randomizeVelocity != False:
-            self.Velocity[0] += random.uniform(-self.randomizeVelocity, self.randomizeVelocity)
-            self.Velocity[1] += random.uniform(-self.randomizeVelocity, self.randomizeVelocity)
+            self.Velocity[0] += random.uniform(-self.randomizeVelocity, self.randomizeVelocity) / obj.fpsFactor
+            self.Velocity[1] += random.uniform(-self.randomizeVelocity, self.randomizeVelocity) / obj.fpsFactor
         #size and color decay
         #color decay
         self.color = (self.color[0] + self.colorDecay[0], self.color[1] + self.colorDecay[1], self.color[2] + self.colorDecay[2])
@@ -86,7 +86,6 @@ class Particle():
             self.alpha = 0
 
         self.frame += 1
-        print(self.Type, self.Position)
         if obj.PymunkBodies[0] != None and self.aerodynamics:
             self.Velocity = utils.AddTuples(self.Velocity, utils.MultiplyTuple(obj.PymunkBodies[0].velocity, -0.00025))
         self.Velocity = list(self.Velocity)
@@ -114,12 +113,11 @@ def ParticleEffect(obj, type, partindex):
             #make velocity and pos lists
             ParticleVelocity = list(ParticleVelocity)
             ParticlePosition = list(ParticlePosition)
-            print(obj.Throttle)
+            #print(obj.Throttle)
             obj.particles.append(Particle(ParticleVelocity, ParticlePosition, "Smoke", obj))
     if type == "Break":
         pass
     if type == "Explosion":
-        print(partindex)
         r = random.randint(5,15)
         c = 0
         #make the index refer to a body and spawn particles on an anchor point of a constraint

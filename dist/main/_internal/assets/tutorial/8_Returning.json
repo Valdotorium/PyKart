@@ -1,0 +1,25 @@
+{
+    "Title": "driving",
+    "Contents":[
+        {
+            "Element": "TEXT",
+            "Size": "LARGE",
+            "Content": ["Driving"]
+        },
+        {
+            "Element": "IMG",
+            "Size": [500,280],
+            "Content": "_t_7.png"
+        },
+        {
+            "Element": "TEXT",
+            "Size": "MEDIUM",
+            "Content": ["To accelerate the vehicle, press Space and press B to brake or reverse.", 
+        "When one of these keys is pressed, engines will power attached wheels and thrusters get active.",
+        "Note that thrusters do not reverse when pressing B.",
+        "At the bottom of the screen, you can see a speed and a rpm display.",
+        "In the center, there is a minimap, showing the terrain in the upcoming 500 meters.",
+        "The value behind the coin icon is how much money you will earn when you end the ride."]
+        }
+    ]
+}

@@ -27,6 +27,5 @@ siehe heft
 
 GAMETEST TODOS:
 
-->add terrain generation assets
-->add gyroscope, thrusters, engine sounds, highscore counters, generate terrain once at start of game and then load it
+->add highscore counters, generate terrain once at start of game and then load it
 

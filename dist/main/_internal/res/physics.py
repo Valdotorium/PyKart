@@ -9,6 +9,7 @@ import pyglet.media
 import os
 from .interactions import interactions as interactions
 from . import particles
+from. import sounds
 
 
 """IMPORTANT NOTE: Because i did not implement vehicle parts as objects :/,
@@ -42,13 +43,13 @@ def LimitThrottle(obj):
     if obj.Throttle < -100:
         obj.Throttle = -100
     else:
-        obj.Throttle = obj.Throttle * 0.96
+        obj.Throttle = obj.Throttle *(1-0.04 / obj.fpsFactor)
 def ApplyThrottle(obj, WheelPart, Force):
     #apply forces to pymunk bodies
     c = WheelPart
     force = obj.Throttle * Force
     point = (0, -obj.NewVehicle[c]["Center"][1])
-    obj.PymunkBodies[c].torque = 28 * force
+    obj.PymunkBodies[c].torque = 25 * force 
 """Making wheels connected to motors spin"""
 def Engine(obj,EnginePart, WheelPart):
     #TODO: for more features: store the obj.NewVehicle as a list of Part objects (new class),
@@ -66,7 +67,7 @@ def ControlPart(obj, index):
         #"angle" property format: [Angle of thrust, AngleIsPermanent, Point relative to the center of the body on which the force is applied]
         #AngleIsPermanent is "Permanent" if the angle of thrust should not be changed by the angle nof the part
     if Properties["Thrust"] != None:
-        print(obj.Throttle)
+        #print(obj.Throttle)
         if obj.Throttle > 15:
             Thrust = (Properties["Thrust"] / 100) * obj.Throttle
             Angle = utils.DegreesToRadians(Properties["Angle"][0])
@@ -83,13 +84,13 @@ def ControlPart(obj, index):
 
     
 #preventing things from spinning too fast
-def LimitAngularVelocity(body):
+def LimitAngularVelocity(body,obj):
     if -160 < body.angular_velocity < 160:
-        body.angular_velocity = body.angular_velocity * 0.9978
+        body.angular_velocity = body.angular_velocity * (1-0.0022 / obj.fpsFactor)
     else:
-        body.angular_velocity = body.angular_velocity * 0.9942
+        body.angular_velocity = body.angular_velocity * (1-0.0058 / obj.fpsFactor)
 def DisplayDistance(obj):
-    x = obj.X_Position + 10
+    x = obj.X_Position + 10 * 32
     obj.MetersTravelled = round(x/32)
     text = str(round(x / 32)) + " M"
     obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (415,obj.dimensions[1] -200))
@@ -97,7 +98,7 @@ def UpdateParticles(obj):
     for particle in obj.particles:
         particle.update(obj)
         if particle.frame > particle.duration:
-            print("delete particle")
+            #print("delete particle")
             obj.particles.pop(obj.particles.index(particle))
 def DisplayEarnedMoney(obj):
     mult = round((round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled) + obj.StuntMoneyForRide) *obj.RideMoneyMultiplier) 
@@ -131,9 +132,23 @@ def DrawBackground(obj):
     obj.body_floor.shape.update
     #colors of the ground above the ground texture
     Groundcolors = obj.Environment["Visuals"]["GroundColors"]
+    c = 0
+    while c < len(obj.TransferredPolygon) and c < len(obj.PolygonAssets):
+        if obj.PolygonAssets[c] != None:
+            Point = obj.TransferredPolygon[c]
+            AssetImage = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["image"]
+            AssetImage = obj.textures[AssetImage]
+            AssetSize = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["size"]
+            AssetImage = pygame.transform.scale(AssetImage,AssetSize)
+            AssetOffset = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["offset"]
+            obj.screen.blit(AssetImage, (Point[0] + AssetOffset[0], Point[1] + AssetOffset[1]))
+                           
+        c += 1
     #drawing lines on the edges of the ground poly
     cc = 0
     y = 0
+
+    
     while cc < len(Groundcolors):
         CurrentColor = Groundcolors[cc]
         c = 0
@@ -202,7 +217,7 @@ def Draw(obj):
     c = 0
     #obj.space.debug_draw(obj.draw_options)
     while c < len(obj.PymunkBodies):
-        LimitAngularVelocity(obj.PymunkBodies[c])
+        LimitAngularVelocity(obj.PymunkBodies[c], obj)
         #negative because it is somehow inverted
         BodyRotation = -utils.RadiansToDegrees(obj.PymunkBodies[c].angle)
         #scrolling camera?
@@ -231,6 +246,8 @@ def Draw(obj):
     obj.rpm = int(obj.VehicleSpeed * 10) + int(obj.Throttle * 75) + random.randint(896, 904)
     #drawing speed and rpm display
     obj.SpeedDisplay.update(obj,obj.VehicleSpeed, 0.95)
+
+
     obj.RPMDisplay.update(obj,obj.rpm, 0.045)
     #displaying distance
 
@@ -341,21 +358,32 @@ def simulate(obj, fps):
     obj._MetersTravelled = obj.MetersTravelled
     Env = obj.Environment
     obj.HasFloor = False
-    utils.CreateGroundPolygon(obj, Env)
-    obj.SoundInFrame = False
+    try:
+        utils.CreateGroundPolygon(obj, Env)
+        obj.SoundInFrame = False
 
-    LimitThrottle(obj)
-    obj.space.step(1/fps)
-    #draeing the poligon with the list of points obj.GroundPolygon
-    #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
-    #draw(obj.Vehicle) <--will be used for textures later
-    Draw(obj)
-    #PhysDraw(obj)
-    CheckJoints(obj)
-    Checkparts(obj)
-    utils.DisplayMoney(obj)
-    DistanceBonuses(obj)
-    UpdateParticles(obj)
+        LimitThrottle(obj)
+        obj.space.step(1/fps)
+        #draeing the poligon with the list of points obj.GroundPolygon
+        #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
+        #draw(obj.Vehicle) <--will be used for textures later
+        Draw(obj)
+        #PhysDraw(obj)
+        CheckJoints(obj)
+        Checkparts(obj)
+        utils.DisplayMoney(obj)
+        DistanceBonuses(obj)
+        UpdateParticles(obj)
+    except:
+        obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
+        obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
+        obj.restart = True
+        AlertSound = obj.sounds["alert.wav"]
+        player = AlertSound.play()
+        del(player)
+        obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 150, obj))
+        print("INTERNAL ERROR: Could not simulate physics")
+
 def FindFreight(obj):
     c = 0
     obj.RideMoneyMultiplier = 1
@@ -553,8 +581,8 @@ def TransferStage(obj):
 
     FindFreight(obj)
     text = "Freight value: " + str(obj.RideMoneyMultiplier)
+    obj.RideMoneyMultiplier=round(obj.RideMoneyMultiplier)
     obj.TextAnimations.append(interactions.TextAnimation(text, 200, obj))
-    print("len of TA", len(obj.TextAnimations))
     #display freight value as text animation
      
     

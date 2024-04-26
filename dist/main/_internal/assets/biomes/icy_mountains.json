@@ -3,12 +3,20 @@
     "Name": "Icy Mountains",
     "Background": [150, 155, 195],
     "Preview": "preview_icy.png",
-    "MoneyMultiplicator": 2.5,
+    "MoneyMultiplicator": 3,
     "Description": "Slippery and steep, but well paid!",
     "Visuals":{
         "GroundColors": [[210, 210, 230], [180, 180, 195], [145, 145, 155], [115, 115, 120]],  
         "LayerHeights": [15,25,35,35],
-        "HasSurfaceMarkings": false
+        "HasSurfaceMarkings": false,
+        "Assets":[{"image": "asset_sign_4.jpg", "size": [180,220], "offset": [-10, -200]},
+            {"image": "asset_ice_1.png", "size": [200,250], "offset": [-10, -200]},
+            {"image": "asset_ice_2.png", "size": [160,160], "offset": [-10, -140]},
+            {"image": "asset_ice_3.png", "size": [160,140], "offset": [-10, -120]},
+            {"image": "asset_ice_1.png", "size": [150,110], "offset": [-10, -110]},
+            {"image": "asset_ice_2.png", "size": [200,200], "offset": [-160, -140]},
+            {"image": "asset_railing_1.jpg", "size": [150,160], "offset": [-10, -125]}],
+        "AssetFrequency": 2.8
     },
     "Terrain":{
         "Scale": 70,

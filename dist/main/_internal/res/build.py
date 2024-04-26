@@ -111,8 +111,11 @@ def run(obj):
             cc = 0
             TexturesOfPart = obj.Vehicle[c]["Textures"]
             while cc < len(obj.Vehicle[c]["Textures"]):
+                TextureOffset = TexturesOfPart[cc]["Pos"]
+                #rotate the texture offset
+                TextureOffset = utils.RotateVector(TextureOffset, -obj.Vehicle[c]["Rotation"])
                 #data of the texture stored in "Textures"
-                PositionOfTexture = utils.AddTuples(obj.Vehicle[c]["Pos"],TexturesOfPart[cc]["Pos"])
+                PositionOfTexture = utils.AddTuples(obj.Vehicle[c]["Pos"],TextureOffset)
 
                 textur = TexturesOfPart[cc]["Image"]
                 textur = obj.textures[textur]
@@ -231,7 +234,10 @@ def run(obj):
         #applying rotation 
         textur = pygame.transform.rotate(textur, obj.RotationOfSelectedPart)
         #rectangle for part rotation cuz it works somehow
-        texture_rect = textur.get_rect(center = (mx,my))
+        TextureOffset =obj.partdict[obj.selectedPart]["Textures"][0]["Pos"]
+        #rotate the texture offset
+        TextureOffset = utils.RotateVector(TextureOffset, -obj.RotationOfSelectedPart)
+        texture_rect = textur.get_rect(center = utils.AddTuples((mx,my), TextureOffset))
         obj.screen.blit(textur, texture_rect)
         obj.Cursor.SetArrows()
     #----------------------------- Getting Temporary Joint Positions of the SelectedPart (if it snapped, at a new position) --------------------------------------------------------
@@ -295,7 +301,7 @@ def run(obj):
                         "Type": obj.partdict[obj.selectedPart]["Type"],
                         "Rotation": obj.RotationOfSelectedPart,
                         "Center": obj.partdict[obj.selectedPart]["Center"], 
-                        "refundValue": obj.partdict[obj.selectedPart]["Cost"],
+                        "refundValue": round(obj.partdict[obj.selectedPart]["Cost"] * 0.75),
                         "CanStandAlone": True,
                         "Joints": Joints,
                         "Hitbox": obj.partdict[obj.selectedPart]["Hitbox"],
@@ -419,10 +425,32 @@ def run(obj):
             pygame.mouse.set_pos(PartPosition)
             mx, my = pygame.mouse.get_pos()
             obj.Cursor.SetArrows()
+    #---------------------The Sell Part Button--------------------------------
+        SellButton = interactions.ButtonArea(obj, obj.textures["returnButton.png"], utils.Scale(obj,(650,30)), utils.Scale(obj,[80,80]))
+        if SellButton or pygame.key.get_pressed()[pygame.K_r]:
+            SelectSound = obj.sounds["coinbag.wav"]
+            SelectSound.play()
+            obj.Cursor.SetDelete()
+            #returning 80% of the money to the user
+            obj.money += obj.Vehicle[obj.SelectedBuiltPart]["refundValue"]
+            #removed parts are still list items, but they will be ignored
+            obj.Vehicle[obj.SelectedBuiltPart] = None
+            obj.Cursor.SetSell()
+            print(f"part {obj.SelectedBuiltPart} deleted")
+            #removing all joints that are connected to the built part
+            c = 0
+            while c < len(obj.VehicleJoints):
+                if obj.VehicleJoints[c] != None:
+                    if obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][0] or obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][1]:
+                        #removed joints are still list items, but they will be ignored -NOT ANYMORE
+                        obj.VehicleJoints.pop(c)
+                c += 1
+            obj.SelectedBuiltPart = None
+        
     #------------------------------Marking the selected part-------------------------------------
     if obj.SelectedBuiltPart != None:
         RectPos = utils.SubstractTuples(obj.Vehicle[obj.SelectedBuiltPart]["Pos"], obj.Vehicle[obj.SelectedBuiltPart]["Center"])
-        RectPos = utils.AddTuples(RectPos, obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Pos"])
+        RectPos = utils.AddTuples(RectPos, utils.DivideTuple(obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Pos"], 1))
         pygame.draw.rect(obj.screen, (250,225,225), (RectPos[0], RectPos[1],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][0],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][1]), 2,2)
     #------------------------------The Reload Vehicle Button---------------------------------------
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
@@ -457,8 +485,12 @@ def run(obj):
     CreditButton = interactions.ButtonArea(obj, obj.textures["logo.png"], utils.Scale(obj,(obj.dimensions[0] - 100,30)), utils.Scale(obj,[80,80]))
     if CreditButton:
         obj.credits.visible = True
+        player = obj.sounds["click.wav"].play()
+        del(player)
     #------------------------------The Tutorial Button---------------------------------------
-    TutButton = interactions.ButtonArea(obj, obj.textures["tutorial.png"], utils.Scale(obj,(obj.dimensions[0] - 200,30)), utils.Scale(obj,[80,80]))
+    TutButton = interactions.ButtonArea(obj, obj.textures["tutorial.png"], utils.Scale(obj,(obj.dimensions[0] - 230,30)), utils.Scale(obj,[80,80]))
     if TutButton:
         obj.gm = "tutorial"
+        player = obj.sounds["click.wav"].play()
+        del(player)
 
