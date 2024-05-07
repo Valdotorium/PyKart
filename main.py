@@ -278,16 +278,6 @@ async def main():
             print("regulating FPS up to:", (1/recentFrameTime) * 1.1)
             Exo.fps = (1/recentFrameTime) * 1.1"""
         recentFrameTime = Exo.frameTime - Exo.lastFrameTime
-        if 0 < recentFrameTime < 0.02 and Exo.fps >48:
-            Exo.fps = 48
-        elif 0.02 < recentFrameTime < 0.045 and Exo.fps > 32:
-            Exo.fps = 32
-        elif 0.046 < recentFrameTime < 0.08 and Exo.fps > 20:
-            Exo.fps = 20
-        else:
-            Exo.fps = 16
-        Exo.fpsFactor = Exo.fps / 48
-        print("fps: ", Exo.fps, "vspd", Exo.VehicleSpeed)
 
         await asyncio.sleep(0)
         #handling error messages
