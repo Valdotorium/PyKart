@@ -74,11 +74,13 @@ def ControlPart(obj, index):
             if Properties["Angle"][1] != "Permanent":
                 Angle += obj.PymunkBodies[index].angle
             obj.PymunkBodies[index].apply_impulse_at_local_point(utils.RotateVector((Thrust, 0), Angle), Properties["Angle"][2])
-            particleCount = round(round(obj.Throttle / 30) + random.uniform(0, 0.2))
-            if Properties["Thrust"] < 500:
-                particles.RedFlame(obj, index, True, Properties["Angle"][2], particleCount)
-            else:
-                particles.BlueFlame(obj, index, True, Properties["Angle"][2], particleCount)
+
+            if not obj.isWeb:
+                particleCount = round(round(obj.Throttle / 30) + random.uniform(0, 0.2))
+                if Properties["Thrust"] < 500:
+                    particles.RedFlame(obj, index, True, Properties["Angle"][2], particleCount)
+                else:
+                    particles.BlueFlame(obj, index, True, Properties["Angle"][2], particleCount)
 
         
 
@@ -132,18 +134,19 @@ def DrawBackground(obj):
     obj.body_floor.shape.update
     #colors of the ground above the ground texture
     Groundcolors = obj.Environment["Visuals"]["GroundColors"]
-    c = 0
-    while c < len(obj.TransferredPolygon) and c < len(obj.PolygonAssets):
-        if obj.PolygonAssets[c] != None:
-            Point = obj.TransferredPolygon[c]
-            AssetImage = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["image"]
-            AssetImage = obj.textures[AssetImage]
-            AssetSize = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["size"]
-            AssetImage = pygame.transform.scale(AssetImage,AssetSize)
-            AssetOffset = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["offset"]
-            obj.screen.blit(AssetImage, (Point[0] + AssetOffset[0], Point[1] + AssetOffset[1]))
-                           
-        c += 1
+    if not obj.isWeb:
+        c = 0
+        while c < len(obj.TransferredPolygon) and c < len(obj.PolygonAssets):
+            if obj.PolygonAssets[c] != None:
+                Point = obj.TransferredPolygon[c]
+                AssetImage = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["image"]
+                AssetImage = obj.textures[AssetImage]
+                AssetSize = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["size"]
+                AssetImage = pygame.transform.scale(AssetImage,AssetSize)
+                AssetOffset = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["offset"]
+                obj.screen.blit(AssetImage, (Point[0] + AssetOffset[0], Point[1] + AssetOffset[1]))
+                            
+            c += 1
     #drawing lines on the edges of the ground poly
     cc = 0
     y = 0
@@ -170,6 +173,9 @@ def DrawBackground(obj):
                 pygame.draw.line(obj.screen, CurrentColor, (obj.TransferredPolygon[c][0],obj.TransferredPolygon[c][1] +y), (obj.TransferredPolygon[c+1][0],obj.TransferredPolygon[c+1][1] +y), obj.Environment["Visuals"]["LayerHeights"][cc])
             c += 1
         y += obj.Environment["Visuals"]["LayerHeights"][cc]
+        if obj.isWeb:
+            cc = len(Groundcolors)
+
         cc += 1
     #the ground texture
 def DrawMinimap(obj):
@@ -262,9 +268,10 @@ def Draw(obj):
             obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
             obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
             obj.restart = True
-            AlertSound = obj.sounds["alert.wav"]
-            player = AlertSound.play()
-            del(player)
+            if not obj.isWeb:
+                AlertSound = obj.sounds["alert.wav"]
+                player = AlertSound.play()
+                del(player)
 """Drawing the pymunk physics simulation"""
 def PhysDraw(obj):
     obj.space.debug_draw(obj.draw_options)
@@ -273,8 +280,9 @@ def PhysDraw(obj):
 def Checkparts(obj):
     c = 0
     while c < len(obj.PymunkBodies) and c < len(obj.NewVehicle):
-        if obj.NewVehicle[c]["Type"] == "Engine":
-            particles.ParticleEffect(obj, "Exhaust", c)
+        if not obj.isWeb:
+            if obj.NewVehicle[c]["Type"] == "Engine":
+                particles.ParticleEffect(obj, "Exhaust", c)
         elif obj.NewVehicle[c]["Type"] == "Control":
             ControlPart(obj, c)
         c += 1
@@ -298,7 +306,8 @@ def CheckJoints(obj):
                 Engine(obj,utils.JointHasType(obj, obj.NewVehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.NewVehicleJoints[c], "Wheel"))
                 #mechanics.Engine(obj,utils.JointHasType(obj, obj.VehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.VehicleJoints[c], "Wheel"))
             if JointImpulse > ImpulseLimit:
-                print("JointImpulse of joint ", c, "(", JointImpulse, ") was too high, it broke.")
+                if obj.debug:
+                    print("JointImpulse of joint ", c, "(", JointImpulse, ") was too high, it broke.")
                 r = random.randint(1,4)
                 if r == 1:
                     obj.TextAnimations.append(interactions.TextAnimation("CRUNCH +25", 100, obj))
@@ -310,8 +319,9 @@ def CheckJoints(obj):
                     obj.TextAnimations.append(interactions.TextAnimation("CRACK +25", 100, obj))
                 ParticlePartA = obj.NewVehicleJoints[c]["JoinedParts"][1]
                 ParticlePartB = obj.NewVehicleJoints[c]["JoinedParts"][0]
-                particles.ParticleEffect(obj, "Break", ParticlePartA)
-                particles.ParticleEffect(obj, "Break", ParticlePartB)
+                if not obj.isWeb:
+                    particles.ParticleEffect(obj, "Break", ParticlePartA)
+                    particles.ParticleEffect(obj, "Break", ParticlePartB)
                 obj.space.remove(obj.PymunkJoints[c])
                 obj.NewVehicleJoints[c] = None
                 obj.VehicleJoints[c] = None
@@ -322,9 +332,10 @@ def CheckJoints(obj):
 def DistanceBonuses(obj):
     if obj._MetersTravelled  <= obj.NextKilometer and obj.MetersTravelled > obj.NextKilometer:
         obj.NextKilometer += 1000
-        AlertSound = obj.sounds["coinbag.wav"]
-        player = AlertSound.play()
-        del(player)
+        if not obj.isWeb:
+            AlertSound = obj.sounds["coinbag.wav"]
+            player = AlertSound.play()
+            del(player)
         #extra large bonuses:
         if obj.NextKilometer == 3000:
             MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 1.2))
@@ -378,9 +389,10 @@ def simulate(obj, fps):
         obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
         obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
         obj.restart = True
-        AlertSound = obj.sounds["alert.wav"]
-        player = AlertSound.play()
-        del(player)
+        if not obj.isWeb:
+            AlertSound = obj.sounds["alert.wav"]
+            player = AlertSound.play()
+            del(player)
         obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 150, obj))
         print("INTERNAL ERROR: Could not simulate physics")
 
@@ -393,13 +405,15 @@ def FindFreight(obj):
                 obj.RideMoneyMultiplier += obj.NewVehicle[c]["Properties"]["Value"]
         c += 1
 def OldRefreshPolygon(obj):
-    print(f"initializing ground poly with vertices: ", obj.GroundPolygon)
+    if obj.debug:
+        print(f"initializing ground poly with vertices: ", obj.GroundPolygon)
     obj.body_floor.shape = pymunk.Poly(obj.body_floor, obj.GroundPolygon)
 """Setting some variables"""
 def setup(obj):
     obj.GameZoom = 1
     obj.Environment = obj.biomes[obj.SelectedEnvironment]
-    print("started with env gravity:", obj.Environment["Gravity"])
+    if obj.debug:
+        print("started with env gravity:", obj.Environment["Gravity"])
     Env = obj.Environment
     obj.space = pymunk.Space()#creating the space
     obj.space.gravity = Env["Gravity"]
@@ -473,7 +487,8 @@ def TransferStage(obj):
                 HitboxVertices.append(utils.AddTuples(HitboxPosition,(HitboxOfPart["Size"][0],HitboxOfPart["Size"][1])))
                 #bottom left corner
                 HitboxVertices.append(utils.AddTuples(HitboxPosition , (0,HitboxOfPart["Size"][1])))
-                print("Hitbox (rect)vertices for part: ",c," : ", HitboxVertices)
+                if obj.debug:
+                    print("Hitbox (rect)vertices for part: ",c," : ", HitboxVertices)
                 obj.PhysicsOutputData[rc]["Size"] = HitboxVertices
                 hitbox_shape = pymunk.Poly(hitbox_body, HitboxVertices)
                 hitbox_body.angle = Angle
@@ -486,7 +501,8 @@ def TransferStage(obj):
                 #centering the Hitbox
                 HitboxPosition = utils.SubstractTuples(HitboxPosition, obj.Vehicle[c]["Center"])
                 hitbox_shape = pymunk.Circle(hitbox_body, HitboxOfPart["Size"])
-                print("radius of hitbox for part ",c," : ", HitboxOfPart["Size"])
+                if obj.debug:
+                    print("radius of hitbox for part ",c," : ", HitboxOfPart["Size"])
                 obj.PhysicsOutputData[rc]["Size"] = [HitboxPosition,HitboxOfPart["Size"]]
                 hitbox_body.angle = Angle
                 obj.PymunkBodies.append(hitbox_body)
@@ -500,7 +516,8 @@ def TransferStage(obj):
                     cc += 1
                 hitbox_shape = pymunk.Poly(hitbox_body, HitboxVertices)
                 obj.PhysicsOutputData[rc]["Size"] = HitboxVertices
-                print("Hitbox (poly)vertices for part: ",c," : ", HitboxVertices)
+                if obj.debug:
+                    print("Hitbox (poly)vertices for part: ",c," : ", HitboxVertices)
                 #applying rotation
                 hitbox_body.angle = Angle
                 obj.PymunkBodies.append(hitbox_body)
@@ -532,7 +549,8 @@ def TransferStage(obj):
         c += 1
     c = 0
     rc = 0
-    print("VehicleTypes: ", obj.VehicleTypes)
+    if obj.debug:
+        print("VehicleTypes: ", obj.VehicleTypes)
     obj.PymunkJoints = []
     #print("VehicleJoints: " + str(obj.VehicleJoints))
     #oV[c] = some item c in obj.Vehicle
@@ -559,12 +577,13 @@ def TransferStage(obj):
                 JointData = obj.VehicleJoints[c]["JointData"]
                 JointType = JointData["Type"]
                 if JointType == "Spring":
-
-                    print("Creating SpringJoint between anchors:",AnchorA, AnchorB)
+                    if obj.debug:
+                        print("Creating SpringJoint between anchors:",AnchorA, AnchorB)
                     Joint = pymunk.constraints.DampedSpring(PartnerA,PartnerB,AnchorA,AnchorB, JointData["Data"]["Distance"], JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
                     obj.PymunkJoints.append(Joint)
                     obj.space.add(Joint)
-                    print("Vector of grrove:",(AnchorA,(utils.RotateVector((0,JointData["Data"]["Distance"]), -(obj.Vehicle[IndexTypePartnerB]["Rotation"]- obj.Vehicle[IndexTypePartnerA]["Rotation"])))) )
+                    if obj.debug:
+                        print("Vector of grrove:",(AnchorA,(utils.RotateVector((0,JointData["Data"]["Distance"]), -(obj.Vehicle[IndexTypePartnerB]["Rotation"]- obj.Vehicle[IndexTypePartnerA]["Rotation"])))) )
                     Joint = pymunk.constraints.GrooveJoint(PartnerA, PartnerB, AnchorA, utils.AddTuples(AnchorA,(utils.RotateVector((0,JointData["Data"]["Distance"]), -(obj.Vehicle[IndexTypePartnerB]["Rotation"]- obj.Vehicle[IndexTypePartnerA]["Rotation"])))), AnchorB)
                     obj.PymunkJoints.append(Joint)
                     obj.space.add(Joint)
@@ -574,7 +593,8 @@ def TransferStage(obj):
                     PivotPoint = obj.VehicleJoints[c]["PositionData"][0]
                     Joint = pymunk.constraints.PivotJoint(PartnerA,PartnerB,PivotPoint)
                     Joint.collide_bodies = True
-                    print("Creating PivotJoint at position:",PivotPoint)
+                    if obj.debug:
+                        print("Creating PivotJoint at position:",PivotPoint)
                     obj.PymunkJoints.append(Joint)
                     obj.space.add(Joint)
         c += 1

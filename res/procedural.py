@@ -3,7 +3,7 @@ import pymunk
 
 def Noise(obj, scale, variability, randomnoise):
         #main  terrain generator function
-        print("----------------------------------------------------------------")
+        #print("----------------------------------------------------------------")
         x = 0
         #Height_Change = random.uniform(-obj.CFG_Terrain_Scale * scale, obj.CFG_Terrain_Scale * scale)
         Height_Change = 0
@@ -86,7 +86,8 @@ def generate_chunk(obj):
         #scaling the variability and scale values by the upscalefactor by the terrain and generating noise woth the new values
         Noise(obj, round(obj.Environment["Terrain"]["StartScale"] / (obj.Environment["Terrain"]["UpscaleFactor"] * c)), obj.Environment["Terrain"]["StartVariability"] * (obj.Environment["Terrain"]["UpscaleFactor"] * c), obj.Environment["Terrain"]["RandomNoise"][c-1])
         c += 1
-    print("total terrain length:", len(obj.Terrain) * obj.Environment["Terrain"]["Scale"])
+    if obj.debug:
+        print("total terrain length:", len(obj.Terrain) * obj.Environment["Terrain"]["Scale"])
 
     
 def WritePolygonPositions(obj):

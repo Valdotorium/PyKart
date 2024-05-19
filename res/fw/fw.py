@@ -123,7 +123,7 @@ def DisplayMoney(obj):
         text = obj.largefont.render(str(obj.money), True, (20,20,20))
         pos = (obj.dimensions[0] * 0.09 - text.get_width() / 2, obj.dimensions[1] * 0.16)
         obj.screen.blit(text, pos)
-        #drawing the hand
+        #drawing the handhand
         Image = obj.textures["coin.png"]
         Image = pygame.transform.scale(Image, (50 ,50))
         obj.screen.blit(Image, (obj.dimensions[0] * 0.05 - text.get_width() / 2, obj.dimensions[1] * 0.17 - 16))
@@ -144,7 +144,8 @@ def CreateGroundPolygon(obj, Env):
     obj.GroundPolygon = []
 
     c = 0
-    print(obj.X_Position)
+    if obj.debug:
+        print(obj.X_Position)
     while c < len(obj.StaticPolygon) - 1:
         VectA = obj.StaticPolygon[c]
         VectB = obj.StaticPolygon[c+1]
@@ -169,7 +170,8 @@ def GetConnectedParts(obj,joint):
     PartB = obj.NewVehicle[joint["JoinedParts"][1]]
     IndexPartA = joint["JoinedParts"][0]
     IndexPartB = joint["JoinedParts"][1]
-    print(IndexPartA,IndexPartB)
+    if obj.debug:
+        print(IndexPartA,IndexPartB)
     return [PartA,PartB]
 def JointHasType(obj,joint, type):
     #check if a joint is connected to a part of a specific type
@@ -231,13 +233,15 @@ class BuildUI():
             for part in self.partdict.values():
                 if part["Type"] == category:
                     self.parts[category].append(part["Name"])
-        print(self.categories, self.parts)
+        if obj.debug:
+            print(self.categories, self.parts)
         self.ClickCooldown = 10
         self.ScrollXSpeed = 0
     def run(self, obj):
-        SelectPartSound = obj.sounds["click.wav"]
-        BuySound = obj.sounds["buy.wav"]
-        AlertSound = obj.sounds["alert.wav"]
+        if not obj.isWeb:
+            SelectPartSound = obj.sounds["click.wav"]
+            BuySound = obj.sounds["buy.wav"]
+            AlertSound = obj.sounds["alert.wav"]
         #Button for switching the category, displaying the name of the current category
         img = self.textures["UI_tile.png"]
 
@@ -258,8 +262,10 @@ class BuildUI():
                 obj.screen.blit(img, pos)
                 obj.screen.blit(text, (pos[0] + 5, pos[1] + 5))
                 if IsClicked and self.ClickCooldown < 0:
-                    SelectPartSound.play()
-                    print("Clicked")
+                    if not obj.isWeb:
+                        SelectPartSound.play()
+                    if obj.debug:
+                        print("Clicked")
                     self.CurrentCategory = category
                     self.ScrollX = 0
                     self.setup(obj)
@@ -275,8 +281,9 @@ class BuildUI():
         #drawing the parts of the categories
         for event in pygame.event.get():
             if event.type == pygame.MOUSEWHEEL:
-                print("Scroll")
-                print(event.x, event.y)
+                if obj.debug:
+                    print("Scroll")
+                    print(event.x, event.y)
                 if event.x < 0 or event.y < 0:
                     self.ScrollXSpeed = -5
                 elif event.x > 0 or event.y > 0:
@@ -304,15 +311,18 @@ class BuildUI():
                 X += part["Textures"][0]["Size"][0]  / 2 - 16
                 #only select if part is available
                 if IsClicked and self.ClickCooldown < 0 and obj.partdict[part["Name"]]["Count"] > 0: 
-                    print("Clicked")
-                    player = SelectPartSound.play()
-                    del(player)
+                    if obj.debug:
+                        print("Clicked")
+                    if not obj.isWeb:
+                        player = SelectPartSound.play()
+                        del(player)
                     self.ClickCooldown = 20
                     obj.selectedPart = part["Name"]
                     obj.UserHasSelectedPart = True
                 #buy part if money is enough
                 elif IsClicked and self.ClickCooldown < 0 and obj.money >= Cost:
-                    print("Clicked")
+                    if obj.debug:
+                        print("Clicked")
                     self.ClickCooldown = 20
                     obj.money -= Cost
                     if obj.partdict[part["Name"]]["Count"] == 0:
@@ -320,14 +330,15 @@ class BuildUI():
                     else:
                         obj.xp += round(Cost /6)
                     obj.partdict[part["Name"]]["Count"] += 1
-
-                    player = BuySound.play()
-                    del(player)
+                    if not obj.isWeb:
+                        player = BuySound.play()
+                        del(player)
                     obj.Cursor.SetBuy()
 
                 elif IsClicked and self.ClickCooldown < 0 and obj.money < Cost:
-                    player = AlertSound.play()
-                    del(player)
+                    if not obj.isWeb:
+                        player = AlertSound.play()
+                        del(player)
                     self.ClickCooldown = 14
                 #display the cost above the image
                 if part["Cost"] > obj.money:
@@ -364,12 +375,10 @@ class Display:
         self.hand_texture = pygame.transform.scale(self.hand_texture, (32 * self.scale,128 * self.scale))
         self.texture = obj.textures[texture]
         self.texture = pygame.transform.scale(self.texture, (128 * self.scale, 128 * self.scale))
-
-        
         self.position = position
     def RotateHand(self, variable, multiplicator,obj):
         NullOrientation = (0,0)
-        self.HandAngle = variable * multiplicator
+        self.HandAngle = (48/obj.fps) * (variable * multiplicator)
         self.HandAngle = math.radians(self.HandAngle)
         if self.HandAngle > math.radians(self.maxRotation):
             self.HandAngle = math.radians(self.maxRotation)

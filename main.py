@@ -1,3 +1,16 @@
+# /// script
+# dependencies = [
+#  "pygame-ce",
+#  "cffi",
+#  "pymunk",
+#  "pyglet",
+#  "os",
+#  "sys",
+#  "time",
+#  "copy",
+# ]
+# ///
+
 import pygame, os, sys
 import time
 import pymunk,pymunk.pygame_util
@@ -17,6 +30,7 @@ import res.interactions.interactions as interactions
 import res.fw.fw as utils
 import res.tutorial
 import asyncio
+import cffi
 #load files in othe directories like this: os.path.dirname(__file__) + "/folder/folder/file.png"
 #load file template:     grass = pygame.image.load(os.path.dirname(__file__)+"/textures/grass.png")
 
@@ -31,7 +45,8 @@ class Game():
         self.lastFrameTime = time.time()
         self.frameTime = time.time()
     
-
+        self.isWeb = True
+        self.debug = False
         self.selected_part = ""
         self.running = True
         self.fps = 48
@@ -106,6 +121,7 @@ class Game():
         self.clock = pygame.time.Clock()
     def updateWindow(self,window):
         self.dimensions = (1200,800)
+        
         self.rldimensions = self.window.get_size()
         self.screen = pygame.transform.scale(self.screen, self.rldimensions)
         self.window.fill((100,100,100))
@@ -129,10 +145,12 @@ class Game():
                 self.money += (self.DistanceMoneyForRide + self.StuntMoneyForRide) * self.RideMoneyMultiplier
                 self.xp += self.MetersTravelled * self.RideMoneyMultiplier
                 self.restart = True
-                AlertSound = self.sounds["alert.wav"]
-                player = AlertSound.play()
+                if not self.isWeb:
+                    AlertSound = self.sounds["alert.wav"]
+                    player = AlertSound.play()
+                    del(player)
                 self.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not write ground poly", 150, self))
-                del(player)
+                
             res.controls.GameControls(self)
             res.mechanics.GameMechanics(self)
             res.physics.simulate(self, self.fps)
@@ -161,9 +179,10 @@ class Game():
                 self.money += (self.DistanceMoneyForRide + self.StuntMoneyForRide) * self.RideMoneyMultiplier
                 self.xp += self.MetersTravelled * self.RideMoneyMultiplier
                 self.restart = True
-                AlertSound = self.sounds["alert.wav"]
-                player = AlertSound.play()
-                del(player)
+                if not self.isWeb:
+                    AlertSound = self.sounds["alert.wav"]
+                    player = AlertSound.play()
+                    del(player)
         if self.gm == "biomeselection":
             self.BiomeSelector.update(self)
         if self.gm == "tutorial":
@@ -188,14 +207,17 @@ class Game():
                     res.transfer.run(self)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    print("Player ESC")
+                    if self.debug:
+                        print("Player ESC")
                     self.money += (self.DistanceMoneyForRide + self.StuntMoneyForRide) *self.RideMoneyMultiplier
                     self.xp += self.MetersTravelled *self.RideMoneyMultiplier
                     self.restart = True
-                    AlertSound = self.sounds["alert.wav"]
-                    player = AlertSound.play()
+                    if not self.isWeb:
+                        AlertSound = self.sounds["alert.wav"]
+                        player = AlertSound.play()
+                        del(player)
                     self.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not write ground poly", 150, self))
-                    del(player)
+
 
 
     def reset(self):
@@ -268,16 +290,18 @@ async def main():
         Exo.run()
         Exo.lastFrameTime = Exo.frameTime
         Exo.frameTime = time.time()
-        """DynaFrame:
-        print("frametime = ", Exo.frameTime - Exo.lastFrameTime)
-        recentFrameTime = Exo.frameTime - Exo.lastFrameTime
-        if recentFrameTime > (1 / Exo.fps * 1.1):
-            print("regulating FPS down to:", (1/recentFrameTime) * 0.75)
-            Exo.fps = (1/recentFrameTime) * 0.9
-        elif recentFrameTime < (1 / Exo.fps * 0.9):
-            print("regulating FPS up to:", (1/recentFrameTime) * 1.1)
-            Exo.fps = (1/recentFrameTime) * 1.1"""
-        recentFrameTime = Exo.frameTime - Exo.lastFrameTime
+
+
+        if Exo.fps * 0.6 > 1 /(Exo.frameTime - Exo.lastFrameTime):
+            Exo.fps = round(Exo.fps / 1.4)
+        if Exo.fps * 1.3 < 1 /(Exo.frameTime - Exo.lastFrameTime):
+            Exo.fps = round(Exo.fps * 1.4)
+        if Exo.fps > 60:
+            Exo.fps = 60
+        if Exo.fps < 1:
+            Exo.fps = 1
+        if Exo.debug:
+            print(Exo.fps)
 
         await asyncio.sleep(0)
         #handling error messages

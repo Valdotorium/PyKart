@@ -32,8 +32,8 @@ def respond(obj):
 
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
     gamefiles = os.listdir(CurrentPath)
-
-    print("LOG: found gamefiles in:", gamefiles)
+    if obj.debug:
+        print("LOG: found gamefiles in:", gamefiles)
     utils.displayLoadText(obj,"checking for necessary files")
     if "assets" in gamefiles:
         print("file loader path is: ", CurrentPath)
@@ -49,7 +49,8 @@ def respond(obj):
             #loading all the images into the game
             for image in imagefiles:
                 if image != ".DS_Store":
-                    print("loaded image: ", image)
+                    if obj.debug:
+                        print("loaded image: ", image)
                     loadedimage = pygame.image.load(CurrentPath+"/assets/images/ui/"+image).convert_alpha()
 
                     utils.clear(obj.window)
@@ -64,7 +65,9 @@ def respond(obj):
             #loading all the images into the game
             for image in imagefiles:
                 if image != ".DS_Store":
-                    print("loaded image: ", image)
+
+                    if obj.debug:
+                        print("loaded image: ", image)
                     loadedimage = pygame.image.load(CurrentPath+"/assets/images/assets/"+image).convert_alpha()
 
                     utils.clear(obj.window)
@@ -79,7 +82,8 @@ def respond(obj):
             #loading all the images into the game
             for image in imagefiles:
                 if image != ".DS_Store":
-                    print("loaded image: ", image)
+                    if obj.debug:
+                        print("loaded image: ", image)
                     loadedimage = pygame.image.load(CurrentPath+"/assets/images/parts/"+image).convert_alpha()
 
                     utils.clear(obj.window)
@@ -94,7 +98,8 @@ def respond(obj):
             #loading all the images into the game
             for image in imagefiles:
                 if image != ".DS_Store":
-                    print("loaded image: ", image)
+                    if obj.debug:
+                        print("loaded image: ", image)
                     loadedimage = pygame.image.load(CurrentPath+"/assets/images/tutorial/"+image).convert_alpha()
 
                     utils.clear(obj.window)
@@ -103,7 +108,8 @@ def respond(obj):
                     utils.displayLoadText(obj,f"loaded image {image}")
                     textures[image] = loadedimage
                     #time.sleep(0.01)
-            print("LOG: loaded all images into:", textures)
+            if obj.debug:
+                print("LOG: loaded all images into:", textures)
             obj.textures = textures
 
             #loading all the parts into the game
@@ -114,31 +120,36 @@ def respond(obj):
                 utils.clear(obj.window)
                 utils.displayLoadText(obj,f"loaded part {part}")
                 #time.sleep(0.01)
-            print("all parts loaded to game: ", obj.partdict)
-            print("all parts loaded to shop: ", obj.shopdict)
+            if obj.debug:
+                print("all parts loaded to game: ", obj.partdict)
+                print("all parts loaded to shop: ", obj.shopdict)
             try:
                 EnvironmentFile = open(CurrentPath+"/assets/environment.json")
                 obj.Environment = json.load(EnvironmentFile)
-                print(f"loaded environment: ", obj.Environment)
+                if obj.debug:
+                    print(f"loaded environment: ", obj.Environment)
             except:
                 raise ImportError("Environment File not found")
             tutorials = os.listdir(CurrentPath+"/assets/tutorial")
             tutorials.sort()
             obj.tutorials = []
-            print(tutorials)
+            if obj.debug:
+                print(tutorials)
             for article in tutorials:
                 loadedarticle = json.load(open(CurrentPath+"/assets/tutorial/"+article))
                 obj.tutorials.append(loadedarticle)
                 utils.clear(obj.window)
                 utils.displayLoadText(obj,f"loaded article {part}")
                 #time.sleep(0.01)
-            print("all parts loaded to game: ", obj.partdict)
+            if obj.debug:
+                print("all parts loaded to game: ", obj.partdict)
             #try loading th partdict and money
             if  not obj.CFG_New_Game:
                 try:
                     SaveFile = open(CurrentPath+"/assets/saves/partdict.json")
                     loadeddata = json.load(SaveFile)
-                    print(f"loaded game reopen data: ", loadeddata)
+                    if obj.debug:
+                        print(f"loaded game reopen data: ", loadeddata)
                     if loadeddata["Parts"] != {}:
                         obj.partdict = loadeddata["Parts"]
                     if loadeddata["Money"] != None:
@@ -149,20 +160,22 @@ def respond(obj):
                     raise ImportError("Environment File not found")
             else:
                 pass
-            soundfiles = os.listdir(CurrentPath+"/assets/sounds")
-            sounds = {}
-            #loading all the sounds into the game
-            for sound in soundfiles:
-                loadedsound = pyglet.media.StaticSource(pyglet.media.load(CurrentPath+"/assets/sounds/"+sound))
+            if not obj.isWeb:
+                soundfiles = os.listdir(CurrentPath+"/assets/sounds")
+                sounds = {}
+                #loading all the sounds into the game
+                for sound in soundfiles:
+                    loadedsound = pyglet.media.StaticSource(pyglet.media.load(CurrentPath+"/assets/sounds/"+sound))
 
-                utils.clear(obj.window)
-                #center the text
+                    utils.clear(obj.window)
+                    #center the text
 
-                utils.displayLoadText(obj,f"loaded sound {sound}")
-                sounds[sound] = loadedsound
-                #time.sleep(0.01)
-            print("LOG: loaded all sounds into:", sounds)
-            obj.sounds = sounds
+                    utils.displayLoadText(obj,f"loaded sound {sound}")
+                    sounds[sound] = loadedsound
+                    #time.sleep(0.01)
+                if obj.debug:
+                    print("LOG: loaded all sounds into:", sounds)
+                obj.sounds = sounds
             biomefiles = os.listdir(CurrentPath+"/assets/biomes")
             biomes = {}
             #loading all the biomes into the game
@@ -170,29 +183,35 @@ def respond(obj):
                 loadedbiome = json.load(open(CurrentPath+"/assets/biomes/"+biome))
 
                 utils.clear(obj.window)
-                utils.displayLoadText(obj,f"loaded sound {sound}")
+                utils.displayLoadText(obj,f"loaded biome {biome}")
                 biomes[loadedbiome["Name"]] = loadedbiome
                 #time.sleep(0.01)
-            print("LOG: loaded all biomes into:", biomes)
+            if obj.debug:
+                print("LOG: loaded all biomes into:", biomes)
             obj.biomes = biomes
         else:
             exit
     else:
         utils.displayLoadText(obj,"ERROR: no textures folder found")
-        print("ERRNO_02: No textures or assets folder found in " + CurrentPath)
+        if obj.debug:
+            print("ERRNO_02: No textures or assets folder found in " + CurrentPath)
         exit
     if obj.CFG_Reload_Latest_Vehicle:
-        print("loading latest vehicle")
+        if obj.debug:
+            print("loading latest vehicle")
         try:
             VehicleFile = open(CurrentPath+"/assets/saves/latest_vehicle.json")
             obj.Vehicle = json.load(VehicleFile)
-            print(f"loaded vehicle: ", obj.Vehicle)
+            if obj.debug:
+                print(f"loaded vehicle: ", obj.Vehicle)
             VehicleJointFile = open(CurrentPath+"/assets/saves/latest_vehicle_joints.json")
             obj.VehicleJoints = json.load(VehicleJointFile)
-            print(f"loaded vehicle joints: ", obj.VehicleJoints)
+            if obj.debug:
+                print(f"loaded vehicle joints: ", obj.VehicleJoints)
             VehicleHitboxFile = open(CurrentPath+"/assets/saves/latest_vehicle_hitboxes.json")
             obj.VehicleHitboxes = json.load(VehicleHitboxFile)
-            print(f"loaded vehicle hitboxes: ", obj.VehicleHitboxes)
+            if obj.debug:
+                print(f"loaded vehicle hitboxes: ", obj.VehicleHitboxes)
         except:
             raise ImportError("Vehicle File not found")
     #TODO: #8 
