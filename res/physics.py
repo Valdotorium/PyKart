@@ -77,20 +77,25 @@ def ControlPart(obj, index):
 
             if not obj.isWeb:
                 particleCount = round(round(obj.Throttle / 30) + random.uniform(0, 0.2))
-                if Properties["Thrust"] < 500:
-                    particles.RedFlame(obj, index, True, Properties["Angle"][2], particleCount)
-                else:
-                    particles.BlueFlame(obj, index, True, Properties["Angle"][2], particleCount)
+            else:
+                particleCount = round(round(obj.Throttle / 80)) 
+            if Properties["Thrust"] < 500:
+                particles.RedFlame(obj, index, True, Properties["Angle"][2], particleCount)
+            else:
+                particles.BlueFlame(obj, index, True, Properties["Angle"][2], particleCount)
 
         
 
     
 #preventing things from spinning too fast
 def LimitAngularVelocity(body,obj):
-    if -160 < body.angular_velocity < 160:
-        body.angular_velocity = body.angular_velocity * (1-0.0022 / obj.fpsFactor)
+    if not obj.isWeb:
+        if -160 < body.angular_velocity < 160:
+            body.angular_velocity = body.angular_velocity * (1-0.0022 / obj.fpsFactor)
+        else:
+            body.angular_velocity = body.angular_velocity * (1-0.0058 / obj.fpsFactor)
     else:
-        body.angular_velocity = body.angular_velocity * (1-0.0058 / obj.fpsFactor)
+        body.angular_velocity = body.angular_velocity * 0.998
 def DisplayDistance(obj):
     x = obj.X_Position + 10 * 32
     obj.MetersTravelled = round(x/32)
@@ -99,9 +104,14 @@ def DisplayDistance(obj):
 def UpdateParticles(obj):
     for particle in obj.particles:
         particle.update(obj)
-        if particle.frame > particle.duration:
-            #print("delete particle")
-            obj.particles.pop(obj.particles.index(particle))
+        if obj.isWeb:
+            if particle.frame > particle.duration:
+                #print("delete particle")
+                obj.particles.pop(obj.particles.index(particle))
+        else:
+            if particle.frame > particle.duration / 2:
+                #print("delete particle")
+                obj.particles.pop(obj.particles.index(particle))
 def DisplayEarnedMoney(obj):
     mult = round((round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled) + obj.StuntMoneyForRide) *obj.RideMoneyMultiplier) 
     text = "+" + str(mult)
@@ -173,7 +183,7 @@ def DrawBackground(obj):
                 pygame.draw.line(obj.screen, CurrentColor, (obj.TransferredPolygon[c][0],obj.TransferredPolygon[c][1] +y), (obj.TransferredPolygon[c+1][0],obj.TransferredPolygon[c+1][1] +y), obj.Environment["Visuals"]["LayerHeights"][cc])
             c += 1
         y += obj.Environment["Visuals"]["LayerHeights"][cc]
-        if obj.isWeb:
+        if obj.isWeb and cc == 1:
             cc = len(Groundcolors)
 
         cc += 1
@@ -249,7 +259,7 @@ def Draw(obj):
             cc += 1
         c+=1
     #calculating rpm using some random variables
-    obj.rpm = int(obj.VehicleSpeed * 10) + int(obj.Throttle * 75) + random.randint(896, 904)
+    obj.rpm = (int(obj.VehicleSpeed * 10) + int(obj.Throttle * 75) + random.randint(896, 904)) * 1
     #drawing speed and rpm display
     obj.SpeedDisplay.update(obj,obj.VehicleSpeed, 0.95)
 

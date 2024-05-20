@@ -76,7 +76,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200,800)
         self.KeyCooldown = 0
-        self.CFG_New_Game =False
+        self.CFG_New_Game =True
         self.TextAnimations = []
         
 
@@ -109,7 +109,7 @@ class Game():
         self.DistanceMoneyForRide = 0
         self.VehicleSpeed = 0
         self.fpsFactor = 1
-        self.money = 22500
+        self.money = 25000
         self.particles = []
         self.xp = 0        
         self.SoundPlayer = pyglet.media.Player()
@@ -128,7 +128,6 @@ class Game():
         self.window.blit(self.screen, (0, 0))
         pygame.display.flip()
         self.screen = pygame.transform.scale(self.screen, self.CFG_Default_Screen_Size)
-        self.screen.fill((100,100,100))
     def run(self):
         self.money = round(self.money)
         self.xp = round(self.xp)
@@ -194,6 +193,9 @@ class Game():
             self.TextAnimations[i].update(self)
         utils.DisplayXP(self)
         self.credits.update(self)
+        self.lastFrameTime = self.frameTime
+        self.frameTime = time.time()
+        print(self.fps)
         self.clock.tick(self.fps)
         self.updateWindow(self.window)
         for event in pygame.event.get():
@@ -288,18 +290,17 @@ async def main():
         frame += 1
         
         Exo.run()
-        Exo.lastFrameTime = Exo.frameTime
-        Exo.frameTime = time.time()
+        
 
 
-        if Exo.fps * 0.6 > 1 /(Exo.frameTime - Exo.lastFrameTime):
-            Exo.fps = round(Exo.fps / 1.4)
-        if Exo.fps * 1.3 < 1 /(Exo.frameTime - Exo.lastFrameTime):
-            Exo.fps = round(Exo.fps * 1.4)
+        if Exo.fps * 0.7 > 1 /(Exo.frameTime - Exo.lastFrameTime):
+            Exo.fps = round(Exo.fps / 1.3)
+        if Exo.fps * 1.2 < 1 /(Exo.frameTime - Exo.lastFrameTime):
+            Exo.fps = round(Exo.fps * 1.3)
         if Exo.fps > 60:
             Exo.fps = 60
-        if Exo.fps < 1:
-            Exo.fps = 1
+        if Exo.fps < 12:
+            Exo.fps = 12
         if Exo.debug:
             print(Exo.fps)
 

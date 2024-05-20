@@ -96,18 +96,32 @@ def run(obj):
         if obj.Vehicle[c] != None:
             PlacedPartCount += 1
         c += 1
-    if PlacedPartCount >= 5:
-        #only vehicles with five or more parts are allowed
-        PlayButtonImg = obj.textures["PlayButton.png"]
-        PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[80,80]))
-        PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,30]), utils.Scale(obj,[80,80]))
-        if PlayButton:
-            if not obj.isWeb:
-                SelectSound = obj.sounds["click.wav"]
-                SelectSound.play()
-            if obj.debug:
-                print("User just cligged on the play button")
-            obj.gm = "biomeselection"
+    if 4 < PlacedPartCount:
+        if not obj.isWeb:
+            #only vehicles with five or more parts are allowed
+            PlayButtonImg = obj.textures["PlayButton.png"]
+            PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[80,80]))
+            PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,30]), utils.Scale(obj,[80,80]))
+            if PlayButton:
+                if not obj.isWeb:
+                    SelectSound = obj.sounds["click.wav"]
+                    SelectSound.play()
+                if obj.debug:
+                    print("User just cligged on the play button")
+                obj.gm = "biomeselection"
+        elif 4 < PlacedPartCount < 17:
+             #only vehicles with between 5 and 16 parts are allowed
+            PlayButtonImg = obj.textures["PlayButton.png"]
+            PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[80,80]))
+            PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,30]), utils.Scale(obj,[80,80]))
+            if PlayButton:
+                if not obj.isWeb:
+                    SelectSound = obj.sounds["click.wav"]
+                    SelectSound.play()
+                if obj.debug:
+                    print("User just cligged on the play button")
+                obj.gm = "biomeselection"
+            
     else:
         PlayButtonImg = obj.textures["PlayButtonLocked.png"]
         PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[80,80]))

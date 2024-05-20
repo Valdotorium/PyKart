@@ -65,6 +65,8 @@ def setup(obj):
     obj.Terrain = []
     obj.TerrainAssets = []
     AssetChance = obj.Environment["Visuals"]["AssetFrequency"]
+    if obj.isWeb:
+        AssetChance = round(AssetChance / 2.5)
     AssetCount = len(obj.Environment["Visuals"]["Assets"])
     x = 0
     obj.Terrain.append(-90000)
