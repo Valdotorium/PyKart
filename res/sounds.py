@@ -12,7 +12,6 @@ def setup(obj):
                     player.loop = True
                     player.queue(Sound)
         
-                
                     obj.engineSoundsPlayer = player
 
                 else:
@@ -51,6 +50,8 @@ def DrivingSounds(obj):
                         if not obj.SoundInFrame:
                             VolumeFactor = (JointImpulse / ImpulseLimit) / 2
                             Sounds = copy.deepcopy(obj.NewVehicleJoints[c]["SoundData"])
+
+                            #suspension sounds
                             Sounds.append(["suspension_1.wav", 0.5])
                             Sounds.append(["suspension_2.wav", 0.5])
                             Sounds.append(["suspension_3.wav", 0.5])
@@ -81,6 +82,7 @@ def DrivingSounds(obj):
         try:
             if obj.engineSoundsPlayer != None:
                 obj.engineSoundsPlayer.play()
+                #pitching the engine sounds
                 pitch = round((1.25 + abs(obj.Throttle) / 260 + abs(obj.rpm / 10000)) * 32)
                 obj.engineSoundsPlayer.pitch = pitch / 32
         except:

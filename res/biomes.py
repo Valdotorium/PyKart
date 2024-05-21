@@ -42,7 +42,7 @@ class BiomeSelection():
             obj.screen.blit(BiomeImage, (XPos, obj.dimensions[1] / 2 - 250))
             #draw a white rect around the biome image with width 5
             pygame.draw.rect(obj.screen, (255,255,255), (XPos, obj.dimensions[1] / 2 - 250,500,500), 6,6)
-
+            #getting the current selected biome from the mouse position
             self.CurrentHoveredBiome = round((mx  - (startX)- 90 + self.ScrollX) / 180)
             if self.CurrentHoveredBiome < 0:
                 self.CurrentHoveredBiome = 0
@@ -63,6 +63,7 @@ class BiomeSelection():
                 else:
                     pygame.draw.rect(obj.screen, (255,255,255), (XPos, obj.dimensions[1] / 2 - 250,500,500), 16,16)
                 if 100 < self.TicksInCurrentSelectedBiome < 355:
+                    #the start button fades in
                     PlayButtonImg.set_alpha(self.TicksInCurrentSelectedBiome - 100)
                     #print("DDDD")
                     PlayButton = interactions.ButtonArea(obj, PlayButtonImg, (XPos + 50, obj.dimensions[1] / 2 - 200), utils.Scale(obj,[64,64]))

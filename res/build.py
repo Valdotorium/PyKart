@@ -30,7 +30,19 @@ M Move Part
 X Delete Part
 S Unslect Part
 """
+
+def discardPartPlacement(obj):
+        if obj.UserHasRotatedPart:
+            print("rot")
+            obj.UserHasRotatedPart = False
+            pass
+        else:
+            obj.SnappedJointData = None
+            obj.selectedPart = ""
+            obj.RotationOfSelectedPart = 0
+            obj.Cursor.SetDefault()
 def setup(obj):
+
     scaleX = obj.dimensions[0] / 1200
     if obj.debug:
         print(f"scale factor: {scaleX}")
@@ -89,7 +101,7 @@ def run(obj):
     c = 0
     #background for inventory tiles
     obj.BuildUI.run(obj)
-        
+
     #------------------------------The play button----------------------------------------------------------------
     PlacedPartCount = 0
     while c < len(obj.Vehicle):
@@ -291,8 +303,20 @@ def run(obj):
 
             c += 1 
         #print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}") 
+
+    if obj.UserHasRotatedPart:
+        obj.UserHasSelectedPart = True
+    #------------------------------The Rotate Button---------------------------------------
+    if obj.isWeb:
+        RotButton = interactions.ButtonArea(obj, obj.textures["RotateButton.png"], utils.Scale(obj,(obj.dimensions[0] - 420,30)), utils.Scale(obj,[80,80]))
+        if not RotButton:
+            obj.UserHasRotatedPart = False
+        if RotButton and not obj.UserHasRotatedPart:
+            obj.RotationOfSelectedPart += 45
+            obj.UserHasRotatedPart = True
+    print(obj.UserHasRotatedPart)
     #------------------------------Upon placement, check if the position of the parts center is within a valid rectangle (BuildBackgroundImg)--------------------------------
-    if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not obj.UserHasSelectedPart and obj.CFG_Build_Enforce_Rules:
+    if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not obj.UserHasSelectedPart and obj.CFG_Build_Enforce_Rules and not obj.UserHasRotatedPart:
         #is the user trying to place an "unjoined" accepting joint?
         if  obj.dimensions[0] * 0.1 < mx < 0.9 * obj.dimensions[0] and obj.dimensions[1] * 0.12 < my < 0.66 * obj.dimensions[1]:
             #if the mouse is touching BuildBackgroundImg, the part gets placed
@@ -357,33 +381,22 @@ def run(obj):
                         PlaceSound.play()
                     print(f"part {obj.selectedPart} placed at {(mx,my)}")
                     #part gets unselected
-                    obj.SnappedJointData = None
-                    obj.selectedPart = ""
-                    obj.RotationOfSelectedPart = 0
-                    obj.Cursor.SetDefault()
+                    discardPartPlacement(obj)
                 else:
                     #part placement invalid, unselect
                     if not obj.isWeb:
                         AlertSound = obj.sounds["alert.wav"]
                         AlertSound.play()
-                    obj.SnappedJointData = None
-                    obj.selectedPart = ""
-                    obj.RotationOfSelectedPart = 0
-                    obj.Cursor.SetDefault()
+                    discardPartPlacement(obj)
         elif not obj.dimensions[0] * 0.1 < mx < 0.9 * obj.dimensions[0] or not obj.dimensions[1] * 0.12 < my < 0.725 * obj.dimensions[1]:
             #part placement invalid, unselect
             if not obj.isWeb:
                 AlertSound = obj.sounds["alert.wav"]
                 AlertSound.play()
-            obj.SnappedJointData = None
-            obj.selectedPart = ""
-            obj.RotationOfSelectedPart = 0
-            obj.Cursor.SetDefault()
+            discardPartPlacement(obj)
         else:
             #the part gets unselected
-            obj.selectedPart = ""
-            obj.SnappedJointData = None
-            obj.RotationOfSelectedPart = 0
+            discardPartPlacement(obj)
             obj.Errormessage = interactions.Errormessage("Part Placement Invalid", 100, obj)
     #------------------------------Drawing dots at the currently selected parts joints --------------------------------
     if obj.selectedPart != "":
@@ -533,3 +546,4 @@ def run(obj):
             player = obj.sounds["click.wav"].play()
             del(player)
 
+    

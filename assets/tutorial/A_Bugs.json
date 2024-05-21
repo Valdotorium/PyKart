@@ -21,7 +21,8 @@
         "When connecting something to a wheel after the wheel part has been placed, different joints are created,",
         "and the wheel will behave differently (not really a bug).",
         "Also, avoid placing smaller wheel at the sides of double frames or other large parts,",
-        "because the length of the spring of a wheel is relative to the center of its parent part."]
+        "because the length of the spring of a wheel is relative to the center of its parent part.",
+        "Sounds will pobably be implemented in the web version in the future."]
         }
     ]
 }

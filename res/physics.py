@@ -144,19 +144,19 @@ def DrawBackground(obj):
     obj.body_floor.shape.update
     #colors of the ground above the ground texture
     Groundcolors = obj.Environment["Visuals"]["GroundColors"]
-    if not obj.isWeb:
-        c = 0
-        while c < len(obj.TransferredPolygon) and c < len(obj.PolygonAssets):
-            if obj.PolygonAssets[c] != None:
-                Point = obj.TransferredPolygon[c]
-                AssetImage = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["image"]
-                AssetImage = obj.textures[AssetImage]
-                AssetSize = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["size"]
-                AssetImage = pygame.transform.scale(AssetImage,AssetSize)
-                AssetOffset = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["offset"]
-                obj.screen.blit(AssetImage, (Point[0] + AssetOffset[0], Point[1] + AssetOffset[1]))
+
+    c = 0
+    while c < len(obj.TransferredPolygon) and c < len(obj.PolygonAssets):
+        if obj.PolygonAssets[c] != None:
+            Point = obj.TransferredPolygon[c]
+            AssetImage = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["image"]
+            AssetImage = obj.textures[AssetImage]
+            AssetSize = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["size"]
+            AssetImage = pygame.transform.scale(AssetImage,AssetSize)
+            AssetOffset = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["offset"]
+            obj.screen.blit(AssetImage, (Point[0] + AssetOffset[0], Point[1] + AssetOffset[1]))
                             
-            c += 1
+        c += 1
     #drawing lines on the edges of the ground poly
     cc = 0
     y = 0
@@ -183,7 +183,7 @@ def DrawBackground(obj):
                 pygame.draw.line(obj.screen, CurrentColor, (obj.TransferredPolygon[c][0],obj.TransferredPolygon[c][1] +y), (obj.TransferredPolygon[c+1][0],obj.TransferredPolygon[c+1][1] +y), obj.Environment["Visuals"]["LayerHeights"][cc])
             c += 1
         y += obj.Environment["Visuals"]["LayerHeights"][cc]
-        if obj.isWeb and cc == 1:
+        if obj.isWeb and cc == 2:
             cc = len(Groundcolors)
 
         cc += 1
@@ -247,10 +247,14 @@ def Draw(obj):
             #getting the actual image object:
             Image = obj.textures[Image]
             Rotation = BodyRotation
-            Image = pygame.transform.scale(Image, utils.MultiplyTuple(PartTextures[cc]["Size"], obj.GameZoom))
-            Image = pygame.transform.rotate(Image, Rotation)
-            Position = utils.AddTuples(utils.MultiplyTuple(BodyPosition, obj.GameZoom), utils.MultiplyTuple(utils.RotateVector(PartTextures[cc]["Pos"], -BodyRotation), obj.GameZoom))
-
+            if obj.isWeb:
+                Image = pygame.transform.scale(Image, PartTextures[cc]["Size"])
+                Image = pygame.transform.rotate(Image, Rotation)
+                Position = utils.AddTuples(BodyPosition, utils.RotateVector(PartTextures[cc]["Pos"], -BodyRotation))
+            else:
+                Image = pygame.transform.scale(Image, utils.MultiplyTuple(PartTextures[cc]["Size"], obj.GameZoom))
+                Image = pygame.transform.rotate(Image, Rotation)
+                Position = utils.AddTuples(utils.MultiplyTuple(BodyPosition, obj.GameZoom), utils.MultiplyTuple(utils.RotateVector(PartTextures[cc]["Pos"], -BodyRotation), obj.GameZoom))
             #applying rotation 
             #rectangle for part rotation cuz it works somehow
             texture_rect = Image.get_rect(center = Position)
@@ -262,15 +266,12 @@ def Draw(obj):
     obj.rpm = (int(obj.VehicleSpeed * 10) + int(obj.Throttle * 75) + random.randint(896, 904)) * 1
     #drawing speed and rpm display
     obj.SpeedDisplay.update(obj,obj.VehicleSpeed, 0.95)
-
-
     obj.RPMDisplay.update(obj,obj.rpm, 0.045)
     #displaying distance
 
     DrawMinimap(obj)
     DisplayDistance(obj)
     DisplayEarnedMoney(obj)
-    CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
     if -14 < obj.VehicleSpeed < 10:
         ReloadButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(150,50)), utils.Scale(obj,[64,64]))
         if ReloadButton or pygame.key.get_pressed()[pygame.K_s]:

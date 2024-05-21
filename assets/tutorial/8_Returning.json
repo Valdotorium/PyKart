@@ -14,9 +14,11 @@
         {
             "Element": "TEXT",
             "Size": "MEDIUM",
-            "Content": ["To accelerate the vehicle, press Space and press B to brake or reverse.", 
+            "Content": ["To accelerate the vehicle, press Space and press B to brake or reverse.",
+        "If you are playing on a browser click on the right half of the screen to accelerate,",
+        "and on the left half to brake.",
         "When one of these keys is pressed, engines will power attached wheels and thrusters get active.",
-        "Note that thrusters do not reverse when pressing B.",
+        "Note that thrusters do not reverse when braking.",
         "At the bottom of the screen, you can see a speed and a rpm display.",
         "In the center, there is a minimap, showing the terrain in the upcoming 500 meters.",
         "The value behind the coin icon is how much money you will earn when you end the ride."]

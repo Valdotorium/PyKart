@@ -39,34 +39,18 @@ if sys.platform == "emscripten":
     platform.window.canvas.style.imageRendering = "pixelated"
 class Game():
     def __init__(self):
-        #game stuff
+        #PYGAME vars
         self.window = pygame.display.set_mode((1200,800), pygame.RESIZABLE)
         self.window.fill((100,100,100))
         self.lastFrameTime = time.time()
         self.frameTime = time.time()
-    
-        self.isWeb = True
+        #DEV options
+        self.isWeb = False
         self.debug = False
         self.selected_part = ""
         self.running = True
         self.fps = 48
-        self.clock = pygame.time.Clock()
-        
-        self.partdict = {} # all part data in the game
-        self.shopdict = {} #includes only part properties necessary while building
-        #loading the font files
-        self.smallfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
-        self.font = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
-        self.boldfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator-Bold.ttf"
-        self.largefont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
-        self.largeboldfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator-Bold.ttf"
-        #initializing the font
-        self.smallfont = pygame.font.Font(self.smallfont, 18)
-        self.font = pygame.font.Font(self.font, 20)
-        self.boldfont = pygame.font.Font(self.boldfont, 24)
-        self.largefont = pygame.font.Font(self.largefont, 28)
-        self.largeboldfont = pygame.font.Font(self.largeboldfont, 36)
-        #dev options
+        self.restart = False
         self.CFG_extensive_logs = True
         self.CFG_visuals = True
         self.CFG_debug_mode = True
@@ -77,21 +61,48 @@ class Game():
         self.CFG_Default_Screen_Size = (1200,800)
         self.KeyCooldown = 0
         self.CFG_New_Game =True
-        self.TextAnimations = []
-        
 
-        #options,olease set fit and fullscreen to false
+        
+        
+        #STATIC
+        #game vars
+        self.TextAnimations = []
+        self.partdict = {} # all part data in the game
+        self.shopdict = {} #includes only part properties necessary while building
+        self.X_Position = 0
+        self.Y_Position = 0
+        self.pi =3.1415926535897932384626433832795
+        self.Throttle = 0
+        self.DistanceMoneyForRide = 0
+        self.VehicleSpeed = 0
+        self.fpsFactor = 1
+        self.UserHasRotatedPart = False
+        self.money = 25000
+        self.particles = []
+        self.xp = 0        
+        self.SoundPlayer = pyglet.media.Player()
+        self.GroundPolygons = []
+        pygame.mouse.set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
+        self.clock = pygame.time.Clock()
+        #loading the font files
+        self.smallfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
+        self.font = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
+        self.boldfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator-Bold.ttf"
+        self.largefont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator.ttf"
+        self.largeboldfont = os.path.dirname(__file__)+"/assets/FONTS/PixelOperator-Bold.ttf"
+        #initializing the font
+        self.smallfont = pygame.font.Font(self.smallfont, 20)
+        self.font = pygame.font.Font(self.font, 22)
+        self.boldfont = pygame.font.Font(self.boldfont, 26)
+        self.largefont = pygame.font.Font(self.largefont, 30)
+        self.largeboldfont = pygame.font.Font(self.largeboldfont, 38)
+        self.Cursor = interactions.Cursor(self)
+        #options,set fit and fullscreen to false
         self.S_Fitscreen = False
         self.S_Fullscreen = False
         self.gm = "build"
-        #flat, smooth, chipped, mountainous, extreme, default
-        #self.S_Terrain_Preset = "mountainous"
-        #small, medium, default, large
-        #self.S_Terrain_Size = "large"
-        #spots (old) or lines (new)
-        #self.S_Terrain_Generator = "lines"
-        #scale factor
-        #self.S_Terrain_Scale_Factor = 1
+        self.SelectedEnvironment = "Moon"
+        #TERRAIN
         #new terrain settings:
         self.CFG_Terrain_Scale = 69 #must be below CFG_Terrain_X_Scale
         self.CFG_Terrain_Upscale_Factor = 100
@@ -102,23 +113,6 @@ class Game():
         #20 plain , 8 minimal noise, 6 low noise, 5 normal, 3 hillside, 2 mountainous
         self.CFG_Terrain_Flatness = 4.8
 
-        self.X_Position = 0
-        self.Y_Position = 0
-        self.pi =3.1415926535897932384626433832795
-        self.Throttle = 0
-        self.DistanceMoneyForRide = 0
-        self.VehicleSpeed = 0
-        self.fpsFactor = 1
-        self.money = 25000
-        self.particles = []
-        self.xp = 0        
-        self.SoundPlayer = pyglet.media.Player()
-        self.GroundPolygons = []
-        self.restart = False
-        self.SelectedEnvironment = "Moon"
-        self.Cursor = interactions.Cursor(self)
-        pygame.mouse.set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
-        self.clock = pygame.time.Clock()
     def updateWindow(self,window):
         self.dimensions = (1200,800)
         
@@ -129,15 +123,15 @@ class Game():
         pygame.display.flip()
         self.screen = pygame.transform.scale(self.screen, self.CFG_Default_Screen_Size)
     def run(self):
+        #the game scripts called every frame
         self.money = round(self.money)
         self.xp = round(self.xp)
-
-    
         #res.interactions.interactions.ButtonArea(Exo)
         if self.gm == "game":
             self.screen.fill((120,120,120))
             #running the physics
             try:
+                #the ground polygon
                 res.procedural.WritePolygonPositions(self)
             except:
                 print("INTERNAL ERROR:Failed to write ground polygon")
@@ -165,9 +159,10 @@ class Game():
                 raise Exception("INTERNAL ERROR:Build mode failed to execute")
         if self.gm == "transfer":
             try:
+                #setup physics simulation
                 res.transfer.run(self)
                 res.physics.setup(self)
-                res.physics.TransferStage(self)
+                res.physics.TransferStage(self) # write new vehicle file
                 res.sounds.setup(self)
                 res.procedural.setup(self)
                 res.procedural.generate_chunk(self)
@@ -182,22 +177,30 @@ class Game():
                     AlertSound = self.sounds["alert.wav"]
                     player = AlertSound.play()
                     del(player)
+
         if self.gm == "biomeselection":
             self.BiomeSelector.update(self)
+
         if self.gm == "tutorial":
             self.Tutorial.update(self)
+        
         if pygame.mouse.get_pressed()[0] and self.Cursor.CurrentAnimation == None:
             self.Cursor.Click()
         self.Cursor.update(self)
+
         for i in range(len(self.TextAnimations)):
             self.TextAnimations[i].update(self)
+        #utils
         utils.DisplayXP(self)
         self.credits.update(self)
+
+        #calculating the execution time of every frame
         self.lastFrameTime = self.frameTime
         self.frameTime = time.time()
-        print(self.fps)
         self.clock.tick(self.fps)
         self.updateWindow(self.window)
+
+        #"quit control"
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -220,10 +223,8 @@ class Game():
                         del(player)
                     self.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not write ground poly", 150, self))
 
-
-
     def reset(self):
-
+            #resetting the veriables after a ride
             self.restart = False
             for i in self.PymunkBodies:
                 self.PymunkBodies.remove(i)
@@ -291,16 +292,14 @@ async def main():
         
         Exo.run()
         
-
-
         if Exo.fps * 0.7 > 1 /(Exo.frameTime - Exo.lastFrameTime):
             Exo.fps = round(Exo.fps / 1.3)
         if Exo.fps * 1.2 < 1 /(Exo.frameTime - Exo.lastFrameTime):
             Exo.fps = round(Exo.fps * 1.3)
         if Exo.fps > 60:
             Exo.fps = 60
-        if Exo.fps < 12:
-            Exo.fps = 12
+        if Exo.fps < 16:
+            Exo.fps = 16
         if Exo.debug:
             print(Exo.fps)
 
