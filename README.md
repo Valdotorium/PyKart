@@ -7,7 +7,8 @@ Future Plans:
 (-probably some new updated textures)
 
 Web version (still in development- buggy), Not recommended for older(slower) devices
-(including smartphones)
+(including smartphones):
+https://valdotorium.github.io/PyKart-Web/
 
 
  
