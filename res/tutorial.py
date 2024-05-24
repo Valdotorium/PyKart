@@ -20,7 +20,7 @@ class Tutorial():
         AlertSound = obj.sounds["alert.wav"]
         self.cooldown -= 1
         obj.screen.fill((140,140,140))
-        pygame.draw.rect(obj.screen, (200, 200, 200), (obj.dimensions[0] / 6, 0, 800, 800))
+        pygame.draw.rect(obj.screen, (200, 200, 200), (obj.dimensions[0] / 24, 0, 1100, 800))
         TutButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(obj.dimensions[0] - 150,50)), utils.Scale(obj,[64,64]))
         if TutButton and self.cooldown < 0 or pygame.key.get_pressed()[pygame.K_s]:
             obj.gm = "build"
@@ -46,7 +46,7 @@ class Tutorial():
         if self.Page > len(self.contents) - 1:
             self.Page = len(self.contents) - 1
         text = obj.largeboldfont.render("Page: "+str(self.Page)+" "+ self.contents[self.Page]["Title"], True, (20,20,20))
-        obj.screen.blit(text, (int(obj.dimensions[0] * 0.25), 60))
+        obj.screen.blit(text, (int(obj.dimensions[0] * 0.2), 60))
         self.CurrentArticle = self.contents[self.Page]["Contents"]
         print(self.CurrentArticle)
         for element in self.CurrentArticle:
@@ -65,7 +65,7 @@ class Tutorial():
             elif element["Element"] == "IMG":
                 image = self.textures[element["Content"]]
                 image = pygame.transform.scale(image, element["Size"])
-                obj.screen.blit(image, (obj.dimensions[0] * 0.5 - element["Size"][0] / 2, self.DrawY))
+                obj.screen.blit(image, (obj.dimensions[0] * 0.33 - element["Size"][0] / 2, self.DrawY))
                 self.DrawY += element["Size"][1] + 5
  
 
