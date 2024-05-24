@@ -15,7 +15,7 @@
             "Element": "TEXT",
             "Size": "MEDIUM",
             "Content": ["The red dots on a parts show the locations at which the part", 
-        "cam be connected to other parts.",
+        "can be connected to other parts.",
         "If one of the joints of a part snaps to a joint of another part, the parts are connected.",
         "Avoid placing parts inside of each other. Some parts cannot be connected together, such as wheels.",
         "The types of joints vary depending on the types of parts connected.",
