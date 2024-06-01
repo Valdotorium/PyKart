@@ -39,7 +39,7 @@ if sys.platform == "emscripten":
     platform.window.canvas.style.imageRendering = "pixelated"
 class Game():
     def __init__(self):
-        #PYGAME vars
+        #PYGAME variables
         self.window = pygame.display.set_mode((1200,800), pygame.RESIZABLE)
         self.window.fill((100,100,100))
         self.lastFrameTime = time.time()
