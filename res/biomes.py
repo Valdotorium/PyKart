@@ -42,7 +42,7 @@ class BiomeSelection():
             obj.screen.blit(BiomeImage, (XPos, obj.dimensions[1] / 2 - 250))
             #draw a white rect around the biome image with width 5
             pygame.draw.rect(obj.screen, (255,255,255), (XPos, obj.dimensions[1] / 2 - 250,500,500), 6,6)
-
+            #getting the current selected biome from the mouse position
             self.CurrentHoveredBiome = round((mx  - (startX)- 90 + self.ScrollX) / 180)
             if self.CurrentHoveredBiome < 0:
                 self.CurrentHoveredBiome = 0
@@ -54,7 +54,7 @@ class BiomeSelection():
             else:
                 self.TicksInCurrentSelectedBiome += 1
             if c == self.CurrentHoveredBiome:
-                print(self.TicksInCurrentSelectedBiome)
+                #print(self.TicksInCurrentSelectedBiome)
                 obj.screen.blit(BiomeImage, (XPos, obj.dimensions[1] / 2 - 250))
                 #draw a white rect around the biome image with width 5
 
@@ -63,11 +63,13 @@ class BiomeSelection():
                 else:
                     pygame.draw.rect(obj.screen, (255,255,255), (XPos, obj.dimensions[1] / 2 - 250,500,500), 16,16)
                 if 100 < self.TicksInCurrentSelectedBiome < 355:
+                    #the start button fades in
                     PlayButtonImg.set_alpha(self.TicksInCurrentSelectedBiome - 100)
-                    print("DDDD")
+                    #print("DDDD")
                     PlayButton = interactions.ButtonArea(obj, PlayButtonImg, (XPos + 50, obj.dimensions[1] / 2 - 200), utils.Scale(obj,[64,64]))
                     if PlayButton:
-                        print("User just cligged on the play button")
+                        if obj.debug:
+                            print("User just cligged on the play button")
                         obj.gm = "transfer"
                         SelectedBiome = list(self.Biomes)[self.CurrentSelectedBiome]
                         SelectedBiome = self.Biomes[SelectedBiome]
@@ -75,12 +77,14 @@ class BiomeSelection():
                 elif self.TicksInCurrentSelectedBiome >= 355:
                     PlayButton = interactions.ButtonArea(obj, PlayButtonImg, (XPos + 50, obj.dimensions[1] / 2 - 200), utils.Scale(obj,[64,64]))
                     if PlayButton:
-                        print("User just cligged on the play button")
+                        if obj.debug:
+                            print("User just cligged on the play button")
                         obj.gm = "transfer"
                         SelectedBiome = list(self.Biomes)[self.CurrentSelectedBiome]
                         SelectedBiome = self.Biomes[SelectedBiome]
                         obj.SelectedEnvironment = SelectedBiome["Name"]
-                        print(obj.SelectedEnvironment)
+                        if obj.debug:
+                            print(obj.SelectedEnvironment)
                 XPos += 540
             
             
@@ -91,8 +95,9 @@ class BiomeSelection():
                 XPos += 180
             c += 1
         if self._CurrentSelectedBiome != self.CurrentSelectedBiome:
-            ClickSound = obj.sounds["select_2.wav"]
-            ClickSound.play()
+            if not obj.isWeb:
+                ClickSound = obj.sounds["select_2.wav"]
+                ClickSound.play()
         #text
         BiomeName = list(self.Biomes)[self.CurrentSelectedBiome]
         BiomeName = self.Biomes[BiomeName]["Name"]

@@ -74,7 +74,11 @@ def ControlPart(obj, index):
             if Properties["Angle"][1] != "Permanent":
                 Angle += obj.PymunkBodies[index].angle
             obj.PymunkBodies[index].apply_impulse_at_local_point(utils.RotateVector((Thrust, 0), Angle), Properties["Angle"][2])
-            particleCount = round(round(obj.Throttle / 30) + random.uniform(0, 0.2))
+
+            if not obj.isWeb:
+                particleCount = round(round(obj.Throttle / 30) + random.uniform(0, 0.2))
+            else:
+                particleCount = round(round(obj.Throttle / 80)) 
             if Properties["Thrust"] < 500:
                 particles.RedFlame(obj, index, True, Properties["Angle"][2], particleCount)
             else:
@@ -85,10 +89,13 @@ def ControlPart(obj, index):
     
 #preventing things from spinning too fast
 def LimitAngularVelocity(body,obj):
-    if -160 < body.angular_velocity < 160:
-        body.angular_velocity = body.angular_velocity * (1-0.0022 / obj.fpsFactor)
+    if not obj.isWeb:
+        if -160 < body.angular_velocity < 160:
+            body.angular_velocity = body.angular_velocity * (1-0.0022 / obj.fpsFactor)
+        else:
+            body.angular_velocity = body.angular_velocity * (1-0.0058 / obj.fpsFactor)
     else:
-        body.angular_velocity = body.angular_velocity * (1-0.0058 / obj.fpsFactor)
+        body.angular_velocity = body.angular_velocity * 0.998
 def DisplayDistance(obj):
     x = obj.X_Position + 10 * 32
     obj.MetersTravelled = round(x/32)
@@ -97,9 +104,14 @@ def DisplayDistance(obj):
 def UpdateParticles(obj):
     for particle in obj.particles:
         particle.update(obj)
-        if particle.frame > particle.duration:
-            #print("delete particle")
-            obj.particles.pop(obj.particles.index(particle))
+        if not obj.isWeb:
+            if particle.frame > particle.duration:
+                #print("delete particle")
+                obj.particles.pop(obj.particles.index(particle))
+        else:
+            if particle.frame > particle.duration / 2:
+                #print("delete particle")
+                obj.particles.pop(obj.particles.index(particle))
 def DisplayEarnedMoney(obj):
     mult = round((round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled) + obj.StuntMoneyForRide) *obj.RideMoneyMultiplier) 
     text = "+" + str(mult)
@@ -132,6 +144,7 @@ def DrawBackground(obj):
     obj.body_floor.shape.update
     #colors of the ground above the ground texture
     Groundcolors = obj.Environment["Visuals"]["GroundColors"]
+
     c = 0
     while c < len(obj.TransferredPolygon) and c < len(obj.PolygonAssets):
         if obj.PolygonAssets[c] != None:
@@ -142,7 +155,7 @@ def DrawBackground(obj):
             AssetImage = pygame.transform.scale(AssetImage,AssetSize)
             AssetOffset = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["offset"]
             obj.screen.blit(AssetImage, (Point[0] + AssetOffset[0], Point[1] + AssetOffset[1]))
-                           
+                            
         c += 1
     #drawing lines on the edges of the ground poly
     cc = 0
@@ -170,6 +183,9 @@ def DrawBackground(obj):
                 pygame.draw.line(obj.screen, CurrentColor, (obj.TransferredPolygon[c][0],obj.TransferredPolygon[c][1] +y), (obj.TransferredPolygon[c+1][0],obj.TransferredPolygon[c+1][1] +y), obj.Environment["Visuals"]["LayerHeights"][cc])
             c += 1
         y += obj.Environment["Visuals"]["LayerHeights"][cc]
+        if obj.isWeb and cc == 2:
+            cc = len(Groundcolors)
+
         cc += 1
     #the ground texture
 def DrawMinimap(obj):
@@ -231,10 +247,14 @@ def Draw(obj):
             #getting the actual image object:
             Image = obj.textures[Image]
             Rotation = BodyRotation
-            Image = pygame.transform.scale(Image, utils.MultiplyTuple(PartTextures[cc]["Size"], obj.GameZoom))
-            Image = pygame.transform.rotate(Image, Rotation)
-            Position = utils.AddTuples(utils.MultiplyTuple(BodyPosition, obj.GameZoom), utils.MultiplyTuple(utils.RotateVector(PartTextures[cc]["Pos"], -BodyRotation), obj.GameZoom))
-
+            if obj.isWeb:
+                Image = pygame.transform.scale(Image, PartTextures[cc]["Size"])
+                Image = pygame.transform.rotate(Image, Rotation)
+                Position = utils.AddTuples(BodyPosition, utils.RotateVector(PartTextures[cc]["Pos"], -BodyRotation))
+            else:
+                Image = pygame.transform.scale(Image, utils.MultiplyTuple(PartTextures[cc]["Size"], obj.GameZoom))
+                Image = pygame.transform.rotate(Image, Rotation)
+                Position = utils.AddTuples(utils.MultiplyTuple(BodyPosition, obj.GameZoom), utils.MultiplyTuple(utils.RotateVector(PartTextures[cc]["Pos"], -BodyRotation), obj.GameZoom))
             #applying rotation 
             #rectangle for part rotation cuz it works somehow
             texture_rect = Image.get_rect(center = Position)
@@ -243,18 +263,15 @@ def Draw(obj):
             cc += 1
         c+=1
     #calculating rpm using some random variables
-    obj.rpm = int(obj.VehicleSpeed * 10) + int(obj.Throttle * 75) + random.randint(896, 904)
+    obj.rpm = (int(obj.VehicleSpeed * 10) + int(obj.Throttle * 75) + random.randint(896, 904)) * 1
     #drawing speed and rpm display
     obj.SpeedDisplay.update(obj,obj.VehicleSpeed, 0.95)
-
-
     obj.RPMDisplay.update(obj,obj.rpm, 0.045)
     #displaying distance
 
     DrawMinimap(obj)
     DisplayDistance(obj)
     DisplayEarnedMoney(obj)
-    CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
     if -14 < obj.VehicleSpeed < 10:
         ReloadButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(150,50)), utils.Scale(obj,[64,64]))
         if ReloadButton or pygame.key.get_pressed()[pygame.K_s]:
@@ -262,9 +279,10 @@ def Draw(obj):
             obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
             obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
             obj.restart = True
-            AlertSound = obj.sounds["alert.wav"]
-            player = AlertSound.play()
-            del(player)
+            if not obj.isWeb:
+                AlertSound = obj.sounds["alert.wav"]
+                player = AlertSound.play()
+                del(player)
 """Drawing the pymunk physics simulation"""
 def PhysDraw(obj):
     obj.space.debug_draw(obj.draw_options)
@@ -273,8 +291,9 @@ def PhysDraw(obj):
 def Checkparts(obj):
     c = 0
     while c < len(obj.PymunkBodies) and c < len(obj.NewVehicle):
-        if obj.NewVehicle[c]["Type"] == "Engine":
-            particles.ParticleEffect(obj, "Exhaust", c)
+        if not obj.isWeb:
+            if obj.NewVehicle[c]["Type"] == "Engine":
+                particles.ParticleEffect(obj, "Exhaust", c)
         elif obj.NewVehicle[c]["Type"] == "Control":
             ControlPart(obj, c)
         c += 1
@@ -298,7 +317,8 @@ def CheckJoints(obj):
                 Engine(obj,utils.JointHasType(obj, obj.NewVehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.NewVehicleJoints[c], "Wheel"))
                 #mechanics.Engine(obj,utils.JointHasType(obj, obj.VehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.VehicleJoints[c], "Wheel"))
             if JointImpulse > ImpulseLimit:
-                print("JointImpulse of joint ", c, "(", JointImpulse, ") was too high, it broke.")
+                if obj.debug:
+                    print("JointImpulse of joint ", c, "(", JointImpulse, ") was too high, it broke.")
                 r = random.randint(1,4)
                 if r == 1:
                     obj.TextAnimations.append(interactions.TextAnimation("CRUNCH +25", 100, obj))
@@ -310,8 +330,9 @@ def CheckJoints(obj):
                     obj.TextAnimations.append(interactions.TextAnimation("CRACK +25", 100, obj))
                 ParticlePartA = obj.NewVehicleJoints[c]["JoinedParts"][1]
                 ParticlePartB = obj.NewVehicleJoints[c]["JoinedParts"][0]
-                particles.ParticleEffect(obj, "Break", ParticlePartA)
-                particles.ParticleEffect(obj, "Break", ParticlePartB)
+                if not obj.isWeb:
+                    particles.ParticleEffect(obj, "Break", ParticlePartA)
+                    particles.ParticleEffect(obj, "Break", ParticlePartB)
                 obj.space.remove(obj.PymunkJoints[c])
                 obj.NewVehicleJoints[c] = None
                 obj.VehicleJoints[c] = None
@@ -322,33 +343,34 @@ def CheckJoints(obj):
 def DistanceBonuses(obj):
     if obj._MetersTravelled  <= obj.NextKilometer and obj.MetersTravelled > obj.NextKilometer:
         obj.NextKilometer += 1000
-        AlertSound = obj.sounds["coinbag.wav"]
-        player = AlertSound.play()
-        del(player)
+        if not obj.isWeb:
+            AlertSound = obj.sounds["coinbag.wav"]
+            player = AlertSound.play()
+            del(player)
         #extra large bonuses:
         if obj.NextKilometer == 3000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 1.2))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 1.2))
             text = "2km Distance Bonus: +" + str(round(MoneyBonus))
         elif obj.NextKilometer == 6000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 2))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 2))
             text = "5km Distance Bonus: +" + str(round(MoneyBonus))
         elif obj.NextKilometer == 11000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 2.8))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 2.8))
             text = " 10km Distance Bonus: +" + str(round(MoneyBonus))
         elif obj.NextKilometer == 16000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 3.5))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 3.5))
             text = " 15km Distance Bonus: +" + str(round(MoneyBonus))
         elif obj.NextKilometer == 21000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 4))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 4))
             text = " 20km Distance Bonus: +" + str(round(MoneyBonus))
         elif obj.NextKilometer == 31000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 3.5))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 3.5))
             text = " 30km Distance Bonus: +" + str(round(MoneyBonus))
         elif obj.NextKilometer == 51000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 3))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 3))
             text = " 50km Distance Bonus: +" + str(round(MoneyBonus))
         else:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 0.8))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 0.8))
             text = "Distance Bonus: +" + str(round(MoneyBonus))
         obj.StuntMoneyForRide += MoneyBonus
 
@@ -368,19 +390,20 @@ def simulate(obj, fps):
         #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
         #draw(obj.Vehicle) <--will be used for textures later
         Draw(obj)
+        UpdateParticles(obj)
         #PhysDraw(obj)
         CheckJoints(obj)
         Checkparts(obj)
         utils.DisplayMoney(obj)
         DistanceBonuses(obj)
-        UpdateParticles(obj)
     except:
         obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
         obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
         obj.restart = True
-        AlertSound = obj.sounds["alert.wav"]
-        player = AlertSound.play()
-        del(player)
+        if not obj.isWeb:
+            AlertSound = obj.sounds["alert.wav"]
+            player = AlertSound.play()
+            del(player)
         obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 150, obj))
         print("INTERNAL ERROR: Could not simulate physics")
 
@@ -393,13 +416,16 @@ def FindFreight(obj):
                 obj.RideMoneyMultiplier += obj.NewVehicle[c]["Properties"]["Value"]
         c += 1
 def OldRefreshPolygon(obj):
-    print(f"initializing ground poly with vertices: ", obj.GroundPolygon)
+    if obj.debug:
+        print(f"initializing ground poly with vertices: ", obj.GroundPolygon)
     obj.body_floor.shape = pymunk.Poly(obj.body_floor, obj.GroundPolygon)
 """Setting some variables"""
 def setup(obj):
     obj.GameZoom = 1
     obj.Environment = obj.biomes[obj.SelectedEnvironment]
-    print("started with env gravity:", obj.Environment["Gravity"])
+    obj.Environment["MoneyMultiplicator"] = round(obj.Environment["MoneyMultiplicator"])
+    if obj.debug:
+        print("started with env gravity:", obj.Environment["Gravity"])
     Env = obj.Environment
     obj.space = pymunk.Space()#creating the space
     obj.space.gravity = Env["Gravity"]
@@ -473,7 +499,8 @@ def TransferStage(obj):
                 HitboxVertices.append(utils.AddTuples(HitboxPosition,(HitboxOfPart["Size"][0],HitboxOfPart["Size"][1])))
                 #bottom left corner
                 HitboxVertices.append(utils.AddTuples(HitboxPosition , (0,HitboxOfPart["Size"][1])))
-                print("Hitbox (rect)vertices for part: ",c," : ", HitboxVertices)
+                if obj.debug:
+                    print("Hitbox (rect)vertices for part: ",c," : ", HitboxVertices)
                 obj.PhysicsOutputData[rc]["Size"] = HitboxVertices
                 hitbox_shape = pymunk.Poly(hitbox_body, HitboxVertices)
                 hitbox_body.angle = Angle
@@ -486,7 +513,8 @@ def TransferStage(obj):
                 #centering the Hitbox
                 HitboxPosition = utils.SubstractTuples(HitboxPosition, obj.Vehicle[c]["Center"])
                 hitbox_shape = pymunk.Circle(hitbox_body, HitboxOfPart["Size"])
-                print("radius of hitbox for part ",c," : ", HitboxOfPart["Size"])
+                if obj.debug:
+                    print("radius of hitbox for part ",c," : ", HitboxOfPart["Size"])
                 obj.PhysicsOutputData[rc]["Size"] = [HitboxPosition,HitboxOfPart["Size"]]
                 hitbox_body.angle = Angle
                 obj.PymunkBodies.append(hitbox_body)
@@ -500,7 +528,8 @@ def TransferStage(obj):
                     cc += 1
                 hitbox_shape = pymunk.Poly(hitbox_body, HitboxVertices)
                 obj.PhysicsOutputData[rc]["Size"] = HitboxVertices
-                print("Hitbox (poly)vertices for part: ",c," : ", HitboxVertices)
+                if obj.debug:
+                    print("Hitbox (poly)vertices for part: ",c," : ", HitboxVertices)
                 #applying rotation
                 hitbox_body.angle = Angle
                 obj.PymunkBodies.append(hitbox_body)
@@ -532,7 +561,8 @@ def TransferStage(obj):
         c += 1
     c = 0
     rc = 0
-    print("VehicleTypes: ", obj.VehicleTypes)
+    if obj.debug:
+        print("VehicleTypes: ", obj.VehicleTypes)
     obj.PymunkJoints = []
     #print("VehicleJoints: " + str(obj.VehicleJoints))
     #oV[c] = some item c in obj.Vehicle
@@ -559,12 +589,13 @@ def TransferStage(obj):
                 JointData = obj.VehicleJoints[c]["JointData"]
                 JointType = JointData["Type"]
                 if JointType == "Spring":
-
-                    print("Creating SpringJoint between anchors:",AnchorA, AnchorB)
+                    if obj.debug:
+                        print("Creating SpringJoint between anchors:",AnchorA, AnchorB)
                     Joint = pymunk.constraints.DampedSpring(PartnerA,PartnerB,AnchorA,AnchorB, JointData["Data"]["Distance"], JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
                     obj.PymunkJoints.append(Joint)
                     obj.space.add(Joint)
-                    print("Vector of grrove:",(AnchorA,(utils.RotateVector((0,JointData["Data"]["Distance"]), -(obj.Vehicle[IndexTypePartnerB]["Rotation"]- obj.Vehicle[IndexTypePartnerA]["Rotation"])))) )
+                    if obj.debug:
+                        print("Vector of grrove:",(AnchorA,(utils.RotateVector((0,JointData["Data"]["Distance"]), -(obj.Vehicle[IndexTypePartnerB]["Rotation"]- obj.Vehicle[IndexTypePartnerA]["Rotation"])))) )
                     Joint = pymunk.constraints.GrooveJoint(PartnerA, PartnerB, AnchorA, utils.AddTuples(AnchorA,(utils.RotateVector((0,JointData["Data"]["Distance"]), -(obj.Vehicle[IndexTypePartnerB]["Rotation"]- obj.Vehicle[IndexTypePartnerA]["Rotation"])))), AnchorB)
                     obj.PymunkJoints.append(Joint)
                     obj.space.add(Joint)
@@ -574,7 +605,8 @@ def TransferStage(obj):
                     PivotPoint = obj.VehicleJoints[c]["PositionData"][0]
                     Joint = pymunk.constraints.PivotJoint(PartnerA,PartnerB,PivotPoint)
                     Joint.collide_bodies = True
-                    print("Creating PivotJoint at position:",PivotPoint)
+                    if obj.debug:
+                        print("Creating PivotJoint at position:",PivotPoint)
                     obj.PymunkJoints.append(Joint)
                     obj.space.add(Joint)
         c += 1

@@ -3,7 +3,7 @@
     "Name": "Icy Mountains",
     "Background": [150, 155, 195],
     "Preview": "preview_icy.png",
-    "MoneyMultiplicator": 3,
+    "MoneyMultiplicator": 4.25,
     "Description": "Slippery and steep, but well paid!",
     "Visuals":{
         "GroundColors": [[210, 210, 230], [180, 180, 195], [145, 145, 155], [115, 115, 120]],  

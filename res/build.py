@@ -30,13 +30,27 @@ M Move Part
 X Delete Part
 S Unslect Part
 """
+
+def discardPartPlacement(obj):
+        if obj.UserHasRotatedPart:
+            print("rot")
+            obj.UserHasRotatedPart = False
+            pass
+        else:
+            obj.SnappedJointData = None
+            obj.selectedPart = ""
+            obj.RotationOfSelectedPart = 0
+            obj.Cursor.SetDefault()
 def setup(obj):
+
     scaleX = obj.dimensions[0] / 1200
-    print(f"scale factor: {scaleX}")
+    if obj.debug:
+        print(f"scale factor: {scaleX}")
     scaleY = obj.dimensions[1] / 800
     obj.scalefactor = scaleX 
     #the calculations of the game are performed in a 1200x800 screen, which will later get rescaled onto the actual window size. everything dealing with positions and sizes needs to get multiplied by scaleX
-    print(1200 * scaleX , 800 * scaleX)
+    if obj.debug:
+        print(1200 * scaleX , 800 * scaleX)
     obj.selectedPart = ""
     if not obj.CFG_Reload_Latest_Vehicle:
         obj.Vehicle = []
@@ -51,20 +65,24 @@ def setup(obj):
     obj.CurrentPartUI = interactions.PartUI(obj, None)
     obj.BuildUI = utils.BuildUI(obj)
     obj.credits = utils.Credits(obj)
-    print("loading latest vehicle")
+    if obj.debug:
+        print("loading latest vehicle")
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
     if not obj.CFG_New_Game:
         try:
             VehicleFile = open(CurrentPath+"/assets/saves/latest_vehicle.json")
             obj.Vehicle = json.load(VehicleFile)
-            print(f"loaded vehicle: ", obj.Vehicle)
+            if obj.debug:
+                print(f"loaded vehicle: ", obj.Vehicle)
             VehicleJointFile = open(CurrentPath+"/assets/saves/latest_vehicle_joints.json")
             obj.VehicleJoints = json.load(VehicleJointFile)
-            print(f"loaded vehicle joints: ", obj.VehicleJoints)
+            if obj.debug:
+                print(f"loaded vehicle joints: ", obj.VehicleJoints)
             VehicleHitboxFile = open(CurrentPath+"/assets/saves/latest_vehicle_hitboxes.json")
             #this file can be ignored!
             obj.VehicleHitboxes = json.load(VehicleHitboxFile)
-            print(f"loaded vehicle hitboxes: ", obj.VehicleHitboxes)
+            if obj.debug:
+                print(f"loaded vehicle hitboxes: ", obj.VehicleHitboxes)
             #that could be buggy
             #obj.gm = "transfer"
         except:
@@ -72,7 +90,8 @@ def setup(obj):
 
 def run(obj):
     PartIsValid = True
-    print(obj.RotationOfSelectedPart)
+    if obj.debug:
+        print(obj.RotationOfSelectedPart)
     scaleX = obj.scalefactor
     mx, my = pygame.mouse.get_pos()
 
@@ -82,23 +101,39 @@ def run(obj):
     c = 0
     #background for inventory tiles
     obj.BuildUI.run(obj)
-        
+
     #------------------------------The play button----------------------------------------------------------------
     PlacedPartCount = 0
     while c < len(obj.Vehicle):
         if obj.Vehicle[c] != None:
             PlacedPartCount += 1
         c += 1
-    if PlacedPartCount >= 5:
-        #only vehicles with five or more parts are allowed
-        PlayButtonImg = obj.textures["PlayButton.png"]
-        PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[80,80]))
-        PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,30]), utils.Scale(obj,[80,80]))
-        if PlayButton:
-            SelectSound = obj.sounds["click.wav"]
-            SelectSound.play()
-            print("User just cligged on the play button")
-            obj.gm = "biomeselection"
+    if 4 < PlacedPartCount:
+        if not obj.isWeb:
+            #only vehicles with five or more parts are allowed
+            PlayButtonImg = obj.textures["PlayButton.png"]
+            PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[80,80]))
+            PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,30]), utils.Scale(obj,[80,80]))
+            if PlayButton:
+                if not obj.isWeb:
+                    SelectSound = obj.sounds["click.wav"]
+                    SelectSound.play()
+                if obj.debug:
+                    print("User just cligged on the play button")
+                obj.gm = "biomeselection"
+        elif 4 < PlacedPartCount < 17:
+             #only vehicles with between 5 and 16 parts are allowed
+            PlayButtonImg = obj.textures["PlayButton.png"]
+            PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[80,80]))
+            PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,30]), utils.Scale(obj,[80,80]))
+            if PlayButton:
+                if not obj.isWeb:
+                    SelectSound = obj.sounds["click.wav"]
+                    SelectSound.play()
+                if obj.debug:
+                    print("User just cligged on the play button")
+                obj.gm = "biomeselection"
+            
     else:
         PlayButtonImg = obj.textures["PlayButtonLocked.png"]
         PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[80,80]))
@@ -129,11 +164,12 @@ def run(obj):
                 PositionOfTexture = utils.SubstractTuples(PositionOfTexture,obj.Vehicle[c]["Center"])
                 IsClicked = interactions.ClickArea(PositionOfTexture, utils.MultiplyTuple(TexturesOfPart[cc]["Size"], scaleX))
                 if IsClicked:
-
-                    print("user just selected part ", c, " of Vehicle")
+                    if obj.debug:
+                        print("user just selected part ", c, " of Vehicle")
                     if obj.SelectedBuiltPart != c:
-                        SelectSound = obj.sounds["click.wav"]
-                        SelectSound.play()
+                        if not obj.isWeb:
+                            SelectSound = obj.sounds["click.wav"]
+                            SelectSound.play()
                     obj.SelectedBuiltPart = c
                     #draeing a rect at the position of the texture with the size of the texture
                     pygame.draw.rect(obj.screen, (50,50,50), (PositionOfTexture[0], PositionOfTexture[1],round(TexturesOfPart[cc]["Size"][0] * scaleX), round(TexturesOfPart[cc]["Size"][1] * scaleX)), 2,2)
@@ -197,7 +233,8 @@ def run(obj):
                     #check if a joint of the part curently selected is closer than 15 * scaleX pixels to a placed joint
                     if obj.JointPositions[c][1][0] - 15 * scaleX < JointPositionsOfSelectedPart[cc][0] < obj.JointPositions[c][1][0] + 15 * scaleX:
                         if obj.JointPositions[c][1][1] - 15 * scaleX < JointPositionsOfSelectedPart[cc][1] < obj.JointPositions[c][1][1] + 15 * scaleX:
-                            print("Found joint at", cc)
+                            if obj.debug:
+                                print("Found joint at", cc)
                             mx,my = (obj.JointPositions[c][1][0] - RelativeJointPositionsOfSelectedPart[cc][0], obj.JointPositions[c][1][1] - RelativeJointPositionsOfSelectedPart[cc][1])
                             #check if pairing of joints is invalid (if both joints have type "Accept")
                             #TODO: only one joint can be created in snapping, fix later.
@@ -205,7 +242,8 @@ def run(obj):
                             while ccc < len(obj.Vehicle[obj.JointPositions[c][0]]["Joints"]) and cc < len(obj.partdict[obj.selectedPart]["Joints"]):
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][ccc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
                                     PartIsValid = False
-                                    print("joint pairing is invalid")
+                                    if obj.debug:
+                                        print("joint pairing is invalid")
                                 #if both involved joints are providers, the joint data of the child part will get applied
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][ccc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
                                     obj.SnappedJointData.append({"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc]], "SoundData": obj.partdict[obj.selectedPart]["Sounds"]["Crash"]})
@@ -265,8 +303,20 @@ def run(obj):
 
             c += 1 
         #print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}") 
+
+    if obj.UserHasRotatedPart:
+        obj.UserHasSelectedPart = True
+    #------------------------------The Rotate Button---------------------------------------
+    if obj.isWeb:
+        RotButton = interactions.ButtonArea(obj, obj.textures["RotateButton.png"], utils.Scale(obj,(obj.dimensions[0] - 420,30)), utils.Scale(obj,[80,80]))
+        if not RotButton:
+            obj.UserHasRotatedPart = False
+        if RotButton and not obj.UserHasRotatedPart:
+            obj.RotationOfSelectedPart += 45
+            obj.UserHasRotatedPart = True
+    print(obj.UserHasRotatedPart)
     #------------------------------Upon placement, check if the position of the parts center is within a valid rectangle (BuildBackgroundImg)--------------------------------
-    if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not obj.UserHasSelectedPart and obj.CFG_Build_Enforce_Rules:
+    if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not obj.UserHasSelectedPart and obj.CFG_Build_Enforce_Rules and not obj.UserHasRotatedPart:
         #is the user trying to place an "unjoined" accepting joint?
         if  obj.dimensions[0] * 0.1 < mx < 0.9 * obj.dimensions[0] and obj.dimensions[1] * 0.12 < my < 0.66 * obj.dimensions[1]:
             #if the mouse is touching BuildBackgroundImg, the part gets placed
@@ -326,35 +376,27 @@ def run(obj):
                     else:
                         PlacedPart["JoinedWith"] = []
                     obj.Vehicle.append(PlacedPart)
-                    PlaceSound = obj.sounds["select.wav"]
-                    PlaceSound.play()
+                    if not obj.isWeb:
+                        PlaceSound = obj.sounds["select.wav"]
+                        PlaceSound.play()
                     print(f"part {obj.selectedPart} placed at {(mx,my)}")
                     #part gets unselected
-                    obj.SnappedJointData = None
-                    obj.selectedPart = ""
-                    obj.RotationOfSelectedPart = 0
-                    obj.Cursor.SetDefault()
+                    discardPartPlacement(obj)
                 else:
                     #part placement invalid, unselect
-                    AlertSound = obj.sounds["alert.wav"]
-                    AlertSound.play()
-                    obj.SnappedJointData = None
-                    obj.selectedPart = ""
-                    obj.RotationOfSelectedPart = 0
-                    obj.Cursor.SetDefault()
+                    if not obj.isWeb:
+                        AlertSound = obj.sounds["alert.wav"]
+                        AlertSound.play()
+                    discardPartPlacement(obj)
         elif not obj.dimensions[0] * 0.1 < mx < 0.9 * obj.dimensions[0] or not obj.dimensions[1] * 0.12 < my < 0.725 * obj.dimensions[1]:
             #part placement invalid, unselect
-            AlertSound = obj.sounds["alert.wav"]
-            AlertSound.play()
-            obj.SnappedJointData = None
-            obj.selectedPart = ""
-            obj.RotationOfSelectedPart = 0
-            obj.Cursor.SetDefault()
+            if not obj.isWeb:
+                AlertSound = obj.sounds["alert.wav"]
+                AlertSound.play()
+            discardPartPlacement(obj)
         else:
             #the part gets unselected
-            obj.selectedPart = ""
-            obj.SnappedJointData = None
-            obj.RotationOfSelectedPart = 0
+            discardPartPlacement(obj)
             obj.Errormessage = interactions.Errormessage("Part Placement Invalid", 100, obj)
     #------------------------------Drawing dots at the currently selected parts joints --------------------------------
     if obj.selectedPart != "":
@@ -373,14 +415,16 @@ def run(obj):
             obj.credits.visible = False
             obj.CurrentPartUI.part = None
             obj.SelectedBuiltPart = None
-            SelectSound = obj.sounds["click.wav"]
-            SelectSound.play()
+            if not obj.isWeb:
+                SelectSound = obj.sounds["click.wav"]
+                SelectSound.play()
         
         #---------------------The Delete Part Button--------------------------------
         DeleteButton = interactions.ButtonArea(obj, obj.textures["DeleteButton.png"], utils.Scale(obj,(250,30)), utils.Scale(obj,[80,80]))
         if DeleteButton or pygame.key.get_pressed()[pygame.K_x]:
-            SelectSound = obj.sounds["tyre_2.wav"]
-            SelectSound.play()
+            if not obj.isWeb:
+                SelectSound = obj.sounds["tyre_2.wav"]
+                SelectSound.play()
             obj.Cursor.SetDelete()
             obj.partdict[obj.Vehicle[obj.SelectedBuiltPart]["name"]]["Count"] += 1
             #removed parts are still list items, but they will be ignored
@@ -399,8 +443,9 @@ def run(obj):
     #------------------------------The Move Part Button------------------------------------------
         MoveButton = interactions.ButtonArea(obj, obj.textures["MoveButton.png"], utils.Scale(obj,(450,30)), utils.Scale(obj,[80,80]))
         if MoveButton or pygame.key.get_pressed()[pygame.K_m]:
-            SelectSound = obj.sounds["click.wav"]
-            SelectSound.play()
+            if not obj.isWeb:
+                SelectSound = obj.sounds["click.wav"]
+                SelectSound.play()
             obj.partdict[obj.Vehicle[obj.SelectedBuiltPart]["name"]]["Count"] += 1
             #esentially deleting the part
             SelectedPart = obj.SelectedBuiltPart
@@ -428,8 +473,9 @@ def run(obj):
     #---------------------The Sell Part Button--------------------------------
         SellButton = interactions.ButtonArea(obj, obj.textures["returnButton.png"], utils.Scale(obj,(650,30)), utils.Scale(obj,[80,80]))
         if SellButton or pygame.key.get_pressed()[pygame.K_r]:
-            SelectSound = obj.sounds["coinbag.wav"]
-            SelectSound.play()
+            if not obj.isWeb:
+                SelectSound = obj.sounds["coinbag.wav"]
+                SelectSound.play()
             obj.Cursor.SetDelete()
             #returning 80% of the money to the user
             obj.money += obj.Vehicle[obj.SelectedBuiltPart]["refundValue"]
@@ -460,13 +506,16 @@ def run(obj):
         try:
             VehicleFile = open(CurrentPath+"/assets/saves/latest_vehicle.json")
             obj.Vehicle = json.load(VehicleFile)
-            print(f"loaded vehicle: ", obj.Vehicle)
+            if obj.debug:
+                print(f"loaded vehicle: ", obj.Vehicle)
             VehicleJointFile = open(CurrentPath+"/assets/saves/latest_vehicle_joints.json")
             obj.VehicleJoints = json.load(VehicleJointFile)
-            print(f"loaded vehicle joints: ", obj.VehicleJoints)
+            if obj.debug:
+                print(f"loaded vehicle joints: ", obj.VehicleJoints)
             VehicleHitboxFile = open(CurrentPath+"/assets/saves/latest_vehicle_hitboxes.json")
             obj.VehicleHitboxes = json.load(VehicleHitboxFile)
-            print(f"loaded vehicle hitboxes: ", obj.VehicleHitboxes)
+            if obj.debug:
+                print(f"loaded vehicle hitboxes: ", obj.VehicleHitboxes)
             #that could be buggy
             #obj.gm = "transfer"
         except:
@@ -476,8 +525,9 @@ def run(obj):
     PartInfoButton = interactions.ButtonArea(obj, obj.textures["infoButton.png"], utils.Scale(obj,(550,30)), utils.Scale(obj,[80,80]))
     if PartInfoButton or pygame.key.get_pressed()[pygame.K_i]:
         if obj.SelectedBuiltPart != None and obj.CurrentPartUI.part == None:
-            SelectSound = obj.sounds["click.wav"]
-            SelectSound.play()
+            if not obj.isWeb:
+                SelectSound = obj.sounds["click.wav"]
+                SelectSound.play()
             obj.CurrentPartUI.setPart(obj.Vehicle[obj.SelectedBuiltPart])
     if obj.CurrentPartUI.part != None and obj.SelectedBuiltPart != None:
         obj.CurrentPartUI.update(obj)
@@ -485,12 +535,15 @@ def run(obj):
     CreditButton = interactions.ButtonArea(obj, obj.textures["logo.png"], utils.Scale(obj,(obj.dimensions[0] - 100,30)), utils.Scale(obj,[80,80]))
     if CreditButton:
         obj.credits.visible = True
-        player = obj.sounds["click.wav"].play()
-        del(player)
+        if not obj.isWeb:
+            player = obj.sounds["click.wav"].play()
+            del(player)
     #------------------------------The Tutorial Button---------------------------------------
     TutButton = interactions.ButtonArea(obj, obj.textures["tutorial.png"], utils.Scale(obj,(obj.dimensions[0] - 230,30)), utils.Scale(obj,[80,80]))
     if TutButton:
         obj.gm = "tutorial"
-        player = obj.sounds["click.wav"].play()
-        del(player)
+        if not obj.isWeb:
+            player = obj.sounds["click.wav"].play()
+            del(player)
 
+    
