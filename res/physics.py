@@ -76,7 +76,7 @@ def ControlPart(obj, index):
             obj.PymunkBodies[index].apply_impulse_at_local_point(utils.RotateVector((Thrust, 0), Angle), Properties["Angle"][2])
 
             if not obj.isWeb:
-                particleCount = round(round(obj.Throttle / 30) + random.uniform(0, 0.2))
+                particleCount = round(obj.Throttle / 34) + random.randint(-1,1)
             else:
                 particleCount = round(round(obj.Throttle / 80)) 
             if Properties["Thrust"] < 500:
