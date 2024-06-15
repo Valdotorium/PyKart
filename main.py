@@ -10,7 +10,6 @@
 #  "copy",
 # ]
 # ///
-
 import pygame, os, sys
 import time
 import pymunk,pymunk.pygame_util
@@ -60,7 +59,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200,800)
         self.KeyCooldown = 0
-        self.CFG_New_Game =True
+        self.CFG_New_Game = True
 
         
         
@@ -77,7 +76,7 @@ class Game():
         self.VehicleSpeed = 0
         self.fpsFactor = 1
         self.UserHasRotatedPart = False
-        self.money = 25000
+        self.money = 250000000
         self.particles = []
         self.xp = 0        
         self.SoundPlayer = pyglet.media.Player()

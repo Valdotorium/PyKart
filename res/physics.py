@@ -104,7 +104,7 @@ def DisplayDistance(obj):
 def UpdateParticles(obj):
     for particle in obj.particles:
         particle.update(obj)
-        if obj.isWeb:
+        if not obj.isWeb:
             if particle.frame > particle.duration:
                 #print("delete particle")
                 obj.particles.pop(obj.particles.index(particle))
@@ -349,28 +349,28 @@ def DistanceBonuses(obj):
             del(player)
         #extra large bonuses:
         if obj.NextKilometer == 3000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 1.2))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 1.2))
             text = "2km Distance Bonus: +" + str(round(MoneyBonus))
         elif obj.NextKilometer == 6000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 2))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 2))
             text = "5km Distance Bonus: +" + str(round(MoneyBonus))
         elif obj.NextKilometer == 11000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 2.8))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 2.8))
             text = " 10km Distance Bonus: +" + str(round(MoneyBonus))
         elif obj.NextKilometer == 16000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 3.5))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 3.5))
             text = " 15km Distance Bonus: +" + str(round(MoneyBonus))
         elif obj.NextKilometer == 21000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 4))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 4))
             text = " 20km Distance Bonus: +" + str(round(MoneyBonus))
         elif obj.NextKilometer == 31000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 3.5))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 3.5))
             text = " 30km Distance Bonus: +" + str(round(MoneyBonus))
         elif obj.NextKilometer == 51000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 3))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 3))
             text = " 50km Distance Bonus: +" + str(round(MoneyBonus))
         else:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* (obj.Environment["MoneyMultiplicator"] * 0.8))
+            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 0.8))
             text = "Distance Bonus: +" + str(round(MoneyBonus))
         obj.StuntMoneyForRide += MoneyBonus
 
@@ -390,12 +390,12 @@ def simulate(obj, fps):
         #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
         #draw(obj.Vehicle) <--will be used for textures later
         Draw(obj)
+        UpdateParticles(obj)
         #PhysDraw(obj)
         CheckJoints(obj)
         Checkparts(obj)
         utils.DisplayMoney(obj)
         DistanceBonuses(obj)
-        UpdateParticles(obj)
     except:
         obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
         obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
@@ -423,6 +423,7 @@ def OldRefreshPolygon(obj):
 def setup(obj):
     obj.GameZoom = 1
     obj.Environment = obj.biomes[obj.SelectedEnvironment]
+    obj.Environment["MoneyMultiplicator"] = round(obj.Environment["MoneyMultiplicator"])
     if obj.debug:
         print("started with env gravity:", obj.Environment["Gravity"])
     Env = obj.Environment
