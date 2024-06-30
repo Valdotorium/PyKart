@@ -44,7 +44,7 @@ class Game():
         self.lastFrameTime = time.time()
         self.frameTime = time.time()
         #DEV options
-        self.isWeb = False
+        self.isWeb = True
         self.debug = False
         self.selected_part = ""
         self.running = True
@@ -76,7 +76,7 @@ class Game():
         self.VehicleSpeed = 0
         self.fpsFactor = 1
         self.UserHasRotatedPart = False
-        self.money = 250000000
+        self.money = 25000
         self.particles = []
         self.xp = 0        
         self.SoundPlayer = pyglet.media.Player()

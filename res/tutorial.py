@@ -44,8 +44,9 @@ class Tutorial():
             self.Page -= 1
             self.cooldown = 8
             self.Scroll = 0
-            player = SelectPartSound.play()
-            del(player)
+            if not obj.isWeb:
+                player = SelectPartSound.play()
+                del(player)
         if self.Page < 0:
             self.Page = 0
         if self.Page > len(self.contents) - 1:
