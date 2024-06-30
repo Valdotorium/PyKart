@@ -176,8 +176,6 @@ async def custom_site():
         print("""
         * Waiting for media user engagement : please click/touch page *
     """)
-        while not platform.window.MM.UME:
-            await asyncio.sleep(.1)
 
     # cleanup
     screen.fill( (0,0,0,0) )
