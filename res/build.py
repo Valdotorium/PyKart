@@ -59,6 +59,7 @@ def setup(obj):
     #if joints have snapped together, it stores their data
     obj.SnappedJointData = []
     obj.SelectedBuiltPart = None
+    obj.moveSelectedPart = False
     obj.UserHasSelectedPart = False
     obj.RotationOfSelectedPart = 0
     obj.Errormessage = None
@@ -89,6 +90,7 @@ def setup(obj):
                 raise ImportError("Vehicle File not found")
 
 def run(obj):
+
     PartIsValid = True
     if obj.debug:
         print(obj.RotationOfSelectedPart)
@@ -442,7 +444,7 @@ def run(obj):
         
     #------------------------------The Move Part Button------------------------------------------
         MoveButton = interactions.ButtonArea(obj, obj.textures["MoveButton.png"], utils.Scale(obj,(450,30)), utils.Scale(obj,[80,80]))
-        if MoveButton or pygame.key.get_pressed()[pygame.K_m]:
+        if MoveButton or pygame.key.get_pressed()[pygame.K_m] or obj.moveSelectedPart:
             if not obj.isWeb:
                 SelectSound = obj.sounds["click.wav"]
                 SelectSound.play()
@@ -494,33 +496,41 @@ def run(obj):
             obj.SelectedBuiltPart = None
         
     #------------------------------Marking the selected part-------------------------------------
+    obj.moveSelectedPart = False
     if obj.SelectedBuiltPart != None:
+        partSize = (obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][0],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][1])
         RectPos = utils.SubstractTuples(obj.Vehicle[obj.SelectedBuiltPart]["Pos"], obj.Vehicle[obj.SelectedBuiltPart]["Center"])
         RectPos = utils.AddTuples(RectPos, utils.DivideTuple(obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Pos"], 1))
-        pygame.draw.rect(obj.screen, (250,225,225), (RectPos[0], RectPos[1],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][0],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][1]), 2,2)
+        pygame.draw.rect(obj.screen, (250,225,225), (RectPos[0], RectPos[1],partSize[0], partSize[1]), 2,2)
+        #checking if the selected part is being clicked for over 10 frames, if true, then move part
+        print(obj.Cursor.clickedTicks)
+        if RectPos[0] < mx < RectPos[0] + partSize[0] and RectPos[1] < my < RectPos[1] + partSize[1] and obj.Cursor.clickedTicks >= 12:
+            obj.moveSelectedPart = True
+            obj.Cursor.SetArrows()
     #------------------------------The Reload Vehicle Button---------------------------------------
-    CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
-    ReloadButton = interactions.ButtonArea(obj, obj.textures["ReloadButton.png"], utils.Scale(obj,(150,30)), utils.Scale(obj,[80,80]))
-    if ReloadButton:
-        print("loading latest vehicle")
-        try:
-            VehicleFile = open(CurrentPath+"/assets/saves/latest_vehicle.json")
-            obj.Vehicle = json.load(VehicleFile)
-            if obj.debug:
-                print(f"loaded vehicle: ", obj.Vehicle)
-            VehicleJointFile = open(CurrentPath+"/assets/saves/latest_vehicle_joints.json")
-            obj.VehicleJoints = json.load(VehicleJointFile)
-            if obj.debug:
-                print(f"loaded vehicle joints: ", obj.VehicleJoints)
-            VehicleHitboxFile = open(CurrentPath+"/assets/saves/latest_vehicle_hitboxes.json")
-            obj.VehicleHitboxes = json.load(VehicleHitboxFile)
-            if obj.debug:
-                print(f"loaded vehicle hitboxes: ", obj.VehicleHitboxes)
-            #that could be buggy
-            #obj.gm = "transfer"
-        except:
-            raise ImportError("Vehicle File not found")
-    
+    if not obj.isWeb:
+        CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
+        ReloadButton = interactions.ButtonArea(obj, obj.textures["ReloadButton.png"], utils.Scale(obj,(150,30)), utils.Scale(obj,[80,80]))
+        if ReloadButton:
+            print("loading latest vehicle")
+            try:
+                VehicleFile = open(CurrentPath+"/assets/saves/latest_vehicle.json")
+                obj.Vehicle = json.load(VehicleFile)
+                if obj.debug:
+                    print(f"loaded vehicle: ", obj.Vehicle)
+                VehicleJointFile = open(CurrentPath+"/assets/saves/latest_vehicle_joints.json")
+                obj.VehicleJoints = json.load(VehicleJointFile)
+                if obj.debug:
+                    print(f"loaded vehicle joints: ", obj.VehicleJoints)
+                VehicleHitboxFile = open(CurrentPath+"/assets/saves/latest_vehicle_hitboxes.json")
+                obj.VehicleHitboxes = json.load(VehicleHitboxFile)
+                if obj.debug:
+                    print(f"loaded vehicle hitboxes: ", obj.VehicleHitboxes)
+                #that could be buggy
+                #obj.gm = "transfer"
+            except:
+                raise ImportError("Vehicle File not found")
+        
     #------------------------------The Part Info Button---------------------------------------
     PartInfoButton = interactions.ButtonArea(obj, obj.textures["infoButton.png"], utils.Scale(obj,(550,30)), utils.Scale(obj,[80,80]))
     if PartInfoButton or pygame.key.get_pressed()[pygame.K_i]:
@@ -545,5 +555,6 @@ def run(obj):
         if not obj.isWeb:
             player = obj.sounds["click.wav"].play()
             del(player)
+
 
     

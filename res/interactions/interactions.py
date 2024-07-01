@@ -51,6 +51,7 @@ class Errormessage():
 class Cursor():
     def __init__(self, obj):
         self.font = obj.largeboldfont
+        self.clickedTicks = 0
         self.animationticks = 0
         self.mode = "Default"
         self.CurrentAnimation = None
@@ -60,6 +61,11 @@ class Cursor():
     def update(self, obj):
         #print(self.CurrentAnimation,self.animationticks)
         self.position = pygame.mouse.get_pos()
+        #check if mouse is pressed, if yes, increment clickedticks
+        if pygame.mouse.get_pressed()[0]:
+            self.clickedTicks += 1
+        else:
+            self.clickedTicks = 0
         if self.CurrentAnimation == "Delete":
             if self.animationticks >= 11:
                 self.animationticks = 0
