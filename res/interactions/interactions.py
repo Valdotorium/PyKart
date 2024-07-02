@@ -129,7 +129,28 @@ class Cursor():
                 self.radius = 16 - int(self.animationticks / 1.5)
                 self.thickness = int(3+self.animationticks / 3)
                 pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
+        
+        if self.CurrentAnimation == "Snap":
+            if self.animationticks >= 30:
+                self.animationticks = 0
+                self.CurrentAnimation = None
+            if self.animationticks <= 30:
+                self.color = (100 ,110 + self.animationticks * 4 ,100)
+                self.radius = 10 + self.animationticks * 3
+                self.thickness = 18 - int(self.animationticks / 2)
+                pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
+
+        if self.CurrentAnimation == "Place":
+            if self.animationticks >= 55:
+                self.animationticks = 0
+                self.CurrentAnimation = None
+            if self.animationticks <= 45:
+                self.color = (200 - self.animationticks * 2 ,200 - self.animationticks * 2 ,200)
+                self.radius = 10 + self.animationticks * 4
+                self.thickness =  31 - int(self.animationticks/1.5)
+                pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
         self.animationticks += 1
+        print(self.animationticks, self.CurrentAnimation)
 
     def SetArrows(self):
         self.CurrentAnimation = "ArrowsOut"
@@ -144,7 +165,11 @@ class Cursor():
         self.CurrentAnimation = "Buy"
     def SetSell(self):
         self.CurrentAnimation = "Sell"
-
+    def SetSnap(self):
+        self.CurrentAnimation = "Snap"
+    def SetPlace(self):
+        self.animationticks = 1
+        self.CurrentAnimation = "Place"
 
 class TextAnimation():
     def __init__(self, message, duration, obj):

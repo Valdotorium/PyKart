@@ -296,7 +296,7 @@ class Credits():
             pos = ((obj.dimensions[0] * 0.5 - text.get_width() / 2) - 2, obj.dimensions[1] * 0.85)
             obj.screen.blit(text, pos)
 
-            if self.frames > 200:
+            if self.frames > 80:
                 text = "click to exit the credit page"
                 text = self.largefont.render(text, True, (20,20,20))
                 pos = ((obj.dimensions[0] * 0.5 - text.get_width() / 2) - 2, obj.dimensions[1] * 0.8)

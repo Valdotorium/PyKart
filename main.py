@@ -41,6 +41,7 @@ class Game():
         #PYGAME variables
         self.window = pygame.display.set_mode((1200,800), pygame.RESIZABLE)
         self.window.fill((100,100,100))
+        pygame.display.set_caption("PyKart - v 1.0.2")
         self.lastFrameTime = time.time()
         self.frameTime = time.time()
         #DEV options
@@ -59,7 +60,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200,800)
         self.KeyCooldown = 0
-        self.CFG_New_Game = False
+        self.CFG_New_Game = True
 
         
         
@@ -76,7 +77,7 @@ class Game():
         self.VehicleSpeed = 0
         self.fpsFactor = 1
         self.UserHasRotatedPart = False
-        self.money = 25000
+        self.money = 20000
         self.particles = []
         self.xp = 0        
         self.SoundPlayer = pyglet.media.Player()
@@ -119,6 +120,7 @@ class Game():
         self.screen = pygame.transform.scale(self.screen, self.rldimensions)
         self.window.fill((100,100,100))
         self.window.blit(self.screen, (0, 0))
+
         pygame.display.flip()
         self.screen = pygame.transform.scale(self.screen, self.CFG_Default_Screen_Size)
     def run(self):

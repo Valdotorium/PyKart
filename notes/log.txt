@@ -22,7 +22,7 @@ LOG START 1.3.2024
 ----------------------------------------------------------------VERSION NUMBERS----------------------------------------------------------------
 v0.1 ---- 27.3.2024 ---- added procedural terrain
 [FILL THIS IN]
-
+v1.0.2 -- 2.7.2024 ----- more intuitive touch controls and some code rewriting
 
 TODO
 siehe heft
