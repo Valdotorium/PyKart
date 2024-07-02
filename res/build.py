@@ -156,7 +156,8 @@ class PartInventory():
                         del(player)
                     self.ClickCooldown = 20
                     obj.selectedPart = part["Name"]
-                    obj.UserHasSelectedPart = True
+                    obj.SelectedPart = True
+                    obj.UserIsPlacingPart = True
                 #buy part if money is enough
                 elif IsClicked and self.ClickCooldown < 0 and obj.money >= Cost:
                     if obj.debug:
@@ -244,7 +245,8 @@ def setup(obj):
     obj.SnappedJointData = []
     obj.SelectedBuiltPart = None
     obj.moveSelectedPart = False
-    obj.UserHasSelectedPart = False
+    obj.SelectedPart = False
+    obj.UserIsPlacingPart = False
     obj.RotationOfSelectedPart = 0
     obj.Errormessage = None
     obj.CurrentPartUI = interactions.PartUI(obj, None)
@@ -274,12 +276,13 @@ def setup(obj):
             raise ImportError("Vehicle File not found")
 
 def run(obj):
-
+    #-------------------------miscellaneous --------------------------------
     PartIsValid = True
     if obj.debug:
         print(obj.RotationOfSelectedPart)
     scaleX = obj.scalefactor
     mx, my = pygame.mouse.get_pos()
+    MouseIsClicked = pygame.mouse.get_pressed()[0]
 
     #--------------------------Drawing the part inventory---------------------------------------------------
     inventoryTileImage = obj.textures["UI_tile.png"]
@@ -475,7 +478,7 @@ def run(obj):
         #print(f"joint positions of currently selected part: {JointPositionsOfSelectedPart}") 
 
     if obj.UserHasRotatedPart:
-        obj.UserHasSelectedPart = True
+        obj.SelectedPart = True
     #------------------------------The Rotate Button---------------------------------------
     if obj.isWeb:
         RotButton = interactions.ButtonArea(obj, obj.textures["RotateButton.png"], utils.Scale(obj,(obj.dimensions[0] - 420,30)), utils.Scale(obj,[80,80]))
@@ -485,7 +488,7 @@ def run(obj):
             obj.RotationOfSelectedPart += 45
             obj.UserHasRotatedPart = True
     #------------------------------Upon placement, check if the position of the parts center is within a valid rectangle (BuildBackgroundImg)--------------------------------
-    if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not obj.UserHasSelectedPart and obj.CFG_Build_Enforce_Rules and not obj.UserHasRotatedPart:
+    if obj.selectedPart != "" and obj.CFG_Build_Enforce_Rules and not obj.UserHasRotatedPart and obj.UserIsPlacingPart and not MouseIsClicked:
         #is the user trying to place an "unjoined" accepting joint?
         if  obj.dimensions[0] * 0.1 < mx < 0.9 * obj.dimensions[0] and obj.dimensions[1] * 0.12 < my < 0.66 * obj.dimensions[1]:
             #if the mouse is touching BuildBackgroundImg, the part gets placed
@@ -533,6 +536,7 @@ def run(obj):
                         "ShowProperties": obj.partdict[obj.selectedPart]["ShowProperties"],
                         "Description": obj.partdict[obj.selectedPart]["Description"],
                     }
+                    obj.UserIsPlacingPart = False
                     obj.partdict[obj.selectedPart]["Count"] -= 1
                     #if a joint need to be formed, its data will be created here
                     if obj.SnappedJointData != []:
@@ -575,9 +579,9 @@ def run(obj):
             c += 1
     #------------------------------The Unselect Part Button-------------------------------------
     #dragging should now be possible
-    if obj.UserHasSelectedPart:
-        if not pygame.mouse.get_pressed()[0]:
-            obj.UserHasSelectedPart = False
+    if obj.SelectedPart:
+        if not MouseIsClicked:
+            obj.SelectedPart = False
     if obj.SelectedBuiltPart != None:
         UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(350,30)), utils.Scale(obj,[80,80]))
         if UnselectButton or pygame.key.get_pressed()[pygame.K_s]:
@@ -616,7 +620,7 @@ def run(obj):
             #removed parts are still list items, but they will be ignored
             obj.Vehicle[obj.SelectedBuiltPart] = None
             DeletePart(obj)
-            obj.UserHasSelectedPart = True
+            obj.SelectedPart = True
             #setting mouse pos to pos of selected part
             pygame.mouse.set_pos(PartPosition)
             mx, my = pygame.mouse.get_pos()

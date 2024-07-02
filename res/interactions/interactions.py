@@ -1,5 +1,6 @@
 import pygame,os, random
-
+"""This is a file storing all functions and classes that are used across many files
+handling text, buttons and comparable stuff."""
 def ButtonArea(obj, image, pos, size):
    # print("Creating a button at position " + str(pos) + " and size" + str(size))
     try:
@@ -98,11 +99,13 @@ class Cursor():
                 pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
             
         if self.CurrentAnimation == "Click":
-            if self.animationticks >= 10:
-                self.animationticks = 0
-                self.CurrentAnimation = None
+            if self.animationticks >= 8:
+                self.animationticks = 8
+                if not pygame.mouse.get_pressed()[0]:
+                    self.CurrentAnimation = None
+                    self.animationticks = 0
             if self.animationticks <= 8:
-                self.color = (120 + 8 * self.animationticks,120 + 8 * self.animationticks,120 + 8 * self.animationticks)
+                self.color = (120 - 5 * self.animationticks,120 - 5 * self.animationticks,120 - 5 * self.animationticks)
                 self.radius = 16
                 self.thickness = int(3+self.animationticks/2)
                 pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
@@ -166,7 +169,6 @@ class TextAnimation():
         self.ticks += 1
         if self.ticks == self.duration:
             del(self)
-
 class PartUI():
     def __init__(self, obj, part):
         self.boldfont = obj.boldfont
