@@ -504,7 +504,7 @@ def run(obj):
         pygame.draw.rect(obj.screen, (250,225,225), (RectPos[0], RectPos[1],partSize[0], partSize[1]), 2,2)
         #checking if the selected part is being clicked for over 10 frames, if true, then move part
         print(obj.Cursor.clickedTicks)
-        if RectPos[0] < mx < RectPos[0] + partSize[0] and RectPos[1] < my < RectPos[1] + partSize[1] and obj.Cursor.clickedTicks >= 12:
+        if RectPos[0] < mx < RectPos[0] + partSize[0] and RectPos[1] < my < RectPos[1] + partSize[1] and obj.Cursor.clickedTicks >= 10:
             obj.moveSelectedPart = True
             obj.Cursor.SetArrows()
     #------------------------------The Reload Vehicle Button---------------------------------------
