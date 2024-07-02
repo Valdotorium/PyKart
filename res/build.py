@@ -31,6 +31,177 @@ X Delete Part
 S Unslect Part
 """
 
+"""A class that defines the part inventory """
+class PartInventory():
+    def __init__(self, obj):
+        self.categories = []
+        self.parts = {}
+        self.partdict = obj.partdict
+        self.setup(obj)
+        self.ScrollX = 0
+        self.dimensions = obj.dimensions
+        self.textures = obj.textures
+        self.font = obj.font
+        self.largefont = obj.largefont
+        self.CurrentCategory = self.categories[0]
+    def AddCategory(self, category):
+        self.categories.append(category)
+    def ClickArea(self,pos, size):
+        if pygame.mouse.get_pressed()[0]:
+            mx, my = pygame.mouse.get_pos()
+
+            # is the button clicked?  (is the mouse within a box at pos with size when the click occurs?)
+            if mx >= pos[0] and mx <= pos[0] + size[0]:
+                if my >= pos[1] and my <= pos[1] + size[1]:
+                    return True
+                else:
+                    return False
+            else:
+                return False
+    def setup(self, obj):
+        #finding out which categories exist
+        for part in self.partdict.values():
+            if part["Type"] not in self.categories:
+                self.AddCategory(part["Type"])
+        self.categories.sort()
+        #finding out which parts exist
+        self.parts = {}
+        for category in self.categories:
+            self.parts[category] = []
+            for part in self.partdict.values():
+                if part["Type"] == category:
+                    self.parts[category].append(part["Name"])
+        if obj.debug:
+            print(self.categories, self.parts)
+        self.ClickCooldown = 10
+        self.ScrollXSpeed = 0
+    def update(self, obj):
+        if not obj.isWeb:
+            SelectPartSound = obj.sounds["click.wav"]
+            BuySound = obj.sounds["buy.wav"]
+            AlertSound = obj.sounds["alert.wav"]
+        #Button for switching the category, displaying the name of the current category
+        img = self.textures["UI_tile.png"]
+
+        XOffset = 10
+        for category in self.categories:
+            c = self.categories.index(category)
+            text = category
+            pos = (XOffset, obj.dimensions[1] * 0.68)
+            if category != self.CurrentCategory:
+                text = self.largefont.render(text, True, (20,20,20))
+            else:
+                text = self.largefont.render(text, True, (140,35,25))
+            img = pygame.transform.scale(img, (text.get_width() + 10, text.get_height() + 10))
+
+            XOffset += text.get_width() + 15
+            if category != self.CurrentCategory:
+                IsClicked = self.ClickArea(pos, (text.get_width(), text.get_height()))
+                obj.screen.blit(img, pos)
+                obj.screen.blit(text, (pos[0] + 5, pos[1] + 5))
+                if IsClicked and self.ClickCooldown < 0:
+                    if not obj.isWeb:
+                        SelectPartSound.play()
+                    if obj.debug:
+                        print("Clicked")
+                    self.CurrentCategory = category
+                    self.ScrollX = 0
+                    self.setup(obj)
+            else:
+                obj.screen.blit(img, pos)
+                obj.screen.blit(text, (pos[0] + 5, pos[1] + 5))
+            self.ClickCooldown -= 1
+        #tile image as background for the building ui, scaled to cover the bottom quarter of the screen
+        Image = self.textures["UI_tile.png"]
+        Image = pygame.transform.scale(Image, (obj.dimensions[0] * 2, obj.dimensions[1] * 0.25))
+        obj.screen.blit(Image, (-200, obj.dimensions[1] * 0.75))
+        
+        #drawing the parts of the categories
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEWHEEL:
+                if obj.debug:
+                    print("Scroll")
+                    print(event.x, event.y)
+                if event.x < 0 or event.y < 0:
+                    self.ScrollXSpeed = -10
+                elif event.x > 0 or event.y > 0:
+                    self.ScrollXSpeed = 10
+        if -0.05 < self.ScrollXSpeed < 0.05 and self.ScrollXSpeed != 0:
+            self.ScrollXSpeed = 0
+        else:
+            self.ScrollXSpeed *= 0.75
+        self.ScrollX += self.ScrollXSpeed
+
+        #drawing the parts of the current category, repositioned using scrollx
+        X = round(obj.dimensions[0] / 20)
+        gap = 15
+        for part in self.parts[self.CurrentCategory]:
+            if part in self.partdict:
+                part = self.partdict[part]
+                Image = self.textures[part["Textures"][0]["Image"]]
+                Cost = part["Cost"]
+                #draw low alpha version if part is not available
+                Image = pygame.transform.scale(Image, part["Textures"][0]["Size"])
+
+                obj.screen.blit(Image, ( X + self.ScrollX, obj.dimensions[1] * 0.85))
+                #making the part clickable
+                IsClicked = self.ClickArea((X + self.ScrollX, obj.dimensions[1] * 0.85), part["Textures"][0]["Size"])
+                X += part["Textures"][0]["Size"][0]  / 2 - 16
+                #only select if part is available
+                if IsClicked and self.ClickCooldown < 0 and obj.partdict[part["Name"]]["Count"] > 0: 
+                    if obj.debug:
+                        print("Clicked")
+                    if not obj.isWeb:
+                        player = SelectPartSound.play()
+                        del(player)
+                    self.ClickCooldown = 20
+                    obj.selectedPart = part["Name"]
+                    obj.UserHasSelectedPart = True
+                #buy part if money is enough
+                elif IsClicked and self.ClickCooldown < 0 and obj.money >= Cost:
+                    if obj.debug:
+                        print("Clicked")
+                    self.ClickCooldown = 20
+                    obj.money -= Cost
+                    if obj.partdict[part["Name"]]["Count"] == 0:
+                        obj.xp += round(Cost / 4) + 250
+                    else:
+                        obj.xp += round(Cost /6)
+                    obj.partdict[part["Name"]]["Count"] += 1
+                    if not obj.isWeb:
+                        player = BuySound.play()
+                        del(player)
+                    obj.Cursor.SetBuy()
+
+                elif IsClicked and self.ClickCooldown < 0 and obj.money < Cost:
+                    if not obj.isWeb:
+                        player = AlertSound.play()
+                        del(player)
+                    self.ClickCooldown = 14
+                #display the cost above the image
+                if part["Cost"] > obj.money:
+                    textcolor = (130, 50, 20)
+                else:
+                    textcolor = (20, 20, 20)
+                text = self.font.render(str(Cost), True, textcolor)
+                pos = (X + self.ScrollX - text.get_width() / 2 + 30, obj.dimensions[1] * 0.8)
+                obj.screen.blit(text, pos)
+
+                CoinImage = obj.textures["coin.png"]
+                CoinImage = pygame.transform.scale(CoinImage, (25,25))
+                obj.screen.blit(CoinImage, (X + self.ScrollX - text.get_width() / 2, obj.dimensions[1] * 0.8))
+                utils.DisplayMoney(obj)
+                #display the available part count at the top right of the part img
+                if part["Count"] == 0:
+                    textcolor = (130, 50, 20)
+                else:
+                    textcolor = (20, 20, 20)
+                text = self.font.render("x"+str(part["Count"]), True, textcolor)
+                pos = (X + 10 + self.ScrollX, obj.dimensions[1] * 0.825)
+                obj.screen.blit(text, pos)
+                X += part["Textures"][0]["Size"][0]  / 2 + gap + 16
+
+
 def discardPartPlacement(obj):
         if obj.UserHasRotatedPart:
             print("rot")
@@ -41,6 +212,19 @@ def discardPartPlacement(obj):
             obj.selectedPart = ""
             obj.RotationOfSelectedPart = 0
             obj.Cursor.SetDefault()
+        
+def DeletePart(obj):
+    print(f"part {obj.SelectedBuiltPart} deleted")
+    #removing all joints that are connected to the built part
+    c = 0
+    while c < len(obj.VehicleJoints):
+        if obj.VehicleJoints[c] != None:
+            if obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][0] or obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][1]:
+                #removed joints are still list items, but they will be ignored -NOT ANYMORE
+                obj.VehicleJoints.pop(c)
+        c += 1
+    obj.SelectedBuiltPart = None
+
 def setup(obj):
 
     scaleX = obj.dimensions[0] / 1200
@@ -64,7 +248,7 @@ def setup(obj):
     obj.RotationOfSelectedPart = 0
     obj.Errormessage = None
     obj.CurrentPartUI = interactions.PartUI(obj, None)
-    obj.BuildUI = utils.BuildUI(obj)
+    obj.PartInventory = PartInventory(obj)
     obj.credits = utils.Credits(obj)
     if obj.debug:
         print("loading latest vehicle")
@@ -87,7 +271,7 @@ def setup(obj):
             #that could be buggy
             #obj.gm = "transfer"
         except:
-                raise ImportError("Vehicle File not found")
+            raise ImportError("Vehicle File not found")
 
 def run(obj):
 
@@ -102,40 +286,24 @@ def run(obj):
     obj.inventoryTile = pygame.transform.scale(inventoryTileImage, utils.Scale(obj, (64,64)))
     c = 0
     #background for inventory tiles
-    obj.BuildUI.run(obj)
+    obj.PartInventory.update(obj)
+    print(obj.selectedPart)
 
     #------------------------------The play button----------------------------------------------------------------
-    PlacedPartCount = 0
-    while c < len(obj.Vehicle):
-        if obj.Vehicle[c] != None:
-            PlacedPartCount += 1
-        c += 1
+    PlacedPartCount = len(obj.Vehicle)
+    
     if 4 < PlacedPartCount:
-        if not obj.isWeb:
-            #only vehicles with five or more parts are allowed
-            PlayButtonImg = obj.textures["PlayButton.png"]
-            PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[80,80]))
-            PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,30]), utils.Scale(obj,[80,80]))
-            if PlayButton:
-                if not obj.isWeb:
-                    SelectSound = obj.sounds["click.wav"]
-                    SelectSound.play()
-                if obj.debug:
-                    print("User just cligged on the play button")
-                obj.gm = "biomeselection"
-        elif 4 < PlacedPartCount < 17:
-             #only vehicles with between 5 and 16 parts are allowed
-            PlayButtonImg = obj.textures["PlayButton.png"]
-            PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[80,80]))
-            PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,30]), utils.Scale(obj,[80,80]))
-            if PlayButton:
-                if not obj.isWeb:
-                    SelectSound = obj.sounds["click.wav"]
-                    SelectSound.play()
-                if obj.debug:
-                    print("User just cligged on the play button")
-                obj.gm = "biomeselection"
-            
+        #only vehicles with five or more parts are allowed
+        PlayButtonImg = obj.textures["PlayButton.png"]
+        PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[80,80]))
+        PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,30]), utils.Scale(obj,[80,80]))
+        if PlayButton:
+            if not obj.isWeb:
+                SelectSound = obj.sounds["click.wav"]
+                SelectSound.play()
+            if obj.debug:
+                print("User just cligged on the play button")
+            obj.gm = "biomeselection"
     else:
         PlayButtonImg = obj.textures["PlayButtonLocked.png"]
         PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[80,80]))
@@ -173,7 +341,7 @@ def run(obj):
                             SelectSound = obj.sounds["click.wav"]
                             SelectSound.play()
                     obj.SelectedBuiltPart = c
-                    #draeing a rect at the position of the texture with the size of the texture
+                    #drawing a rect at the position of the texture with the size of the texture
                     pygame.draw.rect(obj.screen, (50,50,50), (PositionOfTexture[0], PositionOfTexture[1],round(TexturesOfPart[cc]["Size"][0] * scaleX), round(TexturesOfPart[cc]["Size"][1] * scaleX)), 2,2)
                 cc += 1
         c += 1
@@ -181,7 +349,7 @@ def run(obj):
     c = 0
     obj.JointPositions = []
     while c < len(obj.Vehicle):
-        if obj.Vehicle[c] != None:
+        if obj.Vehicle[c] != None and obj.selectedPart != "":
             PartJoints = obj.Vehicle[c]["Joints"]
             PartPosition = obj.Vehicle[c]["Pos"]
             HitboxPosition = obj.Vehicle[c]["Hitbox"]["Pos"]
@@ -316,7 +484,6 @@ def run(obj):
         if RotButton and not obj.UserHasRotatedPart:
             obj.RotationOfSelectedPart += 45
             obj.UserHasRotatedPart = True
-    print(obj.UserHasRotatedPart)
     #------------------------------Upon placement, check if the position of the parts center is within a valid rectangle (BuildBackgroundImg)--------------------------------
     if obj.selectedPart != "" and pygame.mouse.get_pressed()[0] and not obj.UserHasSelectedPart and obj.CFG_Build_Enforce_Rules and not obj.UserHasRotatedPart:
         #is the user trying to place an "unjoined" accepting joint?
@@ -431,16 +598,7 @@ def run(obj):
             obj.partdict[obj.Vehicle[obj.SelectedBuiltPart]["name"]]["Count"] += 1
             #removed parts are still list items, but they will be ignored
             obj.Vehicle[obj.SelectedBuiltPart] = None
-            print(f"part {obj.SelectedBuiltPart} deleted")
-            #removing all joints that are connected to the built part
-            c = 0
-            while c < len(obj.VehicleJoints):
-                if obj.VehicleJoints[c] != None:
-                    if obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][0] or obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][1]:
-                        #removed joints are still list items, but they will be ignored -NOT ANYMORE
-                        obj.VehicleJoints.pop(c)
-                c += 1
-            obj.SelectedBuiltPart = None
+            DeletePart(obj)
         
     #------------------------------The Move Part Button------------------------------------------
         MoveButton = interactions.ButtonArea(obj, obj.textures["MoveButton.png"], utils.Scale(obj,(450,30)), utils.Scale(obj,[80,80]))
@@ -457,16 +615,7 @@ def run(obj):
             PartPosition =utils.AddTuples(PartPosition, obj.Vehicle[SelectedPart]["Center"])
             #removed parts are still list items, but they will be ignored
             obj.Vehicle[obj.SelectedBuiltPart] = None
-            print(f"part {obj.SelectedBuiltPart} deleted")
-            #removing all joints that are connected to the built part
-            c = 0
-            while c < len(obj.VehicleJoints):
-                if obj.VehicleJoints[c] != None:
-                    if obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][0] or obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][1]:
-                        #removed joints are still list items, but they will be ignored -NOT ANYMORE
-                        obj.VehicleJoints.pop(c)
-                c += 1
-            obj.SelectedBuiltPart = None
+            DeletePart(obj)
             obj.UserHasSelectedPart = True
             #setting mouse pos to pos of selected part
             pygame.mouse.set_pos(PartPosition)
@@ -484,16 +633,8 @@ def run(obj):
             #removed parts are still list items, but they will be ignored
             obj.Vehicle[obj.SelectedBuiltPart] = None
             obj.Cursor.SetSell()
-            print(f"part {obj.SelectedBuiltPart} deleted")
-            #removing all joints that are connected to the built part
-            c = 0
-            while c < len(obj.VehicleJoints):
-                if obj.VehicleJoints[c] != None:
-                    if obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][0] or obj.SelectedBuiltPart == obj.VehicleJoints[c]["JoinedParts"][1]:
-                        #removed joints are still list items, but they will be ignored -NOT ANYMORE
-                        obj.VehicleJoints.pop(c)
-                c += 1
-            obj.SelectedBuiltPart = None
+
+            DeletePart(obj)
         
     #------------------------------Marking the selected part-------------------------------------
     obj.moveSelectedPart = False
@@ -555,6 +696,3 @@ def run(obj):
         if not obj.isWeb:
             player = obj.sounds["click.wav"].play()
             del(player)
-
-
-    

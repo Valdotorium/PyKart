@@ -6,9 +6,6 @@ Then this list is used to setup the pymink physics simulation for the vehicle"""
 import os
 import json
 def run(obj):
-    #---------------------------------------------------------------- some basics
-    BuildVehicle = obj.Vehicle
-    PhysicsVehicle = []
     #removing temporary values from parts
     
     print("User started with Vehicle: ", obj.Vehicle)

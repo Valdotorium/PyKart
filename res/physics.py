@@ -58,7 +58,7 @@ def Engine(obj,EnginePart, WheelPart):
         IndexOfWheelBody = obj.NewVehicle.index(WheelPart)
         EnginePower = EnginePart["Properties"]["Power"] * WheelPart["Properties"]["Force"] * (WheelPart["Properties"]["Weight"] / 28)
         ApplyThrottle(obj, IndexOfWheelBody, EnginePower)
-def ControlPart(obj, index):
+def ExecuteControlPart(obj, index):
     Properties = obj.NewVehicle[index]["Properties"]
     #stabilisators here
     if Properties["LimitsAngularVelocity"] != None:
@@ -295,7 +295,7 @@ def Checkparts(obj):
             if obj.NewVehicle[c]["Type"] == "Engine":
                 particles.ParticleEffect(obj, "Exhaust", c)
         elif obj.NewVehicle[c]["Type"] == "Control":
-            ControlPart(obj, c)
+            ExecuteControlPart(obj, c)
         c += 1
 
 

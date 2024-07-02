@@ -230,7 +230,7 @@ class Game():
             for i in self.PymunkJoints:
                 self.PymunkJoints.remove(i)
             del(self.space)
-            del(self.BuildUI)
+            del(self.PartInventory)
             del(self.credits)
             del(self.CurrentPartUI)
             res.build.setup(self)
@@ -267,7 +267,6 @@ async def main():
     while running:
         if frame > 0:        
             running = Exo.running
-
 
         if frame == 0:
 
