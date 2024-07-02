@@ -19,12 +19,13 @@
         "You can select parts by clicking them.",
         "Here are the functions of the buttons from the left to the right:",
         "Drive the Vehicle. The vehicle must consist of at least 5 parts.",
-        "Reload the latest vehicle.",
+        "(removed)",
         "Delete a part. It will be available in the inventory after deleting it.",
         "Unselect the current selected part or exit the part Information window",
         "Move the current selected part.",
         "Open a window with information for the current selected part.",
-        "Sell the current selected part, for 75% of its original value.(not shown in the image)"]
+        "Sell the current selected part, for 75% of its original value.(not shown in the image)",
+        "(Only in web version) rotate the current selected part"]
         }
     ]
 }
