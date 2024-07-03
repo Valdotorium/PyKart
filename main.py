@@ -30,6 +30,7 @@ import res.fw.fw as utils
 import res.tutorial
 import asyncio
 import cffi
+import cProfile
 #load files in othe directories like this: os.path.dirname(__file__) + "/folder/folder/file.png"
 #load file template:     grass = pygame.image.load(os.path.dirname(__file__)+"/textures/grass.png")
 
@@ -41,6 +42,7 @@ class Game():
     def __init__(self):
         #PYGAME variables
         self.window = pygame.display.set_mode((1200,800), pygame.RESIZABLE)
+        self.rldimensions = (1200,800)
         self.window.fill((100,100,100))
         pygame.display.set_caption("PyKart - v 1.0.2")
         self.lastFrameTime = time.time()
@@ -78,7 +80,7 @@ class Game():
         self.VehicleSpeed = 0
         self.fpsFactor = 1
         self.UserHasRotatedPart = False
-        self.money = 20000
+        self.money = 100000
         self.particles = []
         self.xp = 0        
         self.SoundPlayer = pyglet.media.Player()
@@ -116,14 +118,16 @@ class Game():
 
     def updateWindow(self,window):
         self.dimensions = (1200,800)
-        
-        self.rldimensions = self.window.get_size()
-        self.screen = pygame.transform.scale(self.screen, self.rldimensions)
-        self.window.fill((100,100,100))
-        self.window.blit(self.screen, (0, 0))
 
+        if self.CFG_Default_Screen_Size[0] != self.window.get_size()[0] or self.CFG_Default_Screen_Size[1] != self.window.get_size()[1] and self.frame % 10 == 0:
+
+            self.screen = pygame.transform.scale(self.screen, self.window.get_size())
+            self.window.blit(self.screen, (0, 0))
+            self.screen = pygame.transform.scale(self.screen, self.CFG_Default_Screen_Size)
+        else:
+            self.window.blit(self.screen, (0, 0))
         pygame.display.flip()
-        self.screen = pygame.transform.scale(self.screen, self.CFG_Default_Screen_Size)
+
     @utils.timing_val
     def run(self):
         #the game scripts called every frame
@@ -276,6 +280,7 @@ async def main():
         if frame == 0:
 
             Exo = Game()
+            Exo.frame = frame
             res.load.respond(Exo)
             Exo.BiomeSelector = res.biomes.BiomeSelection(Exo)
             Exo.screen.fill((100,100,100))
@@ -292,6 +297,8 @@ async def main():
             time.sleep(1)
 
         frame += 1
+        Exo.frame = frame
+
         
         Exo.run()
         
@@ -299,8 +306,8 @@ async def main():
             Exo.fps = round(Exo.fps / 1.3)
         if Exo.fps * 1.2 < 1 /(Exo.frameTime - Exo.lastFrameTime):
             Exo.fps = round(Exo.fps * 1.3)
-        if Exo.fps > 60:
-            Exo.fps = 60
+        if Exo.fps > 44:
+            Exo.fps = 44
         if Exo.fps < 16:
             Exo.fps = 16
         if Exo.debug:
@@ -316,5 +323,7 @@ async def main():
                 frame = resetFrames(Exo, frame)
         if running == False:
             res.transfer.run(Exo)
+def core():
+    asyncio.run(main())
 
-asyncio.run(main())
+cProfile.run("core()", sort="tottime")

@@ -618,7 +618,7 @@ def run(obj):
         
     #------------------------------The Move Part Button------------------------------------------
         MoveButton = interactions.ButtonArea(obj, obj.textures["MoveButton.png"], utils.Scale(obj,(380,30)), utils.Scale(obj,[60,60]))
-        if MoveButton or pygame.key.get_pressed()[pygame.K_m] or obj.moveSelectedPart:
+        if MoveButton or pygame.key.get_pressed()[pygame.K_m] or obj.moveSelectedPart and not obj.UserIsPlacingPart:
             if not obj.isWeb:
                 SelectSound = obj.sounds["click.wav"]
                 SelectSound.play()

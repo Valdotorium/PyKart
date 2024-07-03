@@ -1,3 +1,7 @@
 Version, Date, CPU% [Build Idle, Build Active, Drive Idle, Drive Active]
 1.0.6-web, 21.5.2024, 40, 41, 54, 58
 1.0.6    , 21.5.2024, 40, 41, 57, 61
+1.0.2-web, 3.7.2024 , 34, 35, 57, 61
+1.0.2-40F, 3.7.2024,  31, 22, 44, 46
+
+cprofile
