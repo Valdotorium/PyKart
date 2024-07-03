@@ -142,42 +142,11 @@ def DisplayMoney(obj):
         Image = obj.textures["coin.png"]
         Image = pygame.transform.scale(Image, (50 ,50))
         obj.screen.blit(Image, (obj.dimensions[0] * 0.05 - text.get_width() / 2, obj.dimensions[1] * 0.17 - 16))
-def CreateGroundPolygon(obj, Env):
+def PymunkGroundPolygon(obj, Env):
     #TODO #10 #completely rewrite this function
-    c = 0
-    while c < len(obj.GroundPolygons):
-        if obj.GroundPolygons[c]!= None:
-            obj.space.remove(obj.GroundPolygons[c])
-        c += 1
-    if not obj.HasFloor:
-        obj.body_floor = pymunk.Body(1, 100, body_type=pymunk.Body.STATIC)
-        obj.body_floor.position = (0,0)
-        obj.HasFloor = True
-        obj.space.add(obj.body_floor)
-    obj.GroundPolygons = []
-
-    obj.GroundPolygon = []
-
-    c = 0
-    if obj.debug:
-        print(obj.X_Position)
-    while c < len(obj.StaticPolygon) - 1:
-        VectA = obj.StaticPolygon[c]
-        VectB = obj.StaticPolygon[c+1]
-        VectAX = VectA[0]
-        VectBX = VectB[0]
-        #vertices for the poly, one poly for every x position in obj.GroundRelief
-        Vertices = [(VectAX , 55000), (VectBX, 55000), VectB, VectA]
-        obj.body_floor.shape = pymunk.Poly(obj.body_floor, Vertices)
-        obj.body_floor.shape.friction = Env["Physics"]["Friction"]
-        obj.body_floor.shape.elasticity = Env["Physics"]["Bounce"]
-        obj.body_floor.shape.filter = pymunk.ShapeFilter(categories= 4, mask= 7)
-        obj.GroundPolygons.append(obj.body_floor.shape)
-        obj.space.add(obj.body_floor.shape)
-        c += 1
-        obj.GroundPolygon.append(obj.GroundRelief[c])
+    #take the pymunk bodies from the polygon list and put them here
     
-
+    print("----")
     
 def GetConnectedParts(obj,joint):
     #joint should come from obj.vehiclejoints

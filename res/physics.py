@@ -122,70 +122,11 @@ def DisplayEarnedMoney(obj):
 #performance killer! needs to be improved +TODO #17
 @utils.timing_val
 def DrawBackground(obj):
-    c = 0
-    #check this function for mistakes(#10)
-    obj.TransferredPolygon = []
-    #print("GP:", obj.GroundPolygon)
-    while c < len(obj.GroundPolygon):
-        obj.TransferredPolygon.append(utils.MultiplyTuple(utils.AddTuples(obj.GroundPolygon[c], (0, -obj.Y_Position)), obj.GameZoom))
-        c += 1
-    obj.TransferredPolygon.append((obj.GroundPolygon[-1][0], 55000))
-    obj.TransferredPolygon.append((0, 55000))
 
-    #print("Transferred polygon: ", obj.TransferredPolygon)
-    #invert y of the last two points (esentially inverting the y axis, because pygame)
-    obj.TransferredPolygon[-2] = list(obj.TransferredPolygon[-2])
-    obj.TransferredPolygon[-2][1] = -obj.TransferredPolygon[-2][1]
-    obj.TransferredPolygon[-1] = list(obj.TransferredPolygon[-1])
-    obj.TransferredPolygon[-1][1] = -obj.TransferredPolygon[-1][1]
-    pygame.draw.polygon(obj.screen, obj.Environment["Background"],obj.TransferredPolygon)
     obj.body_floor.shape.update
     #colors of the ground above the ground texture
-    Groundcolors = obj.Environment["Visuals"]["GroundColors"]
-
-    c = 0
-    while c < len(obj.TransferredPolygon) and c < len(obj.PolygonAssets):
-        if obj.PolygonAssets[c] != None:
-            Point = obj.TransferredPolygon[c]
-            AssetImage = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["image"]
-            AssetImage = obj.textures[AssetImage]
-            AssetSize = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["size"]
-            AssetImage = pygame.transform.scale(AssetImage,AssetSize)
-            AssetOffset = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["offset"]
-            obj.screen.blit(AssetImage, (Point[0] + AssetOffset[0], Point[1] + AssetOffset[1]))
-                            
-        c += 1
-    #drawing lines on the edges of the ground poly
-    cc = 0
-    y = 0
-
-    
-    while cc < len(Groundcolors):
-        CurrentColor = Groundcolors[cc]
-        c = 0
-        while c < len(obj.TransferredPolygon) - 3:
-            if  not obj.Environment["Visuals"]["HasSurfaceMarkings"] or cc != 0:
-                pygame.draw.line(obj.screen, CurrentColor, (obj.TransferredPolygon[c][0],obj.TransferredPolygon[c][1] +y), (obj.TransferredPolygon[c+1][0],obj.TransferredPolygon[c+1][1] +y), obj.Environment["Visuals"]["LayerHeights"][cc])
-            else:
-                #white striped surface
-                if obj.EndItemOfRendering % 2 == 0:
-                    if c % 2 == 0:
-                        CurrentColor = (220,220,220)
-                    else:
-                        CurrentColor = Groundcolors[cc]
-                else:
-                    if c % 2 == 1:
-                        CurrentColor = (220,220,220)
-                    else:
-                        CurrentColor = Groundcolors[cc]
-                pygame.draw.line(obj.screen, CurrentColor, (obj.TransferredPolygon[c][0],obj.TransferredPolygon[c][1] +y), (obj.TransferredPolygon[c+1][0],obj.TransferredPolygon[c+1][1] +y), obj.Environment["Visuals"]["LayerHeights"][cc])
-            c += 1
-        y += obj.Environment["Visuals"]["LayerHeights"][cc]
-        if obj.isWeb and cc == 2:
-            cc = len(Groundcolors)
-
-        cc += 1
-    #the ground texture
+    #blit poly surface to main screen
+    #if performance impact too high, strip the main poly surface into screen-wide chunks
 
 def DrawMinimap(obj):
     startX = 400
@@ -378,7 +319,7 @@ def simulate(obj, fps):
     Env = obj.Environment
     obj.HasFloor = False
     try:
-        utils.CreateGroundPolygon(obj, Env)
+        utils.PymunkGroundPolygon(obj, Env)
         obj.SoundInFrame = False
 
         LimitThrottle(obj)

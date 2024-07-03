@@ -252,7 +252,7 @@ class Game():
             self.pi =3.1415926535897932384626433832795
             self.Throttle = 0
             self.VehicleSpeed = 0
-            res.procedural.WritePolygonPositions(self)
+            res.procedural.PreparePolygons(self)
             res.physics.setup(self)
 
 def resetFrames(obj, frame):

@@ -1,5 +1,5 @@
 import random
-import pymunk
+import pygame
 from .fw import fw as utils
 
 def Noise(obj, scale, variability, randomnoise):
@@ -37,12 +37,12 @@ def Noise(obj, scale, variability, randomnoise):
 
             obj.Terrain[x] += Height_Change
             obj.Terrain[x] = round(obj.Terrain[x])
-            if obj.Terrain[x] < -50000:
-                obj.Terrain[x] = -50000
+            if obj.Terrain[x] < -25000:
+                obj.Terrain[x] = -25000
                 Height_Change = 0
                 Terrain_Direction = 1
-            if obj.Terrain[x] > 50000:
-                obj.Terrain[x] = 50000
+            if obj.Terrain[x] > 25000:
+                obj.Terrain[x] = 25000
                 Height_Change = 0
                 Terrain_Direction = -1
             
@@ -71,7 +71,7 @@ def setup(obj):
     AssetCount = len(obj.Environment["Visuals"]["Assets"])
     x = 0
     obj.Terrain.append(-90000)
-    while x < 50000:
+    while x < 15000:
         r = random.uniform(0,100)
         if r < AssetChance and x > 40:
             if AssetCount != 0:
@@ -92,34 +92,22 @@ def generate_chunk(obj):
     if obj.debug:
         print("total terrain length:", len(obj.Terrain) * obj.Environment["Terrain"]["Scale"])
 
-@utils.timing_val
-def WritePolygonPositions(obj):
-    
-    #making tuples (x,y) out of the y positions of the future polygon vertices stored in obj.Terrain
-    x = round((obj.X_Position + obj.Environment["Terrain"]["Scale"] * 8) /obj.Environment["Terrain"]["Scale"])
-    endx = round((obj.X_Position + obj.dimensions[0]*2.2)/ obj.Environment["Terrain"]["Scale"])
-    obj.EndItemOfRendering = endx
-    PolygonPoints = []
-    obj.StaticPolygon = []
-    #Edge point
-    if x < 0: 
-        x = 0
-    if endx < 2:
-        endx = 2
-    #the polygon points between x and enx get rendered
-    while x < round(endx):
-        Point = obj.Terrain[x]
-        PolygonPoints.append(((x - 10) * round(obj.Environment["Terrain"]["Scale"]) - obj.X_Position, Point))
-        obj.StaticPolygon.append(((x - 10) * round(obj.Environment["Terrain"]["Scale"]) , obj.Terrain[x]))
-        x += 1
-    #edge point
-    obj.GroundRelief = PolygonPoints#provisorisch
 
+def PreparePolygons(obj):
+    #write a long list of all polygon x and y vertices
+    #blit the pygame poly on a surface that can be blitted to the main screen with offset xpos and ypos
+    #and add the lines with the colors env[groundcolors] on top of it
+    #form a lot of pymunk polys and put them in a list to use later for the physics simulation
+    print("----")
+
+def WriteMinimapPolygon(obj):
+    obj.GroundRelief = PolygonPoints#provisorisch
+    print("GR:",obj.GroundRelief)
     #print("THE GROUND POLYGON IS AT:", PolygonPoints)
     #print(f"drawing poly from terrain item {startx} to terrain item {x}")
     obj.MinimapPolygon = []
-    x = round((obj.X_Position - obj.Environment["Terrain"]["Scale"] * 8) /obj.Environment["Terrain"]["Scale"])
-    endx = round((obj.X_Position + obj.dimensions[0]*25)/ obj.Environment["Terrain"]["Scale"])
+    x = round((obj.X_Position - obj.Environment["Terrain"]["Scale"] * 5) /obj.Environment["Terrain"]["Scale"])
+    endx = round((obj.X_Position + obj.dimensions[0]*15)/ obj.Environment["Terrain"]["Scale"])
     PolygonPoints = []
     PolygonAssets = []
     #Edge point
