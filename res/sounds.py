@@ -1,4 +1,5 @@
 import pygame,random,pyglet.media  ,copy  
+from .fw import fw as utils
 def setup(obj):
     if not obj.isWeb:
         obj.engineSoundsPlayer = None
@@ -16,7 +17,7 @@ def setup(obj):
 
                 else:
                     print("No sound data for part:", part["name"])
-        
+@utils.timing_val
 def DrivingSounds(obj):
     if not obj.isWeb:
         c = 0

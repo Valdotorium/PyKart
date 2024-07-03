@@ -36,6 +36,7 @@ import cffi
 import platform
 if sys.platform == "emscripten":
     platform.window.canvas.style.imageRendering = "pixelated"
+
 class Game():
     def __init__(self):
         #PYGAME variables
@@ -49,7 +50,7 @@ class Game():
         self.debug = False
         self.selected_part = ""
         self.running = True
-        self.fps = 48
+        self.fps = 10
         self.restart = False
         self.CFG_extensive_logs = True
         self.CFG_visuals = True
@@ -123,6 +124,7 @@ class Game():
 
         pygame.display.flip()
         self.screen = pygame.transform.scale(self.screen, self.CFG_Default_Screen_Size)
+    @utils.timing_val
     def run(self):
         #the game scripts called every frame
         self.money = round(self.money)
@@ -146,6 +148,7 @@ class Game():
                 self.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not write ground poly", 150, self))
                 
             res.controls.GameControls(self)
+
             res.mechanics.GameMechanics(self)
             res.physics.simulate(self, self.fps)
             res.sounds.DrivingSounds(self)

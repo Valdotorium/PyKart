@@ -1,5 +1,6 @@
 import pygame
-
+from .fw import fw as utils
+@utils.timing_val
 def GameControls(obj):
     if pygame.key.get_pressed()[pygame.K_SPACE]:
             obj.Throttle += 2.4 / obj.fpsFactor

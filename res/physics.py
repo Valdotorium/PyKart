@@ -58,6 +58,7 @@ def Engine(obj,EnginePart, WheelPart):
         IndexOfWheelBody = obj.NewVehicle.index(WheelPart)
         EnginePower = EnginePart["Properties"]["Power"] * WheelPart["Properties"]["Force"] * (WheelPart["Properties"]["Weight"] / 28)
         ApplyThrottle(obj, IndexOfWheelBody, EnginePower)
+@utils.timing_val
 def ExecuteControlPart(obj, index):
     Properties = obj.NewVehicle[index]["Properties"]
     #stabilisators here
@@ -75,18 +76,13 @@ def ExecuteControlPart(obj, index):
                 Angle += obj.PymunkBodies[index].angle
             obj.PymunkBodies[index].apply_impulse_at_local_point(utils.RotateVector((Thrust, 0), Angle), Properties["Angle"][2])
 
-            if not obj.isWeb:
-                particleCount = round(obj.Throttle / 34) + random.randint(-1,1)
-            else:
-                particleCount = round(round(obj.Throttle / 80)) 
+            particleCount = round(obj.Throttle / 34) + random.randint(-1,1)
+
             if Properties["Thrust"] < 500:
                 particles.RedFlame(obj, index, True, Properties["Angle"][2], particleCount)
             else:
                 particles.BlueFlame(obj, index, True, Properties["Angle"][2], particleCount)
 
-        
-
-    
 #preventing things from spinning too fast
 def LimitAngularVelocity(body,obj):
     if not obj.isWeb:
@@ -123,6 +119,8 @@ def DisplayEarnedMoney(obj):
     obj.screen.blit(CoinImage, (665,obj.dimensions[1] -200))
     obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (710,obj.dimensions[1] -200))
 #physics
+#performance killer! needs to be improved +TODO #17
+@utils.timing_val
 def DrawBackground(obj):
     c = 0
     #check this function for mistakes(#10)
@@ -188,6 +186,7 @@ def DrawBackground(obj):
 
         cc += 1
     #the ground texture
+
 def DrawMinimap(obj):
     startX = 400
     startY = 600
@@ -225,8 +224,9 @@ def DrawMinimap(obj):
             pygame.draw.circle(obj.screen, (240,160,110), (MinimapPolygon[c][0],MinimapPolygon[c][1]), 8, 7)
         c += 1
     obj.screen.blit(obj.MiniMapImage, (startX -15, startY - 15))
-
 """Drawing the Vehicle"""
+#performance killer! needs improvements TODO #16
+@utils.timing_val
 def Draw(obj):
     #drawing the background
     DrawBackground(obj)
@@ -287,17 +287,14 @@ def Draw(obj):
 def PhysDraw(obj):
     obj.space.debug_draw(obj.draw_options)
 """Checking if joints need to be broken, playing crashing sounds, performing core game mechanics besides physics(why is this here?)"""
-
 def Checkparts(obj):
     c = 0
     while c < len(obj.PymunkBodies) and c < len(obj.NewVehicle):
-        if not obj.isWeb:
-            if obj.NewVehicle[c]["Type"] == "Engine":
-                particles.ParticleEffect(obj, "Exhaust", c)
+        if obj.NewVehicle[c]["Type"] == "Engine":
+            particles.ParticleEffect(obj, "Exhaust", c)
         elif obj.NewVehicle[c]["Type"] == "Control":
             ExecuteControlPart(obj, c)
         c += 1
-
 
 def CheckJoints(obj):
     #checking the latest impulse divided by fps
@@ -330,9 +327,8 @@ def CheckJoints(obj):
                     obj.TextAnimations.append(interactions.TextAnimation("CRACK +25", 100, obj))
                 ParticlePartA = obj.NewVehicleJoints[c]["JoinedParts"][1]
                 ParticlePartB = obj.NewVehicleJoints[c]["JoinedParts"][0]
-                if not obj.isWeb:
-                    particles.ParticleEffect(obj, "Break", ParticlePartA)
-                    particles.ParticleEffect(obj, "Break", ParticlePartB)
+                particles.ParticleEffect(obj, "Break", ParticlePartA)
+                particles.ParticleEffect(obj, "Break", ParticlePartB)
                 obj.space.remove(obj.PymunkJoints[c])
                 obj.NewVehicleJoints[c] = None
                 obj.VehicleJoints[c] = None
@@ -376,6 +372,7 @@ def DistanceBonuses(obj):
 
         obj.TextAnimations.append(interactions.TextAnimation(text, 150, obj))
 """The pymunk physics simulation"""
+@utils.timing_val
 def simulate(obj, fps):
     obj._MetersTravelled = obj.MetersTravelled
     Env = obj.Environment

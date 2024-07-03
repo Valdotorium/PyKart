@@ -1,5 +1,6 @@
 import random
 import pymunk
+from .fw import fw as utils
 
 def Noise(obj, scale, variability, randomnoise):
         #main  terrain generator function
@@ -91,7 +92,7 @@ def generate_chunk(obj):
     if obj.debug:
         print("total terrain length:", len(obj.Terrain) * obj.Environment["Terrain"]["Scale"])
 
-    
+@utils.timing_val
 def WritePolygonPositions(obj):
     
     #making tuples (x,y) out of the y positions of the future polygon vertices stored in obj.Terrain

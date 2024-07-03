@@ -2,7 +2,22 @@ import pygame, math
 import pymunk
 import copy
 import pyglet.media
+import time
+
+
 #some small helpers to make code shorter and maybe more radable
+
+def timing_val(func):
+    def wrapper(*arg, **kw):
+        '''source: http://www.daniweb.com/code/snippet368.html'''
+        t1 = time.time()
+        res = func(*arg, **kw)
+        t2 = time.time()
+        print(func.__name__ , " took " , (t2-t1) , "seconds")
+        return (t2 - t1), res, func.__name__
+    
+    return wrapper
+
 def getScreenSize():
     try:
         return pygame.display.get_desktop_sizes()

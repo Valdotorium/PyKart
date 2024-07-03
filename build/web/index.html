@@ -240,7 +240,7 @@ config = {
     archive : "project.exoplanet",
     gui_debug : 3,
     cdn : "https://pygame-web.github.io/archives/0.9/",
-    autorun : 0,
+    autorun : 1,
     PYBUILD : "3.12"
 }
 
@@ -299,12 +299,17 @@ config = {
             left: 0;
             right: 0;
         }
+        canvas :focus{
+            outline: none;
+            box-shadow: none;
+            display: none;
+        }
 
         body {
             font-family: arial;
             margin: 0;
             padding: none;
-            background-color:powderblue;
+            background-color:#998844;
         }
 
         .topright{
@@ -357,6 +362,10 @@ config = {
     <canvas class="emscripten" id="canvas"
 width="1px"
 height="1px"
+onkeydown="event.preventDefault()"
+onkeypress="event.stopPropagation()"
+onload="focus()"
+
     oncontextmenu="event.preventDefault()" tabindex=1>
     </canvas>
 
