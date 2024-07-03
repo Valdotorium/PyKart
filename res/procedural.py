@@ -71,7 +71,7 @@ def setup(obj):
     AssetCount = len(obj.Environment["Visuals"]["Assets"])
     x = 0
     obj.Terrain.append(-90000)
-    while x < 15000:
+    while x < 7500:
         r = random.uniform(0,100)
         if r < AssetChance and x > 40:
             if AssetCount != 0:
@@ -98,7 +98,17 @@ def PreparePolygons(obj):
     #blit the pygame poly on a surface that can be blitted to the main screen with offset xpos and ypos
     #and add the lines with the colors env[groundcolors] on top of it
     #form a lot of pymunk polys and put them in a list to use later for the physics simulation
-    print("----")
+
+    PygamePolygon = []
+    Xscale = obj.Environment["Terrain"]["Scale"]
+
+    c = 0
+    while c < len(obj.Terrain):
+        PygamePolygon.append(((Xscale * c - 10), obj.Terrain[c])) #dont forget bottom edge points later
+
+        c += 1
+    
+    print("PygamePolygon: ", PygamePolygon)
 
 def WriteMinimapPolygon(obj):
     obj.GroundRelief = PolygonPoints#provisorisch
