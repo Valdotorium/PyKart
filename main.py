@@ -60,7 +60,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200,800)
         self.KeyCooldown = 0
-        self.CFG_New_Game = True
+        self.CFG_New_Game = False
 
         
         
