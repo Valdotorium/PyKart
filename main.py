@@ -119,7 +119,7 @@ class Game():
     def updateWindow(self,window):
         self.dimensions = (1200,800)
 
-        if self.CFG_Default_Screen_Size[0] != self.window.get_size()[0] or self.CFG_Default_Screen_Size[1] != self.window.get_size()[1] and self.frame % 10 == 0:
+        if self.CFG_Default_Screen_Size[0] != self.window.get_size()[0] or self.CFG_Default_Screen_Size[1] != self.window.get_size()[1]:
 
             self.screen = pygame.transform.scale(self.screen, self.window.get_size())
             self.window.blit(self.screen, (0, 0))
@@ -306,8 +306,8 @@ async def main():
             Exo.fps = round(Exo.fps / 1.3)
         if Exo.fps * 1.2 < 1 /(Exo.frameTime - Exo.lastFrameTime):
             Exo.fps = round(Exo.fps * 1.3)
-        if Exo.fps > 44:
-            Exo.fps = 44
+        if Exo.fps > 60:
+            Exo.fps = 60
         if Exo.fps < 16:
             Exo.fps = 16
         if Exo.debug:

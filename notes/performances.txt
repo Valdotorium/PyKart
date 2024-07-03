@@ -2,6 +2,11 @@ Version, Date, CPU% [Build Idle, Build Active, Drive Idle, Drive Active]
 1.0.6-web, 21.5.2024, 40, 41, 54, 58
 1.0.6    , 21.5.2024, 40, 41, 57, 61
 1.0.2-web, 3.7.2024 , 34, 35, 57, 61
-1.0.2-40F, 3.7.2024,  31, 22, 44, 46
+1.0.2    , 3.7.2024,  36, 36, 47, 59
 
-cprofile
+PERFORMANCE UPDATE 1.1: 
+-draw entire ground poly once and then blit onto screen with xpos and ypos as offset (-10% +- 4)
+-writegroundpoly should become unneccessary (-1.5% +- 1)
+-reduce usage of pygame events (-2.5%)
+-optimize minimap (-1.25% +- 0.5)
+-also draw lines once and the blit (-0.5%)
