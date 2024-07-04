@@ -1,5 +1,6 @@
 import random
 import pygame
+import pymunk
 from .fw import fw as utils
 
 def Noise(obj, scale, variability, randomnoise):
@@ -109,6 +110,32 @@ def PreparePolygons(obj):
         c += 1
     
     print("PygamePolygon: ", PygamePolygon)
+
+    #creating pymunk polygons
+    PymunkPolygons = []
+    c = 0
+    while c < len(PygamePolygon) - 2:
+        #creating the edge vertices for the pymunk poly
+        ItemA = PygamePolygon[c]
+        ItemB = PygamePolygon[c+1]
+
+        ItemAX = ItemA[0]
+        ItemBX = ItemB[0]
+
+        Vertices = [ItemA, ItemB, (ItemBX, -90000), (ItemAX, -90000)]
+
+        #creating the polygon bodies
+        Body = pymunk.Body(1, 0, body_type=pymunk.Body.STATIC)
+        Poly = pymunk.Poly(Body, Vertices)
+        PymunkPolygons.append(Body)
+
+        c += 1
+    
+    #edges of pygame poly
+    PygamePolygon.append(((Xscale * len(obj.Terrain) - 10), 90000))
+    PygamePolygon.append(((Xscale * 0 - 10), 90000))
+
+
 
 def WriteMinimapPolygon(obj):
     obj.GroundRelief = PolygonPoints#provisorisch
