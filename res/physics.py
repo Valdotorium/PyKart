@@ -8,6 +8,7 @@ import random
 import pyglet.media
 import os
 from .interactions import interactions as interactions
+from . import procedural
 from . import particles
 from. import sounds
 
@@ -121,14 +122,59 @@ def DisplayEarnedMoney(obj):
 #physics
 #performance killer! needs to be improved +TODO #17
 @utils.timing_val
-def DrawBackground(obj):
+def PymunkGroundPolygon(obj, Env):
+    Drawrange = obj.dimensions[0] * 1.5
+    Drawrange = int(Drawrange / obj.Environment["Terrain"]["Scale"])
+    CurrentItem = obj.X_Position // obj.Environment["Terrain"]["Scale"]
+    x = int(CurrentItem)
 
-    obj.body_floor.shape.update
-    #colors of the ground above the ground texture
-    #blit poly surface to main screen
-    #if performance impact too high, strip the main poly surface into screen-wide chunks
+    elasticity = Env["Physics"]["Friction"]
+    friction = Env["Physics"]["Bounce"]
+    while x < CurrentItem + Drawrange:
+        Vertices = obj.PymunkPolygons[x]
+        shape = pymunk.Poly(obj.body_floor, Vertices)
+        shape.elasticity = elasticity
+        shape.friction = 1-friction
+        
+        obj.space.add(shape)
+        print("Added ", x , " pymunkpoly")
+        x += 1
+    print("shapoes", obj.body_floor.shapes)
+    obj.space.step(1/obj.fps)
+
+    #remove all shapes attached to obj.body_floor
+    for shape in obj.body_floor.shapes:
+        obj.space.remove(shape)
+    
+
+
+
+
+    #TODO #10 #completely rewrite this function
+    #take the pymunk bodies from the polygon list and put them here
+    
+    print("----")
+def PygamePolygons(obj):
+    Drawrange = int(obj.dimensions[0] * 1.5)
+    Drawrange = int(Drawrange / obj.Environment["Terrain"]["Scale"])
+    CurrentItem = int(obj.X_Position // obj.Environment["Terrain"]["Scale"])
+    XOffset = obj.X_Position
+    YOffset = obj.Y_Position
+
+    #now draw all the pygame polygons from CurrentItem to DrawRange on the screen
+    x = CurrentItem
+    while x < CurrentItem + Drawrange:
+        PygamePolygon = obj.PygamePolygons[x]
+        #offset all vertices contained in pygamepolygon by X and y position
+        PygamePolygon = [(vertex[0] - XOffset, vertex[1] - YOffset) for vertex in PygamePolygon]
+        #sort the vertices by y coordinate
+        PygamePolygon.sort(key=lambda x: x[1])
+        #draw the polygon on the screen
+        pygame.draw.polygon(obj.screen, (130,140,180), PygamePolygon)
+        x += 1
 
 def DrawMinimap(obj):
+    procedural.WriteMinimapPolygon(obj)
     startX = 400
     startY = 600
     sizeX = 400
@@ -170,7 +216,7 @@ def DrawMinimap(obj):
 @utils.timing_val
 def Draw(obj):
     #drawing the background
-    DrawBackground(obj)
+    PygamePolygons(obj)
     c = 0
     #obj.space.debug_draw(obj.draw_options)
     while c < len(obj.PymunkBodies):
@@ -317,33 +363,32 @@ def DistanceBonuses(obj):
 def simulate(obj, fps):
     obj._MetersTravelled = obj.MetersTravelled
     Env = obj.Environment
-    obj.HasFloor = False
-    try:
-        utils.PymunkGroundPolygon(obj, Env)
-        obj.SoundInFrame = False
+    #try:
+    PymunkGroundPolygon(obj, Env)
+    obj.SoundInFrame = False
 
-        LimitThrottle(obj)
-        obj.space.step(1/fps)
-        #draeing the poligon with the list of points obj.GroundPolygon
-        #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
-        #draw(obj.Vehicle) <--will be used for textures later
-        Draw(obj)
-        UpdateParticles(obj)
-        #PhysDraw(obj)
-        CheckJoints(obj)
-        Checkparts(obj)
-        utils.DisplayMoney(obj)
-        DistanceBonuses(obj)
-    except:
-        obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
-        obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
-        obj.restart = True
-        if not obj.isWeb:
-            AlertSound = obj.sounds["alert.wav"]
-            player = AlertSound.play()
-            del(player)
-        obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 150, obj))
-        print("INTERNAL ERROR: Could not simulate physics")
+    LimitThrottle(obj)
+    
+    #draeing the poligon with the list of points obj.GroundPolygon
+    #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
+    #draw(obj.Vehicle) <--will be used for textures later
+    Draw(obj)
+    UpdateParticles(obj)
+    #PhysDraw(obj)
+    CheckJoints(obj)
+    Checkparts(obj)
+    utils.DisplayMoney(obj)
+    DistanceBonuses(obj)
+    #except Exception as e:
+    #obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
+    #obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
+    #obj.restart = True
+    #if not obj.isWeb:
+        #AlertSound = obj.sounds["alert.wav"]
+        #player = AlertSound.play()
+        #del(player)
+    #obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 150, obj))
+    #print("INTERNAL ERROR: Could not simulate physics: " + str(e))
 
 def FindFreight(obj):
     c = 0
@@ -383,6 +428,12 @@ def setup(obj):
     obj.SpeedDisplay = utils.Display(obj, "Speed_display.png",(160,obj.dimensions[1]-120), 315, 1.6)
     obj.RPMDisplay = utils.Display(obj, "Rpm_display.png",(obj.dimensions[0] - 160,obj.dimensions[1]-120), 315, 1.6)
     obj.MiniMapImage = pygame.transform.scale(obj.textures["mapoverlay.png"],(400 + 30, 180 + 30))
+    #the pymunk floor body
+    obj.body_floor = pymunk.Body(1, 100, body_type=pymunk.Body.STATIC)
+    obj.body_floor.position = (0,0)
+    obj.space.add(obj.body_floor)
+
+
 """Function for translating the old data stored in obj.Vehicle and obj.VehicleJoints into  pymunk joints and bodies.
 Creates obj.NewVehicle, obj.VehicleTypes, obj.NewVehicleJoints, obj.PymunkBodies, obj.PymunkJoints (versions of the old data with
 "None" objects removed"""

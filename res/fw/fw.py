@@ -142,12 +142,7 @@ def DisplayMoney(obj):
         Image = obj.textures["coin.png"]
         Image = pygame.transform.scale(Image, (50 ,50))
         obj.screen.blit(Image, (obj.dimensions[0] * 0.05 - text.get_width() / 2, obj.dimensions[1] * 0.17 - 16))
-def PymunkGroundPolygon(obj, Env):
-    #TODO #10 #completely rewrite this function
-    #take the pymunk bodies from the polygon list and put them here
-    
-    print("----")
-    
+
 def GetConnectedParts(obj,joint):
     #joint should come from obj.vehiclejoints
     PartA = obj.NewVehicle[joint["JoinedParts"][0]]

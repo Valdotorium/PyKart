@@ -136,21 +136,6 @@ class Game():
         #res.interactions.interactions.ButtonArea(Exo)
         if self.gm == "game":
             self.screen.fill((120,120,120))
-            #running the physics
-            try:
-                #the ground polygon
-                res.procedural.WritePolygonPositions(self)
-            except:
-                print("INTERNAL ERROR:Failed to write ground polygon")
-                self.money += (self.DistanceMoneyForRide + self.StuntMoneyForRide) * self.RideMoneyMultiplier
-                self.xp += self.MetersTravelled * self.RideMoneyMultiplier
-                self.restart = True
-                if not self.isWeb:
-                    AlertSound = self.sounds["alert.wav"]
-                    player = AlertSound.play()
-                    del(player)
-                self.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not write ground poly", 150, self))
-                
             res.controls.GameControls(self)
 
             res.mechanics.GameMechanics(self)
@@ -163,8 +148,9 @@ class Game():
             try:
                 res.build.run(self)
                 res.controls.BuildControls(self)
-            except:
-                raise Exception("INTERNAL ERROR:Build mode failed to execute")
+            except Exception as e:
+                
+                raise Exception("INTERNAL ERROR:Build mode failed to execute: ", e)
         if self.gm == "transfer":
             try:
                 #setup physics simulation
@@ -174,9 +160,9 @@ class Game():
                 res.sounds.setup(self)
                 res.procedural.setup(self)
                 res.procedural.generate_chunk(self)
-                res.procedural.WritePolygonPositions(self)
-            except:
-                print("INTERNAL ERROR:Failed to run transfer game mode")
+                res.procedural.PreparePolygons(self)
+            except Exception as e:
+                print("INTERNAL ERROR:Failed to run transfer game mode: ", e)
                 self.TextAnimations.append(interactions.TextAnimation("EXCEPTION: failed transfer stage", 150, self))
                 self.money += (self.DistanceMoneyForRide + self.StuntMoneyForRide) * self.RideMoneyMultiplier
                 self.xp += self.MetersTravelled * self.RideMoneyMultiplier

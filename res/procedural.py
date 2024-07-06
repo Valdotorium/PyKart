@@ -2,6 +2,7 @@ import random
 import pygame
 import pymunk
 from .fw import fw as utils
+import time
 
 def Noise(obj, scale, variability, randomnoise):
         #main  terrain generator function
@@ -94,6 +95,7 @@ def generate_chunk(obj):
         print("total terrain length:", len(obj.Terrain) * obj.Environment["Terrain"]["Scale"])
 
 
+
 def PreparePolygons(obj):
     #write a long list of all polygon x and y vertices
     #blit the pygame poly on a surface that can be blitted to the main screen with offset xpos and ypos
@@ -109,39 +111,35 @@ def PreparePolygons(obj):
 
         c += 1
     
-    print("PygamePolygon: ", PygamePolygon)
+    #print("PygamePolygon: ", PygamePolygon)
 
-    #creating pymunk polygons
+    #creating pymunk and pygame polygons
     PymunkPolygons = []
+    PygamePolygons = []
     c = 0
     while c < len(PygamePolygon) - 2:
         #creating the edge vertices for the pymunk poly
         ItemA = PygamePolygon[c]
         ItemB = PygamePolygon[c+1]
-
         ItemAX = ItemA[0]
         ItemBX = ItemB[0]
 
-        Vertices = [ItemA, ItemB, (ItemBX, -90000), (ItemAX, -90000)]
+        Vertices = [ItemA, ItemB, (ItemBX, 25100), (ItemAX, 25100)]
 
-        #creating the polygon bodies
-        Body = pymunk.Body(1, 0, body_type=pymunk.Body.STATIC)
-        Poly = pymunk.Poly(Body, Vertices)
-        PymunkPolygons.append(Body)
-
+        #creating the polygon vertices
+        Poly = Vertices
+        PymunkPolygons.append(Poly)
         c += 1
+        #creating the pygame polygons (inverting the Ys)
+        Vertices = [ItemA, ItemB, (ItemBX, -25100), (ItemAX, -25100)]
+        PygamePolygons.append(Vertices)
     
-    #edges of pygame poly
-    PygamePolygon.append(((Xscale * len(obj.Terrain) - 10), 90000))
-    PygamePolygon.append(((Xscale * 0 - 10), 90000))
-
-
+    print("ok")
+    obj.PygamePolygons = PygamePolygons
+    obj.PymunkPolygons = PymunkPolygons
+    time.sleep(1)
 
 def WriteMinimapPolygon(obj):
-    obj.GroundRelief = PolygonPoints#provisorisch
-    print("GR:",obj.GroundRelief)
-    #print("THE GROUND POLYGON IS AT:", PolygonPoints)
-    #print(f"drawing poly from terrain item {startx} to terrain item {x}")
     obj.MinimapPolygon = []
     x = round((obj.X_Position - obj.Environment["Terrain"]["Scale"] * 5) /obj.Environment["Terrain"]["Scale"])
     endx = round((obj.X_Position + obj.dimensions[0]*15)/ obj.Environment["Terrain"]["Scale"])
