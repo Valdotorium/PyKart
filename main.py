@@ -313,4 +313,4 @@ async def main():
 def core():
     asyncio.run(main())
 
-core()
+cProfile.run("core()", sort="tottime")

@@ -137,30 +137,19 @@ def PymunkGroundPolygon(obj, Env):
         shape.friction = 1-friction
         
         obj.space.add(shape)
-        print("Added ", x , " pymunkpoly")
         x += 1
-    print("shapoes", obj.body_floor.shapes)
     obj.space.step(1/obj.fps)
 
     #remove all shapes attached to obj.body_floor
     for shape in obj.body_floor.shapes:
         obj.space.remove(shape)
-    
-
-
-
-
-    #TODO #10 #completely rewrite this function
-    #take the pymunk bodies from the polygon list and put them here
-    
-    print("----")
+@utils.timing_val 
 def PygamePolygons(obj):
     Drawrange = int(obj.dimensions[0] * 1.5)
     Drawrange = int(Drawrange / obj.Environment["Terrain"]["Scale"])
     CurrentItem = int(obj.X_Position // obj.Environment["Terrain"]["Scale"])
     XOffset = obj.X_Position
     YOffset = obj.Y_Position
-
     #now draw all the pygame polygons from CurrentItem to DrawRange on the screen
     x = CurrentItem
     while x < CurrentItem + Drawrange:
@@ -172,6 +161,7 @@ def PygamePolygons(obj):
         #draw the polygon on the screen
         pygame.draw.polygon(obj.screen, (130,140,180), PygamePolygon)
         x += 1
+    print("drew ",Drawrange, "Polygons" )
 
 def DrawMinimap(obj):
     procedural.WriteMinimapPolygon(obj)
