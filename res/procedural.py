@@ -139,24 +139,3 @@ def PreparePolygons(obj):
     obj.PymunkPolygons = PymunkPolygons
     time.sleep(1)
 
-def WriteMinimapPolygon(obj):
-    obj.MinimapPolygon = []
-    x = round((obj.X_Position - obj.Environment["Terrain"]["Scale"] * 5) /obj.Environment["Terrain"]["Scale"])
-    endx = round((obj.X_Position + obj.dimensions[0]*15)/ obj.Environment["Terrain"]["Scale"])
-    PolygonPoints = []
-    PolygonAssets = []
-    #Edge point
-    if x < 0: 
-        x = 0
-    if endx < 2:
-        endx = 2
-    #the polygon points between x and enx get rendered
-    while x < round(endx) and endx < len(obj.Terrain):
-        Point = obj.Terrain[x]
-        Asset = obj.TerrainAssets[x]
-        PolygonPoints.append(((x - 10) * round(obj.Environment["Terrain"]["Scale"]) - obj.X_Position, Point))
-        PolygonAssets.append(Asset)
-        #PolygonAssets format: [None, None, [AssetData], None...]
-        x += 1
-    obj.MinimapPolygon = PolygonPoints
-    obj.PolygonAssets = PolygonAssets

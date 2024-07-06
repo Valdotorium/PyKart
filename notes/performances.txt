@@ -10,3 +10,6 @@ PERFORMANCE UPDATE 1.1:
 -reduce usage of pygame events (-2.5%)
 -optimize minimap (-1.25% +- 0.5)
 -also draw lines once and the blit (-0.5%)
+
+note 6.7:
+-up to 30% performance improvements (a.l. 20%)

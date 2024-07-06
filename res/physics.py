@@ -121,9 +121,26 @@ def DisplayEarnedMoney(obj):
     obj.screen.blit(obj.largefont.render(text, True, (220,220,220)), (710,obj.dimensions[1] -200))
 #physics
 #performance killer! needs to be improved +TODO #17
+def WriteTerrainAssets(obj):
+    Drawrange = int(obj.dimensions[0] * 4)
+    Drawrange = int(Drawrange / obj.Environment["Terrain"]["Scale"])
+    x = int(obj.X_Position // obj.Environment["Terrain"]["Scale"])
+
+    PolygonAssets = []
+
+    Drawrange = int(obj.dimensions[0] * 1.25)
+    endx = x + Drawrange
+    #the polygon points between x and enx get rendered
+    while x < round(endx) and endx < len(obj.Terrain):
+        Asset = obj.TerrainAssets[x]
+
+        PolygonAssets.append(Asset)
+        #PolygonAssets format: [None, None, [AssetData], None...]
+        x += 1
+    obj.PolygonAssets = PolygonAssets
 @utils.timing_val
 def PymunkGroundPolygon(obj, Env):
-    Drawrange = obj.dimensions[0] * 1.5
+    Drawrange = obj.dimensions[0] * 1.2
     Drawrange = int(Drawrange / obj.Environment["Terrain"]["Scale"])
     CurrentItem = obj.X_Position // obj.Environment["Terrain"]["Scale"]
     x = int(CurrentItem)
@@ -145,7 +162,7 @@ def PymunkGroundPolygon(obj, Env):
         obj.space.remove(shape)
 @utils.timing_val 
 def PygamePolygons(obj):
-    Drawrange = int(obj.dimensions[0] * 1.5)
+    Drawrange = int(obj.dimensions[0] * 1.25)
     Drawrange = int(Drawrange / obj.Environment["Terrain"]["Scale"])
     CurrentItem = int(obj.X_Position // obj.Environment["Terrain"]["Scale"])
     EndItem = CurrentItem + Drawrange
@@ -156,18 +173,33 @@ def PygamePolygons(obj):
     while CurrentItem < EndItem:
         Vertices.append(obj.PygamePolygons[CurrentItem])
         CurrentItem += 1
-    Vertices.append((Vertices[len(Vertices)-1][0], -25000))
-    Vertices.append((Vertices[0][0], -25000))
+    Vertices.append((Vertices[len(Vertices)-1][0], -10000))
+    Vertices.append((Vertices[0][0], -10000))
 
     #offset all vertices by XOffset and YOffset
     Vertices = [(x - XOffset, y - YOffset) for x, y in Vertices]
 
     #draw all the polygons to the screen
     pygame.draw.polygon(obj.screen, obj.Environment["Background"], Vertices)
+    Vertices = Vertices[:-2]
+    pygame.draw.lines(obj.screen, (20,20,20), False,Vertices, 20)
     print("drew ",Drawrange, "Polygons" )
 
+    c = 0
+    while c < len(obj.PolygonAssets) and c < len(Vertices):
+        if obj.PolygonAssets[c] != None:
+            Point = Vertices[c]
+            AssetImage = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["image"]
+            AssetImage = obj.textures[AssetImage]
+            AssetSize = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["size"]
+            AssetImage = pygame.transform.scale(AssetImage,AssetSize)
+            AssetOffset = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["offset"]
+            obj.screen.blit(AssetImage, (Point[0] + AssetOffset[0], Point[1] + AssetOffset[1]))
+                            
+        c += 1
 def DrawMinimap(obj):
-    procedural.WriteMinimapPolygon(obj)
+
+    #rewrite this, performance TODO #18
     startX = 400
     startY = 600
     sizeX = 400
@@ -179,8 +211,8 @@ def DrawMinimap(obj):
     obj.screen.blit(Surface, (startX, startY))
 
     MinimapPolygon = []
-    XOffset = obj.MinimapPolygon[0][0] / 50
-    YOffset = obj.MinimapPolygon[0][1] / 50 - sizeY/2
+    XOffset = obj.MinimapPolygon[0][0] / 10
+    YOffset = obj.MinimapPolygon[0][1] / 10 - sizeY/2
     for node in obj.MinimapPolygon:
         if node[0] < startX + sizeX * 45:
             node = list(node)
@@ -209,7 +241,10 @@ def DrawMinimap(obj):
 @utils.timing_val
 def Draw(obj):
     #drawing the background
+    WriteTerrainAssets(obj)
     PygamePolygons(obj)
+
+    #DrawMinimap(obj)
     c = 0
     #obj.space.debug_draw(obj.draw_options)
     while c < len(obj.PymunkBodies):
@@ -249,7 +284,7 @@ def Draw(obj):
     obj.RPMDisplay.update(obj,obj.rpm, 0.045)
     #displaying distance
 
-    DrawMinimap(obj)
+ 
     DisplayDistance(obj)
     DisplayEarnedMoney(obj)
     if -14 < obj.VehicleSpeed < 10:
@@ -365,6 +400,7 @@ def simulate(obj, fps):
     #draeing the poligon with the list of points obj.GroundPolygon
     #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
     #draw(obj.Vehicle) <--will be used for textures later
+    #DrawMinimap(obj)
     Draw(obj)
     UpdateParticles(obj)
     #PhysDraw(obj)
@@ -425,7 +461,6 @@ def setup(obj):
     obj.body_floor = pymunk.Body(1, 100, body_type=pymunk.Body.STATIC)
     obj.body_floor.position = (0,0)
     obj.space.add(obj.body_floor)
-
 
 """Function for translating the old data stored in obj.Vehicle and obj.VehicleJoints into  pymunk joints and bodies.
 Creates obj.NewVehicle, obj.VehicleTypes, obj.NewVehicleJoints, obj.PymunkBodies, obj.PymunkJoints (versions of the old data with

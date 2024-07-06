@@ -278,8 +278,7 @@ async def main():
             #res.terrain.place(Exo)
             res.build.setup(Exo)
             Exo.Tutorial = res.tutorial.Tutorial(Exo)
-            #res.physics.setup(Exo)
-            
+            #res.physics.setup(Exo)        
             Exo.draw_options = pymunk.pygame_util.DrawOptions(Exo.screen)
             time.sleep(1)
 
