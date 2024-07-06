@@ -148,19 +148,22 @@ def PygamePolygons(obj):
     Drawrange = int(obj.dimensions[0] * 1.5)
     Drawrange = int(Drawrange / obj.Environment["Terrain"]["Scale"])
     CurrentItem = int(obj.X_Position // obj.Environment["Terrain"]["Scale"])
+    EndItem = CurrentItem + Drawrange
     XOffset = obj.X_Position
     YOffset = obj.Y_Position
     #now draw all the pygame polygons from CurrentItem to DrawRange on the screen
-    x = CurrentItem
-    while x < CurrentItem + Drawrange:
-        PygamePolygon = obj.PygamePolygons[x]
-        #offset all vertices contained in pygamepolygon by X and y position
-        PygamePolygon = [(vertex[0] - XOffset, vertex[1] - YOffset) for vertex in PygamePolygon]
-        #sort the vertices by y coordinate
-        PygamePolygon.sort(key=lambda x: x[1])
-        #draw the polygon on the screen
-        pygame.draw.polygon(obj.screen, (130,140,180), PygamePolygon)
-        x += 1
+    Vertices = []
+    while CurrentItem < EndItem:
+        Vertices.append(obj.PygamePolygons[CurrentItem])
+        CurrentItem += 1
+    Vertices.append((Vertices[len(Vertices)-1][0], -25000))
+    Vertices.append((Vertices[0][0], -25000))
+
+    #offset all vertices by XOffset and YOffset
+    Vertices = [(x - XOffset, y - YOffset) for x, y in Vertices]
+
+    #draw all the polygons to the screen
+    pygame.draw.polygon(obj.screen, obj.Environment["Background"], Vertices)
     print("drew ",Drawrange, "Polygons" )
 
 def DrawMinimap(obj):

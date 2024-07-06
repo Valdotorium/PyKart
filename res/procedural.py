@@ -135,7 +135,7 @@ def PreparePolygons(obj):
         PygamePolygons.append(Vertices)
     
     print("ok")
-    obj.PygamePolygons = PygamePolygons
+    obj.PygamePolygons = PygamePolygon
     obj.PymunkPolygons = PymunkPolygons
     time.sleep(1)
 
