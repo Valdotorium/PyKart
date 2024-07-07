@@ -8,8 +8,6 @@ import json
 def run(obj):
     #removing temporary values from parts
     
-    print("User started with Vehicle: ", obj.Vehicle)
-    print("The Vehicles Joints are: ", obj.VehicleJoints)
     #storing the vehicle as json for readability
     CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
     with open(CurrentPath + "/assets/saves/latest_vehicle.json", "w") as outfile: 

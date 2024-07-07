@@ -27,12 +27,11 @@ obj.NewVehicleJoints and obj.PymunkJoints refer to the same joints
 How to for example get the parts a joint links:
 obj.NewVehicleJoints["JoinedParts"] is a tuple containing the parts a joint is linked with.
 However, there currently is no way of finding out to which joint a part is connected, so game mechanics are currently
-build around joints.
+built around joints.
 sorry and will do better in the next game, Valdotorium, 24/3/2024"""
 #mechanics
 
 """Function that makes wheels go brrrrrrr"""
-
 def LimitThrottle(obj):
     if 0 < obj.Throttle < 0.5:
         obj.Throttle = 0
@@ -83,7 +82,6 @@ def ExecuteControlPart(obj, index):
                 particles.RedFlame(obj, index, True, Properties["Angle"][2], particleCount)
             else:
                 particles.BlueFlame(obj, index, True, Properties["Angle"][2], particleCount)
-
 #preventing things from spinning too fast
 def LimitAngularVelocity(body,obj):
     if not obj.isWeb:
@@ -114,7 +112,6 @@ def DisplayEarnedMoney(obj):
     text = "+" + str(mult)
     obj.DistanceMoneyForRide = round((round(obj.Environment["MoneyMultiplicator"] * obj.MetersTravelled) + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier)
     #display coin image in front of text
-
     CoinImage = obj.textures["coin.png"]
     CoinImage = pygame.transform.scale(CoinImage, (30,30))
     obj.screen.blit(CoinImage, (665,obj.dimensions[1] -200))
@@ -127,7 +124,6 @@ def WriteTerrainAssets(obj):
     x = int(obj.X_Position // obj.Environment["Terrain"]["Scale"])
 
     PolygonAssets = []
-
     Drawrange = int(obj.dimensions[0] * 1.25)
     endx = x + Drawrange
     #the polygon points between x and enx get rendered
@@ -175,7 +171,6 @@ def PygamePolygons(obj):
         CurrentItem += 1
     Vertices.append((Vertices[len(Vertices)-1][0], -10000))
     Vertices.append((Vertices[0][0], -10000))
-
     #offset all vertices by XOffset and YOffset
     Vertices = [(x - XOffset, y - YOffset) for x, y in Vertices]
 
@@ -184,7 +179,6 @@ def PygamePolygons(obj):
     Vertices = Vertices[:-2]
     pygame.draw.lines(obj.screen, (20,20,20), False,Vertices, 20)
     print("drew ",Drawrange, "Polygons" )
-
     c = 0
     while c < len(obj.PolygonAssets) and c < len(Vertices):
         if obj.PolygonAssets[c] != None:
@@ -198,44 +192,33 @@ def PygamePolygons(obj):
                             
         c += 1
 def DrawMinimap(obj):
+    DownscaleFactor = int(obj.dimensions[0] * obj.MinimapRange) / int(obj.dimensions[0] / (obj.dimensions[0] / obj.MinimapSize[0]))
+    BackwardsRange = 8
+    MinimapPosition = (400, 610)
+    Drawrange = int(obj.dimensions[0] * obj.MinimapRange)
+    Drawrange = int(Drawrange / obj.Environment["Terrain"]["Scale"])
+    CurrentItem = int(obj.X_Position // obj.Environment["Terrain"]["Scale"]) - BackwardsRange
+    EndItem = CurrentItem + Drawrange
+    LinePos = obj.Environment["Terrain"]["Scale"] * BackwardsRange * 2 / DownscaleFactor
+    XOffset = (obj.X_Position - obj.Environment["Terrain"]["Scale"] * BackwardsRange) / DownscaleFactor 
+    YOffset = int(obj.Y_Position / DownscaleFactor - obj.MinimapSize[1] / 3)
+    #now draw all the pygame polygons from CurrentItem to DrawRange on the screen
+    Vertices = []
+    while CurrentItem < EndItem:
+        if CurrentItem > -1 and EndItem < len(obj.PygamePolygons) - 2 and CurrentItem % obj.MinimapRange == 0:
+            Vertices.append(obj.PygamePolygons[CurrentItem])
+        CurrentItem += 1
 
-    #rewrite this, performance TODO #18
-    startX = 400
-    startY = 600
-    sizeX = 400
-    sizeY = 180
-    #draw rect at startx and stary
-    Surface = pygame.Surface((sizeX, sizeY))
-    Surface.fill((180,180,180))
-    Surface.set_alpha(180)
-    obj.screen.blit(Surface, (startX, startY))
+    #offset all vertices by XOffset and YOffset
+    Vertices = [(x / DownscaleFactor - XOffset, y / DownscaleFactor - YOffset) for x, y in Vertices]
+    #draw a white line at the vertices
+    obj.MinimapSurface.fill((26, 23, 21))
+    pygame.draw.lines(obj.MinimapSurface, (255, 255, 255), False, Vertices, 3)
+    #dreaw red vertical line at x = dotpos over the entire minimapsurface
+    pygame.draw.line(obj.MinimapSurface, (140, 30, 30), (LinePos, 0), (LinePos, obj.MinimapSize[1]), 4)
+    obj.screen.blit(obj.MinimapSurface, (MinimapPosition[0], MinimapPosition[1]))
+    obj.screen.blit(obj.MiniMapImage, (MinimapPosition[0] -15, MinimapPosition[1] - 25))
 
-    MinimapPolygon = []
-    XOffset = obj.MinimapPolygon[0][0] / 10
-    YOffset = obj.MinimapPolygon[0][1] / 10 - sizeY/2
-    for node in obj.MinimapPolygon:
-        if node[0] < startX + sizeX * 45:
-            node = list(node)
-            MinimapPolygon.append((node[0] /50 + startX - XOffset, node[1] / 50 + startY - YOffset))
-    #draw the minimap polygon
-    c = 0
-    while c < len(MinimapPolygon)-1:
-        MinimapPolygon[c] = list(MinimapPolygon[c])
-        MinimapPolygon[c+1] = list(MinimapPolygon[c+1])
-        if MinimapPolygon[c][1] < startY:
-            MinimapPolygon[c][1] = startY
-        if MinimapPolygon[c+1][1] < startY:
-            MinimapPolygon[c+1][1] = startY
-        if MinimapPolygon[c][1] > startY + sizeY:
-            MinimapPolygon[c][1] = startY + sizeY
-        if MinimapPolygon[c+1][1] > startY + sizeY:
-            MinimapPolygon[c+1][1] = startY + sizeY
-        pygame.draw.line(obj.screen, (255,255,255), (MinimapPolygon[c][0],MinimapPolygon[c][1]), (MinimapPolygon[c+1][0],MinimapPolygon[c+1][1]), 3)
-        if c == 30:
-            #draw a circle at the point
-            pygame.draw.circle(obj.screen, (240,160,110), (MinimapPolygon[c][0],MinimapPolygon[c][1]), 8, 7)
-        c += 1
-    obj.screen.blit(obj.MiniMapImage, (startX -15, startY - 15))
 """Drawing the Vehicle"""
 #performance killer! needs improvements TODO #16
 @utils.timing_val
@@ -243,8 +226,6 @@ def Draw(obj):
     #drawing the background
     WriteTerrainAssets(obj)
     PygamePolygons(obj)
-
-    #DrawMinimap(obj)
     c = 0
     #obj.space.debug_draw(obj.draw_options)
     while c < len(obj.PymunkBodies):
@@ -282,9 +263,9 @@ def Draw(obj):
     #drawing speed and rpm display
     obj.SpeedDisplay.update(obj,obj.VehicleSpeed, 0.95)
     obj.RPMDisplay.update(obj,obj.rpm, 0.045)
+    #draw minimap (unexpected :o)
+    DrawMinimap(obj)
     #displaying distance
-
- 
     DisplayDistance(obj)
     DisplayEarnedMoney(obj)
     if -14 < obj.VehicleSpeed < 10:
@@ -310,7 +291,6 @@ def Checkparts(obj):
         elif obj.NewVehicle[c]["Type"] == "Control":
             ExecuteControlPart(obj, c)
         c += 1
-
 def CheckJoints(obj):
     #checking the latest impulse divided by fps
     #if the impulse exceeds a set limit, the joint breaks
@@ -319,8 +299,6 @@ def CheckJoints(obj):
         if obj.PymunkJoints[c]!= None and obj.NewVehicleJoints[c] != None:
             JointImpulse = obj.PymunkJoints[c].impulse
             ImpulseLimit = obj.NewVehicleJoints[c]["JointData"]["BreakPoint"]
-            #print(len(obj.PymunkJoints), len(obj.VehicleJoints))
-            #print("Impulse of joint ", c, ":", JointImpulse)
             #perform mechanics here
             #is the joint connecting an Engine and an Wheel?
             if utils.JointHasType(obj, obj.NewVehicleJoints[c], "Engine") != False and utils.JointHasType(obj, obj.NewVehicleJoints[c], "Wheel") != False:
@@ -349,7 +327,6 @@ def CheckJoints(obj):
                 obj.VehicleJoints[c] = None
                 obj.PymunkJoints[c] = None
                 obj.StuntMoneyForRide += 25
-
         c += 1
 def DistanceBonuses(obj):
     if obj._MetersTravelled  <= obj.NextKilometer and obj.MetersTravelled > obj.NextKilometer:
@@ -394,30 +371,37 @@ def simulate(obj, fps):
     #try:
     PymunkGroundPolygon(obj, Env)
     obj.SoundInFrame = False
-
-    LimitThrottle(obj)
-    
-    #draeing the poligon with the list of points obj.GroundPolygon
-    #pygame.draw.circle(obj.screen,(200,0,100), obj.body_ball1.position, obj.body_ball1_size)
-    #draw(obj.Vehicle) <--will be used for textures later
-    #DrawMinimap(obj)
-    Draw(obj)
-    UpdateParticles(obj)
-    #PhysDraw(obj)
-    CheckJoints(obj)
-    Checkparts(obj)
-    utils.DisplayMoney(obj)
-    DistanceBonuses(obj)
-    #except Exception as e:
-    #obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
-    #obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
-    #obj.restart = True
-    #if not obj.isWeb:
-        #AlertSound = obj.sounds["alert.wav"]
-        #player = AlertSound.play()
-        #del(player)
-    #obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 150, obj))
-    #print("INTERNAL ERROR: Could not simulate physics: " + str(e))
+    #first block: draw vehicle, ground and minimap
+    try:
+        LimitThrottle(obj)
+        Draw(obj)
+        UpdateParticles(obj)
+    except Exception as e:
+        obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
+        obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
+        obj.restart = True
+        if not obj.isWeb:
+            AlertSound = obj.sounds["alert.wav"]
+            player = AlertSound.play()
+            del(player)
+        obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not draw frame", 200, obj))
+        print("INTERNAL ERROR: Could not draw frame: " + str(e))
+    #second block: perform value and physics simulation
+    try:
+        CheckJoints(obj)
+        Checkparts(obj)
+        utils.DisplayMoney(obj)
+        DistanceBonuses(obj)
+    except Exception as e:
+        obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
+        obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
+        obj.restart = True
+        if not obj.isWeb:
+            AlertSound = obj.sounds["alert.wav"]
+            player = AlertSound.play()
+            del(player)
+        obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 200, obj))
+        print("INTERNAL ERROR: Could not simulate physics: " + str(e))
 
 def FindFreight(obj):
     c = 0
@@ -461,6 +445,12 @@ def setup(obj):
     obj.body_floor = pymunk.Body(1, 100, body_type=pymunk.Body.STATIC)
     obj.body_floor.position = (0,0)
     obj.space.add(obj.body_floor)
+
+    #minimap setup
+    obj.MinimapSize = (400, 180)
+    #must be between 2 and 100 (2 low 4 normal 8 medium 14 high >30 very high)
+    obj.MinimapRange = 4
+    obj.MinimapSurface = pygame.Surface(obj.MinimapSize)
 
 """Function for translating the old data stored in obj.Vehicle and obj.VehicleJoints into  pymunk joints and bodies.
 Creates obj.NewVehicle, obj.VehicleTypes, obj.NewVehicleJoints, obj.PymunkBodies, obj.PymunkJoints (versions of the old data with
@@ -632,6 +622,3 @@ def TransferStage(obj):
     text = "Freight value: " + str(obj.RideMoneyMultiplier)
     obj.RideMoneyMultiplier=round(obj.RideMoneyMultiplier)
     obj.TextAnimations.append(interactions.TextAnimation(text, 200, obj))
-    #display freight value as text animation
-     
-    

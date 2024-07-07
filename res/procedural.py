@@ -98,19 +98,14 @@ def generate_chunk(obj):
 
 def PreparePolygons(obj):
     #write a long list of all polygon x and y vertices
-    #blit the pygame poly on a surface that can be blitted to the main screen with offset xpos and ypos
-    #and add the lines with the colors env[groundcolors] on top of it
     #form a lot of pymunk polys and put them in a list to use later for the physics simulation
 
     PygamePolygon = []
     Xscale = obj.Environment["Terrain"]["Scale"]
-
     c = 0
     while c < len(obj.Terrain):
         PygamePolygon.append(((Xscale * c - 10), obj.Terrain[c])) #dont forget bottom edge points later
-
         c += 1
-    
     #print("PygamePolygon: ", PygamePolygon)
 
     #creating pymunk and pygame polygons
@@ -123,9 +118,7 @@ def PreparePolygons(obj):
         ItemB = PygamePolygon[c+1]
         ItemAX = ItemA[0]
         ItemBX = ItemB[0]
-
         Vertices = [ItemA, ItemB, (ItemBX, 25100), (ItemAX, 25100)]
-
         #creating the polygon vertices
         Poly = Vertices
         PymunkPolygons.append(Poly)
@@ -134,8 +127,6 @@ def PreparePolygons(obj):
         Vertices = [ItemA, ItemB, (ItemBX, -25100), (ItemAX, -25100)]
         PygamePolygons.append(Vertices)
     
-    print("ok")
     obj.PygamePolygons = PygamePolygon
     obj.PymunkPolygons = PymunkPolygons
     time.sleep(1)
-
