@@ -216,6 +216,20 @@ def respond(obj):
             raise ImportError("Vehicle File not found")
     #TODO: #8 
     #implement scalability by scaling all size values of parts by scaleX before starting in building mode
-
-    utils.displayLoadText(obj, "All Done!")
-    time.sleep(0.2)
+    #scaling all part images
+    time.sleep(0.1)
+    c = 0
+    for part in obj.partdict.values():
+        utils.clear(obj.window)
+        utils.displayLoadText(obj,f"scaling part {part}")
+        partimages = part["Textures"]
+        for texturedata in partimages:
+            utils.clear(obj.window)
+            utils.displayLoadText(obj,f"scaling image {texturedata}")
+            image = obj.textures[texturedata["Image"]]
+            #zoom MISSING!
+            image = pygame.transform.scale(image, utils.MultiplyTuple(texturedata["Size"], 1))
+            obj.textures[texturedata["Image"]] = image
+    utils.clear(obj.window)
+    utils.displayLoadText(obj,"ALL DONE!")
+    time.sleep(0.1)

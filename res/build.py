@@ -141,7 +141,7 @@ class PartInventory():
                 Image = self.textures[part["Textures"][0]["Image"]]
                 Cost = part["Cost"]
                 #draw low alpha version if part is not available
-                Image = pygame.transform.scale(Image, part["Textures"][0]["Size"])
+                #Image = pygame.transform.scale(Image, part["Textures"][0]["Size"])
 
                 obj.screen.blit(Image, ( X + self.ScrollX, obj.dimensions[1] * 0.85))
                 #making the part clickable

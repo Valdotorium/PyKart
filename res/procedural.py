@@ -129,4 +129,3 @@ def PreparePolygons(obj):
     
     obj.PygamePolygons = PygamePolygon
     obj.PymunkPolygons = PymunkPolygons
-    time.sleep(1)

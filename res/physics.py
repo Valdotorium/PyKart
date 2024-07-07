@@ -244,7 +244,7 @@ def Draw(obj):
             Image = obj.textures[Image]
             Rotation = BodyRotation
             if obj.isWeb:
-                Image = pygame.transform.scale(Image, PartTextures[cc]["Size"])
+                #Image = pygame.transform.scale(Image, PartTextures[cc]["Size"])
                 Image = pygame.transform.rotate(Image, Rotation)
                 Position = utils.AddTuples(BodyPosition, utils.RotateVector(PartTextures[cc]["Pos"], -BodyRotation))
             else:
