@@ -72,7 +72,7 @@ def setup(obj):
         AssetChance = round(AssetChance / 2.5)
     AssetCount = len(obj.Environment["Visuals"]["Assets"])
     x = 0
-    obj.Terrain.append(-90000)
+    obj.Terrain.append(-10000)
     while x < 7500:
         r = random.uniform(0,100)
         if r < AssetChance and x > 40:

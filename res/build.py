@@ -159,7 +159,7 @@ class PartInventory():
                     obj.SelectedPart = True
                     obj.UserIsPlacingPart = True
                 #buy part if money is enough
-                elif IsClicked and self.ClickCooldown < 0 and obj.money >= Cost:
+                elif IsClicked and self.ClickCooldown < 0 and obj.money >= Cost and not obj.UserIsPlacingPart:
                     if obj.debug:
                         print("Clicked")
                     self.ClickCooldown = 20

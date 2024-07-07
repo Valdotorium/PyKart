@@ -131,23 +131,23 @@ class Cursor():
                 pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
         
         if self.CurrentAnimation == "Snap":
-            if self.animationticks >= 30:
+            if self.animationticks >= 20:
                 self.animationticks = 0
                 self.CurrentAnimation = None
-            if self.animationticks <= 30:
-                self.color = (100 ,110 + self.animationticks * 4 ,100)
-                self.radius = 10 + self.animationticks * 3
-                self.thickness = 18 - int(self.animationticks / 2)
+            if self.animationticks <= 20:
+                self.color = (100 ,110 + self.animationticks * 5 ,100)
+                self.radius = 10 + self.animationticks * 4
+                self.thickness = 25 - int(self.animationticks * 1.2)
                 pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
 
         if self.CurrentAnimation == "Place":
-            if self.animationticks >= 55:
+            if self.animationticks >= 32:
                 self.animationticks = 0
                 self.CurrentAnimation = None
-            if self.animationticks <= 45:
-                self.color = (200 - self.animationticks * 2 ,200 - self.animationticks * 2 ,200)
-                self.radius = 10 + self.animationticks * 4
-                self.thickness =  31 - int(self.animationticks/1.5)
+            if self.animationticks <= 28:
+                self.color = (200 - self.animationticks * 3 ,200 - self.animationticks * 3 ,200)
+                self.radius = 10 + self.animationticks * 5
+                self.thickness =  31 - self.animationticks
                 pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
         self.animationticks += 1
         print(self.animationticks, self.CurrentAnimation)

@@ -51,7 +51,7 @@ class Tutorial():
             self.Page = 0
         if self.Page > len(self.contents) - 1:
             self.Page = len(self.contents) - 1
-        text = obj.largeboldfont.render("Page: "+str(self.Page)+" "+ self.contents[self.Page]["Title"], True, (20,20,20))
+        text = obj.largeboldfont.render("Page "+str(self.Page)+" of "+ str(len(self.contents) - 1)+ ": "+ self.contents[self.Page]["Title"], True, (20,20,20))
         obj.screen.blit(text, (int(obj.dimensions[0] * 0.2), 60))
         self.CurrentArticle = self.contents[self.Page]["Contents"]
         if obj.debug:
@@ -67,16 +67,10 @@ class Tutorial():
                         text = obj.largefont.render(line, True, (20,20,20))
                     else:
                         text = obj.largeboldfont.render(line, True, (20,20,20))
-                    obj.screen.blit(text, (int(obj.dimensions[0] * 0.15), self.DrawY))
+                    obj.screen.blit(text, (int(obj.dimensions[0] * 0.2), self.DrawY))
                     self.DrawY += text.get_height() + 7
             elif element["Element"] == "IMG":
                 image = self.textures[element["Content"]]
                 image = pygame.transform.scale(image, element["Size"])
-                obj.screen.blit(image, (obj.dimensions[0] * 0.33 - element["Size"][0] / 2, self.DrawY))
+                obj.screen.blit(image, (obj.dimensions[0] * 0.2, self.DrawY))
                 self.DrawY += element["Size"][1] + 5
- 
-
-        
-        
-    
-

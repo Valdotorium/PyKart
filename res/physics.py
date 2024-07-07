@@ -124,12 +124,11 @@ def DisplayEarnedMoney(obj):
 #physics
 #performance killer! needs to be improved +TODO #17
 def WriteTerrainAssets(obj):
-    Drawrange = int(obj.dimensions[0] * 4)
+    Drawrange = int(obj.dimensions[0] * 1.3)
     Drawrange = int(Drawrange / obj.Environment["Terrain"]["Scale"])
     x = int(obj.X_Position // obj.Environment["Terrain"]["Scale"])
 
     PolygonAssets = []
-    Drawrange = int(obj.dimensions[0] * 1.25)
     endx = x + Drawrange
     #the polygon points between x and enx get rendered
     while x < round(endx) and endx < len(obj.Terrain):
@@ -174,8 +173,8 @@ def PygamePolygons(obj):
     while CurrentItem < EndItem:
         Vertices.append(obj.PygamePolygons[CurrentItem])
         CurrentItem += 1
-    Vertices.append((Vertices[len(Vertices)-1][0], -10000))
-    Vertices.append((Vertices[0][0], -10000))
+    Vertices.append((Vertices[len(Vertices)-1][0], -7500))
+    Vertices.append((Vertices[0][0], -7500))
     #offset all vertices by XOffset and YOffset
     Vertices = [(x - XOffset, y - YOffset) for x, y in Vertices]
 
