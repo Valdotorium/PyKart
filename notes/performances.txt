@@ -3,6 +3,7 @@ Version, Date, CPU% [Build Idle, Build Active, Drive Idle, Drive Active]
 1.0.6    , 21.5.2024, 40, 41, 57, 61
 1.0.2-web, 3.7.2024 , 34, 35, 57, 61
 1.0.2    , 3.7.2024,  36, 36, 47, 59
+1.1-web  , 7.7.2024,  28, 28, 33, 34 (51 when at 0m!, fix)
 
 PERFORMANCE UPDATE 1.1: 
 -draw entire ground poly once and then blit onto screen with xpos and ypos as offset (-10% +- 4)
@@ -13,3 +14,6 @@ PERFORMANCE UPDATE 1.1:
 
 note 6.7:
 -up to 30% performance improvements (a.l. 20%)
+
+note7.7:
+-actually its about 40-45%

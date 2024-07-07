@@ -11,10 +11,11 @@
         "Weight": 75,
         "Bounciness": 0.004,
         "JoiningBehavior": "Provide",
+        "RequiresOxygen": true,
         "Power": 925
 
     },
-    "ShowProperties": ["Weight", "Power"],
+    "ShowProperties": ["Weight", "Power", "RequiresOxygen"],
     "JointData": {
         "BreakPoint": 62000,
         "Hardness": 0.98,

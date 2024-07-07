@@ -9,6 +9,7 @@ class BiomeSelection():
         self.TicksInCurrentSelectedBiome = 0
         self.ScrollX = 0
         self.Biomes = obj.biomes
+        self.ScrollSpeed = 0
     def update(self, obj):
         
         obj.screen.fill((130,130,130))
@@ -18,7 +19,7 @@ class BiomeSelection():
         CurrentBiome = list(self.Biomes)[CurrentItem]
         CurrentBiome = self.Biomes[CurrentBiome]
         startX = obj.dimensions[0] / 2 - 500
-        XPos = startX
+        XPos = startX + self.ScrollX
         c = 0
         self._CurrentSelectedBiome = self.CurrentSelectedBiome
         while c < len(self.Biomes):
@@ -39,11 +40,11 @@ class BiomeSelection():
                 obj.screen.blit(BackgroundImage, (0,0))
             BiomeImage = BiomeImage.convert()
             BiomeImage = pygame.transform.scale(BiomeImage, (500,500))
-            obj.screen.blit(BiomeImage, (XPos, obj.dimensions[1] / 2 - 250))
+            obj.screen.blit(BiomeImage, (XPos , obj.dimensions[1] / 2 - 250))
             #draw a white rect around the biome image with width 5
             pygame.draw.rect(obj.screen, (255,255,255), (XPos, obj.dimensions[1] / 2 - 250,500,500), 6,6)
             #getting the current selected biome from the mouse position
-            self.CurrentHoveredBiome = round((mx  - (startX)- 90 + self.ScrollX) / 180)
+            self.CurrentHoveredBiome = round((mx  - (startX)- self.ScrollX- 90 ) / 180)
             if self.CurrentHoveredBiome < 0:
                 self.CurrentHoveredBiome = 0
             if self.CurrentHoveredBiome > len(self.Biomes) - 1:
@@ -62,9 +63,9 @@ class BiomeSelection():
                     pygame.draw.rect(obj.screen, (255,255,255), (XPos, obj.dimensions[1] / 2 - 250,500,500), 4+int(self.TicksInCurrentSelectedBiome / 3),4+int(self.TicksInCurrentSelectedBiome / 3))
                 else:
                     pygame.draw.rect(obj.screen, (255,255,255), (XPos, obj.dimensions[1] / 2 - 250,500,500), 16,16)
-                if 100 < self.TicksInCurrentSelectedBiome < 355:
+                if 40 < self.TicksInCurrentSelectedBiome < 160:
                     #the start button fades in
-                    PlayButtonImg.set_alpha(self.TicksInCurrentSelectedBiome - 100)
+                    PlayButtonImg.set_alpha(self.TicksInCurrentSelectedBiome * 2 - 40)
                     #print("DDDD")
                     PlayButton = interactions.ButtonArea(obj, PlayButtonImg, (XPos + 50, obj.dimensions[1] / 2 - 200), utils.Scale(obj,[64,64]))
                     if PlayButton:
@@ -74,7 +75,7 @@ class BiomeSelection():
                         SelectedBiome = list(self.Biomes)[self.CurrentSelectedBiome]
                         SelectedBiome = self.Biomes[SelectedBiome]
                         obj.SelectedEnvironment = SelectedBiome["Name"]
-                elif self.TicksInCurrentSelectedBiome >= 355:
+                elif self.TicksInCurrentSelectedBiome >= 160:
                     PlayButton = interactions.ButtonArea(obj, PlayButtonImg, (XPos + 50, obj.dimensions[1] / 2 - 200), utils.Scale(obj,[64,64]))
                     if PlayButton:
                         if obj.debug:
@@ -116,8 +117,19 @@ class BiomeSelection():
         #display at the bottom, centered
         obj.screen.blit(text, (obj.dimensions[0] / 2 - text.get_width()/ 2, obj.dimensions[1] - 90))
 
-        
+        RightButton = interactions.ButtonArea(obj, obj.textures["ButtonRight.png"], utils.Scale(obj,(obj.dimensions[0] - 100,obj.dimensions[1] - 90)), utils.Scale(obj,[80,80]))
+        if RightButton:
+            self.ScrollSpeed = -20
+        LeftButton = interactions.ButtonArea(obj, obj.textures["ButtonLeft.png"], (100,obj.dimensions[1] - 90), utils.Scale(obj,[80,80]))
+        if LeftButton:
+            self.ScrollSpeed = 20
 
-
-
+        self.ScrollX += self.ScrollSpeed
+        if self.ScrollX > 0:
+            self.ScrollX = 0
+        if self.ScrollX < -len(obj.biomes) * 180:
+            self.ScrollX = -len(obj.biomes) * 180
+        self.ScrollSpeed *= 0.9
+        if -0.5 < self.ScrollSpeed < 0.5:
+            self.ScrollSpeed = 0
 

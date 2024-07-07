@@ -44,7 +44,7 @@ class Game():
         self.window = pygame.display.set_mode((1200,800), pygame.RESIZABLE)
         self.rldimensions = (1200,800)
         self.window.fill((100,100,100))
-        pygame.display.set_caption("PyKart - v 1.0.2")
+        pygame.display.set_caption("PyKart - v 1.1")
         self.lastFrameTime = time.time()
         self.frameTime = time.time()
         #DEV options
@@ -65,8 +65,6 @@ class Game():
         self.KeyCooldown = 0
         self.CFG_New_Game = False
 
-        
-        
         #STATIC
         #game vars
         self.TextAnimations = []
@@ -80,7 +78,7 @@ class Game():
         self.VehicleSpeed = 0
         self.fpsFactor = 1
         self.UserHasRotatedPart = False
-        self.money = 100000
+        self.money = 25000
         self.particles = []
         self.xp = 0        
         self.SoundPlayer = pyglet.media.Player()
@@ -128,7 +126,7 @@ class Game():
             self.window.blit(self.screen, (0, 0))
         pygame.display.flip()
 
-    @utils.timing_val
+    
     def run(self):
         #the game scripts called every frame
         self.money = round(self.money)
@@ -292,10 +290,10 @@ async def main():
             Exo.fps = round(Exo.fps / 1.3)
         if Exo.fps * 1.2 < 1 /(Exo.frameTime - Exo.lastFrameTime):
             Exo.fps = round(Exo.fps * 1.3)
-        if Exo.fps > 60:
-            Exo.fps = 60
-        if Exo.fps < 16:
-            Exo.fps = 16
+        if Exo.fps > 50:
+            Exo.fps = 50
+        if Exo.fps < 14:
+            Exo.fps = 14
         if Exo.debug:
             print(Exo.fps)
 
@@ -309,7 +307,6 @@ async def main():
                 frame = resetFrames(Exo, frame)
         if running == False:
             res.transfer.run(Exo)
-def core():
-    asyncio.run(main())
 
-cProfile.run("core()", sort="tottime")
+asyncio.run(main())
+

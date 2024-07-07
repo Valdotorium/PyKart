@@ -7,8 +7,9 @@ def GameControls(obj):
         obj.Throttle -= 4.6 / obj.fpsFactor
     for event in pygame.event.get():
         if event.type == pygame.MOUSEWHEEL:
-            print("Scroll")
-            print(event.x, event.y)
+            if obj.debug:
+                print("Scroll")
+                print(event.x, event.y)
             if event.y < 0:
                 obj.GameZoom += 0.01
             elif event.y > 0:

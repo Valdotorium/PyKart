@@ -1,10 +1,10 @@
 {
-    "Gravity": [0,120],
+    "Gravity": [0,100],
     "Name": "Moon",
     "Background": [150, 150, 150],
     "Preview": "preview_moon.png",
     "MoneyMultiplicator": 1.5,
-    "Description": "Less Gravity and Greyscale",
+    "Description": "Less Gravity and Greyscale. (No Oxygen Available)",
     "Visuals":{
         "GroundColors": [[200, 200, 200], [160,160, 170], [110, 110, 117], [110, 107, 108]],  
         "LayerHeights": [20,30,34,36],
@@ -28,6 +28,6 @@
     "Physics":{
         "Friction": 1,
         "Bounce": 0.04,
-        "Oxygen": true
+        "Oxygen": false
     }
 }

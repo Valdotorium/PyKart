@@ -54,11 +54,16 @@ def ApplyThrottle(obj, WheelPart, Force):
 def Engine(obj,EnginePart, WheelPart):
     #TODO: for more features: store the obj.NewVehicle as a list of Part objects (new class),
     #for easier value management of individual parts
-    if obj.Throttle != 0:
-        IndexOfWheelBody = obj.NewVehicle.index(WheelPart)
-        EnginePower = EnginePart["Properties"]["Power"] * WheelPart["Properties"]["Force"] * (WheelPart["Properties"]["Weight"] / 28)
-        ApplyThrottle(obj, IndexOfWheelBody, EnginePower)
-@utils.timing_val
+    if obj.Environment["Physics"]["Oxygen"] == True:
+        if obj.Throttle != 0:
+            IndexOfWheelBody = obj.NewVehicle.index(WheelPart)
+            EnginePower = EnginePart["Properties"]["Power"] * WheelPart["Properties"]["Force"] * (WheelPart["Properties"]["Weight"] / 28)
+            ApplyThrottle(obj, IndexOfWheelBody, EnginePower)
+    else:
+        if obj.Throttle != 0 and not EnginePart["Properties"]["RequiresOxygen"]:
+            IndexOfWheelBody = obj.NewVehicle.index(WheelPart)
+            EnginePower = EnginePart["Properties"]["Power"] * WheelPart["Properties"]["Force"] * (WheelPart["Properties"]["Weight"] / 28)
+            ApplyThrottle(obj, IndexOfWheelBody, EnginePower)
 def ExecuteControlPart(obj, index):
     Properties = obj.NewVehicle[index]["Properties"]
     #stabilisators here
@@ -104,7 +109,7 @@ def UpdateParticles(obj):
                 #print("delete particle")
                 obj.particles.pop(obj.particles.index(particle))
         else:
-            if particle.frame > particle.duration / 2:
+            if particle.frame > int(particle.duration / 1.5):
                 #print("delete particle")
                 obj.particles.pop(obj.particles.index(particle))
 def DisplayEarnedMoney(obj):
@@ -134,7 +139,7 @@ def WriteTerrainAssets(obj):
         #PolygonAssets format: [None, None, [AssetData], None...]
         x += 1
     obj.PolygonAssets = PolygonAssets
-@utils.timing_val
+
 def PymunkGroundPolygon(obj, Env):
     Drawrange = obj.dimensions[0] * 1.2
     Drawrange = int(Drawrange / obj.Environment["Terrain"]["Scale"])
@@ -156,9 +161,9 @@ def PymunkGroundPolygon(obj, Env):
     #remove all shapes attached to obj.body_floor
     for shape in obj.body_floor.shapes:
         obj.space.remove(shape)
-@utils.timing_val 
+ 
 def PygamePolygons(obj):
-    Drawrange = int(obj.dimensions[0] * 1.25)
+    Drawrange = int(obj.dimensions[0] * 1.2)
     Drawrange = int(Drawrange / obj.Environment["Terrain"]["Scale"])
     CurrentItem = int(obj.X_Position // obj.Environment["Terrain"]["Scale"])
     EndItem = CurrentItem + Drawrange
@@ -175,10 +180,9 @@ def PygamePolygons(obj):
     Vertices = [(x - XOffset, y - YOffset) for x, y in Vertices]
 
     #draw all the polygons to the screen
-    pygame.draw.polygon(obj.screen, obj.Environment["Background"], Vertices)
+    pygame.draw.polygon(obj.screen, (obj.Environment["Background"]), Vertices)
     Vertices = Vertices[:-2]
-    pygame.draw.lines(obj.screen, (20,20,20), False,Vertices, 20)
-    print("drew ",Drawrange, "Polygons" )
+    LineVertices = Vertices
     c = 0
     while c < len(obj.PolygonAssets) and c < len(Vertices):
         if obj.PolygonAssets[c] != None:
@@ -188,9 +192,19 @@ def PygamePolygons(obj):
             AssetSize = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["size"]
             AssetImage = pygame.transform.scale(AssetImage,AssetSize)
             AssetOffset = obj.Environment["Visuals"]["Assets"][obj.PolygonAssets[c]]["offset"]
-            obj.screen.blit(AssetImage, (Point[0] + AssetOffset[0], Point[1] + AssetOffset[1]))
-                            
+            obj.screen.blit(AssetImage, (Point[0] + AssetOffset[0], Point[1] + AssetOffset[1]))               
         c += 1
+    c = 0
+    #ground lines
+    while c < len(obj.Environment["Visuals"]["LayerHeights"]):
+        layerheight = obj.Environment["Visuals"]["LayerHeights"][c]
+        #move all vertices down by the current layerheight
+        pygame.draw.lines(obj.screen, obj.Environment["Visuals"]["GroundColors"][c], False,LineVertices, layerheight)
+        c += 1
+        cc = 0
+        while cc < len(Vertices):
+            Vertices[cc] = (Vertices[cc][0], Vertices[cc][1] + layerheight)
+            cc += 1
 def DrawMinimap(obj):
     DownscaleFactor = int(obj.dimensions[0] * obj.MinimapRange) / int(obj.dimensions[0] / (obj.dimensions[0] / obj.MinimapSize[0]))
     BackwardsRange = 8
@@ -208,7 +222,6 @@ def DrawMinimap(obj):
         if CurrentItem > -1 and EndItem < len(obj.PygamePolygons) - 2 and CurrentItem % obj.MinimapRange == 0:
             Vertices.append(obj.PygamePolygons[CurrentItem])
         CurrentItem += 1
-
     #offset all vertices by XOffset and YOffset
     Vertices = [(x / DownscaleFactor - XOffset, y / DownscaleFactor - YOffset) for x, y in Vertices]
     #draw a white line at the vertices
@@ -221,7 +234,7 @@ def DrawMinimap(obj):
 
 """Drawing the Vehicle"""
 #performance killer! needs improvements TODO #16
-@utils.timing_val
+
 def Draw(obj):
     #drawing the background
     WriteTerrainAssets(obj)
@@ -364,7 +377,7 @@ def DistanceBonuses(obj):
 
         obj.TextAnimations.append(interactions.TextAnimation(text, 150, obj))
 """The pymunk physics simulation"""
-@utils.timing_val
+
 def simulate(obj, fps):
     obj._MetersTravelled = obj.MetersTravelled
     Env = obj.Environment
@@ -402,7 +415,6 @@ def simulate(obj, fps):
             del(player)
         obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 200, obj))
         print("INTERNAL ERROR: Could not simulate physics: " + str(e))
-
 def FindFreight(obj):
     c = 0
     obj.RideMoneyMultiplier = 1
@@ -432,7 +444,6 @@ def setup(obj):
     obj.VehicleFuelUse = 0
     obj.rpm = 0
     obj.StuntMoneyForRide = 0
-
     #kilometerwise money bonuses
     obj.NextKilometer = 1000
     obj.MetersTravelled = 0

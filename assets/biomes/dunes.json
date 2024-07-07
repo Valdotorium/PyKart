@@ -19,8 +19,9 @@
             {"image": "asset_bush_1.jpg", "size": [120,120], "offset": [-70, -70]},
             {"image": "asset_bush_2.png", "size": [200,170], "offset": [-170, -120]},
             {"image": "asset_bush_3.png", "size": [150,200], "offset": [-130, -170]},
-            {"image": "asset_cactus_2.jpg", "size": [150,300], "offset": [-120, -260]}],
-        "AssetFrequency": 4.8
+            {"image": "asset_cactus_2.jpg", "size": [150,300], "offset": [-120, -260]},
+            {"image": "asset_rock_9.png", "size": [70,45], "offset": [-55, -34]}],
+        "AssetFrequency": 5
     },
     "Terrain":{
         "Scale": 70,
@@ -33,7 +34,7 @@
         "RandomNoise": [false]
     },
     "Physics":{
-        "Friction": 0.8,
+        "Friction": 0.725,
         "Bounce": 0.04,
         "Oxygen": true
     }

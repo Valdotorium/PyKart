@@ -48,7 +48,7 @@ class Tutorial():
         text = obj.largeboldfont.render("Page: "+str(self.Page)+" "+ self.contents[self.Page]["Title"], True, (20,20,20))
         obj.screen.blit(text, (int(obj.dimensions[0] * 0.25), 60))
         self.CurrentArticle = self.contents[self.Page]["Contents"]
-        print(self.CurrentArticle)
+        #print(self.CurrentArticle)
         for element in self.CurrentArticle:
             if element["Element"] == "TEXT":
                 for line in element["Content"]:

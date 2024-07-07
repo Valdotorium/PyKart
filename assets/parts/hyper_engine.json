@@ -2,7 +2,7 @@
     "Name": "Hyper Engine",
     "Index": 2,
     "Type": "Engine",
-    "Cost": 35000,
+    "Cost": 32000,
     "Center": [32,64],
     "Stex": "hyper_engine.png",
     "Properties": {
@@ -11,10 +11,11 @@
         "Weight": 134,
         "Bounciness": 0.015,
         "JoiningBehavior": "Provide",
+        "RequiresOxygen": true,
         "Power": 2250
     },
     "Description": ["The best engine of all time. Heavy. Powerful. High-Tech.", "provides power to connected wheels."],
-    "ShowProperties": ["Weight", "Power"],
+    "ShowProperties": ["Weight", "Power", "RequiresOxygen"],
     "JointData": {
         "BreakPoint": 86000,
         "Hardness": 0.98,

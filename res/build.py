@@ -205,7 +205,6 @@ class PartInventory():
 
 def discardPartPlacement(obj):
         if obj.UserHasRotatedPart:
-            print("rot")
             obj.UserHasRotatedPart = False
             pass
         else:
@@ -289,7 +288,6 @@ def run(obj):
     c = 0
     #background for inventory tiles
     obj.PartInventory.update(obj)
-    print(obj.selectedPart)
 
     #------------------------------The play button----------------------------------------------------------------
     #count the items that are none in obj.vehicle
@@ -411,11 +409,8 @@ def run(obj):
                     #check if a joint of the part curently selected is closer than 15 * scaleX pixels to a placed joint
                     if obj.JointPositions[c][1][0] - 15 * scaleX < JointPositionsOfSelectedPart[cc][0] < obj.JointPositions[c][1][0] + 15 * scaleX:
                         if obj.JointPositions[c][1][1] - 15 * scaleX < JointPositionsOfSelectedPart[cc][1] < obj.JointPositions[c][1][1] + 15 * scaleX:
-                            if obj.debug:
-                                print("Found joint at", cc)
                             
                             mx,my = (obj.JointPositions[c][1][0] - RelativeJointPositionsOfSelectedPart[cc][0], obj.JointPositions[c][1][1] - RelativeJointPositionsOfSelectedPart[cc][1])
-                            
                             obj.Cursor.SetSnap()
                             #check if pairing of joints is invalid (if both joints have type "Accept")
                             #TODO: only one joint can be created in snapping, fix later.
@@ -661,7 +656,6 @@ def run(obj):
         RectPos = utils.AddTuples(RectPos, utils.DivideTuple(obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Pos"], 1))
         pygame.draw.rect(obj.screen, (250,225,225), (RectPos[0], RectPos[1],partSize[0], partSize[1]), 2,2)
         #checking if the selected part is being clicked for over 10 frames, if true, then move part
-        print(obj.Cursor.clickedTicks)
         if RectPos[0] < mx < RectPos[0] + partSize[0] and RectPos[1] < my < RectPos[1] + partSize[1] and obj.Cursor.clickedTicks >= 10:
             obj.moveSelectedPart = True
             obj.Cursor.SetArrows()

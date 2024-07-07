@@ -144,7 +144,6 @@ def CreateGroundPolygon(obj, Env):
     obj.GroundPolygon = []
 
     c = 0
-    print(obj.X_Position)
     while c < len(obj.StaticPolygon) - 1:
         VectA = obj.StaticPolygon[c]
         VectB = obj.StaticPolygon[c+1]
@@ -169,7 +168,7 @@ def GetConnectedParts(obj,joint):
     PartB = obj.NewVehicle[joint["JoinedParts"][1]]
     IndexPartA = joint["JoinedParts"][0]
     IndexPartB = joint["JoinedParts"][1]
-    print(IndexPartA,IndexPartB)
+    #(IndexPartA,IndexPartB)
     return [PartA,PartB]
 def JointHasType(obj,joint, type):
     #check if a joint is connected to a part of a specific type
