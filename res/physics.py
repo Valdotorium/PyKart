@@ -204,6 +204,9 @@ def PygamePolygons(obj):
         while cc < len(Vertices):
             Vertices[cc] = (Vertices[cc][0], Vertices[cc][1] + layerheight)
             cc += 1
+#drawing springs on spring joints
+def DrawSpring(obj, PartA, PartB):
+    pass
 def DrawMinimap(obj):
     DownscaleFactor = int(obj.dimensions[0] * obj.MinimapRange) / int(obj.dimensions[0] / (obj.dimensions[0] / obj.MinimapSize[0]))
     BackwardsRange = 8
@@ -318,7 +321,7 @@ def CheckJoints(obj):
 
                 Engine(obj,utils.JointHasType(obj, obj.NewVehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.NewVehicleJoints[c], "Wheel"))
                 #mechanics.Engine(obj,utils.JointHasType(obj, obj.VehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.VehicleJoints[c], "Wheel"))
-            if JointImpulse > ImpulseLimit:
+            if JointImpulse > ImpulseLimit * (40 / obj.fps):
                 if obj.debug:
                     print("JointImpulse of joint ", c, "(", JointImpulse, ") was too high, it broke.")
                 r = random.randint(1,4)
@@ -339,6 +342,15 @@ def CheckJoints(obj):
                 obj.VehicleJoints[c] = None
                 obj.PymunkJoints[c] = None
                 obj.StuntMoneyForRide += 25
+            #drawing some springs between parts
+            if obj.PymunkJoints[c] != None and obj.NewVehicleJoints[c] != None and utils.JointHasType(obj, obj.NewVehicleJoints[c], "Wheel"):
+                print("HAAH")
+                if type(obj.NewVehicleJoints[c]) == pymunk.constraints.DampedSpring:
+                    PartA = obj.PymunkJoints[c].a
+                    PartB = obj.PymunkJoints[c].b
+                    AnchorA = obj.PymunkJoints[c].anchor_a
+                    AnchorB = obj.PymunkJoints[c].anchor_b
+                    DrawSpring(obj, PartA, PartB)
         c += 1
 def DistanceBonuses(obj):
     if obj._MetersTravelled  <= obj.NextKilometer and obj.MetersTravelled > obj.NextKilometer:
@@ -399,21 +411,21 @@ def simulate(obj, fps):
         obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not draw frame", 200, obj))
         print("INTERNAL ERROR: Could not draw frame: " + str(e))
     #second block: perform value and physics simulation
-    try:
-        CheckJoints(obj)
-        Checkparts(obj)
-        utils.DisplayMoney(obj)
-        DistanceBonuses(obj)
-    except Exception as e:
-        obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
-        obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
-        obj.restart = True
-        if not obj.isWeb:
-            AlertSound = obj.sounds["alert.wav"]
-            player = AlertSound.play()
-            del(player)
-        obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 200, obj))
-        print("INTERNAL ERROR: Could not simulate physics: " + str(e))
+    #try:
+    CheckJoints(obj)
+    Checkparts(obj)
+    utils.DisplayMoney(obj)
+    DistanceBonuses(obj)
+    #except Exception as e:
+    #    obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
+    #    obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
+    #    obj.restart = True
+    #    if not obj.isWeb:
+    #        AlertSound = obj.sounds["alert.wav"]
+    #        player = AlertSound.play()
+    #        del(player)
+    #    obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 200, obj))
+    #    print("INTERNAL ERROR: Could not simulate physics: " + str(e))
 def FindFreight(obj):
     c = 0
     obj.RideMoneyMultiplier = 1

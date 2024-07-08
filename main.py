@@ -39,7 +39,7 @@ if sys.platform == "emscripten":
 
 class Game():
     def __init__(self):
-        #PYGAME variables
+        #PYGAME variables     
         self.window = pygame.display.set_mode((1200,800), pygame.RESIZABLE)
         self.rldimensions = (1200,800)
         self.window.fill((100,100,100))
