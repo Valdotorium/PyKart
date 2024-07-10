@@ -205,8 +205,12 @@ def PygamePolygons(obj):
             Vertices[cc] = (Vertices[cc][0], Vertices[cc][1] + layerheight)
             cc += 1
 #drawing springs on spring joints
-def DrawSpring(obj, PartA, PartB):
-    pass
+def DrawSpring(obj, BodyA, BodyB, AnchorA, AnchorB):
+    StartPoint = (BodyA.position[0] + AnchorA[0] - obj.X_Position, BodyA.position[1] + AnchorA[1] - obj.Y_Position)
+    EndPoint = (BodyB.position[0] + AnchorB[0] - obj.X_Position, BodyB.position[1] + AnchorB[1] - obj.Y_Position)
+    print(StartPoint, EndPoint)
+    pygame.draw.line(obj.screen, (255, 255, 255), StartPoint, EndPoint, 10)
+
 def DrawMinimap(obj):
     DownscaleFactor = int(obj.dimensions[0] * obj.MinimapRange) / int(obj.dimensions[0] / (obj.dimensions[0] / obj.MinimapSize[0]))
     BackwardsRange = 8
@@ -310,8 +314,17 @@ def CheckJoints(obj):
     #checking the latest impulse divided by fps
     #if the impulse exceeds a set limit, the joint breaks
     c = 0
-    while c < len(obj.PymunkJoints) and c < len(obj.NewVehicleJoints):
+    while c < len(obj.NewVehicleJoints) and c < len(obj.PymunkJoints):
         if obj.PymunkJoints[c]!= None and obj.NewVehicleJoints[c] != None:
+            #drawing some springs between parts
+            if isinstance(obj.PymunkJoints[c], pymunk.constraints.DampedSpring):
+                #somehow does not work ehen c is the last part, must be an error in nvjoints or pkjoints creation
+                PartA, PartB = obj.PymunkJoints[c].a, obj.PymunkJoints[c].b
+                
+                AnchorA = obj.PymunkJoints[c].anchor_a
+                AnchorB = obj.PymunkJoints[c].anchor_b
+                
+                DrawSpring(obj, PartA, PartB, AnchorA, AnchorB)
             JointImpulse = obj.PymunkJoints[c].impulse
             ImpulseLimit = obj.NewVehicleJoints[c]["JointData"]["BreakPoint"]
             #perform mechanics here
@@ -342,15 +355,6 @@ def CheckJoints(obj):
                 obj.VehicleJoints[c] = None
                 obj.PymunkJoints[c] = None
                 obj.StuntMoneyForRide += 25
-            #drawing some springs between parts
-            if obj.PymunkJoints[c] != None and obj.NewVehicleJoints[c] != None and utils.JointHasType(obj, obj.NewVehicleJoints[c], "Wheel"):
-                print("HAAH")
-                if type(obj.NewVehicleJoints[c]) == pymunk.constraints.DampedSpring:
-                    PartA = obj.PymunkJoints[c].a
-                    PartB = obj.PymunkJoints[c].b
-                    AnchorA = obj.PymunkJoints[c].anchor_a
-                    AnchorB = obj.PymunkJoints[c].anchor_b
-                    DrawSpring(obj, PartA, PartB)
         c += 1
 def DistanceBonuses(obj):
     if obj._MetersTravelled  <= obj.NextKilometer and obj.MetersTravelled > obj.NextKilometer:
@@ -400,6 +404,7 @@ def simulate(obj, fps):
         LimitThrottle(obj)
         Draw(obj)
         UpdateParticles(obj)
+        CheckJoints(obj)
     except Exception as e:
         obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
         obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
@@ -412,7 +417,6 @@ def simulate(obj, fps):
         print("INTERNAL ERROR: Could not draw frame: " + str(e))
     #second block: perform value and physics simulation
     #try:
-    CheckJoints(obj)
     Checkparts(obj)
     utils.DisplayMoney(obj)
     DistanceBonuses(obj)
