@@ -18,7 +18,7 @@
     "Description": ["A wheel removed from a shopping cart.it is very stable and has less damping", "connect it to an engine to power it"],
     "ShowProperties": ["Weight", "Force"],
     "JointData": {
-        "BreakPoint": 40000,
+        "BreakPoint": 9000,
         "Type": "Spring",
         "Data":{
             "Distance": 64,

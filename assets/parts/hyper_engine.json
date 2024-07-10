@@ -12,7 +12,7 @@
         "Bounciness": 0.015,
         "JoiningBehavior": "Provide",
         "RequiresOxygen": true,
-        "Power": 2250
+        "Power": 2000
     },
     "Description": ["The best engine of all time. Heavy. Powerful. High-Tech.", "provides power to connected wheels."],
     "ShowProperties": ["Weight", "Power", "RequiresOxygen"],

@@ -30,7 +30,61 @@ However, there currently is no way of finding out to which joint a part is conne
 built around joints.
 sorry and will do better in the next game, Valdotorium, 24/3/2024"""
 #mechanics
+"""Checking if joints need to be broken, playing crashing sounds, performing core game mechanics besides physics(why is this here?)"""
+def Checkparts(obj):
+    c = 0
+    while c < len(obj.PymunkBodies) and c < len(obj.NewVehicle):
+        if obj.NewVehicle[c]["Type"] == "Engine":
+            particles.ParticleEffect(obj, "Exhaust", c)
+        elif obj.NewVehicle[c]["Type"] == "Control":
+            ExecuteControlPart(obj, c)
+        c += 1
+def CheckJoints(obj):
+    #checking the latest impulse divided by fps
+    #if the impulse exceeds a set limit, the joint breaks
+    c = 0
+    while c < len(obj.NewVehicleJoints) and c < len(obj.PymunkJoints):
+        if obj.PymunkJoints[c]!= None and obj.NewVehicleJoints[c] != None:
+            #drawing some springs between parts
+            if isinstance(obj.PymunkJoints[c], pymunk.constraints.DampedSpring):
+                print(obj.PymunkJoints[c].impulse)
+                #somehow does not work ehen c is the last part, must be an error in nvjoints or pkjoints creation
+                PartA, PartB = obj.PymunkJoints[c].a, obj.PymunkJoints[c].b
+                
+                AnchorA = obj.PymunkJoints[c].anchor_a
+                AnchorB = obj.PymunkJoints[c].anchor_b
+                
+                DrawSpring(obj, PartA, PartB, AnchorA, AnchorB)
+            JointImpulse = obj.PymunkJoints[c].impulse
+            ImpulseLimit = obj.NewVehicleJoints[c]["JointData"]["BreakPoint"]
+            #perform mechanics here
+            #is the joint connecting an Engine and an Wheel?
+            if utils.JointHasType(obj, obj.NewVehicleJoints[c], "Engine") != False and utils.JointHasType(obj, obj.NewVehicleJoints[c], "Wheel") != False:
+                #if yes, perform engine mechanics with the two parts
 
+                Engine(obj,utils.JointHasType(obj, obj.NewVehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.NewVehicleJoints[c], "Wheel"))
+                #mechanics.Engine(obj,utils.JointHasType(obj, obj.VehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.VehicleJoints[c], "Wheel"))
+            if JointImpulse > ImpulseLimit * (40 / obj.fps):
+                if obj.debug:
+                    print("JointImpulse of joint ", c, "(", JointImpulse, ") was too high, it broke.")
+                r = random.randint(1,4)
+                if r == 1:
+                    obj.TextAnimations.append(interactions.TextAnimation("CRUNCH +25", 100, obj))
+                elif r == 2:
+                    obj.TextAnimations.append(interactions.TextAnimation("SMASH + 25", 100, obj))
+                elif r == 3:
+                    obj.TextAnimations.append(interactions.TextAnimation("BONK +25", 100, obj))
+                elif r == 4:
+                    obj.TextAnimations.append(interactions.TextAnimation("CRACK +25", 100, obj))
+                ParticlePartA = obj.NewVehicleJoints[c]["JoinedParts"][1]
+                ParticlePartB = obj.NewVehicleJoints[c]["JoinedParts"][0]
+                particles.ParticleEffect(obj, "Break", ParticlePartA)
+                particles.ParticleEffect(obj, "Break", ParticlePartB)
+                obj.space.remove(obj.PymunkJoints[c])
+                obj.NewVehicleJoints[c] = None
+                obj.PymunkJoints[c] = None
+                obj.StuntMoneyForRide += 25
+        c += 1
 """Function that makes wheels go brrrrrrr"""
 def LimitThrottle(obj):
     if 0 < obj.Throttle < 0.5:
@@ -208,8 +262,7 @@ def PygamePolygons(obj):
 def DrawSpring(obj, BodyA, BodyB, AnchorA, AnchorB):
     StartPoint = (BodyA.position[0] + AnchorA[0] - obj.X_Position, BodyA.position[1] + AnchorA[1] - obj.Y_Position)
     EndPoint = (BodyB.position[0] + AnchorB[0] - obj.X_Position, BodyB.position[1] + AnchorB[1] - obj.Y_Position)
-    print(StartPoint, EndPoint)
-    pygame.draw.line(obj.screen, (255, 255, 255), StartPoint, EndPoint, 10)
+    pygame.draw.line(obj.screen, (105, 100, 95), StartPoint, EndPoint, 10)
 
 def DrawMinimap(obj):
     DownscaleFactor = int(obj.dimensions[0] * obj.MinimapRange) / int(obj.dimensions[0] / (obj.dimensions[0] / obj.MinimapSize[0]))
@@ -245,6 +298,7 @@ def Draw(obj):
     #drawing the background
     WriteTerrainAssets(obj)
     PygamePolygons(obj)
+    CheckJoints(obj)
     c = 0
     #obj.space.debug_draw(obj.draw_options)
     while c < len(obj.PymunkBodies):
@@ -301,61 +355,7 @@ def Draw(obj):
 """Drawing the pymunk physics simulation"""
 def PhysDraw(obj):
     obj.space.debug_draw(obj.draw_options)
-"""Checking if joints need to be broken, playing crashing sounds, performing core game mechanics besides physics(why is this here?)"""
-def Checkparts(obj):
-    c = 0
-    while c < len(obj.PymunkBodies) and c < len(obj.NewVehicle):
-        if obj.NewVehicle[c]["Type"] == "Engine":
-            particles.ParticleEffect(obj, "Exhaust", c)
-        elif obj.NewVehicle[c]["Type"] == "Control":
-            ExecuteControlPart(obj, c)
-        c += 1
-def CheckJoints(obj):
-    #checking the latest impulse divided by fps
-    #if the impulse exceeds a set limit, the joint breaks
-    c = 0
-    while c < len(obj.NewVehicleJoints) and c < len(obj.PymunkJoints):
-        if obj.PymunkJoints[c]!= None and obj.NewVehicleJoints[c] != None:
-            #drawing some springs between parts
-            if isinstance(obj.PymunkJoints[c], pymunk.constraints.DampedSpring):
-                #somehow does not work ehen c is the last part, must be an error in nvjoints or pkjoints creation
-                PartA, PartB = obj.PymunkJoints[c].a, obj.PymunkJoints[c].b
-                
-                AnchorA = obj.PymunkJoints[c].anchor_a
-                AnchorB = obj.PymunkJoints[c].anchor_b
-                
-                DrawSpring(obj, PartA, PartB, AnchorA, AnchorB)
-            JointImpulse = obj.PymunkJoints[c].impulse
-            ImpulseLimit = obj.NewVehicleJoints[c]["JointData"]["BreakPoint"]
-            #perform mechanics here
-            #is the joint connecting an Engine and an Wheel?
-            if utils.JointHasType(obj, obj.NewVehicleJoints[c], "Engine") != False and utils.JointHasType(obj, obj.NewVehicleJoints[c], "Wheel") != False:
-                #if yes, perform engine mechanics with the two parts
 
-                Engine(obj,utils.JointHasType(obj, obj.NewVehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.NewVehicleJoints[c], "Wheel"))
-                #mechanics.Engine(obj,utils.JointHasType(obj, obj.VehicleJoints[c], "Engine"),utils.JointHasType(obj, obj.VehicleJoints[c], "Wheel"))
-            if JointImpulse > ImpulseLimit * (40 / obj.fps):
-                if obj.debug:
-                    print("JointImpulse of joint ", c, "(", JointImpulse, ") was too high, it broke.")
-                r = random.randint(1,4)
-                if r == 1:
-                    obj.TextAnimations.append(interactions.TextAnimation("CRUNCH +25", 100, obj))
-                elif r == 2:
-                    obj.TextAnimations.append(interactions.TextAnimation("SMASH + 25", 100, obj))
-                elif r == 3:
-                    obj.TextAnimations.append(interactions.TextAnimation("BONK +25", 100, obj))
-                elif r == 4:
-                    obj.TextAnimations.append(interactions.TextAnimation("CRACK +25", 100, obj))
-                ParticlePartA = obj.NewVehicleJoints[c]["JoinedParts"][1]
-                ParticlePartB = obj.NewVehicleJoints[c]["JoinedParts"][0]
-                particles.ParticleEffect(obj, "Break", ParticlePartA)
-                particles.ParticleEffect(obj, "Break", ParticlePartB)
-                obj.space.remove(obj.PymunkJoints[c])
-                obj.NewVehicleJoints[c] = None
-                obj.VehicleJoints[c] = None
-                obj.PymunkJoints[c] = None
-                obj.StuntMoneyForRide += 25
-        c += 1
 def DistanceBonuses(obj):
     if obj._MetersTravelled  <= obj.NextKilometer and obj.MetersTravelled > obj.NextKilometer:
         obj.NextKilometer += 1000
@@ -404,7 +404,7 @@ def simulate(obj, fps):
         LimitThrottle(obj)
         Draw(obj)
         UpdateParticles(obj)
-        CheckJoints(obj)
+
     except Exception as e:
         obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
         obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
@@ -417,6 +417,7 @@ def simulate(obj, fps):
         print("INTERNAL ERROR: Could not draw frame: " + str(e))
     #second block: perform value and physics simulation
     #try:
+    #CheckJoints(obj) -moved into draw because of springs
     Checkparts(obj)
     utils.DisplayMoney(obj)
     DistanceBonuses(obj)
@@ -607,7 +608,6 @@ def TransferStage(obj):
             PartnerB = obj.VehicleJoints[c]["JoinedParts"][1]
             IndexTypePartnerB = PartnerB
             if obj.Vehicle[PartnerA] != None and obj.Vehicle[PartnerB] != None:
-                obj.NewVehicleJoints.append(obj.VehicleJoints[c])
                 #the size of the hitbox of PartnerA / 2
                 AnchorA = utils.RotateVector(obj.Vehicle[PartnerA]["Hitbox"]["Anchor"], -obj.Vehicle[PartnerA]["Rotation"])
                 Vector = utils.RotateVector(obj.Vehicle[PartnerA]["Center"], -obj.Vehicle[PartnerA]["Rotation"])
@@ -627,11 +627,16 @@ def TransferStage(obj):
                     Joint = pymunk.constraints.DampedSpring(PartnerA,PartnerB,AnchorA,AnchorB, JointData["Data"]["Distance"], JointData["Data"]["Stiffness"], JointData["Data"]["Damping"])
                     obj.PymunkJoints.append(Joint)
                     obj.space.add(Joint)
+                    
                     if obj.debug:
                         print("Vector of grrove:",(AnchorA,(utils.RotateVector((0,JointData["Data"]["Distance"]), -(obj.Vehicle[IndexTypePartnerB]["Rotation"]- obj.Vehicle[IndexTypePartnerA]["Rotation"])))) )
                     Joint = pymunk.constraints.GrooveJoint(PartnerA, PartnerB, AnchorA, utils.AddTuples(AnchorA,(utils.RotateVector((0,JointData["Data"]["Distance"]), -(obj.Vehicle[IndexTypePartnerB]["Rotation"]- obj.Vehicle[IndexTypePartnerA]["Rotation"])))), AnchorB)
                     obj.PymunkJoints.append(Joint)
                     obj.space.add(Joint)
+                    obj.NewVehicleJoints.append(obj.VehicleJoints[c])
+                    obj.NewVehicleJoints.append(None)
+                    #equalizing lens of newvehiclejoints and pymunkjoints
+                    
 
                 if JointType == "Solid":
                     #relative position of the pivot joint t the position of PartnerA
@@ -642,6 +647,7 @@ def TransferStage(obj):
                         print("Creating PivotJoint at position:",PivotPoint)
                     obj.PymunkJoints.append(Joint)
                     obj.space.add(Joint)
+                    obj.NewVehicleJoints.append(obj.VehicleJoints[c])
         c += 1
 
     FindFreight(obj)

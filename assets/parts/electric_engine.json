@@ -12,7 +12,7 @@
         "Bounciness": 0.004,
         "JoiningBehavior": "Provide",
         "RequiresOxygen": false,
-        "Power": 625
+        "Power": 620
 
     },
     "Description": ["Large Box containing everything a electric engine needs. Very heavy and extremely powerful.", "provides power to connected wheels."],

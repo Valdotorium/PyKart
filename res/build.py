@@ -211,6 +211,8 @@ def discardPartPlacement(obj):
             obj.SnappedJointData = None
             obj.selectedPart = ""
             obj.RotationOfSelectedPart = 0
+            obj.UserIsPlacingPart = False
+            obj.Cursor.SetDelete()
         
 def DeletePart(obj):
     print(f"part {obj.SelectedBuiltPart} deleted")
@@ -540,8 +542,7 @@ def run(obj):
                         "ShowProperties": obj.partdict[obj.selectedPart]["ShowProperties"],
                         "Description": obj.partdict[obj.selectedPart]["Description"],
                     }
-                    obj.UserIsPlacingPart = False
-                    obj.Cursor.SetPlace()
+
                     #reducing the count of the part in obj.partdict
                     obj.partdict[obj.selectedPart]["Count"] -= 1
                     #if a joint need to be formed, its data will be created here
@@ -551,17 +552,17 @@ def run(obj):
                             PlacedPart["JoinedWith"].append(obj.SnappedJointData[c]["JoinedParts"])
                             obj.VehicleJoints.append(obj.SnappedJointData[c])
                             c += 1
-
                     else:
                         PlacedPart["JoinedWith"] = []
                     obj.Vehicle.append(PlacedPart)
-
                     if not obj.isWeb:
                         PlaceSound = obj.sounds["select.wav"]
                         PlaceSound.play()
                     print(f"part {obj.selectedPart} placed at {(mx,my)}")
                     #part gets unselected
                     discardPartPlacement(obj)
+                    obj.UserIsPlacingPart = False
+                    obj.Cursor.SetPlace()
                 else:
                     #part placement invalid, unselect
                     if not obj.isWeb:
@@ -661,27 +662,10 @@ def run(obj):
             obj.Cursor.SetArrows()
     #------------------------------The Reload Vehicle Button---------------------------------------
     if not obj.isWeb:
-        CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(__file__)))
         ReloadButton = interactions.ButtonArea(obj, obj.textures["ReloadButton.png"], utils.Scale(obj,(140,30)), utils.Scale(obj,[60,60]))
         if ReloadButton:
-            print("loading latest vehicle")
-            try:
-                VehicleFile = open(CurrentPath+"/assets/saves/latest_vehicle.json")
-                obj.Vehicle = json.load(VehicleFile)
-                if obj.debug:
-                    print(f"loaded vehicle: ", obj.Vehicle)
-                VehicleJointFile = open(CurrentPath+"/assets/saves/latest_vehicle_joints.json")
-                obj.VehicleJoints = json.load(VehicleJointFile)
-                if obj.debug:
-                    print(f"loaded vehicle joints: ", obj.VehicleJoints)
-                VehicleHitboxFile = open(CurrentPath+"/assets/saves/latest_vehicle_hitboxes.json")
-                obj.VehicleHitboxes = json.load(VehicleHitboxFile)
-                if obj.debug:
-                    print(f"loaded vehicle hitboxes: ", obj.VehicleHitboxes)
-                #that could be buggy
-                #obj.gm = "transfer"
-            except:
-                raise ImportError("Vehicle File not found")
+            utils.ReloadVehicle(obj)
+
         
     #------------------------------The Part Info Button---------------------------------------
     PartInfoButton = interactions.ButtonArea(obj, obj.textures["infoButton.png"], utils.Scale(obj,(460,30)), utils.Scale(obj,[60,60]))

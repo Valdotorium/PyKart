@@ -62,7 +62,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200,800)
         self.KeyCooldown = 0
-        self.CFG_New_Game = False
+        self.CFG_New_Game = True
 
         #STATIC
         #game vars
@@ -229,6 +229,8 @@ class Game():
             self.StuntMoneyForRide = 0
             self.DistanceMoneyForRide = 0
             self.gm = "build"
+            utils.ReloadVehicle(self)
+
             self.GroundPolygons = []
             self.X_Position = 0
             self.Y_Position = 0

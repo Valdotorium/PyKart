@@ -12,7 +12,7 @@
         "Bounciness": 0.004,
         "JoiningBehavior": "Provide",
         "RequiresOxygen": true,
-        "Power": 330
+        "Power": 300
 
     },
     "JointData": {

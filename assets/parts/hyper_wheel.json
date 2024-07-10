@@ -18,7 +18,7 @@
     "Description": ["The best wheel of all time. Heavy. Powerful. High-Tech.", "connect it to an engine to power it"],
     "ShowProperties": ["Weight", "Force"],
     "JointData": {
-        "BreakPoint": 28000,
+        "BreakPoint": 6500,
         "Type": "Spring",
         "Data":{
             "Distance": 66,

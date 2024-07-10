@@ -3,6 +3,8 @@ import pymunk
 import copy
 import pyglet.media
 import time
+import json
+import os
 
 
 #some small helpers to make code shorter and maybe more radable
@@ -286,5 +288,26 @@ class Credits():
             self.frames += 1
             
 
+def ReloadVehicle(obj):
+    CurrentPath = os.path.dirname(os.path.realpath(os.path.dirname(os.path.realpath(os.path.dirname(__file__)))))
 
+
+    print("loading latest vehicle")
+    try:
+        VehicleFile = open(CurrentPath+"/assets/saves/latest_vehicle.json")
+        obj.Vehicle = json.load(VehicleFile)
+        if obj.debug:
+            print(f"loaded vehicle: ", obj.Vehicle)
+        VehicleJointFile = open(CurrentPath+"/assets/saves/latest_vehicle_joints.json")
+        obj.VehicleJoints = json.load(VehicleJointFile)
+        if obj.debug:
+            print(f"loaded vehicle joints: ", obj.VehicleJoints)
+        VehicleHitboxFile = open(CurrentPath+"/assets/saves/latest_vehicle_hitboxes.json")
+        obj.VehicleHitboxes = json.load(VehicleHitboxFile)
+        if obj.debug:
+            print(f"loaded vehicle hitboxes: ", obj.VehicleHitboxes)
+        #that could be buggy
+        #obj.gm = "transfer"
+    except:
+        raise ImportError("Vehicle File not found")
          
