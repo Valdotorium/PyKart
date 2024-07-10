@@ -47,7 +47,7 @@ def CheckJoints(obj):
         if obj.PymunkJoints[c]!= None and obj.NewVehicleJoints[c] != None:
             #drawing some springs between parts
             if isinstance(obj.PymunkJoints[c], pymunk.constraints.DampedSpring):
-                print(obj.PymunkJoints[c].impulse)
+
                 #somehow does not work ehen c is the last part, must be an error in nvjoints or pkjoints creation
                 PartA, PartB = obj.PymunkJoints[c].a, obj.PymunkJoints[c].b
                 
@@ -633,10 +633,12 @@ def TransferStage(obj):
                     Joint = pymunk.constraints.GrooveJoint(PartnerA, PartnerB, AnchorA, utils.AddTuples(AnchorA,(utils.RotateVector((0,JointData["Data"]["Distance"]), -(obj.Vehicle[IndexTypePartnerB]["Rotation"]- obj.Vehicle[IndexTypePartnerA]["Rotation"])))), AnchorB)
                     obj.PymunkJoints.append(Joint)
                     obj.space.add(Joint)
+                
                     obj.NewVehicleJoints.append(obj.VehicleJoints[c])
                     obj.NewVehicleJoints.append(None)
-                    #equalizing lens of newvehiclejoints and pymunkjoints
-                    
+                    #equalizing lens of newvehiclejoints and pymunkjoints, because two joints are being created for pymunk
+                    #but only one is for saving in newvehiclejoints, but to equalize the lengths of both lists, it is important
+                    #to also add an empty item to newvehiclejoints
 
                 if JointType == "Solid":
                     #relative position of the pivot joint t the position of PartnerA
