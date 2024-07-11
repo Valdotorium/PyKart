@@ -84,6 +84,12 @@ def CheckJoints(obj):
                 obj.NewVehicleJoints[c] = None
                 obj.PymunkJoints[c] = None
                 obj.StuntMoneyForRide += 25
+                #for springjoints, also remove the groovejoint always placed directly after it
+                if c+1 < len(obj.NewVehicleJoints)-1 and isinstance(obj.PymunkJoints[c+1], pymunk.constraints.GrooveJoint):
+                    obj.space.remove(obj.PymunkJoints[c+1])
+                    obj.NewVehicleJoints[c+1] = None
+                    obj.PymunkJoints[c+1] = None
+                    obj.StuntMoneyForRide += 25
         c += 1
 """Function that makes wheels go brrrrrrr"""
 def LimitThrottle(obj):
