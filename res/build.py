@@ -305,7 +305,7 @@ def run(obj):
         PlayButtonImg = obj.textures["PlayButton.png"]
         PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[90,90]))
         PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[40,20]), utils.Scale(obj,[90,90]))
-        if PlayButton:
+        if PlayButton and not obj.UserIsPlacingPart:
             if not obj.isWeb:
                 SelectSound = obj.sounds["click.wav"]
                 SelectSound.play()
@@ -593,61 +593,64 @@ def run(obj):
     if obj.SelectedBuiltPart != None:
         UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(300,30)), utils.Scale(obj,[60,60]))
         if UnselectButton or pygame.key.get_pressed()[pygame.K_s]:
-            obj.credits.visible = False
-            obj.CurrentPartUI.part = None
-            obj.SelectedBuiltPart = None
-            if not obj.isWeb:
-                SelectSound = obj.sounds["click.wav"]
-                SelectSound.play()
-        
+            if not obj.UserIsPlacingPart:
+                obj.credits.visible = False
+                obj.CurrentPartUI.part = None
+                obj.SelectedBuiltPart = None
+                if not obj.isWeb:
+                    SelectSound = obj.sounds["click.wav"]
+                    SelectSound.play() 
         #---------------------The Delete Part Button--------------------------------
         DeleteButton = interactions.ButtonArea(obj, obj.textures["DeleteButton.png"], utils.Scale(obj,(220,30)), utils.Scale(obj,[60,60]))
         if DeleteButton or pygame.key.get_pressed()[pygame.K_x]:
-            if not obj.isWeb:
-                SelectSound = obj.sounds["tyre_2.wav"]
-                SelectSound.play()
-            obj.Cursor.SetDelete()
-            obj.partdict[obj.Vehicle[obj.SelectedBuiltPart]["name"]]["Count"] += 1
-            #removed parts are still list items, but they will be ignored
-            obj.Vehicle[obj.SelectedBuiltPart] = None
-            DeletePart(obj)
+            if not obj.UserIsPlacingPart:
+                if not obj.isWeb:
+                    SelectSound = obj.sounds["tyre_2.wav"]
+                    SelectSound.play()
+                obj.Cursor.SetDelete()
+                obj.partdict[obj.Vehicle[obj.SelectedBuiltPart]["name"]]["Count"] += 1
+                #removed parts are still list items, but they will be ignored
+                obj.Vehicle[obj.SelectedBuiltPart] = None
+                DeletePart(obj)
         
     #------------------------------The Move Part Button------------------------------------------
         MoveButton = interactions.ButtonArea(obj, obj.textures["MoveButton.png"], utils.Scale(obj,(380,30)), utils.Scale(obj,[60,60]))
         if MoveButton or pygame.key.get_pressed()[pygame.K_m] or obj.moveSelectedPart and not obj.UserIsPlacingPart:
-            if not obj.isWeb:
-                SelectSound = obj.sounds["click.wav"]
-                SelectSound.play()
-            obj.partdict[obj.Vehicle[obj.SelectedBuiltPart]["name"]]["Count"] += 1
-            #esentially deleting the part
-            SelectedPart = obj.SelectedBuiltPart
-            obj.selectedPart = obj.Vehicle[SelectedPart]["name"]
-            #storing the position of the part that is going to be deleted
-            PartPosition = obj.Vehicle[SelectedPart]["Pos"]
-            PartPosition =utils.AddTuples(PartPosition, obj.Vehicle[SelectedPart]["Center"])
-            #removed parts are still list items, but they will be ignored
-            obj.Vehicle[obj.SelectedBuiltPart] = None
-            DeletePart(obj)
-            obj.SelectedPart = True
-            obj.UserIsPlacingPart = True
-            #setting mouse pos to pos of selected part
-            pygame.mouse.set_pos(PartPosition)
-            mx, my = pygame.mouse.get_pos()
-            obj.Cursor.SetArrows()
+            if not obj.UserIsPlacingPart:
+                if not obj.isWeb:
+                    SelectSound = obj.sounds["click.wav"]
+                    SelectSound.play()
+                obj.partdict[obj.Vehicle[obj.SelectedBuiltPart]["name"]]["Count"] += 1
+                #esentially deleting the part
+                SelectedPart = obj.SelectedBuiltPart
+                obj.selectedPart = obj.Vehicle[SelectedPart]["name"]
+                #storing the position of the part that is going to be deleted
+                PartPosition = obj.Vehicle[SelectedPart]["Pos"]
+                PartPosition =utils.AddTuples(PartPosition, obj.Vehicle[SelectedPart]["Center"])
+                #removed parts are still list items, but they will be ignored
+                obj.Vehicle[obj.SelectedBuiltPart] = None
+                DeletePart(obj)
+                obj.SelectedPart = True
+                obj.UserIsPlacingPart = True
+                #setting mouse pos to pos of selected part
+                pygame.mouse.set_pos(PartPosition)
+                mx, my = pygame.mouse.get_pos()
+                obj.Cursor.SetArrows()
     #---------------------The Sell Part Button--------------------------------
         SellButton = interactions.ButtonArea(obj, obj.textures["returnButton.png"], utils.Scale(obj,(540,30)), utils.Scale(obj,[60,60]))
         if SellButton or pygame.key.get_pressed()[pygame.K_r]:
-            if not obj.isWeb:
-                SelectSound = obj.sounds["coinbag.wav"]
-                SelectSound.play()
-            obj.Cursor.SetDelete()
-            #returning 80% of the money to the user
-            obj.money += obj.Vehicle[obj.SelectedBuiltPart]["refundValue"]
-            #removed parts are still list items, but they will be ignored
-            obj.Vehicle[obj.SelectedBuiltPart] = None
-            obj.Cursor.SetSell()
+            if not obj.UserIsPlacingPart:
+                if not obj.isWeb:
+                    SelectSound = obj.sounds["coinbag.wav"]
+                    SelectSound.play()
+                obj.Cursor.SetDelete()
+                #returning 80% of the money to the user
+                obj.money += obj.Vehicle[obj.SelectedBuiltPart]["refundValue"]
+                #removed parts are still list items, but they will be ignored
+                obj.Vehicle[obj.SelectedBuiltPart] = None
+                obj.Cursor.SetSell()
 
-            DeletePart(obj)
+                DeletePart(obj)
         
     #------------------------------Marking the selected part-------------------------------------
     obj.moveSelectedPart = False
@@ -663,14 +666,14 @@ def run(obj):
     #------------------------------The Reload Vehicle Button---------------------------------------
     if not obj.isWeb:
         ReloadButton = interactions.ButtonArea(obj, obj.textures["ReloadButton.png"], utils.Scale(obj,(140,30)), utils.Scale(obj,[60,60]))
-        if ReloadButton:
+        if ReloadButton and not obj.UserIsPlacingPart:
             utils.ReloadVehicle(obj)
 
         
     #------------------------------The Part Info Button---------------------------------------
     PartInfoButton = interactions.ButtonArea(obj, obj.textures["infoButton.png"], utils.Scale(obj,(460,30)), utils.Scale(obj,[60,60]))
     if PartInfoButton or pygame.key.get_pressed()[pygame.K_i]:
-        if obj.SelectedBuiltPart != None and obj.CurrentPartUI.part == None:
+        if obj.SelectedBuiltPart != None and obj.CurrentPartUI.part == None and not obj.UserIsPlacingPart:
             if not obj.isWeb:
                 SelectSound = obj.sounds["click.wav"]
                 SelectSound.play()
@@ -679,14 +682,14 @@ def run(obj):
         obj.CurrentPartUI.update(obj)
     #------------------------------The Credits Button---------------------------------------
     CreditButton = interactions.ButtonArea(obj, obj.textures["logo.png"], utils.Scale(obj,(obj.dimensions[0] - 100,20)), utils.Scale(obj,[80,80]))
-    if CreditButton:
+    if CreditButton and not obj.UserIsPlacingPart:
         obj.credits.visible = True
         if not obj.isWeb:
             player = obj.sounds["click.wav"].play()
             del(player)
     #------------------------------The Tutorial Button---------------------------------------
     TutButton = interactions.ButtonArea(obj, obj.textures["tutorial.png"], utils.Scale(obj,(obj.dimensions[0] - 200,20)), utils.Scale(obj,[80,80]))
-    if TutButton:
+    if TutButton  and not obj.UserIsPlacingPart:
         obj.gm = "tutorial"
         if not obj.isWeb:
             player = obj.sounds["click.wav"].play()
