@@ -268,7 +268,7 @@ def PygamePolygons(obj):
 def DrawSpring(obj, BodyA, BodyB, AnchorA, AnchorB):
     StartPoint = (BodyA.position[0] + AnchorA[0] - obj.X_Position, BodyA.position[1] + AnchorA[1] - obj.Y_Position)
     EndPoint = (BodyB.position[0] + AnchorB[0] - obj.X_Position, BodyB.position[1] + AnchorB[1] - obj.Y_Position)
-    pygame.draw.line(obj.screen, (105, 100, 95), StartPoint, EndPoint, 10)
+    pygame.draw.line(obj.screen, (125, 121, 114), StartPoint, EndPoint, 10)
 
 def DrawMinimap(obj):
     DownscaleFactor = int(obj.dimensions[0] * obj.MinimapRange) / int(obj.dimensions[0] / (obj.dimensions[0] / obj.MinimapSize[0]))
@@ -304,6 +304,7 @@ def Draw(obj):
     #drawing the background
     WriteTerrainAssets(obj)
     PygamePolygons(obj)
+    UpdateParticles(obj)
     CheckJoints(obj)
     c = 0
     #obj.space.debug_draw(obj.draw_options)
@@ -341,7 +342,7 @@ def Draw(obj):
     obj.rpm = (int(obj.VehicleSpeed * 10) + int(obj.Throttle * 75) + random.randint(896, 904)) * 1
     #drawing speed and rpm display
     obj.SpeedDisplay.update(obj,obj.VehicleSpeed, 0.95)
-    obj.RPMDisplay.update(obj,obj.rpm, 0.045)
+    obj.RPMDisplay.update(obj,obj.rpm , 0.045)
     #draw minimap (unexpected :o)
     DrawMinimap(obj)
     #displaying distance
@@ -409,7 +410,7 @@ def simulate(obj, fps):
     try:
         LimitThrottle(obj)
         Draw(obj)
-        UpdateParticles(obj)
+        
 
     except Exception as e:
         obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier

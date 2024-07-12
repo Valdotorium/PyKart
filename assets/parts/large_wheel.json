@@ -22,7 +22,7 @@
         "Data":{
             "Distance": 100,
             "Damping": 2.6,
-            "Stiffness": 2700
+            "Stiffness": 2300
         }
     },
     "Description": ["A upscaled version of the normal wheel", "connect it to an engine to power it."],

@@ -18,7 +18,7 @@
     "Description": ["A wheel which can resust large amounts of pressure it can spin very fast", "connect it to an engine to power it"],
     "ShowProperties": ["Weight", "Force"],
     "JointData": {
-        "BreakPoint": 6000,
+        "BreakPoint": 4000,
         "Type": "Spring",
         "Data":{
             "Distance": 68,

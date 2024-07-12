@@ -190,7 +190,7 @@ class Display:
         self.position = position
     def RotateHand(self, variable, multiplicator,obj):
         NullOrientation = (0,0)
-        self.HandAngle = ((1/48)*obj.fps) * (variable * multiplicator)
+        self.HandAngle = variable * multiplicator
         self.HandAngle = math.radians(self.HandAngle)
         if self.HandAngle > math.radians(self.maxRotation):
             self.HandAngle = math.radians(self.maxRotation)

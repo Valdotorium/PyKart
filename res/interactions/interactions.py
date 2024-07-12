@@ -150,7 +150,6 @@ class Cursor():
                 self.thickness =  31 - self.animationticks
                 pygame.draw.circle(obj.screen, self.color, self.position,self.radius, self.thickness)
         self.animationticks += 1
-        print(self.animationticks, self.CurrentAnimation)
 
     def SetArrows(self):
         self.CurrentAnimation = "ArrowsOut"

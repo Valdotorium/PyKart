@@ -137,7 +137,7 @@ def RedFlame(obj, bodyindex, hasRotation, positionOffset, count):
         ParticlePosition = utils.AddTuples(ParticlePosition, (-obj.X_Position, -obj.Y_Position))
         ParticlePosition = utils.AddTuples(ParticlePosition, randomPositionOffset)
         ParticlePosition = list(utils.AddTuples(ParticlePosition, positionOffset))
-        ParticleVelocity = utils.AddTuples(-obj.PymunkBodies[bodyindex].velocity, utils.RotateVector(-obj.PymunkBodies[bodyindex].velocity, utils.RadiansToDegrees(obj.PymunkBodies[bodyindex].angle)))
+        ParticleVelocity = utils.AddTuples(-obj.PymunkBodies[bodyindex].velocity , utils.RotateVector(-obj.PymunkBodies[bodyindex].velocity, utils.RadiansToDegrees(obj.PymunkBodies[bodyindex].angle)))
         #divide the tuple by obj.fps
         ParticleVelocity = list(utils.DivideTuple(ParticleVelocity, obj.fps))
         obj.particles.append(Particle(ParticleVelocity, ParticlePosition, "Red Flame", obj))

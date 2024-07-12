@@ -26,9 +26,12 @@ v1.0.2 -- 2.7.2024 ----- more intuitive touch controls and some code rewriting
 v1.1 ---- 7.7.2024 ----- up to 40% desktop performance improvements, a new landscape and various other features
 
 NOW TODO:
--draw springs
 -offset pivotjoints and make two of them to reduce wobble, balance new breakpoint Values
--update UI
+-update UI [NILS_NEUMI]
+-Separator and adapter part
+-jelly biome and assets
+-update submerged due on 22.7.
+-update 1.1 due on 15.7.
 
 GAMETEST TODOS:
 

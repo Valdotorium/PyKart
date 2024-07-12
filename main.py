@@ -53,7 +53,7 @@ class Game():
         self.running = True
         self.fps = 10
         self.restart = False
-        self.CFG_extensive_logs = True
+        self.CFG_extensive_logs = True    
         self.CFG_visuals = True
         self.CFG_debug_mode = True
         self.CFG_limit_refresh_access = False
@@ -62,7 +62,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200,800)
         self.KeyCooldown = 0
-        self.CFG_New_Game = True
+        self.CFG_New_Game = False
 
         #STATIC
         #game vars
@@ -289,8 +289,8 @@ async def main():
         
         if Exo.fps * 0.7 > 1 /(Exo.frameTime - Exo.lastFrameTime):
             Exo.fps = round(Exo.fps / 1.3)
-        if Exo.fps * 1.2 < 1 /(Exo.frameTime - Exo.lastFrameTime):
-            Exo.fps = round(Exo.fps * 1.3)
+        if Exo.fps * 1.35 < 1 /(Exo.frameTime - Exo.lastFrameTime):
+            Exo.fps = round(Exo.fps * 1.4)
         if Exo.fps > 50:
             Exo.fps = 50
         if Exo.fps < 14:

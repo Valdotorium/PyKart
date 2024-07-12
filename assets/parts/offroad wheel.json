@@ -18,7 +18,7 @@
     "Description": ["A wheel with much grip, ideal for uneven terrain", " connect it to an engine to power it"],
     "ShowProperties": ["Weight", "Force"],
     "JointData": {
-        "BreakPoint": 10000,
+        "BreakPoint": 9000,
         "Type": "Spring",
         "Data":{
             "Distance": 92,

@@ -18,7 +18,7 @@
     "Description": ["Large wheel, used for creating vehicles","that should be fast and able to drive up steep slopes", "connect it to an engine to ppower it"],
     "ShowProperties": ["Weight", "Force"],
     "JointData": {
-        "BreakPoint": 12000,
+        "BreakPoint": 10000,
         "Type": "Spring",
         "Data":{
             "Distance": 116,
