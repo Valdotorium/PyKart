@@ -409,7 +409,7 @@ def simulate(obj, fps):
     #first block: draw vehicle, ground and minimap
     try:
         LimitThrottle(obj)
-        Draw(obj)
+        PhysDraw(obj)
         
 
     except Exception as e:
@@ -657,6 +657,7 @@ def TransferStage(obj):
                     JointB = pymunk.constraints.PivotJoint(PartnerA, PartnerB, utils.AddTuples(PivotOffsetB, PivotPoint))
                     JointA.collide_bodies = True
                     JointB.collide_bodies = True
+                    #improve that, TODO #19, add more data to joints, including part dimensions
                     if obj.debug:
                         print("Creating PivotJoint at positions:",PivotPoint, "with offsets:",PivotOffsetA, PartnerB)
                     obj.PymunkJoints.append(JointA)
