@@ -16,8 +16,8 @@
     "Description": ["Double frame for everyday vehicle building use."],
     "ShowProperties": ["Weight"],
     "JointData": {
-        "BreakPoint": 28000,
-        "Hardness": 0.98,
+        "BreakPoint": 14000,
+        "Hardness": 1,
         "Type": "Solid",
         "Data":{
         }

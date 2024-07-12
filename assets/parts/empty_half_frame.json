@@ -8,7 +8,7 @@
     "Properties": {
         "Rot": 0,
         "Friction": 0.92,
-        "Weight": 10,
+        "Weight": 12,
         "Bounciness": 0.025,
         "JoiningBehavior": "Provide"
 
@@ -16,8 +16,8 @@
     "Description": ["cheap half frame for everyday vehicle building use. Not stable at all."],
     "ShowProperties": ["Weight"],
     "JointData": {
-        "BreakPoint": 7500,
-        "Hardness": 0.98,
+        "BreakPoint": 3700,
+        "Hardness": 1,
         "Type": "Solid",
         "Data":{
         }

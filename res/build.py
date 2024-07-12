@@ -379,6 +379,7 @@ def run(obj):
     JointPositionsOfSelectedPart = []
     #stores the joints positions relative to the center of the part
     RelativeJointPositionsOfSelectedPart = []
+    RotatedRelativeJointPositionsOfSelectedPart = []
     if obj.selectedPart != "":
         #TODO #7, this can probably be done by: centering all blitted graphics around their center point instead of their top left corner
         #(utils function for that?)
@@ -394,6 +395,7 @@ def run(obj):
                 JointPosition = utils.AddTuples(JointPosition,HitboxPosition)
             #rotating the joints position
             JointPosition = utils.RotateVector(JointPosition, -obj.RotationOfSelectedPart)
+            RotatedRelativeJointPositionsOfSelectedPart.append(JointPosition)
             FJointPosition = utils.AddTuples(JointPosition, (mx,my))
             JointPositionsOfSelectedPart.append(FJointPosition)
             RelativeJointPositionsOfSelectedPart.append(JointPosition)
@@ -424,11 +426,11 @@ def run(obj):
                                         print("joint pairing is invalid")
                                 #if both involved joints are providers, the joint data of the child part will get applied
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][ccc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
-                                    obj.SnappedJointData.append({"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc]], "SoundData": obj.partdict[obj.selectedPart]["Sounds"]["Crash"]})
+                                    obj.SnappedJointData.append({"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc], RotatedRelativeJointPositionsOfSelectedPart[cc]], "SoundData": obj.partdict[obj.selectedPart]["Sounds"]["Crash"]})
                                     #The Joints Data that will be saved to obj.VehicleJoints
                                 #if the new part is a acceptor and its parent is a provider, the joint data of the child part will get applied
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][ccc]["Type"] == "Provide" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Accept":
-                                    obj.SnappedJointData.append({"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc]], "SoundData": obj.partdict[obj.selectedPart]["Sounds"]["Crash"] })
+                                    obj.SnappedJointData.append({"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc], RotatedRelativeJointPositionsOfSelectedPart[cc]], "SoundData": obj.partdict[obj.selectedPart]["Sounds"]["Crash"] })
                                     #The Joints Data that will be saved to obj.VehicleJoints, format {JoinedParts: [Int,Int], JointData:{},PositionData: [Vec2d,Vec2d]}
                                     #JoinedParts stores the indexes of the two parts in obj.Vehicle
                                     #JointData stores the joint data of the (in this case) child joint
@@ -436,7 +438,7 @@ def run(obj):
                                     #obj.Jointpositions[c][1] is a tuple containing the world coordinates of the joint.
                                 #vice versa
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][ccc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
-                                    obj.SnappedJointData.append({"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc]], "SoundData": obj.partdict[obj.selectedPart]["Sounds"]["Crash"]})
+                                    obj.SnappedJointData.append({"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc], RotatedRelativeJointPositionsOfSelectedPart[cc]], "SoundData": obj.partdict[obj.selectedPart]["Sounds"]["Crash"]})
                                     #The Joints Data that will be saved to obj.VehicleJoints
                                 ccc += 1
                     cc += 1

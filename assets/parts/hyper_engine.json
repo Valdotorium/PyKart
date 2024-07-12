@@ -17,8 +17,8 @@
     "Description": ["The best engine of all time. Heavy. Powerful. High-Tech.", "provides power to connected wheels."],
     "ShowProperties": ["Weight", "Power", "RequiresOxygen"],
     "JointData": {
-        "BreakPoint": 86000,
-        "Hardness": 0.98,
+        "BreakPoint": 42000,
+        "Hardness": 1,
         "Type": "Solid",
         "Data":{
         }

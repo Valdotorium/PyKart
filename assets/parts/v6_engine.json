@@ -17,8 +17,8 @@
     },
     "ShowProperties": ["Weight", "Power", "RequiresOxygen"],
     "JointData": {
-        "BreakPoint": 40000,
-        "Hardness": 0.98,
+        "BreakPoint": 20000,
+        "Hardness": 1,
         "Type": "Solid",
         "Data":{
         }

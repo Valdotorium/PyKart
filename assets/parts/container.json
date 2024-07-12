@@ -16,7 +16,7 @@
     "Description": ["Heavy Box containing very valuable items, do not lose it!", "Transporting it increases money rewards!"],
     "ShowProperties": ["Weight", "Value"],
     "JointData": {
-        "BreakPoint": 50000,
+        "BreakPoint": 25000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{

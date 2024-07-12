@@ -18,8 +18,8 @@
     "Description": ["Heavy Box containing high-tech machinery.","Does not want to spin. Looks better if placed last.", "it will constantly try to prevent rotation", "of itself and its neighboring parts"],
     "ShowProperties": ["Weight", "LimitsAngularVelocity"],
     "JointData": {
-        "BreakPoint": 75000,
-        "Hardness": 0.98,
+        "BreakPoint": 37000,
+        "Hardness": 1,
         "Type": "Solid",
         "Data":{
         }

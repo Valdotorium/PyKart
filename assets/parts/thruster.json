@@ -19,8 +19,8 @@
     "Description": ["A very modern thruster.","It applies strong forces in the direction it is facing.", "does not require engines to operate"],
     "ShowProperties": ["Weight", "Thrust"],
     "JointData": {
-        "BreakPoint": 82000,
-        "Hardness": 0.98,
+        "BreakPoint": 40000,
+        "Hardness": 1,
         "Type": "Solid",
         "Data":{
         }

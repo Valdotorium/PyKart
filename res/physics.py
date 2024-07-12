@@ -650,13 +650,24 @@ def TransferStage(obj):
                 if JointType == "Solid":
                     #relative position of the pivot joint t the position of PartnerA
                     PivotPoint = obj.VehicleJoints[c]["PositionData"][0]
-                    Joint = pymunk.constraints.PivotJoint(PartnerA,PartnerB,PivotPoint)
-                    Joint.collide_bodies = True
+                    
+                    PivotOffsetA = (int(obj.VehicleJoints[c]["PositionData"][2][1] / 4),0)
+                    PivotOffsetB = (0,int(obj.VehicleJoints[c]["PositionData"][2][0] / 4))
+                    JointA = pymunk.constraints.PivotJoint(PartnerA,PartnerB,utils.AddTuples(PivotOffsetA, PivotPoint))
+                    JointB = pymunk.constraints.PivotJoint(PartnerA, PartnerB, utils.AddTuples(PivotOffsetB, PivotPoint))
+                    JointA.collide_bodies = True
+                    JointB.collide_bodies = True
                     if obj.debug:
-                        print("Creating PivotJoint at position:",PivotPoint)
-                    obj.PymunkJoints.append(Joint)
-                    obj.space.add(Joint)
+                        print("Creating PivotJoint at positions:",PivotPoint, "with offsets:",PivotOffsetA, PartnerB)
+                    obj.PymunkJoints.append(JointA)
+                    obj.space.add(JointA)
+                    obj.PymunkJoints.append(JointB)
+                    obj.space.add(JointB)
                     obj.NewVehicleJoints.append(obj.VehicleJoints[c])
+                    obj.NewVehicleJoints.append(obj.VehicleJoints[c])
+                    #equalizing lens of newvehiclejoints and pymunkjoints, because two joints are being created for pymunk
+                    #but only one is for saving in newvehiclejoints, but to equalize the lengths of both lists, it is important
+                    #to also add an empty item to newvehiclejoints
         c += 1
 
     FindFreight(obj)

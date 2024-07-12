@@ -18,8 +18,8 @@
     "Description": ["Large Box containing everything a electric engine needs. Very heavy and extremely powerful.", "provides power to connected wheels."],
     "ShowProperties": ["Weight", "Power", "RequiresOxygen"],
     "JointData": {
-        "BreakPoint": 75000,
-        "Hardness": 0.98,
+        "BreakPoint": 40000,
+        "Hardness": 1,
         "Type": "Solid",
         "Data":{
         }

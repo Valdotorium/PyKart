@@ -8,7 +8,7 @@
     "Properties": {
         "Rot": 0,
         "Friction": 0.92,
-        "Weight": 14,
+        "Weight": 16,
         "Bounciness": 0.035,
         "JoiningBehavior": "Provide"
 
@@ -16,8 +16,8 @@
     "ShowProperties": ["Weight"],
     "Description": ["cheap frame for everyday vehicle building use. Not very stable."],
     "JointData": {
-        "BreakPoint": 8500,
-        "Hardness": 0.98,
+        "BreakPoint": 4500,
+        "Hardness": 1,
         "Type": "Solid",
         "Data":{
         }

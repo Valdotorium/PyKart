@@ -19,7 +19,7 @@
     "Description": ["A old-school, but cheap thruster.", "It applies force in the direction it is facing.", "does not require engines to operate"],
     "ShowProperties": ["Weight", "Thrust"],
     "JointData": {
-        "BreakPoint": 50000,
+        "BreakPoint": 25000,
         "Hardness": 0.98,
         "Type": "Solid",
         "Data":{
