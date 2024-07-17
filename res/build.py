@@ -436,6 +436,9 @@ def run(obj):
                                     #JointData stores the joint data of the (in this case) child joint
                                     #PositionData stores the position of the joint in world coordinates and the position of the joint relative to the new part
                                     #obj.Jointpositions[c][1] is a tuple containing the world coordinates of the joint.
+                                    #the relative position of the joint relative to the center of the part is stored at index 2
+                                    #and the dimensions of the part is stored at index 3.
+                                    #based on these values, the position of the jointpivot joints can be calculated (for example)
                                 #vice versa
                                 if obj.Vehicle[obj.JointPositions[c][0]]["Joints"][ccc]["Type"] == "Accept" and obj.partdict[obj.selectedPart]["Joints"][cc]["Type"] == "Provide":
                                     obj.SnappedJointData.append({"JoinedParts": [obj.JointPositions[c][0], len(obj.Vehicle)], "JointData":obj.partdict[obj.selectedPart]["JointData"],"PositionData": [obj.JointPositions[c][1],JointPositionsOfSelectedPart[cc], RotatedRelativeJointPositionsOfSelectedPart[cc]], "SoundData": obj.partdict[obj.selectedPart]["Sounds"]["Crash"]})

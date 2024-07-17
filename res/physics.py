@@ -648,24 +648,25 @@ def TransferStage(obj):
                     #to also add an empty item to newvehiclejoints
 
                 if JointType == "Solid":
-                    #relative position of the pivot joint t the position of PartnerA
-                    PivotPoint = obj.VehicleJoints[c]["PositionData"][0]
-                    
-                    PivotOffsetA = (int(obj.VehicleJoints[c]["PositionData"][2][1] / 4),0)
-                    PivotOffsetB = (0,int(obj.VehicleJoints[c]["PositionData"][2][0] / 4))
-                    JointA = pymunk.constraints.PivotJoint(PartnerA,PartnerB,utils.AddTuples(PivotOffsetA, PivotPoint))
-                    JointB = pymunk.constraints.PivotJoint(PartnerA, PartnerB, utils.AddTuples(PivotOffsetB, PivotPoint))
+                    #relative position of the pin joint t the position of PartnerA
+                    PartA = obj.Vehicle[obj.VehicleJoints[c]["JoinedParts"][0]]
+                    PartB = obj.Vehicle[obj.VehicleJoints[c]["JoinedParts"][1]]
+                    PartASize = obj.Vehicle[obj.VehicleJoints[c]["JoinedParts"][0]]["Textures"][0]["Size"]
+                    PartBSize = obj.Vehicle[obj.VehicleJoints[c]["JoinedParts"][1]]["Textures"][0]["Size"]
+                    PartAPos = PartA["Pos"]
+                    PartBPos = PartB["Pos"]
+                    print(PartASize, PartBSize)
+                    PointA =[0,0]
+                    PointB = [0,0]
+                    JointA = pymunk.constraints.PinJoint(PartnerA, PartnerB, PointA, PointB)
+                    JointPosition = obj.VehicleJoints[c]["PositionData"][2]
+                    #replace pivot joints with two pin joints that are slightly offset of the centers of thhe two parts
+                    #todo #20
                     JointA.collide_bodies = True
-                    JointB.collide_bodies = True
-                    #improve that, TODO #19, add more data to joints, including part dimensions
                     if obj.debug:
-                        print("Creating PivotJoint at positions:",PivotPoint, "with offsets:",PivotOffsetA, PartnerB)
+                        print("Creating Pinjoint at position: ", JointPosition)
                     obj.PymunkJoints.append(JointA)
                     obj.space.add(JointA)
-                    obj.PymunkJoints.append(JointB)
-                    obj.space.add(JointB)
-                    obj.NewVehicleJoints.append(obj.VehicleJoints[c])
-                    obj.NewVehicleJoints.append(obj.VehicleJoints[c])
                     #equalizing lens of newvehiclejoints and pymunkjoints, because two joints are being created for pymunk
                     #but only one is for saving in newvehiclejoints, but to equalize the lengths of both lists, it is important
                     #to also add an empty item to newvehiclejoints
