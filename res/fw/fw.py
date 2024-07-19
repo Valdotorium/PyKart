@@ -175,7 +175,10 @@ def JointHasName(obj,joint,name):
         return PartB
     else: 
         return False                
+def VectorDistance(VectorA, VectorB):
 
+    #calculate the distance between two vectors
+    return math.sqrt((VectorB[0] - VectorA[0]) ** 2 + (VectorB[1] - VectorA[1]) ** 2)
 
 class Display:
     def __init__(self, obj,texture, position, maxRotation, scale):
