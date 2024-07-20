@@ -16,7 +16,7 @@
     "Description": ["half frame for everyday vehicle building use."],
     "ShowProperties": ["Weight"],
     "JointData": {
-        "BreakPoint": 10000,
+        "BreakPoint": 12000,
         "Hardness": 1,
         "Type": "Solid",
         "Data":{

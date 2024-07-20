@@ -24,6 +24,8 @@ v0.1 ---- 27.3.2024 ---- added procedural terrain
 [FILL THIS IN]
 v1.0.2 -- 2.7.2024 ----- more intuitive touch controls and some code rewriting
 v1.1 ---- 7.7.2024 ----- up to 40% desktop performance improvements, a new landscape and various other features
+v1.1.1
+v1.1.2 -- 20.7.2024 ---- significantly reduced part wobble, balancing
 
 NOW TODO:
 -offset pivotjoints and make two of them to reduce wobble, balance new breakpoint Values

@@ -18,7 +18,7 @@
     "Description": ["A small high-tech device that stabilizes vehicles.", "Looks better if placed last.", "it will constantly try to prevent rotation","of itself and its neighboring parts"],
     "ShowProperties": ["Weight", "LimitsAngularVelocity"],
     "JointData": {
-        "BreakPoint": 25000,
+        "BreakPoint": 38000,
         "Hardness": 1,
         "Type": "Solid",
         "Data":{

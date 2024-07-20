@@ -18,7 +18,7 @@
     "Description": ["Box containing modern machinery that stabilizes the vehicle.", "Looks better if placed last.", "it will constantly try to prevent rotation","of itself and its neighboring parts"],
     "ShowProperties": ["Weight", "LimitsAngularVelocity"],
     "JointData": {
-        "BreakPoint": 30000,
+        "BreakPoint": 40000,
         "Hardness": 1,
         "Type": "Solid",
         "Data":{

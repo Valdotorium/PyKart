@@ -19,7 +19,7 @@
     "Description": ["A very modern control unit, contains a super strong thruster", "and a stabilisator. Does not require engines to operate"],
     "ShowProperties": ["Weight", "Thrust", "LimitsAngularVelocity"],
     "JointData": {
-        "BreakPoint": 50000,
+        "BreakPoint": 64000,
         "Hardness": 1,
         "Type": "Solid",
         "Data":{

@@ -216,6 +216,7 @@ def PymunkGroundPolygon(obj, Env):
         
         obj.space.add(shape)
         x += 1
+    obj.space.iterations = int(40 * (48 / obj.fps))
     obj.space.step(1/obj.fps)
 
     #remove all shapes attached to obj.body_floor
@@ -410,7 +411,7 @@ def simulate(obj, fps):
     #first block: draw vehicle, ground and minimap
     try:
         LimitThrottle(obj)
-        PhysDraw(obj)
+        Draw(obj)
         
 
     except Exception as e:
@@ -460,6 +461,10 @@ def setup(obj):
         print("started with env gravity:", obj.Environment["Gravity"])
     Env = obj.Environment
     obj.space = pymunk.Space()#creating the space
+    obj.space.collision_bias = 1
+    obj.space.collision_persistence = 1
+    obj.space.collision_slop = 0.5
+    obj.space.iterations = 40
     obj.space.gravity = Env["Gravity"]
     #static floor of the simulation
     obj.RotationOfSelectedPart = 0
@@ -652,17 +657,12 @@ def TransferStage(obj):
                     #relative position of the pivot joint t the position of PartnerA
                     PivotPoint = obj.VehicleJoints[c]["PositionData"][0]
                     Joint = pymunk.constraints.PivotJoint(PartnerA,PartnerB,PivotPoint)
-                    JointB = pymunk.constraints.RotaryLimitJoint(PartnerA,PartnerB,0,0)
                     Joint.collide_bodies = True
-                    JointB.collide_bodies = True
-
                     if obj.debug:
                         print("Creating PivotJoint at position:",PivotPoint)
-
-                    obj.PymunkJoints.append(JointB)
                     obj.PymunkJoints.append(Joint)
-                    obj.space.add(JointB)
                     obj.space.add(Joint)
+                    obj.NewVehicleJoints.append(obj.VehicleJoints[c])
                     #equalizing lens of newvehiclejoints and pymunkjoints, because two joints are being created for pymunk
                     #but only one is for saving in newvehiclejoints, but to equalize the lengths of both lists, it is important
                     #to also add an empty item to newvehiclejoints

@@ -16,7 +16,7 @@
     "ShowProperties": ["Weight"],
     "Description": ["cheap frame for everyday vehicle building use. Not very stable."],
     "JointData": {
-        "BreakPoint": 4500,
+        "BreakPoint": 5000,
         "Hardness": 1,
         "Type": "Solid",
         "Data":{

@@ -16,7 +16,7 @@
     "Description": ["Made out of very stable metal, this is a next-gen version of the double frame"],
     "ShowProperties": ["Weight"],
     "JointData": {
-        "BreakPoint": 35000,
+        "BreakPoint": 46000,
         "Hardness": 1,
         "Type": "Solid",
         "Data":{
