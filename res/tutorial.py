@@ -16,9 +16,8 @@ class Tutorial():
         """the articles of the tutorial are stored in a list as json.
         within the articles, there is a list of lines, having a type and content (e.g "TXT", "Tutorial line text)"""
         self.DrawY = 150
-        if not obj.isWeb:
-            SelectPartSound = obj.sounds["click.wav"]
-            AlertSound = obj.sounds["alert.wav"]
+        SelectPartSound = obj.sounds["click.ogg"]
+        AlertSound = obj.sounds["alert.ogg"]
         self.cooldown -= 1
         obj.screen.fill((140,140,140))
 
@@ -28,25 +27,19 @@ class Tutorial():
 
             obj.gm = "build"
             self.cooldown = 8
-            if not obj.isWeb:
-                player = AlertSound.play()
-                del(player)
+            player = AlertSound.play()
         RightButton = interactions.ButtonArea(obj, obj.textures["ButtonRight.png"], utils.Scale(obj,(obj.dimensions[0] - 60,50)), utils.Scale(obj,[64,64]))
         if RightButton and self.cooldown < 0:
             self.Page += 1
             self.cooldown = 8
             self.Scroll = 0
-            if not obj.isWeb:
-                player = obj.sounds["click.wav"].play()
-                del(player)
+            player = obj.sounds["click.ogg"].play()
         LeftButton = interactions.ButtonArea(obj, obj.textures["ButtonLeft.png"], utils.Scale(obj,(30,50)), utils.Scale(obj,[64,64]))
         if LeftButton and self.cooldown < 0:
             self.Page -= 1
             self.cooldown = 8
             self.Scroll = 0
-            if not obj.isWeb:
-                player = SelectPartSound.play()
-                del(player)
+            player = SelectPartSound.play()
         if self.Page < 0:
             self.Page = 0
         if self.Page > len(self.contents) - 1:

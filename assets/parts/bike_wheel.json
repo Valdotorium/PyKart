@@ -50,7 +50,7 @@
         "Size": [64,64]
     }],
     "Sounds": {
-        "Crash": [["tyre_1.wav",1], ["tyre_2.wav",1], ["tyre_3.wav",1]],
+        "Crash": [["tyre_1.ogg",1], ["tyre_2.ogg",1], ["tyre_3.ogg",1]],
         "Active": [[]],
         "Constraints":[[]],
         "Idle":[[]]

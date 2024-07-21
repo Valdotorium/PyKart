@@ -53,7 +53,7 @@
         "Size": [128,128]
     }],
     "Sounds": {
-        "Crash": [["metal_crash_1.wav",0.6]],
+        "Crash": [["metal_crash_1.ogg",0.6]],
         "Active": [[]],
         "Constraints":[[]],
         "Idle":[[]]

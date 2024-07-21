@@ -1800,7 +1800,7 @@
 		<data>
 		1Z+QnrnS+SX//BE1DXFRWN3PVvw=
 		</data>
-		<key>Resources/lib/python3.12/pygame/examples/data/boom.wav</key>
+		<key>Resources/lib/python3.12/pygame/examples/data/boom.ogg</key>
 		<data>
 		3duPC2RCcXfHiVdoq8giH8+HbT0=
 		</data>
@@ -1808,7 +1808,7 @@
 		<data>
 		ai71xQ7ATHEEKRsDtfXiqgCrgbE=
 		</data>
-		<key>Resources/lib/python3.12/pygame/examples/data/car_door.wav</key>
+		<key>Resources/lib/python3.12/pygame/examples/data/car_door.ogg</key>
 		<data>
 		hfSy72kn1UlQxSJABkC4jj8qmvU=
 		</data>
@@ -1856,7 +1856,7 @@
 		<data>
 		brcxJrRsJN3AHFVJZpwrSRdcJ1U=
 		</data>
-		<key>Resources/lib/python3.12/pygame/examples/data/house_lo.wav</key>
+		<key>Resources/lib/python3.12/pygame/examples/data/house_lo.ogg</key>
 		<data>
 		c0GhX4/gDPl/xxKJhwE/wlAu07o=
 		</data>
@@ -1876,7 +1876,7 @@
 		<data>
 		uXT6nMYCd35GSSKyV/NpsQT4sUM=
 		</data>
-		<key>Resources/lib/python3.12/pygame/examples/data/punch.wav</key>
+		<key>Resources/lib/python3.12/pygame/examples/data/punch.ogg</key>
 		<data>
 		zezPm9DIfrR1DG8XREFWyX1NkrE=
 		</data>
@@ -1896,7 +1896,7 @@
 		<data>
 		eG9D5ET2ep5bx/WSVJ7mC72GoGI=
 		</data>
-		<key>Resources/lib/python3.12/pygame/examples/data/secosmic_lo.wav</key>
+		<key>Resources/lib/python3.12/pygame/examples/data/secosmic_lo.ogg</key>
 		<data>
 		BuN3OkemEqtoS6x7F0l79EomGz8=
 		</data>
@@ -1916,7 +1916,7 @@
 		<data>
 		Dt0mzk/6dGaBgluKT9fSjRTPZVA=
 		</data>
-		<key>Resources/lib/python3.12/pygame/examples/data/whiff.wav</key>
+		<key>Resources/lib/python3.12/pygame/examples/data/whiff.ogg</key>
 		<data>
 		1IlvAVbPqbXfAVisd8Uzn97Hemc=
 		</data>
@@ -10016,7 +10016,7 @@
 			TZ60QP1S2QBN6QPNSqBwS5VyebZA93iu8ZMUXzEg2QA=
 			</data>
 		</dict>
-		<key>Resources/lib/python3.12/pygame/examples/data/boom.wav</key>
+		<key>Resources/lib/python3.12/pygame/examples/data/boom.ogg</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -10038,7 +10038,7 @@
 			K/mshK0aL81nzOjAorTXyPps6n9mvofLeOWFXFpVjYA=
 			</data>
 		</dict>
-		<key>Resources/lib/python3.12/pygame/examples/data/car_door.wav</key>
+		<key>Resources/lib/python3.12/pygame/examples/data/car_door.ogg</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -10170,7 +10170,7 @@
 			64FiQ1Zjq+cOj6Bmya/v3ZjEWmBaGZlTl19udKaz6sU=
 			</data>
 		</dict>
-		<key>Resources/lib/python3.12/pygame/examples/data/house_lo.wav</key>
+		<key>Resources/lib/python3.12/pygame/examples/data/house_lo.ogg</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -10225,7 +10225,7 @@
 			3ZTVWGxnedKqtf3R+X1omPC0Y8jUSPGgHBAzeGhnV4c=
 			</data>
 		</dict>
-		<key>Resources/lib/python3.12/pygame/examples/data/punch.wav</key>
+		<key>Resources/lib/python3.12/pygame/examples/data/punch.ogg</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -10280,7 +10280,7 @@
 			iLN1RrY8LCSUnDrwYvWC99v/pLGy0iN8winH7VAyVL0=
 			</data>
 		</dict>
-		<key>Resources/lib/python3.12/pygame/examples/data/secosmic_lo.wav</key>
+		<key>Resources/lib/python3.12/pygame/examples/data/secosmic_lo.ogg</key>
 		<dict>
 			<key>hash</key>
 			<data>
@@ -10335,7 +10335,7 @@
 			4OkIy6CDPMv77tRR/wA9ZHA6qZzG3pjZ+1m1mNB7bcI=
 			</data>
 		</dict>
-		<key>Resources/lib/python3.12/pygame/examples/data/whiff.wav</key>
+		<key>Resources/lib/python3.12/pygame/examples/data/whiff.ogg</key>
 		<dict>
 			<key>hash</key>
 			<data>

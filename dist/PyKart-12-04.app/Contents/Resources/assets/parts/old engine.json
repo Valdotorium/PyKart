@@ -54,8 +54,8 @@
         "Size": [64,64]
     }],
     "Sounds": {
-        "Crash": [["tyre_2.wav",1], ["metal_crash_3.wav",0.5], ["metal_crash_4.wav",0.5]],
-        "Active": [["old_engine.wav",0.2]],
+        "Crash": [["tyre_2.ogg",1], ["metal_crash_3.ogg",0.5], ["metal_crash_4.ogg",0.5]],
+        "Active": [["old_engine.ogg",0.2]],
         "Constraints":[[]],
         "Idle":[[]]
     }

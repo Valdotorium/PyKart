@@ -96,9 +96,9 @@ class BiomeSelection():
                 XPos += 180
             c += 1
         if self._CurrentSelectedBiome != self.CurrentSelectedBiome:
-            if not obj.isWeb:
-                ClickSound = obj.sounds["select_2.wav"]
-                ClickSound.play()
+
+            ClickSound = obj.sounds["select_2.ogg"]
+            ClickSound.play()
         #text
         BiomeName = list(self.Biomes)[self.CurrentSelectedBiome]
         BiomeName = self.Biomes[BiomeName]["Name"]

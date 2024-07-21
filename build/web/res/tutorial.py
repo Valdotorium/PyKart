@@ -17,8 +17,8 @@ class Tutorial():
         within the articles, there is a list of lines, having a type and content (e.g "TXT", "Tutorial line text)"""
         self.DrawY = 150
         if not obj.isWeb:
-            SelectPartSound = obj.sounds["click.wav"]
-            AlertSound = obj.sounds["alert.wav"]
+            SelectPartSound = obj.sounds["click.ogg"]
+            AlertSound = obj.sounds["alert.ogg"]
         self.cooldown -= 1
         obj.screen.fill((140,140,140))
 
@@ -37,7 +37,7 @@ class Tutorial():
             self.cooldown = 8
             self.Scroll = 0
             if not obj.isWeb:
-                player = obj.sounds["click.wav"].play()
+                player = obj.sounds["click.ogg"].play()
                 del(player)
         LeftButton = interactions.ButtonArea(obj, obj.textures["ButtonLeft.png"], utils.Scale(obj,(30,50)), utils.Scale(obj,[64,64]))
         if LeftButton and self.cooldown < 0:

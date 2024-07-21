@@ -53,11 +53,11 @@ def DrivingSounds(obj):
                             Sounds = copy.deepcopy(obj.NewVehicleJoints[c]["SoundData"])
 
                             #suspension sounds
-                            Sounds.append(["suspension_1.wav", 0.5])
-                            Sounds.append(["suspension_2.wav", 0.5])
-                            Sounds.append(["suspension_3.wav", 0.5])
-                            Sounds.append(["suspension_4.wav", 0.5])
-                            Sounds.append(["suspension_5.wav", 0.5])
+                            Sounds.append(["suspension_1.ogg", 0.5])
+                            Sounds.append(["suspension_2.ogg", 0.5])
+                            Sounds.append(["suspension_3.ogg", 0.5])
+                            Sounds.append(["suspension_4.ogg", 0.5])
+                            Sounds.append(["suspension_5.ogg", 0.5])
                             #selecting a random sounds from a list of sounds
                             r = random.randint(0, len(Sounds) -1)
                             Sound = Sounds[r][0]

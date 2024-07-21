@@ -1,7 +1,7 @@
 import pygame, math
 import pymunk
 import copy
-import pyglet.media
+
 #some small helpers to make code shorter and maybe more radable
 def getScreenSize():
     try:

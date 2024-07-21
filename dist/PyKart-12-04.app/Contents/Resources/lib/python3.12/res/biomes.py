@@ -91,7 +91,7 @@ class BiomeSelection():
                 XPos += 180
             c += 1
         if self._CurrentSelectedBiome != self.CurrentSelectedBiome:
-            ClickSound = obj.sounds["select_2.wav"]
+            ClickSound = obj.sounds["select_2.ogg"]
             ClickSound.play()
         #text
         BiomeName = list(self.Biomes)[self.CurrentSelectedBiome]

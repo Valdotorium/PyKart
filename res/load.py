@@ -3,7 +3,7 @@ import time
 import os
 from .fw import fw as utils
 import json
-import pyglet.media
+
 def respond(obj):
     """This script is responsible for loading the games assets, such as images and parts. it will load everything in the folder it finds.
     WARNING: In py2app, the assets folder must be included TWICE in several locations of the app, see py2app.txt"""
@@ -160,22 +160,23 @@ def respond(obj):
                     raise ImportError("Environment File not found")
             else:
                 pass
-            if not obj.isWeb:
-                soundfiles = os.listdir(CurrentPath+"/assets/sounds")
-                sounds = {}
-                #loading all the sounds into the game
-                for sound in soundfiles:
-                    loadedsound = pyglet.media.StaticSource(pyglet.media.load(CurrentPath+"/assets/sounds/"+sound))
 
-                    utils.clear(obj.window)
-                    #center the text
+            soundfiles = os.listdir(CurrentPath+"/assets/sounds")
+            sounds = {}
+            #loading all the sounds into the game
+            for sound in soundfiles:
+                if sound != ".DS_Store":
+                    loadedsound = pygame.mixer.Sound(CurrentPath+"/assets/sounds/"+sound)
 
-                    utils.displayLoadText(obj,f"loaded sound {sound}")
-                    sounds[sound] = loadedsound
-                    #time.sleep(0.01)
-                if obj.debug:
-                    print("LOG: loaded all sounds into:", sounds)
-                obj.sounds = sounds
+                utils.clear(obj.window)
+                #center the text
+
+                utils.displayLoadText(obj,f"loaded sound {sound}")
+                sounds[sound] = loadedsound
+                #time.sleep(0.01)
+            if obj.debug:
+                print("LOG: loaded all sounds into:", sounds)
+            obj.sounds = sounds
             biomefiles = os.listdir(CurrentPath+"/assets/biomes")
             biomes = {}
             #loading all the biomes into the game

@@ -12,7 +12,7 @@ import res.controls
 import res.mechanics
 import res.sounds
 from copy import deepcopy as deepcopy
-import pyglet.media
+
 import res.interactions.interactions as interactions
 import res.fw.fw as utils
 import res.tutorial
@@ -125,7 +125,7 @@ class Game():
                 self.money += (self.DistanceMoneyForRide + self.StuntMoneyForRide) * self.RideMoneyMultiplier
                 self.xp += self.MetersTravelled * self.RideMoneyMultiplier
                 self.restart = True
-                AlertSound = self.sounds["alert.wav"]
+                AlertSound = self.sounds["alert.ogg"]
                 player = AlertSound.play()
                 self.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not write ground poly", 150, self))
                 del(player)
@@ -157,7 +157,7 @@ class Game():
                 self.money += (self.DistanceMoneyForRide + self.StuntMoneyForRide) * self.RideMoneyMultiplier
                 self.xp += self.MetersTravelled * self.RideMoneyMultiplier
                 self.restart = True
-                AlertSound = self.sounds["alert.wav"]
+                AlertSound = self.sounds["alert.ogg"]
                 player = AlertSound.play()
                 del(player)
         if self.gm == "biomeselection":
@@ -188,7 +188,7 @@ class Game():
                     self.money += (self.DistanceMoneyForRide + self.StuntMoneyForRide) *self.RideMoneyMultiplier
                     self.xp += self.MetersTravelled *self.RideMoneyMultiplier
                     self.restart = True
-                    AlertSound = self.sounds["alert.wav"]
+                    AlertSound = self.sounds["alert.ogg"]
                     player = AlertSound.play()
                     self.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not write ground poly", 150, self))
                     del(player)

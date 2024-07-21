@@ -3,7 +3,7 @@ import time
 import os
 from .fw import fw as utils
 import json
-import pyglet.media
+
 def respond(obj):
     """This script is responsible for loading the games assets, such as images and parts. it will load everything in the folder it finds.
     WARNING: In py2app, the assets folder must be included TWICE in several locations of the app, see py2app.txt"""

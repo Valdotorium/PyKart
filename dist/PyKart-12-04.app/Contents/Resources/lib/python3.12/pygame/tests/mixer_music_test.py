@@ -89,8 +89,8 @@ class MixerMusicModuleTest(unittest.TestCase):
         import shutil
 
         ep = example_path("data")
-        temp_file = os.path.join(ep, "你好.wav")
-        org_file = os.path.join(ep, "house_lo.wav")
+        temp_file = os.path.join(ep, "你好.ogg")
+        org_file = os.path.join(ep, "house_lo.ogg")
         try:
             with open(temp_file, "w") as f:
                 pass
@@ -109,8 +109,8 @@ class MixerMusicModuleTest(unittest.TestCase):
         import tempfile
 
         ep = example_path("data")
-        org_file = os.path.join(ep, "house_lo.wav")
-        tmpfd, tmppath = tempfile.mkstemp(".wav")
+        org_file = os.path.join(ep, "house_lo.ogg")
+        tmpfd, tmppath = tempfile.mkstemp(".ogg")
         os.close(tmpfd)
         shutil.copy(org_file, tmppath)
         try:
@@ -140,20 +140,20 @@ class MixerMusicModuleTest(unittest.TestCase):
 
         |tags:music|
         """
-        filename = example_path(os.path.join("data", "house_lo.wav"))
+        filename = example_path(os.path.join("data", "house_lo.ogg"))
         pygame.mixer.music.queue(filename)
 
     def test_queue__multiple_calls(self):
         """Ensures queue() can be called multiple times."""
         ogg_file = example_path(os.path.join("data", "house_lo.ogg"))
-        wav_file = example_path(os.path.join("data", "house_lo.wav"))
+        wav_file = example_path(os.path.join("data", "house_lo.ogg"))
 
         pygame.mixer.music.queue(ogg_file)
         pygame.mixer.music.queue(wav_file)
 
     def test_queue__arguments(self):
         """Ensures queue() can be called with proper arguments."""
-        wav_file = example_path(os.path.join("data", "house_lo.wav"))
+        wav_file = example_path(os.path.join("data", "house_lo.ogg"))
 
         pygame.mixer.music.queue(wav_file, loops=2)
         pygame.mixer.music.queue(wav_file, namehint="")
@@ -422,8 +422,8 @@ class MixerMusicModuleTest(unittest.TestCase):
         import tempfile
         import shutil
 
-        testfile = example_path(os.path.join("data", "house_lo.wav"))
-        tempcopy = os.path.join(tempfile.gettempdir(), "tempfile.wav")
+        testfile = example_path(os.path.join("data", "house_lo.ogg"))
+        tempcopy = os.path.join(tempfile.gettempdir(), "tempfile.ogg")
 
         for i in range(10):
             pygame.mixer.init()

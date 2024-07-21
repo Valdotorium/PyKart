@@ -24,7 +24,7 @@ import res.controls
 import res.mechanics
 import res.sounds
 from copy import deepcopy as deepcopy
-import pyglet.media
+
 import res.interactions.interactions as interactions
 import res.fw.fw as utils
 import res.tutorial
@@ -53,6 +53,7 @@ class Game():
         self.running = True
         self.fps = 10
         self.restart = False
+        self.CFG_AllowEngineSounds = False
         self.CFG_extensive_logs = True    
         self.CFG_visuals = True
         self.CFG_debug_mode = True
@@ -80,7 +81,7 @@ class Game():
         self.money = 25000
         self.particles = []
         self.xp = 0        
-        self.SoundPlayer = pyglet.media.Player()
+        pygame.mixer.init()
         self.GroundPolygons = []
         pygame.mouse.set_cursor((8,8),(0,0),(0,0,0,0,0,0,0,0),(0,0,0,0,0,0,0,0))
         self.clock = pygame.time.Clock()
@@ -165,7 +166,7 @@ class Game():
                 self.xp += self.MetersTravelled * self.RideMoneyMultiplier
                 self.restart = True
                 if not self.isWeb:
-                    AlertSound = self.sounds["alert.wav"]
+                    AlertSound = self.sounds["alert.ogg"]
                     player = AlertSound.play()
                     del(player)
 
@@ -209,7 +210,7 @@ class Game():
                     self.xp += self.MetersTravelled *self.RideMoneyMultiplier
                     self.restart = True
                     if not self.isWeb:
-                        AlertSound = self.sounds["alert.wav"]
+                        AlertSound = self.sounds["alert.ogg"]
                         player = AlertSound.play()
                         del(player)
                     self.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not write ground poly", 150, self))

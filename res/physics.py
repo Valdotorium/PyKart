@@ -5,7 +5,7 @@ import pymunk.pygame_util
 from .fw import fw as utils
 import pymunk.constraints
 import random
-import pyglet.media
+
 import os
 from .interactions import interactions as interactions
 from . import procedural
@@ -150,13 +150,11 @@ def ExecuteControlPart(obj, index):
                 particles.BlueFlame(obj, index, True, Properties["Angle"][2], particleCount)
 #preventing things from spinning too fast
 def LimitAngularVelocity(body,obj):
-    if not obj.isWeb:
-        if -160 < body.angular_velocity < 160:
-            body.angular_velocity = body.angular_velocity * (1-0.0022 / obj.fpsFactor)
-        else:
-            body.angular_velocity = body.angular_velocity * (1-0.0058 / obj.fpsFactor)
+
+    if -100 < body.angular_velocity < 100:
+        pass
     else:
-        body.angular_velocity = body.angular_velocity * 0.998
+        body.angular_velocity = body.angular_velocity * 0.99
 def DisplayDistance(obj):
     x = obj.X_Position + 10 * 32
     obj.MetersTravelled = round(x/32)
@@ -235,10 +233,12 @@ def PygamePolygons(obj):
     while CurrentItem < EndItem:
         Vertices.append(obj.PygamePolygons[CurrentItem])
         CurrentItem += 1
-    Vertices.append((Vertices[len(Vertices)-1][0], -7500))
-    Vertices.append((Vertices[0][0], -7500))
+    Vertices.append([Vertices[len(Vertices)-1][0], -11200])
+    Vertices.append([Vertices[0][0], -11200])
     #offset all vertices by XOffset and YOffset
-    Vertices = [(x - XOffset, y - YOffset) for x, y in Vertices]
+    Vertices = [[x - XOffset, y - YOffset] for x, y in Vertices]
+    Vertices[-1][1] = 0
+    Vertices[-2][1] = 0
 
     #draw all the polygons to the screen
     pygame.draw.polygon(obj.screen, (obj.Environment["Background"]), Vertices)
@@ -357,10 +357,10 @@ def Draw(obj):
             obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
             obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
             obj.restart = True
-            if not obj.isWeb:
-                AlertSound = obj.sounds["alert.wav"]
-                player = AlertSound.play()
-                del(player)
+
+            AlertSound = obj.sounds["alert.ogg"]
+            player = AlertSound.play()
+
 """Drawing the pymunk physics simulation"""
 def PhysDraw(obj):
     obj.space.debug_draw(obj.draw_options)
@@ -368,10 +368,10 @@ def PhysDraw(obj):
 def DistanceBonuses(obj):
     if obj._MetersTravelled  <= obj.NextKilometer and obj.MetersTravelled > obj.NextKilometer:
         obj.NextKilometer += 1000
-        if not obj.isWeb:
-            AlertSound = obj.sounds["coinbag.wav"]
-            player = AlertSound.play()
-            del(player)
+
+        AlertSound = obj.sounds["coinbag.ogg"]
+        player = AlertSound.play()
+
         #extra large bonuses:
         if obj.NextKilometer == 3000:
             MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 1.2))
@@ -418,10 +418,9 @@ def simulate(obj, fps):
         obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
         obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
         obj.restart = True
-        if not obj.isWeb:
-            AlertSound = obj.sounds["alert.wav"]
-            player = AlertSound.play()
-            del(player)
+
+        AlertSound = obj.sounds["alert.ogg"]
+        player = AlertSound.play()
         obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not draw frame", 200, obj))
         print("INTERNAL ERROR: Could not draw frame: " + str(e))
     #second block: perform value and physics simulation
@@ -435,7 +434,7 @@ def simulate(obj, fps):
     #    obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
     #    obj.restart = True
     #    if not obj.isWeb:
-    #        AlertSound = obj.sounds["alert.wav"]
+    #        AlertSound = obj.sounds["alert.ogg"]
     #        player = AlertSound.play()
     #        del(player)
     #    obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 200, obj))
@@ -463,7 +462,7 @@ def setup(obj):
     obj.space = pymunk.Space()#creating the space
     obj.space.collision_bias = 1
     obj.space.collision_persistence = 1
-    obj.space.collision_slop = 0.5
+    obj.space.collision_slop = 0.2
     obj.space.iterations = 40
     obj.space.gravity = Env["Gravity"]
     #static floor of the simulation

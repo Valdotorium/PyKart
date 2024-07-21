@@ -1,7 +1,7 @@
 import pygame, math
 import pymunk
 import copy
-import pyglet.media
+
 #some small helpers to make code shorter and maybe more radable
 def getScreenSize():
     try:
@@ -231,9 +231,9 @@ class BuildUI():
         self.ClickCooldown = 10
         self.ScrollXSpeed = 0
     def run(self, obj):
-        SelectPartSound = obj.sounds["click.wav"]
-        BuySound = obj.sounds["buy.wav"]
-        AlertSound = obj.sounds["alert.wav"]
+        SelectPartSound = obj.sounds["click.ogg"]
+        BuySound = obj.sounds["buy.ogg"]
+        AlertSound = obj.sounds["alert.ogg"]
         #Button for switching the category, displaying the name of the current category
         img = self.textures["UI_tile.png"]
 

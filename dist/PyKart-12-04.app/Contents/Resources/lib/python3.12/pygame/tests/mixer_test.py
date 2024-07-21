@@ -138,7 +138,7 @@ class MixerModuleTest(unittest.TestCase):
         mixer.init()
 
         sample = b"\x00\xff" * 24
-        wave_path = example_path(os.path.join("data", "house_lo.wav"))
+        wave_path = example_path(os.path.join("data", "house_lo.ogg"))
         uwave_path = str(wave_path)
         bwave_path = uwave_path.encode(sys.getfilesystemencoding())
         snd = mixer.Sound(file=wave_path)
@@ -214,8 +214,8 @@ class MixerModuleTest(unittest.TestCase):
         import shutil
 
         ep = example_path("data")
-        temp_file = os.path.join(ep, "你好.wav")
-        org_file = os.path.join(ep, "house_lo.wav")
+        temp_file = os.path.join(ep, "你好.ogg")
+        org_file = os.path.join(ep, "house_lo.ogg")
         shutil.copy(org_file, temp_file)
         try:
             with open(temp_file, "rb") as f:
@@ -470,7 +470,7 @@ class MixerModuleTest(unittest.TestCase):
         """Ensure pygame.mixer.fadeout() stops playback after fading out the sound."""
         if mixer.get_init() is None:
             mixer.init()
-        sound = pygame.mixer.Sound(example_path("data/house_lo.wav"))
+        sound = pygame.mixer.Sound(example_path("data/house_lo.ogg"))
         channel = pygame.mixer.find_channel()
         channel.play(sound)
         fadeout_time = 200  # milliseconds
@@ -487,7 +487,7 @@ class MixerModuleTest(unittest.TestCase):
         # find an unused channel
         mixer.init()
 
-        filename = example_path(os.path.join("data", "house_lo.wav"))
+        filename = example_path(os.path.join("data", "house_lo.ogg"))
         sound = mixer.Sound(file=filename)
 
         num_channels = mixer.get_num_channels()
@@ -525,7 +525,7 @@ class MixerModuleTest(unittest.TestCase):
         """Ensure pygame.mixer.pause() temporarily stops playback of all sound channels."""
         if mixer.get_init() is None:
             mixer.init()
-        sound = mixer.Sound(example_path("data/house_lo.wav"))
+        sound = mixer.Sound(example_path("data/house_lo.ogg"))
         channel = mixer.find_channel()
         channel.play(sound)
 
@@ -570,7 +570,7 @@ class MixerModuleTest(unittest.TestCase):
         """Stops playback of all active sound channels."""
         if mixer.get_init() is None:
             mixer.init()
-        sound = pygame.mixer.Sound(example_path("data/house_lo.wav"))
+        sound = pygame.mixer.Sound(example_path("data/house_lo.ogg"))
         channel = pygame.mixer.Channel(0)
         channel.play(sound)
         pygame.mixer.stop()
@@ -685,7 +685,7 @@ class ChannelTypeTest(unittest.TestCase):
     def test_fadeout(self):
         """Ensure Channel.fadeout() stops playback after fading out."""
         channel = mixer.Channel(0)
-        sound = mixer.Sound(example_path("data/house_lo.wav"))
+        sound = mixer.Sound(example_path("data/house_lo.ogg"))
         channel.play(sound)
 
         fadeout_time = 1000
@@ -708,7 +708,7 @@ class ChannelTypeTest(unittest.TestCase):
     def test_get_busy__active(self):
         """Ensure an active channel's busy state is correct."""
         channel = mixer.Channel(0)
-        sound = mixer.Sound(example_path("data/house_lo.wav"))
+        sound = mixer.Sound(example_path("data/house_lo.ogg"))
         channel.play(sound)
 
         self.assertTrue(channel.get_busy())
@@ -758,7 +758,7 @@ class ChannelTypeTest(unittest.TestCase):
     def test_get_sound(self):
         """Ensure Channel.get_sound() returns the currently playing Sound."""
         channel = mixer.Channel(0)
-        sound = mixer.Sound(example_path("data/house_lo.wav"))
+        sound = mixer.Sound(example_path("data/house_lo.ogg"))
         channel.play(sound)
 
         # Ensure the correct Sound object is returned.
@@ -785,7 +785,7 @@ class ChannelTypeTest(unittest.TestCase):
         """
         if mixer.get_init() is None:
             mixer.init()
-        sound = pygame.mixer.Sound(example_path("data/house_lo.wav"))
+        sound = pygame.mixer.Sound(example_path("data/house_lo.ogg"))
         channel = sound.play()
         channel.pause()
         self.assertTrue(
@@ -801,7 +801,7 @@ class ChannelTypeTest(unittest.TestCase):
         """
         Ensure exception for Channel.pause() with non-init mixer.
         """
-        sound = mixer.Sound(example_path("data/house_lo.wav"))
+        sound = mixer.Sound(example_path("data/house_lo.ogg"))
         channel = sound.play()
         mixer.quit()
 
@@ -840,7 +840,7 @@ class ChannelTypeTest(unittest.TestCase):
         #
 
         channel = mixer.Channel(0)
-        sound = mixer.Sound(example_path("data/house_lo.wav"))
+        sound = mixer.Sound(example_path("data/house_lo.ogg"))
 
         # simple check
         channel.play(sound)
@@ -859,7 +859,7 @@ class ChannelSetVolumeTest(unittest.TestCase):
     def setUp(self):
         mixer.init()
         self.channel = pygame.mixer.Channel(0)
-        self.sound = pygame.mixer.Sound(example_path("data/boom.wav"))
+        self.sound = pygame.mixer.Sound(example_path("data/boom.ogg"))
 
     def tearDown(self):
         mixer.quit()
@@ -892,7 +892,7 @@ class ChannelEndEventTest(unittest.TestCase):
     def test_get_endevent(self):
         """Ensure Channel.get_endevent() returns the correct event type."""
         channel = mixer.Channel(0)
-        sound = mixer.Sound(example_path("data/house_lo.wav"))
+        sound = mixer.Sound(example_path("data/house_lo.ogg"))
         channel.play(sound)
 
         # Set the end event for the channel.
@@ -917,7 +917,7 @@ class ChannelEndEventTest(unittest.TestCase):
 class TestSoundPlay(unittest.TestCase):
     def setUp(self):
         mixer.init()
-        self.filename = example_path(os.path.join("data", "house_lo.wav"))
+        self.filename = example_path(os.path.join("data", "house_lo.ogg"))
         self.sound = mixer.Sound(file=self.filename)
 
     def tearDown(self):
@@ -1021,7 +1021,7 @@ class SoundTypeTest(unittest.TestCase):
     # and test_array_keyword() for additional testing of Sound() creation.
     def test_sound(self):
         """Ensure Sound() creation with a filename works."""
-        filename = example_path(os.path.join("data", "house_lo.wav"))
+        filename = example_path(os.path.join("data", "house_lo.ogg"))
         sound1 = mixer.Sound(filename)
         sound2 = mixer.Sound(file=filename)
 
@@ -1030,7 +1030,7 @@ class SoundTypeTest(unittest.TestCase):
 
     def test_sound__from_file_object(self):
         """Ensure Sound() creation with a file object works."""
-        filename = example_path(os.path.join("data", "house_lo.wav"))
+        filename = example_path(os.path.join("data", "house_lo.ogg"))
 
         # Using 'with' ensures the file is closed even if test fails.
         with open(filename, "rb") as file_obj:
@@ -1040,7 +1040,7 @@ class SoundTypeTest(unittest.TestCase):
 
     def test_sound__from_sound_object(self):
         """Ensure Sound() creation with a Sound() object works."""
-        filename = example_path(os.path.join("data", "house_lo.wav"))
+        filename = example_path(os.path.join("data", "house_lo.ogg"))
         sound_obj = mixer.Sound(file=filename)
 
         sound = mixer.Sound(sound_obj)
@@ -1049,7 +1049,7 @@ class SoundTypeTest(unittest.TestCase):
 
     def test_sound__from_pathlib(self):
         """Ensure Sound() creation with a pathlib.Path object works."""
-        path = pathlib.Path(example_path(os.path.join("data", "house_lo.wav")))
+        path = pathlib.Path(example_path(os.path.join("data", "house_lo.ogg")))
         sound1 = mixer.Sound(path)
         sound2 = mixer.Sound(file=path)
         self.assertIsInstance(sound1, mixer.Sound)
@@ -1071,7 +1071,7 @@ class SoundTypeTest(unittest.TestCase):
     def test_sound__before_init(self):
         """Ensure exception raised for Sound() creation with non-init mixer."""
         mixer.quit()
-        filename = example_path(os.path.join("data", "house_lo.wav"))
+        filename = example_path(os.path.join("data", "house_lo.ogg"))
 
         with self.assertRaisesRegex(pygame.error, "mixer not initialized"):
             mixer.Sound(file=filename)
@@ -1103,7 +1103,7 @@ class SoundTypeTest(unittest.TestCase):
             for size in SIZES:
                 pygame.mixer.quit()
                 pygame.mixer.init(size=size)
-                filename = example_path(os.path.join("data", "punch.wav"))
+                filename = example_path(os.path.join("data", "punch.ogg"))
                 sound = mixer.Sound(file=filename)
                 # The sound data is in the mixer output format. So dividing the
                 # length of the raw sound data by the mixer settings gives
@@ -1126,7 +1126,7 @@ class SoundTypeTest(unittest.TestCase):
         of channels playing a specific sound.
         """
         try:
-            filename = example_path(os.path.join("data", "house_lo.wav"))
+            filename = example_path(os.path.join("data", "house_lo.ogg"))
             sound = mixer.Sound(file=filename)
 
             self.assertEqual(sound.get_num_channels(), 0)
@@ -1145,7 +1145,7 @@ class SoundTypeTest(unittest.TestCase):
         """Ensure a sound's volume can be retrieved."""
         try:
             expected_volume = 1.0  # default
-            filename = example_path(os.path.join("data", "house_lo.wav"))
+            filename = example_path(os.path.join("data", "house_lo.ogg"))
             sound = mixer.Sound(file=filename)
 
             volume = sound.get_volume()
@@ -1160,7 +1160,7 @@ class SoundTypeTest(unittest.TestCase):
         """Ensure a sound's volume can be retrieved while playing."""
         try:
             expected_volume = 1.0  # default
-            filename = example_path(os.path.join("data", "house_lo.wav"))
+            filename = example_path(os.path.join("data", "house_lo.ogg"))
             sound = mixer.Sound(file=filename)
             sound.play(-1)
 
@@ -1176,7 +1176,7 @@ class SoundTypeTest(unittest.TestCase):
         """Ensure a sound's volume can be set."""
         try:
             float_delta = 1.0 / 128  # SDL volume range is 0 to 128
-            filename = example_path(os.path.join("data", "house_lo.wav"))
+            filename = example_path(os.path.join("data", "house_lo.ogg"))
             sound = mixer.Sound(file=filename)
             current_volume = sound.get_volume()
 
@@ -1209,7 +1209,7 @@ class SoundTypeTest(unittest.TestCase):
         """Ensure a sound's volume can be set while playing."""
         try:
             float_delta = 1.0 / 128  # SDL volume range is 0 to 128
-            filename = example_path(os.path.join("data", "house_lo.wav"))
+            filename = example_path(os.path.join("data", "house_lo.ogg"))
             sound = mixer.Sound(file=filename)
             current_volume = sound.get_volume()
 
@@ -1243,7 +1243,7 @@ class SoundTypeTest(unittest.TestCase):
         """Ensure stop can be called while not playing a sound."""
         try:
             expected_channels = 0
-            filename = example_path(os.path.join("data", "house_lo.wav"))
+            filename = example_path(os.path.join("data", "house_lo.ogg"))
             sound = mixer.Sound(file=filename)
 
             sound.stop()
@@ -1258,7 +1258,7 @@ class SoundTypeTest(unittest.TestCase):
         """Ensure stop stops a playing sound."""
         try:
             expected_channels = 0
-            filename = example_path(os.path.join("data", "house_lo.wav"))
+            filename = example_path(os.path.join("data", "house_lo.ogg"))
             sound = mixer.Sound(file=filename)
 
             sound.play(-1)
@@ -1290,7 +1290,7 @@ class SoundTypeTest(unittest.TestCase):
             def __init__(self, file):
                 super().__init__(file=file)
 
-        filename = example_path(os.path.join("data", "house_lo.wav"))
+        filename = example_path(os.path.join("data", "house_lo.ogg"))
         correct = CorrectSublass(filename)
 
         try:
@@ -1318,7 +1318,7 @@ class TestSoundFadeout(unittest.TestCase):
 
     def test_fadeout_with_valid_time(self):
         """Tests if fadeout stops sound playback after fading it out over the time argument in milliseconds."""
-        filename = example_path(os.path.join("data", "punch.wav"))
+        filename = example_path(os.path.join("data", "punch.ogg"))
         sound = mixer.Sound(file=filename)
         channel = sound.play()
         channel.fadeout(1000)
@@ -1328,7 +1328,7 @@ class TestSoundFadeout(unittest.TestCase):
     # TODO: this fails.
     # def test_fadeout_with_zero_time(self):
     #     """Tests if fadeout stops sound playback immediately when time argument is zero."""
-    #     filename = example_path(os.path.join("data", "punch.wav"))
+    #     filename = example_path(os.path.join("data", "punch.ogg"))
     #     sound = mixer.Sound(file=filename)
     #     channel = sound.play()
     #     channel.fadeout(0)
@@ -1337,7 +1337,7 @@ class TestSoundFadeout(unittest.TestCase):
     # TODO: this fails.
     # def test_fadeout_with_negative_time(self):
     #     """Tests if fadeout stops sound playback immediately when time argument is negative."""
-    #     filename = example_path(os.path.join("data", "punch.wav"))
+    #     filename = example_path(os.path.join("data", "punch.ogg"))
     #     sound = mixer.Sound(file=filename)
     #     channel = sound.play()
     #     channel.fadeout(-1000)
@@ -1346,7 +1346,7 @@ class TestSoundFadeout(unittest.TestCase):
     # TODO: What should happen here?
     # def test_fadeout_with_large_time(self):
     #     """Tests if fadeout stops sound playback after fading it out over the time argument in milliseconds, even if time is larger than the sound length."""
-    #     filename = example_path(os.path.join("data", "punch.wav"))
+    #     filename = example_path(os.path.join("data", "punch.ogg"))
     #     sound = mixer.Sound(file=filename)
     #     channel = sound.play()
     #     channel.fadeout(...?)
@@ -1376,7 +1376,7 @@ class TestGetBusy(unittest.TestCase):
         """
         Test that get_busy returns True when one sound is playing.
         """
-        sound = pygame.mixer.Sound(example_path("data/house_lo.wav"))
+        sound = pygame.mixer.Sound(example_path("data/house_lo.ogg"))
         sound.play()
         time.sleep(0.2)
         self.assertTrue(pygame.mixer.get_busy())
@@ -1386,8 +1386,8 @@ class TestGetBusy(unittest.TestCase):
         """
         Test that get_busy returns True when multiple sounds are playing.
         """
-        sound1 = pygame.mixer.Sound(example_path("data/house_lo.wav"))
-        sound2 = pygame.mixer.Sound(example_path("data/house_lo.wav"))
+        sound1 = pygame.mixer.Sound(example_path("data/house_lo.ogg"))
+        sound2 = pygame.mixer.Sound(example_path("data/house_lo.ogg"))
         sound1.play()
         sound2.play()
         time.sleep(0.2)
@@ -1399,8 +1399,8 @@ class TestGetBusy(unittest.TestCase):
         """
         Test that get_busy returns False when all sounds are stopped.
         """
-        sound1 = pygame.mixer.Sound(example_path("data/house_lo.wav"))
-        sound2 = pygame.mixer.Sound(example_path("data/house_lo.wav"))
+        sound1 = pygame.mixer.Sound(example_path("data/house_lo.ogg"))
+        sound2 = pygame.mixer.Sound(example_path("data/house_lo.ogg"))
         sound1.play()
         sound2.play()
         time.sleep(0.2)
@@ -1414,8 +1414,8 @@ class TestGetBusy(unittest.TestCase):
         Test that get_busy returns False when all sounds are stopped with
         fadeout.
         """
-        sound1 = pygame.mixer.Sound(example_path("data/house_lo.wav"))
-        sound2 = pygame.mixer.Sound(example_path("data/house_lo.wav"))
+        sound1 = pygame.mixer.Sound(example_path("data/house_lo.ogg"))
+        sound2 = pygame.mixer.Sound(example_path("data/house_lo.ogg"))
         sound1.play()
         sound2.play()
         time.sleep(0.2)
@@ -1426,7 +1426,7 @@ class TestGetBusy(unittest.TestCase):
 
     def test_sound_fading_out(self):
         """Tests that get_busy() returns True when a sound is fading out"""
-        sound = pygame.mixer.Sound(example_path("data/house_lo.wav"))
+        sound = pygame.mixer.Sound(example_path("data/house_lo.ogg"))
         sound.play(fade_ms=1000)
         time.sleep(1.1)
         self.assertTrue(pygame.mixer.get_busy())

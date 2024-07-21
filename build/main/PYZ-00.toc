@@ -1829,7 +1829,7 @@
   ('pyglet.media.codecs.pyogg',
    'C:\\Users\\Valentin\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyglet\\media\\codecs\\pyogg.py',
    'PYMODULE'),
-  ('pyglet.media.codecs.wave',
+  ('pyglet.media.codecs.ogge',
    'C:\\Users\\Valentin\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyglet\\media\\codecs\\wave.py',
    'PYMODULE'),
   ('pyglet.media.codecs.wmf',

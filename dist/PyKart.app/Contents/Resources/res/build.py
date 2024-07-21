@@ -95,7 +95,7 @@ def run(obj):
         PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[80,80]))
         PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[50,30]), utils.Scale(obj,[80,80]))
         if PlayButton:
-            SelectSound = obj.sounds["click.wav"]
+            SelectSound = obj.sounds["click.ogg"]
             SelectSound.play()
             print("User just cligged on the play button")
             obj.gm = "biomeselection"
@@ -133,7 +133,7 @@ def run(obj):
 
                     print("user just selected part ", c, " of Vehicle")
                     if obj.SelectedBuiltPart != c:
-                        SelectSound = obj.sounds["click.wav"]
+                        SelectSound = obj.sounds["click.ogg"]
                         SelectSound.play()
                     obj.SelectedBuiltPart = c
                     #draeing a rect at the position of the texture with the size of the texture
@@ -327,7 +327,7 @@ def run(obj):
                     else:
                         PlacedPart["JoinedWith"] = []
                     obj.Vehicle.append(PlacedPart)
-                    PlaceSound = obj.sounds["select.wav"]
+                    PlaceSound = obj.sounds["select.ogg"]
                     PlaceSound.play()
                     print(f"part {obj.selectedPart} placed at {(mx,my)}")
                     #part gets unselected
@@ -337,7 +337,7 @@ def run(obj):
                     obj.Cursor.SetDefault()
                 else:
                     #part placement invalid, unselect
-                    AlertSound = obj.sounds["alert.wav"]
+                    AlertSound = obj.sounds["alert.ogg"]
                     AlertSound.play()
                     obj.SnappedJointData = None
                     obj.selectedPart = ""
@@ -345,7 +345,7 @@ def run(obj):
                     obj.Cursor.SetDefault()
         elif not obj.dimensions[0] * 0.1 < mx < 0.9 * obj.dimensions[0] or not obj.dimensions[1] * 0.12 < my < 0.725 * obj.dimensions[1]:
             #part placement invalid, unselect
-            AlertSound = obj.sounds["alert.wav"]
+            AlertSound = obj.sounds["alert.ogg"]
             AlertSound.play()
             obj.SnappedJointData = None
             obj.selectedPart = ""
@@ -374,13 +374,13 @@ def run(obj):
             obj.credits.visible = False
             obj.CurrentPartUI.part = None
             obj.SelectedBuiltPart = None
-            SelectSound = obj.sounds["click.wav"]
+            SelectSound = obj.sounds["click.ogg"]
             SelectSound.play()
         
         #---------------------The Delete Part Button--------------------------------
         DeleteButton = interactions.ButtonArea(obj, obj.textures["DeleteButton.png"], utils.Scale(obj,(250,30)), utils.Scale(obj,[80,80]))
         if DeleteButton or pygame.key.get_pressed()[pygame.K_x]:
-            SelectSound = obj.sounds["tyre_2.wav"]
+            SelectSound = obj.sounds["tyre_2.ogg"]
             SelectSound.play()
             obj.Cursor.SetDelete()
             obj.partdict[obj.Vehicle[obj.SelectedBuiltPart]["name"]]["Count"] += 1
@@ -400,7 +400,7 @@ def run(obj):
     #------------------------------The Move Part Button------------------------------------------
         MoveButton = interactions.ButtonArea(obj, obj.textures["MoveButton.png"], utils.Scale(obj,(450,30)), utils.Scale(obj,[80,80]))
         if MoveButton or pygame.key.get_pressed()[pygame.K_m]:
-            SelectSound = obj.sounds["click.wav"]
+            SelectSound = obj.sounds["click.ogg"]
             SelectSound.play()
             obj.partdict[obj.Vehicle[obj.SelectedBuiltPart]["name"]]["Count"] += 1
             #esentially deleting the part
@@ -429,7 +429,7 @@ def run(obj):
     #---------------------The Sell Part Button--------------------------------
         SellButton = interactions.ButtonArea(obj, obj.textures["returnButton.png"], utils.Scale(obj,(650,30)), utils.Scale(obj,[80,80]))
         if SellButton or pygame.key.get_pressed()[pygame.K_r]:
-            SelectSound = obj.sounds["coinbag.wav"]
+            SelectSound = obj.sounds["coinbag.ogg"]
             SelectSound.play()
             obj.Cursor.SetDelete()
             #returning 80% of the money to the user
@@ -477,7 +477,7 @@ def run(obj):
     PartInfoButton = interactions.ButtonArea(obj, obj.textures["infoButton.png"], utils.Scale(obj,(550,30)), utils.Scale(obj,[80,80]))
     if PartInfoButton or pygame.key.get_pressed()[pygame.K_i]:
         if obj.SelectedBuiltPart != None and obj.CurrentPartUI.part == None:
-            SelectSound = obj.sounds["click.wav"]
+            SelectSound = obj.sounds["click.ogg"]
             SelectSound.play()
             obj.CurrentPartUI.setPart(obj.Vehicle[obj.SelectedBuiltPart])
     if obj.CurrentPartUI.part != None and obj.SelectedBuiltPart != None:
@@ -486,12 +486,12 @@ def run(obj):
     CreditButton = interactions.ButtonArea(obj, obj.textures["logo.png"], utils.Scale(obj,(obj.dimensions[0] - 100,30)), utils.Scale(obj,[80,80]))
     if CreditButton:
         obj.credits.visible = True
-        player = obj.sounds["click.wav"].play()
+        player = obj.sounds["click.ogg"].play()
         del(player)
     #------------------------------The Tutorial Button---------------------------------------
     TutButton = interactions.ButtonArea(obj, obj.textures["tutorial.png"], utils.Scale(obj,(obj.dimensions[0] - 230,30)), utils.Scale(obj,[80,80]))
     if TutButton:
         obj.gm = "tutorial"
-        player = obj.sounds["click.wav"].play()
+        player = obj.sounds["click.ogg"].play()
         del(player)
 

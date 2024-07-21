@@ -39,12 +39,12 @@ def Noise(obj, scale, variability, randomnoise):
 
             obj.Terrain[x] += Height_Change
             obj.Terrain[x] = round(obj.Terrain[x])
-            if obj.Terrain[x] < -25000:
-                obj.Terrain[x] = -25000
+            if obj.Terrain[x] < -10000:
+                obj.Terrain[x] = -10000
                 Height_Change = 0
                 Terrain_Direction = 1
-            if obj.Terrain[x] > 25000:
-                obj.Terrain[x] = 25000
+            if obj.Terrain[x] > 10000:
+                obj.Terrain[x] = 10000
                 Height_Change = 0
                 Terrain_Direction = -1
             
@@ -69,7 +69,7 @@ def setup(obj):
     obj.TerrainAssets = []
     AssetChance = obj.Environment["Visuals"]["AssetFrequency"]
     if obj.isWeb:
-        AssetChance = round(AssetChance / 2.5)
+        AssetChance = round(AssetChance / 2)
     AssetCount = len(obj.Environment["Visuals"]["Assets"])
     x = 0
     obj.Terrain.append(-10000)
@@ -118,13 +118,13 @@ def PreparePolygons(obj):
         ItemB = PygamePolygon[c+1]
         ItemAX = ItemA[0]
         ItemBX = ItemB[0]
-        Vertices = [ItemA, ItemB, (ItemBX, 25100), (ItemAX, 25100)]
+        Vertices = [ItemA, ItemB, (ItemBX, 10100), (ItemAX, 10100)]
         #creating the polygon vertices
         Poly = Vertices
         PymunkPolygons.append(Poly)
         c += 1
         #creating the pygame polygons (inverting the Ys)
-        Vertices = [ItemA, ItemB, (ItemBX, -25100), (ItemAX, -25100)]
+        Vertices = [ItemA, ItemB, (ItemBX, -10100), (ItemAX, -10100)]
         PygamePolygons.append(Vertices)
     
     obj.PygamePolygons = PygamePolygon

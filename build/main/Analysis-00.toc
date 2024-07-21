@@ -2541,7 +2541,7 @@
   ('pyglet.media.codecs.gstreamer',
    'C:\\Users\\Valentin\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyglet\\media\\codecs\\gstreamer.py',
    'PYMODULE'),
-  ('pyglet.media.codecs.wave',
+  ('pyglet.media.codecs.ogge',
    'C:\\Users\\Valentin\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pyglet\\media\\codecs\\wave.py',
    'PYMODULE'),
   ('wave',

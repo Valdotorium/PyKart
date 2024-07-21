@@ -5,7 +5,7 @@ import pymunk.pygame_util
 from .fw import fw as utils
 import pymunk.constraints
 import random
-import pyglet.media
+
 import os
 from .interactions import interactions as interactions
 from . import particles
@@ -262,7 +262,7 @@ def Draw(obj):
             obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
             obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
             obj.restart = True
-            AlertSound = obj.sounds["alert.wav"]
+            AlertSound = obj.sounds["alert.ogg"]
             player = AlertSound.play()
             del(player)
 """Drawing the pymunk physics simulation"""
@@ -322,7 +322,7 @@ def CheckJoints(obj):
 def DistanceBonuses(obj):
     if obj._MetersTravelled  <= obj.NextKilometer and obj.MetersTravelled > obj.NextKilometer:
         obj.NextKilometer += 1000
-        AlertSound = obj.sounds["coinbag.wav"]
+        AlertSound = obj.sounds["coinbag.ogg"]
         player = AlertSound.play()
         del(player)
         #extra large bonuses:
@@ -378,7 +378,7 @@ def simulate(obj, fps):
         obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
         obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
         obj.restart = True
-        AlertSound = obj.sounds["alert.wav"]
+        AlertSound = obj.sounds["alert.ogg"]
         player = AlertSound.play()
         del(player)
         obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 150, obj))
