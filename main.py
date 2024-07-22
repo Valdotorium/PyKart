@@ -3,7 +3,6 @@
 #  "pygame-ce",
 #  "cffi",
 #  "pymunk",
-#  "pyglet",
 #  "os",
 #  "sys",
 #  "time",
@@ -292,8 +291,8 @@ async def main():
             Exo.fps = round(Exo.fps / 1.3)
         if Exo.fps * 1.35 < 1 /(Exo.frameTime - Exo.lastFrameTime):
             Exo.fps = round(Exo.fps * 1.4)
-        if Exo.fps > 50:
-            Exo.fps = 50
+        if Exo.fps > 48:
+            Exo.fps = 48
         if Exo.fps < 14:
             Exo.fps = 14
         if Exo.debug:

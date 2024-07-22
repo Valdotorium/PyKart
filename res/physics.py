@@ -462,7 +462,7 @@ def setup(obj):
     obj.space = pymunk.Space()#creating the space
     obj.space.collision_bias = 1
     obj.space.collision_persistence = 1
-    obj.space.collision_slop = 0.2
+    obj.space.collision_slop = 0.15
     obj.space.iterations = 40
     obj.space.gravity = Env["Gravity"]
     #static floor of the simulation
