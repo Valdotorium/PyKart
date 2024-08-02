@@ -31,6 +31,11 @@ built around joints.
 sorry and will do better in the next game, Valdotorium, 24/3/2024"""
 #mechanics
 """Checking if joints need to be broken, playing crashing sounds, performing core game mechanics besides physics(why is this here?)"""
+def ApplyAirResistance(obj):
+    c = 0
+    while c < len(obj.PymunkBodies) and c < len(obj.NewVehicle):
+        obj.PymunkBodies[c].velocity *= 1 - obj.Environment["Physics"]["Resistance"]
+        c += 1
 def Checkparts(obj):
     c = 0
     while c < len(obj.PymunkBodies) and c < len(obj.NewVehicle):
@@ -410,6 +415,8 @@ def simulate(obj, fps):
     obj.SoundInFrame = False
     #first block: draw vehicle, ground and minimap
     try:
+        if Env["Physics"]["Resistance"] != 0:
+            ApplyAirResistance(obj)
         LimitThrottle(obj)
         Draw(obj)
         

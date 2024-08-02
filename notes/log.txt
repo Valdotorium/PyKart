@@ -28,14 +28,11 @@ v1.1.1
 v1.1.2 -- 20.7.2024 ---- significantly reduced part wobble, balancing
 
 NOW TODO:
--offset pivotjoints and make two of them to reduce wobble, balance new breakpoint Values
 -update UI [NILS_NEUMI]
--Separator and adapter part
+-Spring Joint Part
+-Engine Sounds
 -jelly biome and assets
--update submerged due on 22.7.
--update 1.1 due on 15.7.
+-air resistance
+-water biome and assets
 
-GAMETEST TODOS:
-
-->add highscore counters, generate terrain once at start of game and then load it
 

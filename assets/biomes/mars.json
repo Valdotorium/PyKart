@@ -36,6 +36,7 @@
     "Physics":{
         "Friction": 0.8,
         "Bounce": 0.02,
+        "Resistance": 0,
         "Oxygen": false
     }
 }
