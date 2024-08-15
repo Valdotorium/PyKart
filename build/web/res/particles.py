@@ -11,6 +11,7 @@ class Particle():
         self.Position = list(utils.MultiplyTuple(Position, obj.GameZoom))
         self.Type = Type
         self.frame = 0
+    
         if self.Type == "Smoke":
             self.color = [130, 100, 100]
             self.alpha = 55
@@ -21,6 +22,7 @@ class Particle():
             self.shape = "Circle"
             self.randomizeVelocity = 0.6
             self.aerodynamics = True
+        
         if self.Type == "Dust":
             self.alpha = 50
             self.alphaDecay = -0.8
@@ -32,6 +34,7 @@ class Particle():
             self.shape = "Circle"
             self.randomizeVelocity = 0.6
             self.aerodynamics = True
+        
         if self.Type == "Spark":
             self.alpha = 160
             self.alphaDecay = -3
@@ -42,6 +45,7 @@ class Particle():
             self.shape = "Circle"
             self.randomizeVelocity = 0.5
             self.aerodynamics = False
+        
         if self.Type == "Red Flame":
             self.alpha = 190
             self.alphaDecay = -8
@@ -52,6 +56,7 @@ class Particle():
             self.shape = "Square"
             self.randomizeVelocity = 0.5
             self.aerodynamics = False
+        
         if self.Type == "Blue Flame":
             self.alpha = 220
             self.alphaDecay = -15
@@ -62,9 +67,33 @@ class Particle():
             self.shape = "Square"
             self.randomizeVelocity = 0.25
             self.aerodynamics = False
+        
+        if self.Type == "Bubble":
+            self.alpha = 200
+            self.alphaDecay = -4
+            self.color = [random.randint(100, 120), random.randint(180, 235), random.randint(195, 250)]
+            self.duration = 48
+            self.colorDecay = [-1, -4, -3]
+            self.aerodynamics = False
+            self.randomizeVelocity = False
+            self.size = random.randint(4, 11)
+            self.shape = "Circle"
+
+        if self.Type == "Star":
+            self.alpha = 150
+            self.alphaDecay = -1
+            self.color = [random.randint(230, 250), random.randint(225, 240), random.randint(190, 235)]
+            self.duration = 145
+            self.colorDecay = [-1, -1, -1]
+            self.aerodynamics = False
+            self.randomizeVelocity = False
+            self.size = random.randint(1, 5)
+            self.shape = "Circle"
+
         if self.shape == "Square":
             self.surface = pygame.Surface((self.size, self.size), pygame.SRCALPHA)
             pygame.draw.rect(self.surface, RoundColor(self.color), (0,0,self.size, self.size))
+        
         if self.shape =="Circle":
             self.surface = pygame.Surface((self.size * 2, self.size * 2), pygame.SRCALPHA)
             pygame.draw.circle(self.surface, RoundColor(self.color), (self.size, self.size), self.size)
@@ -155,7 +184,21 @@ def BlueFlame(obj, bodyindex, hasRotation, positionOffset, count):
         ParticleVelocity = list(utils.DivideTuple(ParticleVelocity, obj.fps))
         obj.particles.append(Particle(ParticleVelocity, ParticlePosition, "Blue Flame", obj))
         c += 1
+def Bubbles(obj):
+    ParticleVelocity = utils.DivideTuple(-obj.PymunkBodies[0].velocity, random.randint(20, 24))
+    #place the particle on a random location on screen
+    ParticlePosition = (random.randint(0, 1200), random.randint(0, 800))
+    ParticlePosition = list(ParticlePosition)
+    obj.particles.append(Particle(ParticleVelocity, ParticlePosition, "Bubble", obj))
 
+def Stars(obj):
+    #have a lower chance to appear
+    if random.randint(0,10) <= 1:
+        ParticleVelocity = (0,0)
+        #place the particle on a random location on screen
+        ParticlePosition = (random.randint(0, 1200), random.randint(0, 800))
+        ParticlePosition = list(ParticlePosition)
+        obj.particles.append(Particle(ParticleVelocity, ParticlePosition, "Star", obj))
 
 
 

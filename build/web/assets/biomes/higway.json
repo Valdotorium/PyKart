@@ -17,6 +17,7 @@
             {"image": "asset_railing_1.jpg", "size": [180,150], "offset": [0, -130]},
             {"image": "large_wheel.png", "size": [60,60], "offset": [-40, -40]},
             {"image":"asset_sign_1.png","size": [100,200], "offset": [0, -160]}],
+        "Particles": null,
         "AssetFrequency": 1.6
     },
     "Terrain":{
@@ -31,6 +32,7 @@
     },
     "Physics":{
         "Friction": 1,
+        "Resistance": 0.0025,
         "Bounce": 0.04,
         "Oxygen": true
     }

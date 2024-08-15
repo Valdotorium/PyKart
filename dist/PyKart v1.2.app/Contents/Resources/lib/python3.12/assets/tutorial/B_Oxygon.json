@@ -1,0 +1,26 @@
+{
+    "Title": "Oxgen",
+    "Contents":[
+        {
+            "Element": "TEXT",
+            "Size": "LARGE",
+            "Content": ["Oxygen"]
+        },
+        {
+            "Element": "IMG",
+            "Size": [500,300],
+            "Content": "_t_12.png"
+        },
+        {
+            "Element": "TEXT",
+            "Size": "MEDIUM",
+            "Content": ["Oxygen is necessary for combustion engines to work.", 
+        "So, this type of engine does not work on Mars, for example.",
+        "However, engines that do not rely on oxygen should work normally.",
+        "You can find out if an engine needs oxygen, by viewing the part info window.",
+        "The vehicle in the image above has an engine that relies on oxygen,",
+        "So it would not accelerate on Mars or Moon, for example."]
+
+        }
+    ]
+}

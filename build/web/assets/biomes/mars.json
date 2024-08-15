@@ -20,13 +20,13 @@
         {"image": "asset_rock_9.png", "size": [70,45], "offset": [-55, -34]},
         {"image": "asset_sign_5.png", "size": [60,160], "offset": [-45, -130]}
         ],
-
+        "Particles": null,
         "AssetFrequency": 4
     },
     "Terrain":{
         "Scale": 60,
-        "Flatness": 1.25,
-        "Difficulty": 3.5,
+        "Flatness": 1.4,
+        "Difficulty": 3.6,
         "Layers": 3,
         "StartVariability": 14,
         "StartScale": 24,
@@ -36,6 +36,7 @@
     "Physics":{
         "Friction": 0.8,
         "Bounce": 0.02,
+        "Resistance": 0,
         "Oxygen": false
     }
 }

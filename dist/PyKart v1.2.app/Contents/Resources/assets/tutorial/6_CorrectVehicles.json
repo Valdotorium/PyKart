@@ -1,0 +1,26 @@
+{
+    "Title": "Correct Vehicles",
+    "Contents":[
+        {
+            "Element": "TEXT",
+            "Size": "LARGE",
+            "Content": ["Valid Vehicles"]
+        },
+        {
+            "Element": "IMG",
+            "Size": [360,200],
+            "Content": "_t_5.png"
+        },
+        {
+            "Element": "TEXT",
+            "Size": "MEDIUM",
+            "Content": ["Vehicles can only be driven if they have at least 5 parts. (and in web also less tha 17 parts)", 
+        "Then you can press the green start button.",
+        "Because your money is limited and refunding is currently not possible,",
+        "use your money in a way that allow you to build a drivable car, so you can earn money by driving it.",
+        "The vehicle shown has 5 parts and is drivable.",
+        "To motorize the vehicle and make it movable, make sure to directly connect your wheels to engines",
+        "and / or use thrusters to proplse your vehicle."]
+        }
+    ]
+}

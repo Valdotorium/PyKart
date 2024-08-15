@@ -1,6 +1,0 @@
-CATEGORIES:
-
-Category    | Description                   |Number (BIN; DEC)| Mask(BIN;DEC)
-Ground      | Collides with all             | 100, 4          | 111, 7
-Semicolliders| Collides not with vehicle    | 010, 2          | 110, 6
-Colliders    |No sem.col. collisions        | 001, 1          | 101, 5

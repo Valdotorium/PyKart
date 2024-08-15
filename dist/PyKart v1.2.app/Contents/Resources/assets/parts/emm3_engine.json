@@ -1,0 +1,63 @@
+{
+    "Name": "EMM3 Engine",
+    "Index": 4,
+    "Type": "Engine",
+    "Cost": 22500,
+    "Stex": "EMM3_electric_engine.png",
+    "Center": [32,32],
+    "Properties": {
+        "Rot": 0,
+        "Friction": 1.25,
+        "Weight": 80,
+        "Bounciness": 0.004,
+        "JoiningBehavior": "Provide",
+        "RequiresOxygen": false,
+        "Power": 1000
+
+    },
+    "ShowProperties": ["Weight", "Power", "RequiresOxygen"],
+    "JointData": {
+        "BreakPoint": 44000,
+        "Hardness": 1,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Description": ["A very compact, high-qualty electric engine.", "provides power to connected wheels."],
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [32,0]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [64,32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [32, 64]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [0, 32]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [0,0],
+            "Type": "Rect",
+            "Size":[64,64],
+            "Anchor":[32,32],
+            "CollisionType": "Full"
+        },
+    "Textures": [{
+        "Image": "EMM3_electric_engine.png",
+        "Pos": [0,0],
+        "Size": [64,64]
+    }],
+    "Sounds": {
+        "Crash": [["tyre_2.ogg",1], ["metal_crash_3.ogg",0.5], ["metal_crash_4.ogg",0.5]],
+        "Active": [["electric_engine.ogg", 0.2]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+}
