@@ -1,7 +1,7 @@
 {
     "Gravity": [0,100],
     "Name": "Moon",
-    "Background": [150, 150, 150],
+    "Background": [50, 50, 50],
     "Preview": "preview_moon.png",
     "MoneyMultiplicator": 1.5,
     "Description": "Less Gravity and Greyscale. (No Oxygen Available)",
@@ -13,6 +13,7 @@
         {"image": "asset_rock_1.png", "size": [100,100], "offset": [-60, -60]},
         {"image": "asset_rock_2.png", "size": [60,60], "offset": [-50, -50]},
         {"image": "asset_rock_4.jpg", "size": [80,80], "offset": [-64, -64]}],
+        "Particles": "Stars",
         "AssetFrequency": 5
     },
     "Terrain":{

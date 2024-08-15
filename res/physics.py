@@ -31,6 +31,17 @@ built around joints.
 sorry and will do better in the next game, Valdotorium, 24/3/2024"""
 #mechanics
 """Checking if joints need to be broken, playing crashing sounds, performing core game mechanics besides physics(why is this here?)"""
+#environmental particles get created, such as bubbles or blinking stars on moon
+def CreateEnvironmentalParticles(obj):
+    if obj.Environment["Visuals"]["Particles"] != None:
+        particleType = obj.Environment["Visuals"]["Particles"]
+        if random.randint(1, 5) == 5:
+            if particleType == "Bubbles":
+                particles.Bubbles(obj)
+            elif particleType == "Stars":
+                particles.Stars(obj)
+
+#slowing down the vehicle with air/water/whatever resistance
 def ApplyAirResistance(obj):
     c = 0
     while c < len(obj.PymunkBodies) and c < len(obj.NewVehicle):
@@ -173,7 +184,7 @@ def UpdateParticles(obj):
                 #print("delete particle")
                 obj.particles.pop(obj.particles.index(particle))
         else:
-            if particle.frame > int(particle.duration / 1.5):
+            if particle.frame > int(particle.duration / 1.2):
                 #print("delete particle")
                 obj.particles.pop(obj.particles.index(particle))
 def DisplayEarnedMoney(obj):
@@ -238,15 +249,15 @@ def PygamePolygons(obj):
     while CurrentItem < EndItem:
         Vertices.append(obj.PygamePolygons[CurrentItem])
         CurrentItem += 1
-    Vertices.append([Vertices[len(Vertices)-1][0], -11200])
-    Vertices.append([Vertices[0][0], -11200])
+    Vertices.append([Vertices[len(Vertices)-1][0], 1200])
+    Vertices.append([Vertices[0][0], 1200])
     #offset all vertices by XOffset and YOffset
     Vertices = [[x - XOffset, y - YOffset] for x, y in Vertices]
-    Vertices[-1][1] = 0
-    Vertices[-2][1] = 0
+    Vertices[-1][1] = 1200
+    Vertices[-2][1] = 1200
 
     #draw all the polygons to the screen
-    pygame.draw.polygon(obj.screen, (obj.Environment["Background"]), Vertices)
+    pygame.draw.polygon(obj.screen, ((120,120,120)), Vertices)
     Vertices = Vertices[:-2]
     LineVertices = Vertices
     c = 0
@@ -310,8 +321,9 @@ def DrawMinimap(obj):
 def Draw(obj):
     #drawing the background
     WriteTerrainAssets(obj)
-    PygamePolygons(obj)
+    CreateEnvironmentalParticles(obj)
     UpdateParticles(obj)
+    PygamePolygons(obj)
     CheckJoints(obj)
     c = 0
     #obj.space.debug_draw(obj.draw_options)
@@ -678,3 +690,7 @@ def TransferStage(obj):
     text = "Freight value: " + str(obj.RideMoneyMultiplier)
     obj.RideMoneyMultiplier=round(obj.RideMoneyMultiplier)
     obj.TextAnimations.append(interactions.TextAnimation(text, 200, obj))
+
+    #move all bodies in obj.pymunkbodies by 600 px on the x axis
+    for body in obj.PymunkBodies:
+        body.position = pymunk.Vec2d(body.position.x + 600, body.position.y)

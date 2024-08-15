@@ -20,7 +20,7 @@
         {"image": "asset_rock_9.png", "size": [70,45], "offset": [-55, -34]},
         {"image": "asset_sign_5.png", "size": [60,160], "offset": [-45, -130]}
         ],
-
+        "Particles": null,
         "AssetFrequency": 4
     },
     "Terrain":{

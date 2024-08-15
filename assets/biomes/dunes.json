@@ -21,6 +21,7 @@
             {"image": "asset_bush_3.png", "size": [150,200], "offset": [-130, -170]},
             {"image": "asset_cactus_2.jpg", "size": [150,300], "offset": [-120, -260]},
             {"image": "asset_rock_9.png", "size": [70,45], "offset": [-55, -34]}],
+        "Particles": null,
         "AssetFrequency": 5
     },
     "Terrain":{

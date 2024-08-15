@@ -63,7 +63,6 @@ class Game():
         self.CFG_Default_Screen_Size = (1200,800)
         self.KeyCooldown = 0
         self.CFG_New_Game = False
-
         #STATIC
         #game vars
         self.TextAnimations = []
@@ -132,7 +131,7 @@ class Game():
         self.xp = round(self.xp)
         #res.interactions.interactions.ButtonArea(Exo)
         if self.gm == "game":
-            self.screen.fill((120,120,120))
+            self.screen.fill(self.Environment["Background"])
             res.controls.GameControls(self)
 
             res.mechanics.GameMechanics(self)
@@ -269,7 +268,6 @@ async def main():
             Exo.frame = frame
             res.load.respond(Exo)
             Exo.BiomeSelector = res.biomes.BiomeSelection(Exo)
-            Exo.screen.fill((100,100,100))
             pygame.display.flip()
             time.sleep(1)
             #res.terrain.terrain_quality_presets(Exo)

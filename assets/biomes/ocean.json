@@ -1,7 +1,7 @@
 {
     "Gravity": [0,200],
     "Name": "Ocean",
-    "Background": [90, 160, 170],
+    "Background": [80, 120, 140],
     "Preview": "preview_hillside.png",
     "MoneyMultiplicator": 5,
     "Description": "A Deep Dive",
@@ -14,6 +14,7 @@
             {"image": "asset_rock_2.png", "size": [50,50], "offset": [-40, -40]},
             {"image": "asset_rock_4.jpg", "size": [100,100], "offset": [-70, -70]}
         ],
+        "Particles": "Bubbles",
         "AssetFrequency": 6
     },
     "Terrain":{
@@ -29,7 +30,7 @@
     "Physics":{
         "Friction": 0.7,
         "Bounce": 0.08,
-        "Resistance": 0.04,
+        "Resistance": 0.025,
         "Oxygen": false
     }
 }
