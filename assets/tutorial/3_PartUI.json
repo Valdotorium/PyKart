@@ -14,18 +14,12 @@
         {
             "Element": "TEXT",
             "Size": "MEDIUM",
-            "Content": ["After clicking to place a part, a lot of buttons pop up at the top of the window", 
-        "The part that is marked with a white box around it is the selected part.",
-        "You can select parts by clicking them.",
-        "Here are the functions of the buttons from the left to the right:",
-        "Drive the Vehicle. The vehicle must consist of at least 5 parts.",
-        "(removed)",
-        "Delete a part. It will be available in the inventory after deleting it.",
-        "Unselect the current selected part or exit the part Information window",
-        "Move the current selected part.",
-        "Open a window with information for the current selected part.",
-        "Sell the current selected part, for 75% of its original value.(not shown in the image)",
-        "(Only in web version) rotate the current selected part"]
+            "Content": ["After clicking a placed part, a menu shows up",
+            "In which you can sell, delete, move and get information to the selected part.",
+            "Rotating parts is possible by using the A and D keys (not recommended in web),",
+            "or hovering the part above the rotate part button (marked in the image above),",
+            " which will rotate it by 45 degrees.",
+            "Selling a part returns 75 percent of its shop value to you."]
         }
     ]
 }

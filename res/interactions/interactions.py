@@ -197,8 +197,13 @@ class PartUI():
     def __init__(self, obj, part):
         self.boldfont = obj.boldfont
         self.font = obj.font
-        self.image = obj.textures["UI_tile_loweralpha.png"]
+        
         self.size = (800, 600)
+        self.image = pygame.Surface(self.size)
+        self.image.fill((220,220,220)) 
+        #draw a 5 pixel wide border 
+        pygame.draw.rect(self.image, (0,0,0), (0,0,self.size[0], self.size[1]), 5)
+
         self.part = None
         if part != None:
             self.part = part
@@ -222,6 +227,8 @@ class PartUI():
         Image = pygame.transform.scale(Image,(self.part["Textures"][0]["Size"][0] * 2,self.part["Textures"][0]["Size"][1] * 2 ))
         self.pos = obj.dimensions[0] / 2 - self.size[0] / 2,obj.dimensions[1] / 2 - self.size[1] / 2
         obj.screen.blit(self.image, self.pos )
+        self.CloseButton = ButtonArea(obj, obj.textures["_unselectButton.jpg"], (self.pos[0]- 25, self.pos[1]-25), (60*obj.scalefactor,60*obj.scalefactor))
+        
         obj.screen.blit(NameText, (self.pos[0] + 30, self.pos[1] + 30))
         obj.screen.blit(Image, (obj.dimensions[0] / 2 - Image.get_width() / 2, self.pos[1] + 90))
         ImageHeight = Image.get_height()

@@ -276,6 +276,7 @@ def setup(obj):
 def run(obj):
     #-------------------------miscellaneous --------------------------------
     PartIsValid = True
+
     if obj.debug:
         print(obj.RotationOfSelectedPart)
     scaleX = obj.scalefactor
@@ -289,30 +290,6 @@ def run(obj):
     #background for inventory tiles
     obj.PartInventory.update(obj)
 
-    #------------------------------The play button----------------------------------------------------------------
-    #count the items that are none in obj.vehicle
-    c = 0
-    PlacedPartCount = 0
-    while c < len(obj.Vehicle):
-        if obj.Vehicle[c] != None:
-            PlacedPartCount += 1
-        c += 1
-    
-    if 4 < PlacedPartCount:
-        #only vehicles with five or more parts are allowed
-        PlayButtonImg = obj.textures["PlayButton.png"]
-        PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[90,90]))
-        PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[40,20]), utils.Scale(obj,[90,90]))
-        if PlayButton and not obj.UserIsPlacingPart:
-            SelectSound = obj.sounds["click.ogg"]
-            SelectSound.play()
-            if obj.debug:
-                print("User just cligged on the play button")
-            obj.gm = "biomeselection"
-    else:
-        PlayButtonImg = obj.textures["PlayButtonLocked.png"]
-        PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[90,90]))
-        interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[40,20]), utils.Scale(obj,[90,90]))
     #------------------------------Drawing the Vehicle--------------------------------------------------------
         
     c = 0
@@ -335,18 +312,7 @@ def run(obj):
                 #rectangle for part rotation cuz it works somehow
                 texture_rect = textur.get_rect(center = PositionOfTexture)
                 obj.screen.blit(textur, texture_rect)
-                #centering the part at its center point
-                PositionOfTexture = utils.SubstractTuples(PositionOfTexture,obj.Vehicle[c]["Center"])
-                IsClicked = interactions.ClickArea(PositionOfTexture, utils.MultiplyTuple(TexturesOfPart[cc]["Size"], scaleX))
-                if IsClicked:
-                    if obj.debug:
-                        print("user just selected part ", c, " of Vehicle")
-                    if obj.SelectedBuiltPart != c:
-                        SelectSound = obj.sounds["click.ogg"]
-                        SelectSound.play()
-                    obj.SelectedBuiltPart = c
-                    #drawing a rect at the position of the texture with the size of the texture
-                    pygame.draw.rect(obj.screen, (50,50,50), (PositionOfTexture[0], PositionOfTexture[1],round(TexturesOfPart[cc]["Size"][0] * scaleX), round(TexturesOfPart[cc]["Size"][1] * scaleX)), 2,2)
+                
                 cc += 1
         c += 1
     #------------------------------Drawing the Joints-----------------------------------------------------------
@@ -497,7 +463,7 @@ def run(obj):
     #------------------------------Upon placement, check if the position of the parts center is within a valid rectangle (BuildBackgroundImg)--------------------------------
     if obj.selectedPart != "" and obj.CFG_Build_Enforce_Rules and not obj.UserHasRotatedPart and obj.UserIsPlacingPart and not MouseIsClicked:
         #is the user trying to place an "unjoined" accepting joint?
-        if  obj.dimensions[0] * 0.1 < mx < 0.9 * obj.dimensions[0] and obj.dimensions[1] * 0.12 < my < 0.66 * obj.dimensions[1]:
+        if  obj.dimensions[0] * 0.05 < mx < 0.85 * obj.dimensions[0] and obj.dimensions[1] * 0.1 < my < 0.66 * obj.dimensions[1]:
             #if the mouse is touching BuildBackgroundImg, the part gets placed
             if obj.SnappedJointData == [] or obj.SnappedJointData != []:
                 #checking if the position of the part is otherwise invalid
@@ -584,13 +550,29 @@ def run(obj):
         while c < len(JointPositionsOfSelectedPart):
             pygame.draw.circle(obj.screen, (200,0,0), JointPositionsOfSelectedPart[c], 5 * scaleX)
             c += 1
-    #------------------------------The Unselect Part Button-------------------------------------
+
+
+            #------------------------------The Unselect Part Button-------------------------------------
     #dragging should now be possible
     if obj.SelectedPart:
         if not MouseIsClicked:
             obj.SelectedPart = False
     if obj.SelectedBuiltPart != None:
-        UnselectButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(300,30)), utils.Scale(obj,[60,60]))
+        #------------------------------Marking the selected part-------------------------------------
+        if obj.SelectedBuiltPart != None:
+            partSize = (obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][0],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][1])
+            RectPos = utils.SubstractTuples(obj.Vehicle[obj.SelectedBuiltPart]["Pos"], obj.Vehicle[obj.SelectedBuiltPart]["Center"])
+            RectPos = utils.AddTuples(RectPos, utils.DivideTuple(obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Pos"], 1))
+            pygame.draw.rect(obj.screen, (250,225,225), (RectPos[0], RectPos[1],partSize[0], partSize[1]), 2,2)
+            #checking if the selected part is being clicked for over 10 frames, if true, then move part
+            if RectPos[0] < mx < RectPos[0] + partSize[0] and RectPos[1] < my < RectPos[1] + partSize[1] and obj.Cursor.clickedTicks >= 10:
+                obj.moveSelectedPart = True
+                obj.Cursor.SetArrows()
+        PositionOfSelectedBuildPart = obj.Vehicle[obj.SelectedBuiltPart]["Pos"]
+        pygame.draw.rect(obj.screen, (220,220,220), (PositionOfSelectedBuildPart[0] + 40, PositionOfSelectedBuildPart[1] - 100, 180, 360))
+        pygame.draw.rect(obj.screen, (30,30,30), (PositionOfSelectedBuildPart[0] + 40, PositionOfSelectedBuildPart[1] - 100, 180, 360), 5)
+
+        UnselectButton = interactions.ButtonArea(obj, obj.textures["_unselectButton.jpg"], utils.Scale(obj,[PositionOfSelectedBuildPart[0] + 200, PositionOfSelectedBuildPart[1] - 120]), utils.Scale(obj,[60,60]))
         if UnselectButton or pygame.key.get_pressed()[pygame.K_s]:
             if not obj.UserIsPlacingPart:
                 obj.credits.visible = False
@@ -598,10 +580,15 @@ def run(obj):
                 obj.SelectedBuiltPart = None
                 SelectSound = obj.sounds["click.ogg"]
                 SelectSound.play() 
+
+        #checking if the user has closed the part UI
+        if obj.CurrentPartUI.part != None:
+            if obj.CurrentPartUI.CloseButton:
+                obj.CurrentPartUI.part = None
         #---------------------The Delete Part Button--------------------------------
-        DeleteButton = interactions.ButtonArea(obj, obj.textures["DeleteButton.png"], utils.Scale(obj,(220,30)), utils.Scale(obj,[60,60]))
+        DeleteButton = interactions.ButtonArea(obj, obj.textures["_deleteButton.jpg"], utils.Scale(obj, [PositionOfSelectedBuildPart[0] + 45, PositionOfSelectedBuildPart[1] - 80]), utils.Scale(obj,[170,78]))
         if DeleteButton or pygame.key.get_pressed()[pygame.K_x]:
-            if not obj.UserIsPlacingPart:
+            if not obj.UserIsPlacingPart and obj.SelectedBuiltPart != None:
                 SelectSound = obj.sounds["tyre_2.ogg"]
                 SelectSound.play()
                 obj.Cursor.SetDelete()
@@ -611,7 +598,7 @@ def run(obj):
                 DeletePart(obj)
         
     #------------------------------The Move Part Button------------------------------------------
-        MoveButton = interactions.ButtonArea(obj, obj.textures["MoveButton.png"], utils.Scale(obj,(380,30)), utils.Scale(obj,[60,60]))
+        MoveButton = interactions.ButtonArea(obj, obj.textures["_moveButton.jpg"], utils.Scale(obj, [PositionOfSelectedBuildPart[0] + 45, PositionOfSelectedBuildPart[1]+ 160]), utils.Scale(obj,[170,78]))
         if MoveButton or pygame.key.get_pressed()[pygame.K_m] or obj.moveSelectedPart and not obj.UserIsPlacingPart:
             if not obj.UserIsPlacingPart:
                 SelectSound = obj.sounds["click.ogg"]
@@ -632,9 +619,10 @@ def run(obj):
                 pygame.mouse.set_pos(PartPosition)
                 mx, my = pygame.mouse.get_pos()
                 obj.Cursor.SetArrows()
+        obj.moveSelectedPart = False
     #---------------------The Sell Part Button--------------------------------
-        SellButton = interactions.ButtonArea(obj, obj.textures["returnButton.png"], utils.Scale(obj,(540,30)), utils.Scale(obj,[60,60]))
-        if SellButton or pygame.key.get_pressed()[pygame.K_r]:
+        SellButton = interactions.ButtonArea(obj, obj.textures["_sellButton.jpg"], utils.Scale(obj, [PositionOfSelectedBuildPart[0] + 45, PositionOfSelectedBuildPart[1] + 80]), utils.Scale(obj,[170,78]))
+        if SellButton or pygame.key.get_pressed()[pygame.K_s]:
             if not obj.UserIsPlacingPart:
                 SelectSound = obj.sounds["coinbag.ogg"]
                 SelectSound.play()
@@ -646,18 +634,16 @@ def run(obj):
                 obj.Cursor.SetSell()
 
                 DeletePart(obj)
+    #------------------------------The Part Info Button---------------------------------------
+        PartInfoButton = interactions.ButtonArea(obj, obj.textures["_infoButton.jpg"], utils.Scale(obj, [PositionOfSelectedBuildPart[0] + 45, PositionOfSelectedBuildPart[1]]), utils.Scale(obj,[170,78]))
+        if PartInfoButton or pygame.key.get_pressed()[pygame.K_i]:
+            if obj.SelectedBuiltPart != None and obj.CurrentPartUI.part == None and not obj.UserIsPlacingPart:
+                SelectSound = obj.sounds["click.ogg"]
+                SelectSound.play()
+                obj.CurrentPartUI.setPart(obj.Vehicle[obj.SelectedBuiltPart])
+        if obj.CurrentPartUI.part != None and obj.SelectedBuiltPart != None:
+            obj.CurrentPartUI.update(obj)
         
-    #------------------------------Marking the selected part-------------------------------------
-    obj.moveSelectedPart = False
-    if obj.SelectedBuiltPart != None:
-        partSize = (obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][0],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][1])
-        RectPos = utils.SubstractTuples(obj.Vehicle[obj.SelectedBuiltPart]["Pos"], obj.Vehicle[obj.SelectedBuiltPart]["Center"])
-        RectPos = utils.AddTuples(RectPos, utils.DivideTuple(obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Pos"], 1))
-        pygame.draw.rect(obj.screen, (250,225,225), (RectPos[0], RectPos[1],partSize[0], partSize[1]), 2,2)
-        #checking if the selected part is being clicked for over 10 frames, if true, then move part
-        if RectPos[0] < mx < RectPos[0] + partSize[0] and RectPos[1] < my < RectPos[1] + partSize[1] and obj.Cursor.clickedTicks >= 10:
-            obj.moveSelectedPart = True
-            obj.Cursor.SetArrows()
     #------------------------------The Reload Vehicle Button---------------------------------------
     if not obj.isWeb:
         ReloadButton = interactions.ButtonArea(obj, obj.textures["ReloadButton.png"], utils.Scale(obj,(140,30)), utils.Scale(obj,[60,60]))
@@ -665,22 +651,65 @@ def run(obj):
             utils.ReloadVehicle(obj)
 
         
-    #------------------------------The Part Info Button---------------------------------------
-    PartInfoButton = interactions.ButtonArea(obj, obj.textures["infoButton.png"], utils.Scale(obj,(460,30)), utils.Scale(obj,[60,60]))
-    if PartInfoButton or pygame.key.get_pressed()[pygame.K_i]:
-        if obj.SelectedBuiltPart != None and obj.CurrentPartUI.part == None and not obj.UserIsPlacingPart:
-            SelectSound = obj.sounds["click.ogg"]
-            SelectSound.play()
-            obj.CurrentPartUI.setPart(obj.Vehicle[obj.SelectedBuiltPart])
-    if obj.CurrentPartUI.part != None and obj.SelectedBuiltPart != None:
-        obj.CurrentPartUI.update(obj)
     #------------------------------The Credits Button---------------------------------------
-    CreditButton = interactions.ButtonArea(obj, obj.textures["logo.png"], utils.Scale(obj,(obj.dimensions[0] - 100,20)), utils.Scale(obj,[80,80]))
+    CreditButton = interactions.ButtonArea(obj, obj.textures["_creditsButton.jpg"], utils.Scale(obj,(200,20)), utils.Scale(obj,[160,60]))
     if CreditButton and not obj.UserIsPlacingPart:
         obj.credits.visible = True
         obj.sounds["click.ogg"].play()
     #------------------------------The Tutorial Button---------------------------------------
-    TutButton = interactions.ButtonArea(obj, obj.textures["tutorial.png"], utils.Scale(obj,(obj.dimensions[0] - 200,20)), utils.Scale(obj,[80,80]))
+    TutButton = interactions.ButtonArea(obj, obj.textures["_helpButton.jpg"], utils.Scale(obj,(380,20)), utils.Scale(obj,[160,60]))
     if TutButton  and not obj.UserIsPlacingPart:
         obj.gm = "tutorial"
         player = obj.sounds["click.ogg"].play()
+
+    #------------------------------The play button----------------------------------------------------------------
+    #count the items that are none in obj.vehicle
+    c = 0
+    PlacedPartCount = 0
+    while c < len(obj.Vehicle):
+        if obj.Vehicle[c] != None:
+            PlacedPartCount += 1
+        c += 1
+    
+    if 4 < PlacedPartCount:
+        #only vehicles with five or more parts are allowed
+        PlayButtonImg = obj.textures["_driveButton.jpg"]
+        #PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[160,80]))
+        PlayButton = interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[20,20]), utils.Scale(obj,[160,60]))
+        if PlayButton and not obj.UserIsPlacingPart:
+            SelectSound = obj.sounds["click.ogg"]
+            SelectSound.play()
+            if obj.debug:
+                print("User just cligged on the play button")
+            obj.gm = "biomeselection"
+    else:
+        PlayButtonImg = obj.textures["_lockedDriveButton.jpg"]
+        PlayButtonImg = pygame.transform.scale(PlayButtonImg, utils.Scale(obj,[160,80]))
+        interactions.ButtonArea(obj, PlayButtonImg, utils.Scale(obj,[40,20]), utils.Scale(obj,[160,60]))
+
+    #------------------------------checking if the user is selecting a built part--------------------------------
+    c = 0
+    while c < len(obj.Vehicle):
+        if obj.Vehicle[c] != None:
+            cc = 0
+            TexturesOfPart = obj.Vehicle[c]["Textures"]
+            while cc < len(obj.Vehicle[c]["Textures"]):
+                TextureOffset = TexturesOfPart[cc]["Pos"]
+                #rotate the texture offset
+                TextureOffset = utils.RotateVector(TextureOffset, -obj.Vehicle[c]["Rotation"])
+                #data of the texture stored in "Textures"
+                PositionOfTexture = utils.AddTuples(obj.Vehicle[c]["Pos"],TextureOffset)
+                #centering the part at its center point
+                PositionOfTexture = utils.SubstractTuples(PositionOfTexture,obj.Vehicle[c]["Center"])
+                IsClicked = interactions.ClickArea(PositionOfTexture, utils.MultiplyTuple(TexturesOfPart[cc]["Size"], scaleX))
+
+                if IsClicked and obj.SelectedPart != None and not obj.moveSelectedPart and not obj.UserIsPlacingPart:
+                    if obj.debug:
+                        print("user just selected part ", c, " of Vehicle")
+                    if obj.SelectedBuiltPart != c:
+                        SelectSound = obj.sounds["click.ogg"]
+                        SelectSound.play()
+                    obj.SelectedBuiltPart = c
+                cc += 1
+        c += 1
+
