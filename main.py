@@ -48,7 +48,7 @@ class Game():
         self.frameTime = time.time()
         #DEV options
         self.isWeb = True
-        self.debug = True
+        self.debug = False
         self.selected_part = ""
         self.running = True
         self.fps = 10
@@ -63,7 +63,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200,800)
         self.KeyCooldown = 0
-        self.CFG_New_Game =True
+        self.CFG_New_Game = True
         #STATIC
         #game vars
         self.TextAnimations = []
@@ -291,10 +291,10 @@ async def main():
             Exo.fps = round(Exo.fps / 1.3)
         if Exo.fps * 1.35 < 1 /(Exo.frameTime - Exo.lastFrameTime):
             Exo.fps = round(Exo.fps * 1.4)
-        if Exo.fps > 50:
-            Exo.fps = 50
-        if Exo.fps < 25:
-            Exo.fps = 25
+        if Exo.fps > 40:
+            Exo.fps = 40
+        if Exo.fps < 24:
+            Exo.fps = 24
         if Exo.debug:
             print((Exo.frameTime - Exo.lastFrameTime), "FPS:",Exo.fps)
 

@@ -430,7 +430,7 @@ def simulate(obj, fps):
         if Env["Physics"]["Resistance"] != 0:
             ApplyAirResistance(obj)
         LimitThrottle(obj)
-        Draw(obj)
+        PhysDraw(obj)
         
 
     except Exception as e:

@@ -26,19 +26,19 @@
     "Joints":[
         {
             "Type": "Provide",
-            "Pos": [16,32]
+            "Pos": [0,32]
         },
         {
             "Type": "Provide",
-            "Pos": [80,32]
+            "Pos": [64,32]
         }
     ],
     "Hitbox":{
-            "Pos": [0,0],
+            "Pos": [16,0],
             "Type": "Rect",
-            "Size":[64,64],
-            "Anchor":[32,32],
-            "CollisionType": "Semi"
+            "Size":[32,64],
+            "Anchor":[16,32],
+            "CollisionType": "Full"
         },
     "Textures": [{
         "Image": "newLinker.jpg",
