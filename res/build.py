@@ -563,7 +563,9 @@ def run(obj):
             partSize = (obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][0],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][1])
             RectPos = utils.SubstractTuples(obj.Vehicle[obj.SelectedBuiltPart]["Pos"], obj.Vehicle[obj.SelectedBuiltPart]["Center"])
             RectPos = utils.AddTuples(RectPos, utils.DivideTuple(obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Pos"], 1))
-            pygame.draw.rect(obj.screen, (250,225,225), (RectPos[0], RectPos[1],partSize[0], partSize[1]), 2,2)
+            rectSurf = pygame.Surface(partSize, pygame.SRCALPHA)
+            pygame.draw.rect(rectSurf, (250,225,225), (0,0,partSize[0], partSize[1]), 2,2)
+            utils.blitRotateCenter(obj.screen, rectSurf, RectPos, obj.Vehicle[obj.SelectedBuiltPart]["Rotation"])
             #checking if the selected part is being clicked for over 10 frames, if true, then move part
             if RectPos[0] < mx < RectPos[0] + partSize[0] and RectPos[1] < my < RectPos[1] + partSize[1] and obj.Cursor.clickedTicks >= 10:
                 obj.moveSelectedPart = True

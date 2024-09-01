@@ -43,12 +43,12 @@ class Game():
         self.window = pygame.display.set_mode((1200,800), pygame.RESIZABLE)
         self.rldimensions = (1200,800)
         self.window.fill((100,100,100))
-        pygame.display.set_caption("PyKart - v 1.1")
+        pygame.display.set_caption("PyKart - v 1.3")
         self.lastFrameTime = time.time()
         self.frameTime = time.time()
         #DEV options
         self.isWeb = True
-        self.debug = False
+        self.debug = True
         self.selected_part = ""
         self.running = True
         self.fps = 10
@@ -63,7 +63,7 @@ class Game():
         self.CFG_Enable_Biomes = False
         self.CFG_Default_Screen_Size = (1200,800)
         self.KeyCooldown = 0
-        self.CFG_New_Game = False
+        self.CFG_New_Game =True
         #STATIC
         #game vars
         self.TextAnimations = []
@@ -188,8 +188,9 @@ class Game():
         #calculating the execution time of every frame
         self.lastFrameTime = self.frameTime
         self.frameTime = time.time()
-        self.clock.tick(self.fps)
         self.updateWindow(self.window)
+        self.clock.tick(self.fps)
+        
 
         #"quit control"
         for event in pygame.event.get():
@@ -290,12 +291,12 @@ async def main():
             Exo.fps = round(Exo.fps / 1.3)
         if Exo.fps * 1.35 < 1 /(Exo.frameTime - Exo.lastFrameTime):
             Exo.fps = round(Exo.fps * 1.4)
-        if Exo.fps > 48:
-            Exo.fps = 48
-        if Exo.fps < 14:
-            Exo.fps = 14
+        if Exo.fps > 50:
+            Exo.fps = 50
+        if Exo.fps < 25:
+            Exo.fps = 25
         if Exo.debug:
-            print(Exo.fps)
+            print((Exo.frameTime - Exo.lastFrameTime), "FPS:",Exo.fps)
 
         await asyncio.sleep(0)
         #handling error messages

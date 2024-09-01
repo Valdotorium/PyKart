@@ -553,8 +553,15 @@ def TransferStage(obj):
             HitboxPosition = HitboxOfPart["Pos"]
             #defining shapes of hitboxes
             if HitboxOfPart["Type"] == "Rect":
-                #centering the Hitbox
                 HitboxPosition = utils.SubstractTuples(HitboxPosition, obj.Vehicle[c]["Center"])
+               #add pos of the hitbox to offset it
+                print("HBP before:", HitboxPosition)
+                HitboxPosition = utils.RotateVector(HitboxPosition, obj.Vehicle[c]["Rotation"])
+                #centering the Hitbox
+
+                print("HBP after:", HitboxPosition, obj.Vehicle[c]["Rotation"])
+
+
                 HitboxVertices = []
                 #top left corner
                 HitboxVertices.append(HitboxPosition)

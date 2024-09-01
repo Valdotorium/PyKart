@@ -6,7 +6,7 @@
     "MoneyMultiplicator": 5,
     "Description": "Since there is water everywhere, moving here is not that easy...",
     "Visuals":{
-        "GroundColors": [[170, 170, 120], [150,140, 45], [135, 125, 20], [130, 120, 0]],  
+        "GroundColors": [[200, 200, 0], [150,140, 45], [135, 125, 20], [130, 120, 0]],  
         "LayerHeights": [25,30,35,35],
         "HasSurfaceMarkings": false,
         "Assets": [
@@ -17,10 +17,14 @@
             {"image": "asset_sea_rock_2.png", "size": [130,70], "offset": [-100, -45]},
             {"image": "asset_sea_rock_3.png", "size": [110,80], "offset": [-85, -50]},
             {"image": "asset_shell_1.png", "size": [80,80], "offset": [-50, -20]},
+            {"image": "asset_sea_rock_1.png", "size": [240,160], "offset": [-160, -90]},
+            {"image": "asset_sea_rock_2.png", "size": [250,130], "offset": [-200, -95]},
+            {"image": "asset_sea_rock_3.png", "size": [220,150], "offset": [-155, -120]},
+            {"image": "asset_shell_1.png", "size": [150,150], "offset": [-100, -50]},
             {"image": "asset_shell_2.png", "size": [110,110], "offset": [-75, -20]}
         ],
         "Particles": "Bubbles",
-        "AssetFrequency": 9
+        "AssetFrequency": 11
     },
     "Terrain":{
         "Scale": 60,
@@ -35,7 +39,7 @@
     "Physics":{
         "Friction": 0.7,
         "Bounce": 0.08,
-        "Resistance": 0.0275,
+        "Resistance": 0.025,
         "Oxygen": false
     }
 }
