@@ -92,10 +92,13 @@ def CheckJoints(obj):
                     obj.TextAnimations.append(interactions.TextAnimation("BONK +25", 100, obj))
                 elif r == 4:
                     obj.TextAnimations.append(interactions.TextAnimation("CRACK +25", 100, obj))
+                """TODO #26
                 ParticlePartA = obj.NewVehicleJoints[c]["JoinedParts"][1]
                 ParticlePartB = obj.NewVehicleJoints[c]["JoinedParts"][0]
-                particles.ParticleEffect(obj, "Break", ParticlePartA)
-                particles.ParticleEffect(obj, "Break", ParticlePartB)
+                particleVelocity = obj.PymunkBodies[ParticlePartA].velocity
+                particles.Explosion(obj, list(obj.PymunkBodies[ParticlePartA].position), list(particleVelocity), JointImpulse)
+                particles.Explosion(obj, list(obj.PymunkBodies[ParticlePartB].position), list(particleVelocity), JointImpulse)"""
+
                 obj.space.remove(obj.PymunkJoints[c])
                 obj.NewVehicleJoints[c] = None
                 obj.PymunkJoints[c] = None
@@ -333,7 +336,9 @@ def Draw(obj):
         BodyRotation = -utils.RadiansToDegrees(obj.PymunkBodies[c].angle)
         #scrolling camera?
         BodyPosition = (obj.PymunkBodies[c].position[0] - obj.X_Position, obj.PymunkBodies[c].position[1] - obj.Y_Position)
-        #print(BodyPosition,  BodyRotation)
+        
+        HitboxPos = utils.Negative(obj.NewVehicle[c]["Hitbox"]["Pos"])
+        
         PartTextures = obj.PhysicsOutputData[c]["PartTextures"]
         cc = 0
         while cc < len(PartTextures):
@@ -345,11 +350,15 @@ def Draw(obj):
             if obj.isWeb:
                 #Image = pygame.transform.scale(Image, PartTextures[cc]["Size"])
                 Image = pygame.transform.rotate(Image, Rotation)
-                Position = utils.AddTuples(BodyPosition, utils.RotateVector(PartTextures[cc]["Pos"], -BodyRotation))
+                Position = BodyPosition
+                if obj.NewVehicle[c]["Hitbox"]["Type"] != "Circle":
+                    Position = utils.AddTuples(BodyPosition, utils.RotateVector(HitboxPos , -BodyRotation))
             else:
                 Image = pygame.transform.scale(Image, utils.MultiplyTuple(PartTextures[cc]["Size"], obj.GameZoom))
                 Image = pygame.transform.rotate(Image, Rotation)
                 Position = utils.AddTuples(utils.MultiplyTuple(BodyPosition, obj.GameZoom), utils.MultiplyTuple(utils.RotateVector(PartTextures[cc]["Pos"], -BodyRotation), obj.GameZoom))
+                if obj.NewVehicle[c]["Hitbox"]["Type"] != "Circle":
+                    Position = utils.AddTuples(BodyPosition, utils.RotateVector(HitboxPos , -BodyRotation))
             #applying rotation 
             #rectangle for part rotation cuz it works somehow
             texture_rect = Image.get_rect(center = Position)
@@ -368,7 +377,7 @@ def Draw(obj):
     DisplayDistance(obj)
     DisplayEarnedMoney(obj)
     if -14 < obj.VehicleSpeed < 10:
-        ReloadButton = interactions.ButtonArea(obj, obj.textures["UnselectButton.png"], utils.Scale(obj,(150,50)), utils.Scale(obj,[64,64]))
+        ReloadButton = interactions.ButtonArea(obj, obj.textures["_unselectButton.jpg"], utils.Scale(obj,(50,260)), utils.Scale(obj,[60,60]))
         if ReloadButton or pygame.key.get_pressed()[pygame.K_s]:
             #add the meters travelled as money
             obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
@@ -383,36 +392,36 @@ def PhysDraw(obj):
     obj.space.debug_draw(obj.draw_options)
 
 def DistanceBonuses(obj):
-    if obj._MetersTravelled  <= obj.NextKilometer and obj.MetersTravelled > obj.NextKilometer:
-        obj.NextKilometer += 1000
+    if obj._MetersTravelled  <= obj.NextMilestone and obj.MetersTravelled > obj.NextMilestone:
+        obj.NextMilestone += 500
 
         AlertSound = obj.sounds["coinbag.ogg"]
         player = AlertSound.play()
 
         #extra large bonuses:
-        if obj.NextKilometer == 3000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 1.2))
-            text = "2km Distance Bonus: +" + str(round(MoneyBonus))
-        elif obj.NextKilometer == 6000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 2))
-            text = "5km Distance Bonus: +" + str(round(MoneyBonus))
-        elif obj.NextKilometer == 11000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 2.8))
+        if obj.NextMilestone == 1500:
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 1.75))
+            text = "1km Distance Bonus: +" + str(round(MoneyBonus))
+        elif obj.NextMilestone == 3500:
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 2.5))
+            text = "3km Distance Bonus: +" + str(round(MoneyBonus))
+        elif obj.NextMilestone == 5500:
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 3))
+            text = " 5km Distance Bonus: +" + str(round(MoneyBonus))
+        elif obj.NextMilestone == 10500:
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 3.75))
             text = " 10km Distance Bonus: +" + str(round(MoneyBonus))
-        elif obj.NextKilometer == 16000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 3.5))
+        elif obj.NextMilestone == 15500:
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 4.5))
             text = " 15km Distance Bonus: +" + str(round(MoneyBonus))
-        elif obj.NextKilometer == 21000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 4))
-            text = " 20km Distance Bonus: +" + str(round(MoneyBonus))
-        elif obj.NextKilometer == 31000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 3.5))
-            text = " 30km Distance Bonus: +" + str(round(MoneyBonus))
-        elif obj.NextKilometer == 51000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 3))
+        elif obj.NextMilestone == 25500:
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 3.75))
+            text = " 25km Distance Bonus: +" + str(round(MoneyBonus))
+        elif obj.NextMilestone == 35500:
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 3))
             text = " 50km Distance Bonus: +" + str(round(MoneyBonus))
         else:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 0.8))
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 1.5))
             text = "Distance Bonus: +" + str(round(MoneyBonus))
         obj.StuntMoneyForRide += MoneyBonus
 
@@ -437,27 +446,26 @@ def simulate(obj, fps):
         obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
         obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
         obj.restart = True
-
         AlertSound = obj.sounds["alert.ogg"]
         player = AlertSound.play()
         obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not draw frame", 200, obj))
         print("INTERNAL ERROR: Could not draw frame: " + str(e))
-    #second block: perform value and physics simulation
-    #try:
-    #CheckJoints(obj) -moved into draw because of springs
-    Checkparts(obj)
-    utils.DisplayMoney(obj)
-    DistanceBonuses(obj)
-    #except Exception as e:
-    #    obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
-    #    obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
-    #    obj.restart = True
-    #    if not obj.isWeb:
-    #        AlertSound = obj.sounds["alert.ogg"]
-    #        player = AlertSound.play()
-    #        del(player)
-    #    obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 200, obj))
-    #    print("INTERNAL ERROR: Could not simulate physics: " + str(e))
+        #second block: perform value and physics simulation
+    try:
+    #CheckJoints(obj) #moved into draw because of springs
+        Checkparts(obj)
+        utils.DisplayMoney(obj)
+        DistanceBonuses(obj)
+    except Exception as e:
+        obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
+        obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
+        obj.restart = True
+        if not obj.isWeb:
+            AlertSound = obj.sounds["alert.ogg"]
+            player = AlertSound.play()
+            del(player)
+        obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 200, obj))
+        print("INTERNAL ERROR: Could not simulate physics: " + str(e))
 def FindFreight(obj):
     c = 0
     obj.RideMoneyMultiplier = 1
@@ -492,7 +500,7 @@ def setup(obj):
     obj.rpm = 0
     obj.StuntMoneyForRide = 0
     #kilometerwise money bonuses
-    obj.NextKilometer = 1000
+    obj.NextMilestone = 500
     obj.MetersTravelled = 0
     obj._MetersTravelled = 0
     #initialize speed and rpm display
@@ -536,7 +544,7 @@ def TransferStage(obj):
             #applying rotation
             Angle = -utils.DegreesToRadians(obj.Vehicle[c]["Rotation"])
             hitbox_body = pymunk.Body(1,100,body_type=pymunk.Body.DYNAMIC)
-            hitbox_body.position = utils.AddTuples(PartPosition, HitboxOfPart["Pos"])
+            hitbox_body.position = utils.AddTuples(PartPosition, utils.RotateVector(HitboxOfPart["Pos"], -obj.Vehicle[c]["Rotation"]))
             
             #the following variables can be used for drawing the hitboxes
             hitbox_body.properties = {"Type":HitboxOfPart["Type"],
@@ -550,11 +558,18 @@ def TransferStage(obj):
                                       "Center": obj.Vehicle[c]["Center"],
                                       "PartTextures": obj.Vehicle[c]["Textures"]
                                       })
-            HitboxPosition = HitboxOfPart["Pos"]
+            HitboxPosition = [0,0]
             #defining shapes of hitboxes
             if HitboxOfPart["Type"] == "Rect":
-                #centering the Hitbox
                 HitboxPosition = utils.SubstractTuples(HitboxPosition, obj.Vehicle[c]["Center"])
+               #add pos of the hitbox to offset it
+                print("HBP before:", HitboxPosition)
+                #HitboxPosition = utils.RotateVector(HitboxPosition, obj.Vehicle[c]["Rotation"])
+                #centering the Hitbox
+
+                print("HBP after:", HitboxPosition, obj.Vehicle[c]["Rotation"])
+
+
                 HitboxVertices = []
                 #top left corner
                 HitboxVertices.append(HitboxPosition)

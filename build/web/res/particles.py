@@ -7,7 +7,7 @@ def RoundColor(color):
     return (int(color[0]), int(color[1]), int(color[2]))
 class Particle():
     def __init__(self, Velocity, Position, Type, obj):
-        self.Velocity = Velocity
+        self.Velocity = list(Velocity)
         self.Position = list(utils.MultiplyTuple(Position, obj.GameZoom))
         self.Type = Type
         self.frame = 0
@@ -26,11 +26,11 @@ class Particle():
         if self.Type == "Dust":
             self.alpha = 50
             self.alphaDecay = -0.8
-            self.color = [180, 180, 170]
-            self.duration = 60
+            self.color = [120, 110, 90]
+            self.duration = 30
             self.colorDecay = [0.4, 0.4, 0.4]
             self.size = random.randint(10, 15)
-            self.sizeDecay = -0.09
+            self.sizeDecay = -0.3
             self.shape = "Circle"
             self.randomizeVelocity = 0.6
             self.aerodynamics = True
@@ -38,13 +38,13 @@ class Particle():
         if self.Type == "Spark":
             self.alpha = 160
             self.alphaDecay = -3
-            self.color = [180, 180, 60]
-            self.duration = 30
-            self.colorDecay = [-5, -5, -2]
+            self.color = [random.randint(185, 220), random.randint(150, 185), random.randint(65, 165)]
+            self.duration = 10
+            self.colorDecay = [-16, -14, -5]
             self.size = random.randint(6, 14)
             self.shape = "Circle"
             self.randomizeVelocity = 0.5
-            self.aerodynamics = False
+            self.aerodynamics = True
         
         if self.Type == "Red Flame":
             self.alpha = 190
@@ -146,18 +146,6 @@ def ParticleEffect(obj, type, partindex):
             obj.particles.append(Particle(ParticleVelocity, ParticlePosition, "Smoke", obj))
     if type == "Break":
         pass
-    if type == "Explosion":
-        r = random.randint(5,15)
-        c = 0
-        #make the index refer to a body and spawn particles on an anchor point of a constraint
-        while c < r:
-            ParticlePosition = (-10000,0)
-            ParticleVelocity = list((random.randint(-3,3), random.randint(-1,3)))
-            if c < 6:
-                obj.particles.append(Particle(ParticlePosition, ParticlePosition, "Spark", obj))
-            else:
-                obj.particles.append(Particle(ParticlePosition, ParticlePosition, "Dust", obj))
-            c += 1
 def RedFlame(obj, bodyindex, hasRotation, positionOffset, count):
     c = 0
     while c < count:
@@ -199,6 +187,63 @@ def Stars(obj):
         ParticlePosition = (random.randint(0, 1200), random.randint(0, 800))
         ParticlePosition = list(ParticlePosition)
         obj.particles.append(Particle(ParticleVelocity, ParticlePosition, "Star", obj))
+
+def Explosion(obj, particlePosition, particleVelocity, strength):
+    particlePosition = utils.AddTuples(particlePosition,(-obj.X_Position, -obj.Y_Position))
+    if strength <= 17500:
+        particleCount = random.randint(2, 5)
+        while particleCount > 0:
+            particleVelocity = utils.AddTuples(particleVelocity, (random.uniform(-3, 3), random.uniform(-3, 3)))
+            particleCount -= 1
+            #create a dust particle
+            obj.particles.append(Particle(particleVelocity, particlePosition, "Dust", obj))
+        #create 2 to 4 smoke particles
+        particleCount = random.randint(2,4)
+        while particleCount > 0:
+            particleVelocity = utils.AddTuples(particleVelocity, (random.uniform(-1, 1), random.uniform(-1,1)))
+            particleCount -= 1
+            #create a dust particle
+            obj.particles.append(Particle(particleVelocity, particlePosition, "Smoke", obj))
+
+    else:
+        particleCount = random.randint(5, 7)
+        while particleCount > 0:
+            particleVelocity = utils.AddTuples(particleVelocity, (random.uniform(-3, 3), random.uniform(-3, 3)))
+            particleCount -= 1
+            #create a dust particle
+            obj.particles.append(Particle(particleVelocity, particlePosition, "Dust", obj))
+        #create 2 to 4 smoke particles
+        particleCount = random.randint(2, 4)
+        while particleCount > 0:
+            particleVelocity = utils.AddTuples(particleVelocity, (random.uniform(-2, 2), random.uniform(-2,2)))
+            particleCount -= 1
+            #create a dust particle
+            obj.particles.append(Particle(particleVelocity, particlePosition, "Smoke", obj))
+        #create 2 to 5 fire particles
+        particleCount = random.randint(2,5)
+        while particleCount > 0:
+            particleVelocity = utils.AddTuples(particleVelocity, (random.uniform(-3, 3), random.uniform(-3,3)))
+            particleCount -= 1
+            #create a dust particle
+            obj.particles.append(Particle(particleVelocity, particlePosition, "Red Flame", obj))
+def crack(obj, particlePosition, particleVelocity):
+    particlePosition = utils.AddTuples(particlePosition,(-obj.X_Position, -obj.Y_Position))
+    #create 0 to 2 fire particles
+    particleCount = random.randint(0,2)
+    while particleCount > 0:
+        particleVelocity = utils.AddTuples(particleVelocity, (random.uniform(-3, 3), random.uniform(-3,3)))
+        particleCount -= 1
+        #create a dust particle
+        obj.particles.append(Particle(particleVelocity, particlePosition, "Red Flame", obj))
+    particleCount = random.randint(2, 3)
+    while particleCount > 0:
+        particleVelocity = utils.AddTuples(particleVelocity, (random.uniform(-3, 3), random.uniform(-3, 3)))
+        particleCount -= 1
+        #create a dust particle
+        obj.particles.append(Particle(particleVelocity, particlePosition, "Dust", obj))
+
+
+        
 
 
 

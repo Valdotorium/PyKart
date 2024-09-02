@@ -29,7 +29,6 @@ import res.fw.fw as utils
 import res.tutorial
 import asyncio
 import cffi
-import cProfile
 #load files in othe directories like this: os.path.dirname(__file__) + "/folder/folder/file.png"
 #load file template:     grass = pygame.image.load(os.path.dirname(__file__)+"/textures/grass.png")
 
@@ -308,7 +307,6 @@ async def main():
                 frame = resetFrames(Exo, frame)
         if running == False:
             res.transfer.run(Exo)
-def core():
-    asyncio.run(main())
 
-cProfile.run("core()", sort="tottime")
+asyncio.run(main())
+

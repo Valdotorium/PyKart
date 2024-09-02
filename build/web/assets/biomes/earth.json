@@ -3,7 +3,7 @@
     "Name": "Hillside",
     "Background": [120, 150, 170],
     "Preview": "preview_hillside.png",
-    "MoneyMultiplicator": 2.5,
+    "MoneyMultiplicator": 2,
     "Description": "The Classic",
     "Visuals":{
         "GroundColors": [[120, 200, 110], [170,120, 40], [150, 110, 0], [120, 100, 0]],  
@@ -18,11 +18,13 @@
             {"image": "asset_tree_3.jpg", "size": [300,600], "offset": [-270, -560]},
             {"image": "asset_sign_4.jpg", "size": [180,220], "offset": [0, -200]},
             {"image": "asset_bush_1.jpg", "size": [120,120], "offset": [-70, -70]},
+            {"image": "asset_grass_1.jpg", "size": [100,180], "offset": [-60, -120]},
+            {"image": "asset_grass_2.jpg", "size": [90,180], "offset": [-50, -115]}, 
             {"image": "asset_bush_3.png", "size": [150,200], "offset": [-130, -170]},
             {"image": "asset_bush_1.jpg", "size": [200,220], "offset": [-170, -190]},
             {"image": "asset_hut.png", "size": [250,255], "offset": [-205, -200]}],
         "Particles": null,
-        "AssetFrequency": 6
+        "AssetFrequency": 8
     },
     "Terrain":{
         "Scale": 60,

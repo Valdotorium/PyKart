@@ -435,37 +435,37 @@ def simulate(obj, fps):
     PymunkGroundPolygon(obj, Env)
     obj.SoundInFrame = False
     #first block: draw vehicle, ground and minimap
-    #try:
-    if Env["Physics"]["Resistance"] != 0:
-        ApplyAirResistance(obj)
-    LimitThrottle(obj)
-    Draw(obj)
+    try:
+        if Env["Physics"]["Resistance"] != 0:
+            ApplyAirResistance(obj)
+        LimitThrottle(obj)
+        Draw(obj)
         
 
-    #except Exception as e:
-    #    obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
-    #   obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
-    #   obj.restart = True
-    #    AlertSound = obj.sounds["alert.ogg"]
-    #    player = AlertSound.play()
-    #    obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not draw frame", 200, obj))
-    #    print("INTERNAL ERROR: Could not draw frame: " + str(e))
-    #second block: perform value and physics simulation
-    #try:
-    #CheckJoints(obj) -moved into draw because of springs
-    Checkparts(obj)
-    utils.DisplayMoney(obj)
-    DistanceBonuses(obj)
-    #except Exception as e:
-    #    obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
-    #    obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
-    #    obj.restart = True
-    #    if not obj.isWeb:
-    #        AlertSound = obj.sounds["alert.ogg"]
-    #        player = AlertSound.play()
-    #        del(player)
-    #    obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 200, obj))
-    #    print("INTERNAL ERROR: Could not simulate physics: " + str(e))
+    except Exception as e:
+        obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
+        obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
+        obj.restart = True
+        AlertSound = obj.sounds["alert.ogg"]
+        player = AlertSound.play()
+        obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not draw frame", 200, obj))
+        print("INTERNAL ERROR: Could not draw frame: " + str(e))
+        #second block: perform value and physics simulation
+    try:
+    #CheckJoints(obj) #moved into draw because of springs
+        Checkparts(obj)
+        utils.DisplayMoney(obj)
+        DistanceBonuses(obj)
+    except Exception as e:
+        obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
+        obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
+        obj.restart = True
+        if not obj.isWeb:
+            AlertSound = obj.sounds["alert.ogg"]
+            player = AlertSound.play()
+            del(player)
+        obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not simulate physics", 200, obj))
+        print("INTERNAL ERROR: Could not simulate physics: " + str(e))
 def FindFreight(obj):
     c = 0
     obj.RideMoneyMultiplier = 1

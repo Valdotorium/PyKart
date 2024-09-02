@@ -8,7 +8,12 @@ import os
 
 
 #some small helpers to make code shorter and maybe more radable
+def blitRotateCenter(surf, image, topleft, angle):
 
+    rotated_image = pygame.transform.rotate(image, angle)
+    new_rect = rotated_image.get_rect(center = image.get_rect(topleft = topleft).center)
+
+    surf.blit(rotated_image, new_rect)
 def timing_val(func):
     def wrapper(*arg, **kw):
         '''source: http://www.daniweb.com/code/snippet368.html'''

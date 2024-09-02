@@ -1,0 +1,56 @@
+{
+    "Name": "Linker",
+    "Index": 2,
+    "Type": "Control",
+    "Cost": 3000,
+    "Center": [48,32],
+    "Stex": "oldLinker.jpg",
+    "Properties": {
+        "Rot": 0,
+        "Friction": 0.96,
+        "Weight": 20,
+        "Bounciness": 0.1,
+        "JoiningBehavior": "Provide",
+        "LimitsAngularVelocity": 1.025,
+        "Thrust": null,
+        "Angle": null
+    },
+    "Description": ["Can be used between parts to build a flexible connection between them.", "Does not collide with parts except wheels."],
+    "ShowProperties": ["Weight", "LimitsAngularVelocity"],
+    "JointData": {
+        "BreakPoint": 30000,
+        "Hardness": 1,
+        "Type": "Solid",
+        "Data":{
+        }
+    },
+    "Joints":[
+        {
+            "Type": "Provide",
+            "Pos": [0,32]
+        },
+        {
+            "Type": "Provide",
+            "Pos": [64, 32]
+        }
+    ],
+    "Hitbox":{
+            "Pos": [16,0],
+            "Type": "Rect",
+            "Size":[64,64],
+            "Anchor":[32,32],
+            "CollisionType": "Semi"
+        },
+    "Textures": [{
+        "Image": "oldLinker.jpg",
+        "Pos": [0,0],
+        "Size": [96,64]
+    }],
+    "Sounds": {
+        "Crash": [["suspension_2.ogg",0.5], ["metal_crash_1.ogg",0.5], ["metal_crash_4.ogg",0.5]],
+        "Active": [[]],
+        "Constraints":[[]],
+        "Idle":[[]]
+    }
+    
+}

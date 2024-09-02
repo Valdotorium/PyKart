@@ -26,13 +26,14 @@ v1.0.2 -- 2.7.2024 ----- more intuitive touch controls and some code rewriting
 v1.1 ---- 7.7.2024 ----- up to 40% desktop performance improvements, a new landscape and various other features
 v1.1.1
 v1.1.2 -- 20.7.2024 ---- significantly reduced part wobble, balancing
+v1.2 ---- ??.8.2024 ---- added water biome and assets, air resistance
+v1.3 ---- 3.9.2024 ----- added adapter and linker, new UI, balancing and bug fixes
 
 NOW TODO:
--update UI [NILS_NEUMI]
--Spring Joint Part
 -Engine Sounds
 -jelly biome and assets
--air resistance
--water biome and assets
+-explode particles
+-#26
+-reduce use of blit
 
 
