@@ -1,9 +1,9 @@
 {
-    "Gravity": [0,0],
+    "Gravity": [0,190],
     "Name": "Mars",
     "Background": [190, 160, 150],
     "Preview": "preview_mars.png",
-    "MoneyMultiplicator": 3,
+    "MoneyMultiplicator": 2.5,
     "Description": "The Red Planet, hostile, but exploring is worth it! (No Oxygen availble)",
     "Visuals":{
         "GroundColors": [[220, 160, 140], [160,110, 95], [110, 95, 92], [115, 107, 108]],  

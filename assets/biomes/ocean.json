@@ -3,10 +3,10 @@
     "Name": "Ocean",
     "Background": [90, 140, 160],
     "Preview": "preview_ocean.png",
-    "MoneyMultiplicator": 5,
+    "MoneyMultiplicator": 4,
     "Description": "Since there is water everywhere, moving here is not that easy...",
     "Visuals":{
-        "GroundColors": [[200, 200, 0], [150,140, 45], [135, 125, 20], [130, 120, 0]],  
+        "GroundColors": [[175, 175, 0], [150,140, 45], [135, 125, 20], [130, 120, 0]],  
         "LayerHeights": [25,30,35,35],
         "HasSurfaceMarkings": false,
         "Assets": [

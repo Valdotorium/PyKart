@@ -3,7 +3,7 @@
     "Name": "Dunes",
     "Background": [190, 190, 170],
     "Preview": "preview_dunes.png",
-    "MoneyMultiplicator": 2,
+    "MoneyMultiplicator": 1.75,
     "Description": "Sandy Landscapes",
     "Visuals":{
         "GroundColors": [[200, 200, 110], [170,160, 80], [150, 130, 20], [120, 110, 0]],  

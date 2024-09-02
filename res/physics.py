@@ -92,10 +92,13 @@ def CheckJoints(obj):
                     obj.TextAnimations.append(interactions.TextAnimation("BONK +25", 100, obj))
                 elif r == 4:
                     obj.TextAnimations.append(interactions.TextAnimation("CRACK +25", 100, obj))
+                """TODO #26
                 ParticlePartA = obj.NewVehicleJoints[c]["JoinedParts"][1]
                 ParticlePartB = obj.NewVehicleJoints[c]["JoinedParts"][0]
-                particles.ParticleEffect(obj, "Break", ParticlePartA)
-                particles.ParticleEffect(obj, "Break", ParticlePartB)
+                particleVelocity = obj.PymunkBodies[ParticlePartA].velocity
+                particles.Explosion(obj, list(obj.PymunkBodies[ParticlePartA].position), list(particleVelocity), JointImpulse)
+                particles.Explosion(obj, list(obj.PymunkBodies[ParticlePartB].position), list(particleVelocity), JointImpulse)"""
+
                 obj.space.remove(obj.PymunkJoints[c])
                 obj.NewVehicleJoints[c] = None
                 obj.PymunkJoints[c] = None
@@ -389,36 +392,36 @@ def PhysDraw(obj):
     obj.space.debug_draw(obj.draw_options)
 
 def DistanceBonuses(obj):
-    if obj._MetersTravelled  <= obj.NextKilometer and obj.MetersTravelled > obj.NextKilometer:
-        obj.NextKilometer += 1000
+    if obj._MetersTravelled  <= obj.NextMilestone and obj.MetersTravelled > obj.NextMilestone:
+        obj.NextMilestone += 500
 
         AlertSound = obj.sounds["coinbag.ogg"]
         player = AlertSound.play()
 
         #extra large bonuses:
-        if obj.NextKilometer == 3000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 1.2))
-            text = "2km Distance Bonus: +" + str(round(MoneyBonus))
-        elif obj.NextKilometer == 6000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 2))
-            text = "5km Distance Bonus: +" + str(round(MoneyBonus))
-        elif obj.NextKilometer == 11000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 2.8))
+        if obj.NextMilestone == 1500:
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 1.75))
+            text = "1km Distance Bonus: +" + str(round(MoneyBonus))
+        elif obj.NextMilestone == 3500:
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 2.5))
+            text = "3km Distance Bonus: +" + str(round(MoneyBonus))
+        elif obj.NextMilestone == 5500:
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 3))
+            text = " 5km Distance Bonus: +" + str(round(MoneyBonus))
+        elif obj.NextMilestone == 10500:
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 3.75))
             text = " 10km Distance Bonus: +" + str(round(MoneyBonus))
-        elif obj.NextKilometer == 16000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 3.5))
+        elif obj.NextMilestone == 15500:
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 4.5))
             text = " 15km Distance Bonus: +" + str(round(MoneyBonus))
-        elif obj.NextKilometer == 21000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 4))
-            text = " 20km Distance Bonus: +" + str(round(MoneyBonus))
-        elif obj.NextKilometer == 31000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 3.5))
-            text = " 30km Distance Bonus: +" + str(round(MoneyBonus))
-        elif obj.NextKilometer == 51000:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 3))
+        elif obj.NextMilestone == 25500:
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 3.75))
+            text = " 25km Distance Bonus: +" + str(round(MoneyBonus))
+        elif obj.NextMilestone == 35500:
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 3))
             text = " 50km Distance Bonus: +" + str(round(MoneyBonus))
         else:
-            MoneyBonus = round((obj.NextKilometer / 10) * ((obj.NextKilometer / 4000) + 0.5)* round(obj.Environment["MoneyMultiplicator"] * 0.8))
+            MoneyBonus = round((obj.NextMilestone / 10) * ((obj.NextMilestone / 4000) + 0.75)* round(obj.Environment["MoneyMultiplicator"] * 1.5))
             text = "Distance Bonus: +" + str(round(MoneyBonus))
         obj.StuntMoneyForRide += MoneyBonus
 
@@ -432,22 +435,21 @@ def simulate(obj, fps):
     PymunkGroundPolygon(obj, Env)
     obj.SoundInFrame = False
     #first block: draw vehicle, ground and minimap
-    try:
-        if Env["Physics"]["Resistance"] != 0:
-            ApplyAirResistance(obj)
-        LimitThrottle(obj)
-        Draw(obj)
+    #try:
+    if Env["Physics"]["Resistance"] != 0:
+        ApplyAirResistance(obj)
+    LimitThrottle(obj)
+    Draw(obj)
         
 
-    except Exception as e:
-        obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
-        obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
-        obj.restart = True
-
-        AlertSound = obj.sounds["alert.ogg"]
-        player = AlertSound.play()
-        obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not draw frame", 200, obj))
-        print("INTERNAL ERROR: Could not draw frame: " + str(e))
+    #except Exception as e:
+    #    obj.money += (obj.DistanceMoneyForRide + obj.StuntMoneyForRide) * obj.RideMoneyMultiplier
+    #   obj.xp += obj.MetersTravelled * obj.RideMoneyMultiplier
+    #   obj.restart = True
+    #    AlertSound = obj.sounds["alert.ogg"]
+    #    player = AlertSound.play()
+    #    obj.TextAnimations.append(interactions.TextAnimation("EXCEPTION: Could not draw frame", 200, obj))
+    #    print("INTERNAL ERROR: Could not draw frame: " + str(e))
     #second block: perform value and physics simulation
     #try:
     #CheckJoints(obj) -moved into draw because of springs
@@ -498,7 +500,7 @@ def setup(obj):
     obj.rpm = 0
     obj.StuntMoneyForRide = 0
     #kilometerwise money bonuses
-    obj.NextKilometer = 1000
+    obj.NextMilestone = 500
     obj.MetersTravelled = 0
     obj._MetersTravelled = 0
     #initialize speed and rpm display
