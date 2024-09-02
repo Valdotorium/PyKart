@@ -1,5 +1,5 @@
 {
-    "Gravity": [0,240],
+    "Gravity": [0,0],
     "Name": "Mars",
     "Background": [190, 160, 150],
     "Preview": "preview_mars.png",
@@ -21,7 +21,7 @@
         {"image": "asset_sign_5.png", "size": [60,160], "offset": [-45, -130]}
         ],
         "Particles": null,
-        "AssetFrequency": 4
+        "AssetFrequency": 6
     },
     "Terrain":{
         "Scale": 60,

@@ -333,7 +333,9 @@ def Draw(obj):
         BodyRotation = -utils.RadiansToDegrees(obj.PymunkBodies[c].angle)
         #scrolling camera?
         BodyPosition = (obj.PymunkBodies[c].position[0] - obj.X_Position, obj.PymunkBodies[c].position[1] - obj.Y_Position)
-        #print(BodyPosition,  BodyRotation)
+        
+        HitboxPos = utils.Negative(obj.NewVehicle[c]["Hitbox"]["Pos"])
+        
         PartTextures = obj.PhysicsOutputData[c]["PartTextures"]
         cc = 0
         while cc < len(PartTextures):
@@ -345,11 +347,15 @@ def Draw(obj):
             if obj.isWeb:
                 #Image = pygame.transform.scale(Image, PartTextures[cc]["Size"])
                 Image = pygame.transform.rotate(Image, Rotation)
-                Position = utils.AddTuples(BodyPosition, utils.RotateVector(PartTextures[cc]["Pos"], -BodyRotation))
+                Position = BodyPosition
+                if obj.NewVehicle[c]["Hitbox"]["Type"] != "Circle":
+                    Position = utils.AddTuples(BodyPosition, utils.RotateVector(HitboxPos , -BodyRotation))
             else:
                 Image = pygame.transform.scale(Image, utils.MultiplyTuple(PartTextures[cc]["Size"], obj.GameZoom))
                 Image = pygame.transform.rotate(Image, Rotation)
                 Position = utils.AddTuples(utils.MultiplyTuple(BodyPosition, obj.GameZoom), utils.MultiplyTuple(utils.RotateVector(PartTextures[cc]["Pos"], -BodyRotation), obj.GameZoom))
+                if obj.NewVehicle[c]["Hitbox"]["Type"] != "Circle":
+                    Position = utils.AddTuples(BodyPosition, utils.RotateVector(HitboxPos , -BodyRotation))
             #applying rotation 
             #rectangle for part rotation cuz it works somehow
             texture_rect = Image.get_rect(center = Position)
@@ -430,7 +436,7 @@ def simulate(obj, fps):
         if Env["Physics"]["Resistance"] != 0:
             ApplyAirResistance(obj)
         LimitThrottle(obj)
-        PhysDraw(obj)
+        Draw(obj)
         
 
     except Exception as e:
@@ -536,7 +542,7 @@ def TransferStage(obj):
             #applying rotation
             Angle = -utils.DegreesToRadians(obj.Vehicle[c]["Rotation"])
             hitbox_body = pymunk.Body(1,100,body_type=pymunk.Body.DYNAMIC)
-            hitbox_body.position = utils.AddTuples(PartPosition, HitboxOfPart["Pos"])
+            hitbox_body.position = utils.AddTuples(PartPosition, utils.RotateVector(HitboxOfPart["Pos"], -obj.Vehicle[c]["Rotation"]))
             
             #the following variables can be used for drawing the hitboxes
             hitbox_body.properties = {"Type":HitboxOfPart["Type"],
@@ -550,13 +556,13 @@ def TransferStage(obj):
                                       "Center": obj.Vehicle[c]["Center"],
                                       "PartTextures": obj.Vehicle[c]["Textures"]
                                       })
-            HitboxPosition = HitboxOfPart["Pos"]
+            HitboxPosition = [0,0]
             #defining shapes of hitboxes
             if HitboxOfPart["Type"] == "Rect":
                 HitboxPosition = utils.SubstractTuples(HitboxPosition, obj.Vehicle[c]["Center"])
                #add pos of the hitbox to offset it
                 print("HBP before:", HitboxPosition)
-                HitboxPosition = utils.RotateVector(HitboxPosition, obj.Vehicle[c]["Rotation"])
+                #HitboxPosition = utils.RotateVector(HitboxPosition, obj.Vehicle[c]["Rotation"])
                 #centering the Hitbox
 
                 print("HBP after:", HitboxPosition, obj.Vehicle[c]["Rotation"])

@@ -20,11 +20,14 @@
             {"image": "asset_sea_rock_1.png", "size": [240,160], "offset": [-160, -90]},
             {"image": "asset_sea_rock_2.png", "size": [250,130], "offset": [-200, -95]},
             {"image": "asset_sea_rock_3.png", "size": [220,150], "offset": [-155, -120]},
-            {"image": "asset_shell_1.png", "size": [150,150], "offset": [-100, -50]},
-            {"image": "asset_shell_2.png", "size": [110,110], "offset": [-75, -20]}
+            {"image": "asset_shell_1.png", "size": [150,150], "offset": [-100, -90]},
+            {"image": "asset_grass_1.jpg", "size": [100,180], "offset": [-60, -150]},
+            {"image": "asset_grass_2.jpg", "size": [90,180], "offset": [-50, -145]}, 
+            {"image": "asset_shell_2.png", "size": [110,110], "offset": [-75, -70]},
+            {"image": "asset_shell_2.png", "size": [80,80], "offset": [-55, -60]}
         ],
         "Particles": "Bubbles",
-        "AssetFrequency": 11
+        "AssetFrequency": 13
     },
     "Terrain":{
         "Scale": 60,

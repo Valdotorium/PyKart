@@ -1,10 +1,10 @@
 {
-    "Name": "Stable Dual Frame",
+    "Name": "Adapter Frame",
     "Index": 2,
     "Type": "Stability",
     "Cost": 3500,
     "Center": [32,32],
-    "Stex": "dual_stable_frame.png",
+    "Stex": "adapter_frame.jpg",
     "Properties": {
         "Rot": 0,
         "Friction": 0.95,
@@ -21,7 +21,7 @@
         "Data":{
         }
     },
-    "Description": ["Made out of very stable metal, this is a next-gen version of the frame", "It has six joints, allowing for more complex construction."],
+    "Description": ["Made out of very stable metal, this is a next-gen version of the frame", "It has five joints and can be used for more complex builds."],
     "Joints":[
         {
             "Type": "Provide",
@@ -29,11 +29,7 @@
         },
         {
             "Type": "Provide",
-            "Pos": [64,16]
-        },
-        {
-            "Type": "Provide",
-            "Pos": [64,48]
+            "Pos": [64,32]
         },
         {
             "Type": "Provide",
@@ -56,7 +52,7 @@
             "CollisionType": "Full"
         },
     "Textures": [{
-        "Image": "dual_stable_frame.png",
+        "Image": "adapter_frame.jpg",
         "Pos": [0,0],
         "Size": [64,64]
     }],

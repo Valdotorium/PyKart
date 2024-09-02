@@ -77,7 +77,7 @@ class Game():
         self.VehicleSpeed = 0
         self.fpsFactor = 1
         self.UserHasRotatedPart = False
-        self.money = 25000
+        self.money = 500000
         self.particles = []
         self.xp = 0        
         pygame.mixer.init()

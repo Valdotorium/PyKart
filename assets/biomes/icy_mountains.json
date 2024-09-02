@@ -18,7 +18,7 @@
             {"image": "asset_ice_4.png", "size": [60,60], "offset": [-40, -40]},
             {"image": "asset_railing_1.jpg", "size": [150,160], "offset": [-10, -125]}],
         "Particles": null,
-        "AssetFrequency": 3.2
+        "AssetFrequency": 5
     },
     "Terrain":{
         "Scale": 50,

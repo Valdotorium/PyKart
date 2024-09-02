@@ -43,7 +43,7 @@ class PartInventory():
         self.textures = obj.textures
         self.font = obj.font
         self.largefont = obj.largefont
-        self.CurrentCategory = self.categories[0]
+        self.CurrentCategory = "Stability"
     def AddCategory(self, category):
         self.categories.append(category)
     def ClickArea(self,pos, size):
@@ -575,7 +575,7 @@ def run(obj):
         pygame.draw.rect(obj.screen, (30,30,30), (PositionOfSelectedBuildPart[0] + 40, PositionOfSelectedBuildPart[1] - 100, 180, 360), 5)
 
         UnselectButton = interactions.ButtonArea(obj, obj.textures["_unselectButton.jpg"], utils.Scale(obj,[PositionOfSelectedBuildPart[0] + 200, PositionOfSelectedBuildPart[1] - 120]), utils.Scale(obj,[60,60]))
-        if UnselectButton or pygame.key.get_pressed()[pygame.K_s]:
+        if UnselectButton:
             if not obj.UserIsPlacingPart:
                 obj.credits.visible = False
                 obj.CurrentPartUI.part = None

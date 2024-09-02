@@ -21,7 +21,7 @@
         "BreakPoint": 4000,
         "Type": "Spring",
         "Data":{
-            "Distance": 68,
+            "Distance": 66,
             "Damping": 3,
             "Stiffness": 9000
         }

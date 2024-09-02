@@ -15,7 +15,7 @@
             "Element": "TEXT",
             "Size": "MEDIUM",
             "Content": ["Even though we try our best, there are some small issues in the game:", 
-        "For some parts, the box around it when it is selected has the wrong rotation.",
+        "do not delete parts holding the X key. This makes the game crash.",
         "When connecting something to a wheel after the wheel part has been placed, different joints are created,",
         "and the wheel will behave differently (not really a bug).",
         "Also, do not place smaller wheel at the sides of double frames or other large parts,",

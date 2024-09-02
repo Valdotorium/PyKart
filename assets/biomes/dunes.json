@@ -13,16 +13,17 @@
             {"image": "asset_rock_1.png", "size": [150,150], "offset": [-75, -75]},
             {"image": "asset_rock_3.jpg", "size": [100,100], "offset": [-60, -60]}, 
             {"image": "asset_rock_5.jpg", "size": [100,100], "offset": [-60, -50]},
-            {"image": "asset_rock_4.jpg", "size": [120,120], "offset": [-80, -70]},
+            {"image": "asset_rock_4.jpg", "size": [120,120], "offset": [-80, -60]},
             {"image": "asse.jpg", "size": [150,300], "offset": [-120, -260]},
             {"image": "asset_cactus_1.jpg", "size": [200,400], "offset": [-170, -340]},
             {"image": "asset_bush_1.jpg", "size": [120,120], "offset": [-70, -70]},
+            {"image": "asset_grass_1.jpg", "size": [100,180], "offset": [-60, -120]},
             {"image": "asset_bush_2.png", "size": [200,170], "offset": [-170, -120]},
             {"image": "asset_bush_3.png", "size": [150,200], "offset": [-130, -170]},
             {"image": "asset_cactus_2.jpg", "size": [150,300], "offset": [-100, -260]},
             {"image": "asset_rock_9.png", "size": [70,45], "offset": [-45, -20]}],
         "Particles": null,
-        "AssetFrequency": 6
+        "AssetFrequency": 10
     },
     "Terrain":{
         "Scale": 80,
