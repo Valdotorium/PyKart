@@ -554,12 +554,17 @@ def run(obj):
 
             #------------------------------The Unselect Part Button-------------------------------------
     #dragging should now be possible
+
+    if obj.SelectedBuiltPart == None:
+        obj.Cursor.clickedTicks = 0
+        
     if obj.SelectedPart:
         if not MouseIsClicked:
             obj.SelectedPart = False
     if obj.SelectedBuiltPart != None:
         #------------------------------Marking the selected part-------------------------------------
         if obj.SelectedBuiltPart != None:
+
             partSize = (obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][0],obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Size"][1])
             RectPos = utils.SubstractTuples(obj.Vehicle[obj.SelectedBuiltPart]["Pos"], obj.Vehicle[obj.SelectedBuiltPart]["Center"])
             RectPos = utils.AddTuples(RectPos, utils.DivideTuple(obj.Vehicle[obj.SelectedBuiltPart]["Textures"][0]["Pos"], 1))
@@ -587,17 +592,6 @@ def run(obj):
         if obj.CurrentPartUI.part != None:
             if obj.CurrentPartUI.CloseButton:
                 obj.CurrentPartUI.part = None
-        #---------------------The Delete Part Button--------------------------------
-        DeleteButton = interactions.ButtonArea(obj, obj.textures["_deleteButton.jpg"], utils.Scale(obj, [PositionOfSelectedBuildPart[0] + 45, PositionOfSelectedBuildPart[1] - 80]), utils.Scale(obj,[170,78]))
-        if DeleteButton or pygame.key.get_pressed()[pygame.K_x]:
-            if not obj.UserIsPlacingPart and obj.SelectedBuiltPart != None:
-                SelectSound = obj.sounds["tyre_2.ogg"]
-                SelectSound.play()
-                obj.Cursor.SetDelete()
-                obj.partdict[obj.Vehicle[obj.SelectedBuiltPart]["name"]]["Count"] += 1
-                #removed parts are still list items, but they will be ignored
-                obj.Vehicle[obj.SelectedBuiltPart] = None
-                DeletePart(obj)
         
     #------------------------------The Move Part Button------------------------------------------
         MoveButton = interactions.ButtonArea(obj, obj.textures["_moveButton.jpg"], utils.Scale(obj, [PositionOfSelectedBuildPart[0] + 45, PositionOfSelectedBuildPart[1]+ 160]), utils.Scale(obj,[170,78]))
@@ -622,6 +616,18 @@ def run(obj):
                 mx, my = pygame.mouse.get_pos()
                 obj.Cursor.SetArrows()
         obj.moveSelectedPart = False
+        #---------------------The Delete Part Button--------------------------------
+        DeleteButton = interactions.ButtonArea(obj, obj.textures["_deleteButton.jpg"], utils.Scale(obj, [PositionOfSelectedBuildPart[0] + 45, PositionOfSelectedBuildPart[1] - 80]), utils.Scale(obj,[170,78]))
+        if DeleteButton or pygame.key.get_pressed()[pygame.K_x]:
+            if not obj.UserIsPlacingPart and obj.SelectedBuiltPart != None:
+                SelectSound = obj.sounds["tyre_2.ogg"]
+                SelectSound.play()
+                obj.Cursor.SetDelete()
+                obj.partdict[obj.Vehicle[obj.SelectedBuiltPart]["name"]]["Count"] += 1
+                #removed parts are still list items, but they will be ignored
+                obj.Vehicle[obj.SelectedBuiltPart] = None
+                obj.SelectedBuiltPart = None
+                DeletePart(obj)
     #---------------------The Sell Part Button--------------------------------
         SellButton = interactions.ButtonArea(obj, obj.textures["_sellButton.jpg"], utils.Scale(obj, [PositionOfSelectedBuildPart[0] + 45, PositionOfSelectedBuildPart[1] + 80]), utils.Scale(obj,[170,78]))
         if SellButton or pygame.key.get_pressed()[pygame.K_s]:

@@ -535,6 +535,16 @@ def TransferStage(obj):
     c = 0
     rc = 0
     while c < len(obj.Vehicle):
+        #find the first item that is not None in obj.vehicle
+        firstFound = None
+        for i in range(len(obj.Vehicle)):
+            if obj.Vehicle[i]!= None:
+                firstFound = i
+                break
+
+        #for making the vehicle centered
+        obj.camXOffset = 600-obj.Vehicle[firstFound]["Pos"][0]
+        obj.camYOffset = 400-obj.Vehicle[firstFound]["Pos"][1]
         if obj.Vehicle[c]!= None:
             #creating the joints and hitboxes ------------------------------------------------------------------------------------------------
             PartJoints = obj.Vehicle[c]["Joints"]

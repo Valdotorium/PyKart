@@ -90,6 +90,7 @@ def respond(obj):
                     #center the text
 
                     utils.displayLoadText(obj,f"loaded image {image}")
+                    
                     textures[image] = loadedimage
                     #time.sleep(0.01)
             #tutorial image files
